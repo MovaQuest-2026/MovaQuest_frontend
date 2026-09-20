@@ -9,6 +9,7 @@
     "ukrainian": "Українська"
   },
   "world": {
-    "continue": "Continue"
+    "continue": "Continue",
+    "close": "Close"
   }
 }

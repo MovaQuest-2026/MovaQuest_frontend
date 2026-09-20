@@ -110,6 +110,11 @@ code {
   background: var(--code-bg);
 }
 
+.game-screen {
+  position: fixed;
+  inset: 0;
+}
+
 #phaser-container {
   position: fixed;
   inset: 0;
@@ -119,4 +124,27 @@ code {
 
 #phaser-container canvas {
   display: block;
+}
+
+.dialogue-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: calc(100% - 48px);
+  max-width: 560px;
+  box-sizing: border-box;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: rgba(8, 6, 13, 0.88);
+  color: #fff;
+}
+
+.dialogue-overlay button {
+  align-self: flex-end;
 }

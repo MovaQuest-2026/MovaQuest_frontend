@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getCityConfig, type CityConfig } from '../api/getCityConfig'
 import { useGameStore } from '../store/useGameStore'
 import { PhaserGame } from '../game/PhaserGame'
+import { DialogueOverlay } from './DialogueOverlay'
 
 export function WorldScreen() {
   const { t } = useTranslation()
@@ -40,7 +41,12 @@ export function WorldScreen() {
   }
 
   if (introDismissed) {
-    return <PhaserGame />
+    return (
+      <div className="game-screen">
+        <PhaserGame npcs={city.npcs} />
+        <DialogueOverlay />
+      </div>
+    )
   }
 
   const lang = nativeLanguage ?? 'en'

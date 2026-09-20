@@ -1,8 +1,17 @@
 import Phaser from 'phaser'
+import type { CityNpcConfig } from '../../api/getCityConfig'
+import { useGameStore } from '../../store/useGameStore'
+
+export const TEST_LEVEL_SCENE_KEY = 'vinnytsia_test_level'
 
 const MOVE_SPEED = 200
 const TILEMAP_KEY = 'vinnytsia_test'
 const TILESET_IMAGE_KEY = 'tileset'
+const NPC_INTERACTION_RADIUS = 48
+
+interface TestLevelSceneData {
+  npcs?: CityNpcConfig[]
+}
 
 export class TestLevelScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Image
@@ -13,9 +22,16 @@ export class TestLevelScene extends Phaser.Scene {
     left: Phaser.Input.Keyboard.Key
     right: Phaser.Input.Keyboard.Key
   }
+  private npcs: CityNpcConfig[] = []
+  private nearbyNpcId: string | null = null
 
   constructor() {
-    super('vinnytsia_test_level')
+    super(TEST_LEVEL_SCENE_KEY)
+  }
+
+  init(data: TestLevelSceneData) {
+    this.npcs = data.npcs ?? []
+    this.nearbyNpcId = null
   }
 
   preload() {
@@ -26,6 +42,10 @@ export class TestLevelScene extends Phaser.Scene {
     graphics.fillStyle(0xff5a5f, 1)
     graphics.fillRect(0, 0, 32, 32)
     graphics.generateTexture('player-placeholder', 32, 32)
+    graphics.clear()
+    graphics.fillStyle(0xffd23f, 1)
+    graphics.fillRect(0, 0, 32, 32)
+    graphics.generateTexture('npc-placeholder', 32, 32)
     graphics.destroy()
   }
 
@@ -54,6 +74,10 @@ export class TestLevelScene extends Phaser.Scene {
     collisionLayer.setDepth(1)
     this.player.setDepth(2)
 
+    for (const npc of this.npcs) {
+      this.add.image(npc.x, npc.y, 'npc-placeholder').setDepth(2)
+    }
+
     this.cursors = this.input.keyboard!.createCursorKeys()
     this.wasd = {
       up: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
@@ -76,5 +100,33 @@ export class TestLevelScene extends Phaser.Scene {
 
     if (up) this.player.setVelocityY(-MOVE_SPEED)
     else if (down) this.player.setVelocityY(MOVE_SPEED)
+
+    this.updateNpcInteractions()
+  }
+
+  private updateNpcInteractions() {
+    let closestNpc: CityNpcConfig | null = null
+    let closestDistance = Infinity
+
+    for (const npc of this.npcs) {
+      const distance = Phaser.Math.Distance.Between(
+        this.player.x,
+        this.player.y,
+        npc.x,
+        npc.y,
+      )
+      if (distance <= NPC_INTERACTION_RADIUS && distance < closestDistance) {
+        closestDistance = distance
+        closestNpc = npc
+      }
+    }
+
+    const closestNpcId = closestNpc?.id ?? null
+    if (closestNpcId !== this.nearbyNpcId) {
+      this.nearbyNpcId = closestNpcId
+      if (closestNpc) {
+        useGameStore.getState().setActiveDialogue(closestNpc.dialogueId)
+      }
+    }
   }
 }

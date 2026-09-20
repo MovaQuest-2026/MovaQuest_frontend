@@ -1,8 +1,13 @@
 import { useEffect, useRef } from 'react'
 import Phaser from 'phaser'
-import { TestLevelScene } from './scenes/TestLevelScene'
+import { TestLevelScene, TEST_LEVEL_SCENE_KEY } from './scenes/TestLevelScene'
+import type { CityNpcConfig } from '../api/getCityConfig'
 
-export function PhaserGame() {
+interface PhaserGameProps {
+  npcs: CityNpcConfig[]
+}
+
+export function PhaserGame({ npcs }: PhaserGameProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -18,13 +23,14 @@ export function PhaserGame() {
           debug: false,
         },
       },
-      scene: [TestLevelScene],
     })
+
+    game.scene.add(TEST_LEVEL_SCENE_KEY, TestLevelScene, true, { npcs })
 
     return () => {
       game.destroy(true)
     }
-  }, [])
+  }, [npcs])
 
   return <div id="phaser-container" ref={containerRef} />
 }

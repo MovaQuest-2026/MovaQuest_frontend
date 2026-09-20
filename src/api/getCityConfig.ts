@@ -1,9 +1,17 @@
+export interface CityNpcConfig {
+  id: string
+  name: { en: string; uk: string }
+  dialogueId: string
+  x: number
+  y: number
+}
+
 export interface CityConfig {
   id: string
   name: { en: string; uk: string }
   culturalIntro: { en: string; uk: string }
   tilemapKey: string
-  npcs: { id: string; dialogueId: string }[]
+  npcs: CityNpcConfig[]
 }
 
 const cityModules = import.meta.glob<{ default: CityConfig }>(
