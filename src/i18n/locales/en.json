@@ -7,5 +7,8 @@
     "title": "Choose your language",
     "english": "English",
     "ukrainian": "Українська"
+  },
+  "world": {
+    "continue": "Continue"
   }
 }

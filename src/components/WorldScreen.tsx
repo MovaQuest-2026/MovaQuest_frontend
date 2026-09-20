@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { getCityConfig, type CityConfig } from '../api/getCityConfig'
 import { useGameStore } from '../store/useGameStore'
+import { PhaserGame } from '../game/PhaserGame'
 
 export function WorldScreen() {
+  const { t } = useTranslation()
   const { cityId } = useParams<{ cityId: string }>()
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
   const setCurrentCity = useGameStore((state) => state.setCurrentCity)
   const [city, setCity] = useState<CityConfig | null>(null)
+  const [introDismissed, setIntroDismissed] = useState(false)
 
   useEffect(() => {
     if (!cityId) return
@@ -27,8 +31,16 @@ export function WorldScreen() {
     return () => setCurrentCity(null)
   }, [cityId, setCurrentCity])
 
+  useEffect(() => {
+    setIntroDismissed(false)
+  }, [cityId])
+
   if (!city) {
     return <div className="screen world-screen" />
+  }
+
+  if (introDismissed) {
+    return <PhaserGame />
   }
 
   const lang = nativeLanguage ?? 'en'
@@ -37,6 +49,9 @@ export function WorldScreen() {
     <div className="screen world-screen">
       <h1>{city.name[lang]}</h1>
       <p>{city.culturalIntro[lang]}</p>
+      <button type="button" onClick={() => setIntroDismissed(true)}>
+        {t('world.continue')}
+      </button>
     </div>
   )
 }
