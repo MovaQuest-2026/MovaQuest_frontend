@@ -1,0 +1,12 @@
+{
+  "id": "vinnytsia",
+  "name": { "en": "Vinnytsia", "uk": "Вінниця" },
+  "culturalIntro": {
+    "en": "Vinnytsia is a city on the Southern Bug river, known for its Roshen Fountain, the Pyrohovo museum, and a lively old town where you'll practice your first words.",
+    "uk": "Вінниця — місто на річці Південний Буг, відоме фонтаном Roshen, музеєм у Пирогові та затишним старим містом, де ти зробиш перші кроки в мові."
+  },
+  "tilemapKey": "vinnytsia_test_level",
+  "npcs": [
+    { "id": "npc_guide", "dialogueId": "vinnytsia_intro" }
+  ]
+}
