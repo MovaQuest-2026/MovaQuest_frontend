@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Story } from 'inkjs'
 import { getDialogue } from '../api/getDialogue'
+import { trackLessonStarted } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
 
 interface DialogueChoice {
@@ -30,6 +31,8 @@ export function DialogueOverlay() {
     }
 
     let cancelled = false
+
+    trackLessonStarted(activeDialogue)
 
     getDialogue(activeDialogue).then((dialogue) => {
       if (cancelled) return

@@ -2,9 +2,15 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { getNextReviewWords } from '../api/getNextReviewWords'
+import { trackLessonCompleted } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
 
-export function ResultScreen() {
+interface ResultScreenProps {
+  dialogueId: string
+  score: number
+}
+
+export function ResultScreen({ dialogueId, score }: ResultScreenProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const learnedWords = useGameStore((state) => state.learnedWords)
@@ -20,6 +26,10 @@ export function ResultScreen() {
       cancelled = true
     }
   }, [learnedWords])
+
+  useEffect(() => {
+    trackLessonCompleted(dialogueId, score)
+  }, [dialogueId, score])
 
   function handleGoHome() {
     setActiveExercise(null)

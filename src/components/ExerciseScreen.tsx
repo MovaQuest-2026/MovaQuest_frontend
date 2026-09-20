@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getExercises, type ExerciseSet } from '../api/getExercises'
+import { trackExerciseAnswered } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
 import { ResultScreen } from './ResultScreen'
 
@@ -14,6 +15,7 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   const [exercises, setExercises] = useState<ExerciseSet | null>(null)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
+  const [correctCount, setCorrectCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -32,7 +34,12 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   const finished = questionIndex >= exercises.questions.length
 
   if (finished) {
-    return <ResultScreen />
+    return (
+      <ResultScreen
+        dialogueId={dialogueId}
+        score={correctCount / exercises.questions.length}
+      />
+    )
   }
 
   const question = exercises.questions[questionIndex]
@@ -40,8 +47,11 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   function handleSelect(option: string) {
     if (selectedOption) return
 
+    const correct = option === question.correct
     setSelectedOption(option)
-    if (option === question.correct) {
+    trackExerciseAnswered(question.id, correct)
+    if (correct) {
+      setCorrectCount((count) => count + 1)
       addLearnedWord(question.correct)
     }
   }
