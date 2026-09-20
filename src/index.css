@@ -159,3 +159,29 @@ code {
 .dialogue-choices button {
   text-align: left;
 }
+
+.exercise-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.exercise-options button.correct {
+  border-color: #2e7d4f;
+  color: #2e7d4f;
+}
+
+.exercise-options button.incorrect {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+p.correct {
+  color: #2e7d4f;
+}
+
+p.incorrect {
+  color: #c0392b;
+}

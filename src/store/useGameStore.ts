@@ -9,8 +9,11 @@ interface GameState {
   setCurrentCity: (cityId: string | null) => void
   activeDialogue: string | null
   setActiveDialogue: (dialogueId: string | null) => void
+  activeExercise: string | null
+  setActiveExercise: (dialogueId: string | null) => void
   learnedWords: string[]
   setLearnedWords: (words: string[]) => void
+  addLearnedWord: (word: string) => void
 }
 
 export const useGameStore = create<GameState>((set) => ({
@@ -20,6 +23,14 @@ export const useGameStore = create<GameState>((set) => ({
   setCurrentCity: (cityId) => set({ currentCity: cityId }),
   activeDialogue: null,
   setActiveDialogue: (dialogueId) => set({ activeDialogue: dialogueId }),
+  activeExercise: null,
+  setActiveExercise: (dialogueId) => set({ activeExercise: dialogueId }),
   learnedWords: [],
   setLearnedWords: (words) => set({ learnedWords: words }),
+  addLearnedWord: (word) =>
+    set((state) =>
+      state.learnedWords.includes(word)
+        ? state
+        : { learnedWords: [...state.learnedWords, word] },
+    ),
 }))

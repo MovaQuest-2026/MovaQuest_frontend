@@ -5,12 +5,15 @@ import { getCityConfig, type CityConfig } from '../api/getCityConfig'
 import { useGameStore } from '../store/useGameStore'
 import { PhaserGame } from '../game/PhaserGame'
 import { DialogueOverlay } from './DialogueOverlay'
+import { ExerciseScreen } from './ExerciseScreen'
 
 export function WorldScreen() {
   const { t } = useTranslation()
   const { cityId } = useParams<{ cityId: string }>()
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
   const setCurrentCity = useGameStore((state) => state.setCurrentCity)
+  const activeExercise = useGameStore((state) => state.activeExercise)
+  const setActiveExercise = useGameStore((state) => state.setActiveExercise)
   const [city, setCity] = useState<CityConfig | null>(null)
   const [introDismissed, setIntroDismissed] = useState(false)
 
@@ -38,6 +41,15 @@ export function WorldScreen() {
 
   if (!city) {
     return <div className="screen world-screen" />
+  }
+
+  if (activeExercise) {
+    return (
+      <ExerciseScreen
+        dialogueId={activeExercise}
+        onComplete={() => setActiveExercise(null)}
+      />
+    )
   }
 
   if (introDismissed) {

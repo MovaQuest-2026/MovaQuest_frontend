@@ -13,6 +13,7 @@ export function DialogueOverlay() {
   const { t } = useTranslation()
   const activeDialogue = useGameStore((state) => state.activeDialogue)
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue)
+  const setActiveExercise = useGameStore((state) => state.setActiveExercise)
 
   const storyRef = useRef<Story | null>(null)
   const [lines, setLines] = useState<string[]>([])
@@ -65,8 +66,8 @@ export function DialogueOverlay() {
   }
 
   function handleFinish() {
+    setActiveExercise(activeDialogue)
     setActiveDialogue(null)
-    console.log('go to exercise')
   }
 
   if (!activeDialogue) return null

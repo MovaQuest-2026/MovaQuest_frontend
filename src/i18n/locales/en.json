@@ -11,5 +11,12 @@
   "world": {
     "continue": "Continue",
     "finish": "Finish"
+  },
+  "exercise": {
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "next": "Next",
+    "summary": "{{correct}} of {{total}} correct",
+    "backToWorld": "Back to the world"
   }
 }

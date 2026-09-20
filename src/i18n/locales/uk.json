@@ -11,5 +11,12 @@
   "world": {
     "continue": "Продовжити",
     "finish": "Завершити"
+  },
+  "exercise": {
+    "correct": "Правильно!",
+    "incorrect": "Неправильно",
+    "next": "Далі",
+    "summary": "{{correct}} з {{total}} правильно",
+    "backToWorld": "Повернутися у світ"
   }
 }
