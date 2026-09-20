@@ -15,8 +15,12 @@
   "exercise": {
     "correct": "Correct!",
     "incorrect": "Incorrect",
-    "next": "Next",
-    "summary": "{{correct}} of {{total}} correct",
-    "backToWorld": "Back to the world"
+    "next": "Next"
+  },
+  "result": {
+    "title": "Lesson complete!",
+    "learnedCount": "{{count}} words learned",
+    "reviewTitle": "Recommended for review",
+    "goHome": "Home"
   }
 }

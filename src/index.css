@@ -185,3 +185,12 @@ p.correct {
 p.incorrect {
   color: #c0392b;
 }
+
+.result-screen ul {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  margin: 8px 0 16px;
+  list-style-position: inside;
+}

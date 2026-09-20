@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getExercises, type ExerciseSet } from '../api/getExercises'
 import { useGameStore } from '../store/useGameStore'
+import { ResultScreen } from './ResultScreen'
 
 interface ExerciseScreenProps {
   dialogueId: string
-  onComplete: () => void
 }
 
-export function ExerciseScreen({ dialogueId, onComplete }: ExerciseScreenProps) {
+export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   const { t } = useTranslation()
   const addLearnedWord = useGameStore((state) => state.addLearnedWord)
   const [exercises, setExercises] = useState<ExerciseSet | null>(null)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
-  const [correctCount, setCorrectCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -30,31 +29,19 @@ export function ExerciseScreen({ dialogueId, onComplete }: ExerciseScreenProps) 
     return <div className="screen exercise-screen" />
   }
 
-  const question = exercises.questions[questionIndex]
   const finished = questionIndex >= exercises.questions.length
 
   if (finished) {
-    return (
-      <div className="screen exercise-screen">
-        <h1>
-          {t('exercise.summary', {
-            correct: correctCount,
-            total: exercises.questions.length,
-          })}
-        </h1>
-        <button type="button" onClick={onComplete}>
-          {t('exercise.backToWorld')}
-        </button>
-      </div>
-    )
+    return <ResultScreen />
   }
+
+  const question = exercises.questions[questionIndex]
 
   function handleSelect(option: string) {
     if (selectedOption) return
 
     setSelectedOption(option)
     if (option === question.correct) {
-      setCorrectCount((count) => count + 1)
       addLearnedWord(question.correct)
     }
   }

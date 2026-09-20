@@ -15,8 +15,12 @@
   "exercise": {
     "correct": "Правильно!",
     "incorrect": "Неправильно",
-    "next": "Далі",
-    "summary": "{{correct}} з {{total}} правильно",
-    "backToWorld": "Повернутися у світ"
+    "next": "Далі"
+  },
+  "result": {
+    "title": "Урок завершено!",
+    "learnedCount": "Вивчено слів: {{count}}",
+    "reviewTitle": "Рекомендовано повторити",
+    "goHome": "На головну"
   }
 }
