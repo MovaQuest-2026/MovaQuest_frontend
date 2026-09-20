@@ -1,0 +1,32 @@
+src/i18n/locales/uk.json
+  s_3287e58855df6b::t_bbf71ada127fc2 18-24
+src/components/ExerciseScreen.tsx
+  s_3287e58855df6b::t_c007f332be0e3e 5,11,35,38
+  s_3287e58855df6b::t_488e27b19d0ae7 39
+src/components/ResultScreen.tsx
+  s_3287e58855df6b::t_18e508c92f7e21 1-50
+src/index.css
+  s_3287e58855df6b::t_b51c1056e946be 188-196
+src/i18n/locales/en.json
+  s_3287e58855df6b::t_c9b55f708a2f42 18-24
+src/components/WorldScreen.tsx
+  s_3287e58855df6b::t_436b5c77fb843a 46
+src/api/getNextReviewWords.ts
+  s_3287e58855df6b::t_791f466bc2e1a4 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f71972446e6338fac87827d09e55fd1c3f5a6b2b",
+  "prompts": {},
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
