@@ -1,0 +1,42 @@
+src/game/scenes/TestLevelScene.ts
+  s_3287e58855df6b::t_4a87e1a97a9555 2-5,10-14,25-26,29-34,45-48,77-80,103-130
+src/components/WorldScreen.tsx
+  s_3287e58855df6b::t_9c3c19c2fc22b1 44-49
+  s_3287e58855df6b::t_fe2056b06d203c 7
+src/api/getCityConfig.ts
+  s_3287e58855df6b::t_7914e2193566ff 1-8,14
+src/game/PhaserGame.tsx
+  s_3287e58855df6b::t_17758865afde59 3-4,6-10,28-29,33
+src/i18n/locales/en.json
+  s_3287e58855df6b::t_7fc6f39515f495 12-13
+src/i18n/locales/uk.json
+  s_3287e58855df6b::t_bd124f4a1b0041 12-13
+src/components/DialogueOverlay.tsx
+  s_3287e58855df6b::t_0bd6805e88ab53 1-19
+src/mocks/cities/vinnytsia.json
+  h_dfa0da26a12699 8-9,15-31
+  h_dfa0da26a12699 3-6,13-14,32,34
+src/index.css
+  s_3287e58855df6b::t_8f1f1ed53aaa9f 113-117,128-150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b9ab4ce26ae3eccdf791b3db7eaa42ada66b63ad",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
