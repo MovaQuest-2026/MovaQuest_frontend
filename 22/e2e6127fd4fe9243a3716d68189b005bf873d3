@@ -1,0 +1,35 @@
+src/api/getExercises.ts
+  s_3287e58855df6b::t_ba3062ec2b3809 1-26
+src/i18n/locales/en.json
+  s_3287e58855df6b::t_91af35c79fe5c0 14-20
+src/components/WorldScreen.tsx
+  s_3287e58855df6b::t_833db6a4462be4 8,15-16
+  s_3287e58855df6b::t_ad0e2cec879e2b 46-54
+src/components/DialogueOverlay.tsx
+  s_3287e58855df6b::t_366dbf01fcdda3 16
+  s_3287e58855df6b::t_256673838ec5b6 69
+src/i18n/locales/uk.json
+  s_3287e58855df6b::t_08bf2c6ab8f422 14-20
+src/store/useGameStore.ts
+  s_3287e58855df6b::t_56edaf559c21e2 12-13,16,26-27,30-35
+src/index.css
+  s_3287e58855df6b::t_755fa39ad7556a 162-187
+src/components/ExerciseScreen.tsx
+  s_3287e58855df6b::t_14870780eaa8e7 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "22e2e6127fd4fe9243a3716d68189b005bf873d3",
+  "prompts": {},
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
