@@ -1,0 +1,11 @@
+{
+  "id": "vinnytsia_intro",
+  "cityId": "vinnytsia",
+  "npcId": "npc_guide",
+  "inkContent": "__PASTE_COMPILED_INK_JSON_HERE__",
+  "vocabulary": [
+    { "word": "музей", "translation": "museum", "example": "Наш музей у центрі міста." },
+    { "word": "річка", "translation": "river", "example": "Вінниця стоїть на річці Південний Буг." }
+  ],
+  "_compileNote": "Поле inkContent — це placeholder. Скомпілюйте vinnytsia_intro.ink у справжній runtime JSON одним із способів: 1) Inky editor (inky-writer.itch.io / GitHub inkle/inky) → File > Export to JSON. 2) CLI inklecate (частина Inkle's ink репозиторію). 3) npm-пакет inkjs надає лише рантайм, не компілятор — компіляцію треба робити через Inky/inklecate, а результат вставляти сюди замість цього поля. Це поле-нотатка треба видалити з фінального JSON перед використанням у застосунку."
+}

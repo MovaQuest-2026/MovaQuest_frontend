@@ -1,0 +1,26 @@
+{
+  "dialogueId": "vinnytsia_intro",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Як буде 'museum' українською?",
+      "options": ["музей", "ринок", "вулиця"],
+      "correct": "музей"
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Як буде 'river' українською?",
+      "options": ["гора", "річка", "площа"],
+      "correct": "річка"
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "На якій річці стоїть Вінниця?",
+      "options": ["Дніпро", "Південний Буг", "Дністер"],
+      "correct": "Південний Буг"
+    }
+  ]
+}

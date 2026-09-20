@@ -1,0 +1,25 @@
+{
+  "id": "vinnytsia",
+  "name": { "en": "Vinnytsia", "uk": "Вінниця" },
+  "culturalIntro": {
+    "en": "Vinnytsia is a city on the Southern Bug river, known for the Roshen Fountain and its historic old town.",
+    "uk": "Вінниця — місто на річці Південний Буг, відоме фонтаном Рошен та історичним старим містом."
+  },
+  "tilemapKey": "vinnytsia_test_level",
+  "npcs": [
+    {
+      "id": "npc_guide",
+      "name": { "en": "Local Guide", "uk": "Місцевий гід" },
+      "dialogueId": "vinnytsia_intro",
+      "x": 320,
+      "y": 240
+    },
+    {
+      "id": "npc_barista",
+      "name": { "en": "Café Barista", "uk": "Бариста в кав'ярні" },
+      "dialogueId": "vinnytsia_cafe",
+      "x": 560,
+      "y": 180
+    }
+  ]
+}

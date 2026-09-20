@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
 
 const MOVE_SPEED = 200
+const TILEMAP_KEY = 'vinnytsia_test'
+const TILESET_IMAGE_KEY = 'tileset'
 
 export class TestLevelScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Image
@@ -17,6 +19,9 @@ export class TestLevelScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.tilemapTiledJSON(TILEMAP_KEY, '/tilemaps/vinnytsia_test.json')
+    this.load.image(TILESET_IMAGE_KEY, '/tilemaps/tileset.png')
+
     const graphics = this.make.graphics({ x: 0, y: 0 })
     graphics.fillStyle(0xff5a5f, 1)
     graphics.fillRect(0, 0, 32, 32)
@@ -25,14 +30,29 @@ export class TestLevelScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#2f7a4f')
+    const map = this.make.tilemap({ key: TILEMAP_KEY })
+    const tileset = map.addTilesetImage('tileset', TILESET_IMAGE_KEY)!
+
+    const groundLayer = map.createLayer('ground', tileset, 0, 0)!
+    const collisionLayer = map.createLayer('collision', tileset, 0, 0)!
+    collisionLayer.setCollisionByProperty({ collides: true })
 
     this.player = this.physics.add.image(
-      this.scale.width / 2,
-      this.scale.height / 2,
+      map.widthInPixels / 2,
+      map.heightInPixels / 2,
       'player-placeholder',
     )
     this.player.setCollideWorldBounds(true)
+
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+    this.physics.add.collider(this.player, collisionLayer)
+
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+    this.cameras.main.startFollow(this.player)
+
+    groundLayer.setDepth(0)
+    collisionLayer.setDepth(1)
+    this.player.setDepth(2)
 
     this.cursors = this.input.keyboard!.createCursorKeys()
     this.wasd = {
