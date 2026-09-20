@@ -1,0 +1,55 @@
+.gitignore
+  s_3287e58855df6b::t_e7b3aab423da77 1-24
+.oxlintrc.json
+  s_3287e58855df6b::t_948406de64c75d 1-8
+CLAUDE.md
+  s_3287e58855df6b::t_0f0670e6a7bdc5 1-42
+README.md
+  s_3287e58855df6b::t_3b8923d31d4995 1-32
+index.html
+  s_3287e58855df6b::t_673445fc24a6ec 1-13
+package-lock.json
+  s_3287e58855df6b::t_b4e65701d8e780 1-1531
+package.json
+  s_3287e58855df6b::t_ae80332d52d2a5 1-30
+public/favicon.svg
+  s_3287e58855df6b::t_b8109482cf5137 1
+public/icons.svg
+  s_3287e58855df6b::t_ad8fc129455d39 1-24
+src/App.css
+  s_3287e58855df6b::t_da2d07190e1b87 1-184
+src/App.tsx
+  s_3287e58855df6b::t_aafb93ab194d34 1-122
+src/assets/react.svg
+  s_3287e58855df6b::t_44d5f2e245c165 1
+src/assets/vite.svg
+  s_3287e58855df6b::t_0ef6796b194c3a 1
+src/index.css
+  s_3287e58855df6b::t_253c6b36713f58 1-111
+src/main.tsx
+  s_3287e58855df6b::t_f30093c5a6b9b2 1-10
+tsconfig.app.json
+  s_3287e58855df6b::t_5b29fdc41d1fa6 1-26
+tsconfig.json
+  s_3287e58855df6b::t_ac5990f698baed 1-7
+tsconfig.node.json
+  s_3287e58855df6b::t_013ee2aa8984a3 1-23
+vite.config.ts
+  s_3287e58855df6b::t_c4a2adfb272bdb 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "897426640700817ab4a5359c6495dbb5497578df",
+  "prompts": {},
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
