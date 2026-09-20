@@ -1,0 +1,11 @@
+{
+  "start": {
+    "title": "Movaquest",
+    "start": "Start"
+  },
+  "languageSelect": {
+    "title": "Choose your language",
+    "english": "English",
+    "ukrainian": "Українська"
+  }
+}
