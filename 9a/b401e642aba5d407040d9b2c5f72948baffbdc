@@ -1,0 +1,39 @@
+src/i18n/locales/uk.json
+  s_3287e58855df6b::t_8989f572273f26 1-11
+src/components/StartScreen.tsx
+  s_3287e58855df6b::t_d1216d80b3d0af 1-18
+src/main.tsx
+  s_3287e58855df6b::t_7d6cee9d983525 3-4,10-12
+src/i18n/index.ts
+  s_3287e58855df6b::t_a2a59b013c7f73 1-21
+package.json
+  s_3287e58855df6b::t_63072405418518 15-16,23-24
+src/i18n/locales/en.json
+  s_3287e58855df6b::t_5231ad781d42e4 1-11
+src/App.tsx
+  s_3287e58855df6b::t_3c8d52ac838acd 1-4,8-12
+src/store/useGameStore.ts
+  s_3287e58855df6b::t_2deb354548fc19 1-13
+src/components/WorldScreen.tsx
+  s_3287e58855df6b::t_e4c7c4d61633f3 1-11
+src/components/LanguageSelectScreen.tsx
+  s_3287e58855df6b::t_45b3b6a71a26f0 1-27
+package-lock.json
+  s_3287e58855df6b::t_0b57817df8c796 13-14,21-22,685-691,693-695,699,704-706,710,852-857,1131-1142,1261-1263,1265-1267,1273-1275,1278-1279,1282,1385-1391
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9ab401e642aba5d407040d9b2c5f72948baffbdc",
+  "prompts": {},
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
