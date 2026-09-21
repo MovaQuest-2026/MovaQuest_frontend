@@ -1,0 +1,35 @@
+src/mocks/exercises/vinnytsia_cafe.json
+  s_2c552f955d65c4::t_99e16c9bce8697 1-25
+src/mocks/exercises/vinnytsia_intro.json
+  s_2c552f955d65c4::t_bb1acbad2bd3da 7-10,17-20,27-30
+src/api/getExercises.ts
+  s_2c552f955d65c4::t_7ba6350a74e6c5 4
+src/mocks/dialogues/vinnytsia_intro.ink.json
+  s_2c552f955d65c4::t_081c6998476f70 6-71,73-143,146-155
+src/api/getDialogue.ts
+  s_2c552f955d65c4::t_50e14f8bfaafbe 11
+src/components/DialogueOverlay.tsx
+  s_2c552f955d65c4::t_3c0a8cb431c503 18-19
+  s_2c552f955d65c4::t_c37909d5b57291 42,55
+src/mocks/dialogues/vinnytsia_cafe.ink.json
+  s_2c552f955d65c4::t_081c6998476f70 1-153
+src/components/ExerciseScreen.tsx
+  s_2c552f955d65c4::t_8f4fbaf090e9e1 15-16
+  s_2c552f955d65c4::t_b17aad69b23f9d 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8cf29833e16eadc5e9bdb9ca4ac3f18714eb41b4",
+  "prompts": {},
+  "sessions": {
+    "s_2c552f955d65c4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "542fafc8-4c45-46c7-a676-908edd76e297",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
