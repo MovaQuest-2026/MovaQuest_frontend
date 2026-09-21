@@ -269,6 +269,7 @@ button:disabled {
   text-align: left;
   border-radius: 10px;
   padding: 10px 16px;
+  color: var(--bg);
 }
 
 .exercise-options {
