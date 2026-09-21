@@ -1,0 +1,31 @@
+src/game/scenes/TestLevelScene.ts
+  s_3287e58855df6b::t_f3e9c6de34581f 11-14,20-27,38,47,91-93,95-116,128,142,146-179,184,188-189,193
+src/index.css
+  s_3287e58855df6b::t_6c85274d9a8307 63-64,69-76
+  s_3287e58855df6b::t_9aaad9f4a4a849 205
+  s_3287e58855df6b::t_0ebde7549e015d 270-271
+  s_3287e58855df6b::t_ccd98981f3f468 224-234,249,251,253-254
+  s_3287e58855df6b::t_d501e0cc793816 123-204,206-207
+  s_3287e58855df6b::t_71cfa07ef7b4d8 277-278,280-282,291,297,303,308,312-316,319-330
+  s_3287e58855df6b::t_1b75e7b6fd7dd4 284-286
+  s_3287e58855df6b::t_831e66ffaf97e6 331-336
+  s_3287e58855df6b::t_c1e1ec9b4fa25c 283
+src/components/DialogueOverlay.tsx
+  s_3287e58855df6b::t_568b9df0202b71 37-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4ef653f84b5fd8756d4eaf8f8e9e7f0d1172d1d6",
+  "prompts": {},
+  "sessions": {
+    "s_3287e58855df6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d2e0e1c-ab2f-4693-b44b-765e478f8ae9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
