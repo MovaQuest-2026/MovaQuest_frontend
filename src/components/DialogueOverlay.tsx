@@ -34,12 +34,18 @@ export function DialogueOverlay() {
 
     trackLessonStarted(activeDialogue)
 
-    getDialogue(activeDialogue).then((dialogue) => {
-      if (cancelled) return
-      const story = new Story(JSON.stringify(dialogue.inkContent))
-      storyRef.current = story
-      advance(story)
-    })
+    getDialogue(activeDialogue)
+      .then((dialogue) => {
+        if (cancelled) return
+        const story = new Story(JSON.stringify(dialogue.inkContent))
+        storyRef.current = story
+        advance(story)
+      })
+      .catch(() => {
+        // No dialogue content for this NPC yet — close instead of showing a stuck empty overlay.
+        if (cancelled) return
+        setActiveDialogue(null)
+      })
 
     return () => {
       cancelled = true

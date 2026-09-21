@@ -8,9 +8,21 @@ const MOVE_SPEED = 200
 const TILEMAP_KEY = 'vinnytsia_test'
 const TILESET_IMAGE_KEY = 'tileset'
 const NPC_INTERACTION_RADIUS = 48
+const NPC_PATROL_SPEED = 40
+const NPC_PATROL_RANGE = 48
+const NPC_GREETING_MIN_DELAY = 3000
+const NPC_GREETING_MAX_DELAY = 6000
 
 interface TestLevelSceneData {
   npcs?: CityNpcConfig[]
+}
+
+interface NpcEntity {
+  config: CityNpcConfig
+  sprite: Phaser.GameObjects.Image
+  greetingText: Phaser.GameObjects.Text
+  originX: number
+  direction: 1 | -1
 }
 
 export class TestLevelScene extends Phaser.Scene {
@@ -23,6 +35,7 @@ export class TestLevelScene extends Phaser.Scene {
     right: Phaser.Input.Keyboard.Key
   }
   private npcs: CityNpcConfig[] = []
+  private npcEntities: NpcEntity[] = []
   private nearbyNpcId: string | null = null
 
   constructor() {
@@ -31,6 +44,7 @@ export class TestLevelScene extends Phaser.Scene {
 
   init(data: TestLevelSceneData) {
     this.npcs = data.npcs ?? []
+    this.npcEntities = []
     this.nearbyNpcId = null
   }
 
@@ -74,8 +88,32 @@ export class TestLevelScene extends Phaser.Scene {
     collisionLayer.setDepth(1)
     this.player.setDepth(2)
 
+    const greeting =
+      useGameStore.getState().nativeLanguage === 'uk' ? 'Привіт!' : 'Hi!'
+
     for (const npc of this.npcs) {
-      this.add.image(npc.x, npc.y, 'npc-placeholder').setDepth(2)
+      const sprite = this.add.image(npc.x, npc.y, 'npc-placeholder').setDepth(2)
+      const greetingText = this.add
+        .text(npc.x, npc.y - 28, greeting, {
+          fontFamily: 'sans-serif',
+          fontSize: '14px',
+          color: '#111111',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          padding: { x: 6, y: 3 },
+        })
+        .setOrigin(0.5)
+        .setAlpha(0)
+        .setDepth(3)
+
+      const entity: NpcEntity = {
+        config: npc,
+        sprite,
+        greetingText,
+        originX: npc.x,
+        direction: Math.random() < 0.5 ? 1 : -1,
+      }
+      this.npcEntities.push(entity)
+      this.scheduleNpcGreeting(entity)
     }
 
     this.cursors = this.input.keyboard!.createCursorKeys()
@@ -87,7 +125,7 @@ export class TestLevelScene extends Phaser.Scene {
     }
   }
 
-  update() {
+  update(_time: number, delta: number) {
     this.player.setVelocity(0)
 
     const left = this.cursors.left.isDown || this.wasd.left.isDown
@@ -101,23 +139,58 @@ export class TestLevelScene extends Phaser.Scene {
     if (up) this.player.setVelocityY(-MOVE_SPEED)
     else if (down) this.player.setVelocityY(MOVE_SPEED)
 
+    this.updateNpcPatrol(delta)
     this.updateNpcInteractions()
+  }
+
+  private updateNpcPatrol(delta: number) {
+    for (const entity of this.npcEntities) {
+      entity.sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
+
+      if (entity.sprite.x >= entity.originX + NPC_PATROL_RANGE) {
+        entity.sprite.x = entity.originX + NPC_PATROL_RANGE
+        entity.direction = -1
+      } else if (entity.sprite.x <= entity.originX - NPC_PATROL_RANGE) {
+        entity.sprite.x = entity.originX - NPC_PATROL_RANGE
+        entity.direction = 1
+      }
+
+      entity.greetingText.setPosition(entity.sprite.x, entity.sprite.y - 28)
+    }
+  }
+
+  private scheduleNpcGreeting(entity: NpcEntity) {
+    const delay = Phaser.Math.Between(
+      NPC_GREETING_MIN_DELAY,
+      NPC_GREETING_MAX_DELAY,
+    )
+    this.time.delayedCall(delay, () => {
+      this.tweens.add({
+        targets: entity.greetingText,
+        alpha: 1,
+        duration: 200,
+        yoyo: true,
+        hold: 1400,
+        ease: 'Sine.easeInOut',
+      })
+      this.scheduleNpcGreeting(entity)
+    })
   }
 
   private updateNpcInteractions() {
     let closestNpc: CityNpcConfig | null = null
     let closestDistance = Infinity
 
-    for (const npc of this.npcs) {
+    for (const entity of this.npcEntities) {
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         this.player.y,
-        npc.x,
-        npc.y,
+        entity.sprite.x,
+        entity.sprite.y,
       )
       if (distance <= NPC_INTERACTION_RADIUS && distance < closestDistance) {
         closestDistance = distance
-        closestNpc = npc
+        closestNpc = entity.config
       }
     }
 
