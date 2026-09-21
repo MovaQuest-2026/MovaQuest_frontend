@@ -8,7 +8,7 @@ export interface DialogueConfig {
   id: string
   cityId: string
   npcId: string
-  inkContent: object
+  inkContent: { en: object; uk: object }
   vocabulary: DialogueVocabularyEntry[]
 }
 

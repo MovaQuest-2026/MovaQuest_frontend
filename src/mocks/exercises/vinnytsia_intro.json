@@ -4,21 +4,30 @@
     {
       "id": "q1",
       "type": "multiple_choice",
-      "prompt": "Як буде 'museum' українською?",
+      "prompt": {
+        "en": "How do you say 'museum' in Ukrainian?",
+        "uk": "Як буде 'museum' українською?"
+      },
       "options": ["музей", "ринок", "вулиця"],
       "correct": "музей"
     },
     {
       "id": "q2",
       "type": "multiple_choice",
-      "prompt": "Як буде 'river' українською?",
+      "prompt": {
+        "en": "How do you say 'river' in Ukrainian?",
+        "uk": "Як буде 'river' українською?"
+      },
       "options": ["гора", "річка", "площа"],
       "correct": "річка"
     },
     {
       "id": "q3",
       "type": "multiple_choice",
-      "prompt": "На якій річці стоїть Вінниця?",
+      "prompt": {
+        "en": "Which river is Vinnytsia on?",
+        "uk": "На якій річці стоїть Вінниця?"
+      },
       "options": ["Дніпро", "Південний Буг", "Дністер"],
       "correct": "Південний Буг"
     }

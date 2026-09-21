@@ -1,0 +1,153 @@
+{
+  "id": "vinnytsia_cafe",
+  "cityId": "vinnytsia",
+  "npcId": "npc_barista",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "^Hi there! Welcome in — mind the step, the floor's a little uneven.",
+          "\n",
+          "^I'm the barista here, and if you've got a minute while your order's getting ready, I'll teach you something new.",
+          "\n",
+          "^We've got a rule in this café: every guest leaves knowing one new word. Want to hear about the coffee, or the cup it comes in?",
+          "\n",
+          "ev",
+          "str",
+          "^Tell me about the coffee",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Tell me about the cup",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Our word for \"coffee\" is \"кава\" — kah-VAH. This place has been roasting кава the same way for thirty years, ever since the owner's grandmother smuggled the recipe out of Odesa in an empty flour sack.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^We call this little cup a \"чашка\" — CHASH-kah. Every чашка in this café is a different shape on purpose, so regulars can spot their favorite one clear across the room.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        null
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "^Привіт! Заходь — обережно, тут нерівна підлога.",
+          "\n",
+          "^Я тутешній бариста, і поки готується замовлення, є хвилинка навчити тебе дечого нового.",
+          "\n",
+          "^У нашій кав'ярні є правило: кожен гість йде звідси, знаючи нове слово. Розповісти про каву чи про чашку, з якої її п'ють?",
+          "\n",
+          "ev",
+          "str",
+          "^Про каву",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Про чашку",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Цю каву тут обсмажують за одним рецептом уже тридцять років — відколи бабуся власниці вивезла його з Одеси в порожньому мішку з-під борошна.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Кожна чашка в цій кав'ярні навмисно іншої форми, щоб завсідники могли впізнати свою улюблену через всю залу.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        null
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "кава",
+      "translation": "coffee",
+      "example": "Ця кава смакує чудово."
+    },
+    {
+      "word": "чашка",
+      "translation": "cup",
+      "example": "Кожна чашка тут інша."
+    }
+  ]
+}

@@ -12,6 +12,8 @@ interface ExerciseScreenProps {
 export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   const { t } = useTranslation()
   const addLearnedWord = useGameStore((state) => state.addLearnedWord)
+  const nativeLanguage = useGameStore((state) => state.nativeLanguage)
+  const lang = nativeLanguage ?? 'en'
   const [exercises, setExercises] = useState<ExerciseSet | null>(null)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
@@ -63,7 +65,7 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
 
   return (
     <div className="screen exercise-screen">
-      <p>{question.prompt}</p>
+      <p>{question.prompt[lang]}</p>
 
       <div className="exercise-options">
         {question.options.map((option) => {

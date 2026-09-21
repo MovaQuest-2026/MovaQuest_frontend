@@ -1,7 +1,7 @@
 export interface ExerciseQuestion {
   id: string
   type: 'multiple_choice'
-  prompt: string
+  prompt: { en: string; uk: string }
   options: string[]
   correct: string
 }

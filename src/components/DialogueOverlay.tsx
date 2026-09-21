@@ -15,6 +15,8 @@ export function DialogueOverlay() {
   const activeDialogue = useGameStore((state) => state.activeDialogue)
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue)
   const setActiveExercise = useGameStore((state) => state.setActiveExercise)
+  const nativeLanguage = useGameStore((state) => state.nativeLanguage)
+  const lang = nativeLanguage ?? 'en'
 
   const storyRef = useRef<Story | null>(null)
   const [lines, setLines] = useState<string[]>([])
@@ -37,7 +39,7 @@ export function DialogueOverlay() {
     getDialogue(activeDialogue)
       .then((dialogue) => {
         if (cancelled) return
-        const story = new Story(JSON.stringify(dialogue.inkContent))
+        const story = new Story(JSON.stringify(dialogue.inkContent[lang]))
         storyRef.current = story
         advance(story)
       })
@@ -50,7 +52,7 @@ export function DialogueOverlay() {
     return () => {
       cancelled = true
     }
-  }, [activeDialogue])
+  }, [activeDialogue, lang])
 
   function advance(story: Story) {
     const nextLines: string[] = []

@@ -1,0 +1,25 @@
+{
+  "dialogueId": "vinnytsia_cafe",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": {
+        "en": "How do you say 'coffee' in Ukrainian?",
+        "uk": "Як буде 'coffee' українською?"
+      },
+      "options": ["кава", "чай", "сік"],
+      "correct": "кава"
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": {
+        "en": "How do you say 'cup' in Ukrainian?",
+        "uk": "Як буде 'cup' українською?"
+      },
+      "options": ["тарілка", "чашка", "ложка"],
+      "correct": "чашка"
+    }
+  ]
+}
