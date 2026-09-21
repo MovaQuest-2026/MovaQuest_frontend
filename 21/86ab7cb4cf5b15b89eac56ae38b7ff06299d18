@@ -1,0 +1,14 @@
+src/index.css
+  h_dfa0da26a12699 272
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2186ab7cb4cf5b15b89eac56ae38b7ff06299d18",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
