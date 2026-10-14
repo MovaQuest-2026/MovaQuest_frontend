@@ -169,11 +169,29 @@ function findTarget(
   return null
 }
 
-/** Перші двері або вихід на найкоротшому шляху між зонами (пошук у ширину). */
+/**
+ * Перші двері або вихід на найкоротшому шляху між зонами (пошук у ширину).
+ * Якщо передано flags, спершу шукаємо шлях тільки через відкриті проходи — так стрілка
+ * в тролейбусі вказує на той вихід, що справді відкрився. Немає відкритого шляху — шукаємо будь-який.
+ */
 export function findGateTowards(
   city: CityConfig,
   fromZone: string,
   toZone: string,
+  flags?: QuestFlags,
+): ArrowTarget | null {
+  if (flags) {
+    const open = searchGate(city, fromZone, toZone, (gate) => isGateOpen(gate, flags))
+    if (open) return open
+  }
+  return searchGate(city, fromZone, toZone, () => true)
+}
+
+function searchGate(
+  city: CityConfig,
+  fromZone: string,
+  toZone: string,
+  canPass: (gate: DoorConfig | ExitConfig) => boolean,
 ): ArrowTarget | null {
   const firstGate = new Map<string, ArrowTarget>()
   const queue = [fromZone]
@@ -190,7 +208,7 @@ export function findGateTowards(
       ...zone.exits.map((exit) => ({ kind: 'exit' as const, gate: exit })),
     ]
     for (const { kind, gate } of gates) {
-      if (visited.has(gate.target)) continue
+      if (visited.has(gate.target) || !canPass(gate)) continue
       visited.add(gate.target)
       firstGate.set(
         gate.target,
@@ -216,5 +234,5 @@ export function getArrowTarget(
   if (location.zoneId === state.currentZone) {
     return { kind: location.kind, id: location.id }
   }
-  return findGateTowards(city, state.currentZone, location.zoneId)
+  return findGateTowards(city, state.currentZone, location.zoneId, state.flags)
 }

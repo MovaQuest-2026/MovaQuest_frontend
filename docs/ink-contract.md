@@ -63,6 +63,16 @@ node scripts/build-ink.mjs
 | `cutscene:<id>` | після закриття діалогу запускає кат-сцену (`fountain`) |
 | `ending:<best\|good\|basic>` | після закриття діалогу показує екран "Щоденник дня" з цією кінцівкою |
 
+## Прапорці, які ставить квест
+
+Ці прапорці не є змінними ink і не ставляться тегами: їх пише квест-двигун з `startEffects` / `completeEffects` у `src/mocks/quests/vinnytsia_main.json`.
+
+| Прапорець | Коли | Що робить фронт |
+| --- | --- | --- |
+| `rain_started` | старт кроку `wait_rain` (після покупки квітів) | дощ у зовнішніх зонах, NPC з `patrol: true` ховаються, під'їзд `door_entrance` відкривається |
+| `rain_over` | кінець кроку `wait_rain` (після діалогу `vysh_galyna`) | дощ минає, NPC повертаються |
+| `trolley_announced` | кінець кроку `ride` (після діалогу `trolley_passenger`) | тролейбус зупиняється, відкривається `exit_soborna` або `exit_park` залежно від `stop_ok` |
+
 ## Як працює `quiz:`
 
 Фронт викликає `story.Continue()` по одному рядку. Якщо в `story.currentTags` є `quiz:<id>`, рядок показується, кнопка "Далі" замінюється карткою вправи з `getQuiz(id)`. Після відповіді фронт ставить `story.variablesState.quiz_ok = true | false` і продовжує. Тому умова `{ quiz_ok: ... }` у ink має йти одразу після рядка з тегом.

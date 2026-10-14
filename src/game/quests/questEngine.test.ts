@@ -316,3 +316,66 @@ describe('акт 1 Вінниці на справжніх даних', () => {
     expect(isGateOpen(exit, state.flags)).toBe(true)
   })
 })
+
+describe('розвилка тролейбуса', () => {
+  const realCity = vinnytsiaCity as unknown as CityConfig
+  const realQuestline = vinnytsiaQuests as unknown as Questline
+
+  it('стрілка веде на відкритий вихід', () => {
+    const base = { trolley_announced: true }
+    expect(
+      findGateTowards(realCity, 'trolleybus', 'center', { ...base, stop_ok: true }),
+    ).toEqual({ kind: 'exit', id: 'exit_soborna' })
+    expect(
+      findGateTowards(realCity, 'trolleybus', 'center', { ...base, stop_ok: false }),
+    ).toEqual({ kind: 'exit', id: 'exit_park' })
+  })
+
+  it('без відкритого шляху повертає будь-який', () => {
+    expect(findGateTowards(realCity, 'trolleybus', 'center', {})).toEqual({
+      kind: 'exit',
+      id: 'exit_soborna',
+    })
+  })
+
+  it('акти 2–3: злива, тролейбус і обидві гілки зупинки доходять до центру', () => {
+    const step = (state: QuestState, event: QuestEvent) => {
+      const patch = evaluate(realQuestline, state, event)
+      return patch ? { ...state, ...patch } : state
+    }
+    let state = initialState({
+      questStep: 'buy_flowers',
+      currentZone: 'flower_kiosk',
+      flags: { exit_bus_station: true },
+    })
+    state = step({ ...state, flags: { ...state.flags, task_flowers: true } }, { type: 'flag' })
+    expect(state.questStep).toBe('wait_rain')
+    expect(state.flags.rain_started).toBe(true)
+
+    state = step(state, { type: 'dialogueFinished', dialogueId: 'vysh_galyna' })
+    expect(state.questStep).toBe('take_trolleybus')
+    expect(state.flags.rain_over).toBe(true)
+
+    state = step({ ...state, currentZone: 'trolleybus' }, { type: 'zoneEntered', zoneId: 'trolleybus' })
+    expect(state.questStep).toBe('ride')
+
+    for (const stopOk of [true, false]) {
+      const ridden = step(
+        { ...state, flags: { ...state.flags, stop_ok: stopOk } },
+        { type: 'dialogueFinished', dialogueId: 'trolley_passenger' },
+      )
+      expect(ridden.questStep).toBe('show_time')
+      expect(ridden.flags.trolley_announced).toBe(true)
+      expect(ridden.gameClock).toBe('13:30')
+
+      const firstGate = getArrowTarget(realCity, realQuestline, { ...ridden, currentZone: 'trolleybus' })
+      expect(firstGate).toEqual({ kind: 'exit', id: stopOk ? 'exit_soborna' : 'exit_park' })
+      if (!stopOk) {
+        expect(getArrowTarget(realCity, realQuestline, { ...ridden, currentZone: 'park' })).toEqual({
+          kind: 'exit',
+          id: 'exit_center',
+        })
+      }
+    }
+  })
+})

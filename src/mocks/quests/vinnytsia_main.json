@@ -14,7 +14,7 @@
     { "id": "wait_rain", "zone": "vyshenka", "target": { "doorId": "door_entrance" },
       "objective": { "en": "It's raining! Find shelter", "uk": "Злива! Знайди, де сховатися" },
       "startEffects": { "setFlag": "rain_started" },
-      "completeWhen": { "dialogueFinished": "vysh_galyna" } },
+      "completeWhen": { "dialogueFinished": "vysh_galyna" }, "completeEffects": { "setFlag": "rain_over" } },
     { "id": "take_trolleybus", "zone": "vyshenka", "target": { "exitId": "exit_trolley" },
       "objective": { "en": "Take the trolleybus downtown", "uk": "Сідай у тролейбус до центру" },
       "completeWhen": { "zoneEntered": "trolleybus" } },
