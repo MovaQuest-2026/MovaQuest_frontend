@@ -3,7 +3,8 @@
     "title": "Movaquest",
     "start": "Почати",
     "continue": "Продовжити",
-    "restart": "Почати заново"
+    "restart": "Почати заново",
+    "credits": "Автори"
   },
   "languageSelect": {
     "title": "Оберіть мову",
@@ -52,5 +53,9 @@
     "tower_interior": "Вежа з годинником",
     "cafe": "Кафе",
     "embankment": "Набережна Рошен"
+  },
+  "credits": {
+    "back": "Назад",
+    "loadError": "Не вдалося завантажити титри."
   }
 }

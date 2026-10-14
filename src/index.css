@@ -449,3 +449,28 @@ button.interaction-hint:active:not(:disabled) {
 .quiz-card p.incorrect {
   color: #ff8a7a;
 }
+
+.credits-screen {
+  justify-content: flex-start;
+}
+
+.credits-content {
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+}
+
+.credits-content h1,
+.credits-content h2,
+.credits-content h3 {
+  margin: 24px 0 8px;
+}
+
+.credits-content ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.credits-content p {
+  max-width: none;
+}
