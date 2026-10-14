@@ -43,6 +43,8 @@ interface GameData {
   lastFinishedDialogue: FinishedDialogueEvent | null
   pendingCutscene: string | null
   pendingEnding: string | null
+  // Стан ink для діалогів з keepState, ключ — `${dialogueId}:${lang}`.
+  inkStates: Record<string, string>
 }
 
 interface GameActions {
@@ -66,6 +68,8 @@ interface GameActions {
   finishDialogue: (dialogueId: string) => void
   setPendingCutscene: (cutsceneId: string | null) => void
   setPendingEnding: (endingId: string | null) => void
+  setInkState: (key: string, json: string) => void
+  finishGame: (ending: string) => void
   resetProgress: () => void
 }
 
@@ -92,6 +96,7 @@ const initialData: GameData = {
   lastFinishedDialogue: null,
   pendingCutscene: null,
   pendingEnding: null,
+  inkStates: {},
 }
 
 export const useGameStore = create<GameState>()(
@@ -140,6 +145,15 @@ export const useGameStore = create<GameState>()(
         })),
       setPendingCutscene: (cutsceneId) => set({ pendingCutscene: cutsceneId }),
       setPendingEnding: (endingId) => set({ pendingEnding: endingId }),
+      setInkState: (key, json) =>
+        set((state) => ({ inkStates: { ...state.inkStates, [key]: json } })),
+      // Кінцівка зберігається у flags, тож після F5 гра показує щоденник, а не фінальний діалог.
+      finishGame: (ending) =>
+        set((state) => ({
+          flags: { ...state.flags, game_finished: true, ending },
+          pendingEnding: null,
+          pendingCutscene: null,
+        })),
       resetProgress: () => {
         set(initialData)
         useGameStore.persist.clearStorage()
@@ -158,6 +172,10 @@ export const useGameStore = create<GameState>()(
         spawn: state.spawn,
         inventory: state.inventory,
         learnedWords: state.learnedWords,
+        // Кат-сцена і кінцівка переживають F5 посеред кат-сцени.
+        pendingCutscene: state.pendingCutscene,
+        pendingEnding: state.pendingEnding,
+        inkStates: state.inkStates,
       }),
     },
   ),

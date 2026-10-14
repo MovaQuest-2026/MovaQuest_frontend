@@ -40,6 +40,8 @@ for (const [id, info] of Object.entries(meta)) {
       zone: info.zone,
       inkContent: { en: compile(en), uk: compile(uk) },
       vocabulary: info.vocabulary.map(([word, translation]) => ({ word, translation, example: '' })),
+      // keepState: стан ink (лічильники відвідувань) зберігається між розмовами, тож shuffle не повторюється.
+      ...(info.keepState ? { keepState: true } : {}),
     }
     fs.writeFileSync(path.join(OUT_DIR, `${id}.ink.json`), JSON.stringify(out, null, 2))
     console.log(`ok   ${id}`)

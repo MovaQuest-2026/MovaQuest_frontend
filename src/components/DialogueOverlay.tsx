@@ -47,6 +47,7 @@ function DialogueSession({ dialogueId, lang }: DialogueSessionProps) {
 
   const storyRef = useRef<Story | null>(null)
   const hasExercisesRef = useRef(false)
+  const keepStateKeyRef = useRef<string | null>(null)
   const afterCloseRef = useRef<{ cutscene: string | null; ending: string | null }>(
     { cutscene: null, ending: null },
   )
@@ -124,6 +125,21 @@ function DialogueSession({ dialogueId, lang }: DialogueSessionProps) {
         const story = new Story(JSON.stringify(content))
         const variableNames = getInkVariableNames(content)
 
+        // keepState: продовжуємо зі збереженого стану (лічильники відвідувань), але з початку діалогу.
+        const stateKey = `${dialogueId}:${lang}`
+        keepStateKeyRef.current = dialogue.keepState ? stateKey : null
+        const savedState = dialogue.keepState
+          ? useGameStore.getState().inkStates[stateKey]
+          : undefined
+        if (savedState) {
+          try {
+            story.state.LoadJson(savedState)
+            story.state.GoToStart()
+          } catch {
+            story.ResetState()
+          }
+        }
+
         // Фронт записує в ink поточні flags, а зміни змінних забирає назад.
         const { flags, setFlag } = useGameStore.getState()
         for (const name of variableNames) {
@@ -176,6 +192,9 @@ function DialogueSession({ dialogueId, lang }: DialogueSessionProps) {
 
   function handleFinish() {
     const store = useGameStore.getState()
+    if (keepStateKeyRef.current && storyRef.current) {
+      store.setInkState(keepStateKeyRef.current, storyRef.current.state.ToJson())
+    }
     store.finishDialogue(dialogueId)
     // Вправа відкривається до закриття діалогу, щоб рух гравця не розблокувався між ними.
     if (hasExercisesRef.current) store.setActiveExercise(dialogueId)

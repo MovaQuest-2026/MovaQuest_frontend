@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Story } from 'inkjs'
+import { runDialogue } from './inkTestUtils'
 import type { CityConfig } from '../../api/getCityConfig'
 import type { Questline } from '../../api/getQuestline'
 import vinnytsiaCity from '../../mocks/cities/vinnytsia.json'
@@ -14,57 +15,6 @@ import { isRainActive } from '../weather'
 const city = vinnytsiaCity as unknown as CityConfig
 const questline = vinnytsiaQuests as unknown as Questline
 const center = city.zones.find((zone) => zone.id === 'center')!
-
-interface DialogueRun {
-  flags: QuestFlags
-  lines: string[]
-  tags: string[]
-}
-
-/**
- * Проганяє ink-діалог так, як DialogueOverlay: flags записуються в змінні перед стартом,
- * на quiz: ставиться quiz_ok, вибори — за індексом або за частиною тексту.
- */
-function runDialogue(
-  dialogue: { inkContent: { uk: object } },
-  flags: QuestFlags,
-  { choices = [], quizOk = true }: { choices?: (number | string)[]; quizOk?: boolean } = {},
-): DialogueRun {
-  const story = new Story(JSON.stringify(dialogue.inkContent.uk))
-  const result: DialogueRun = { flags: { ...flags }, lines: [], tags: [] }
-  for (const [name, value] of Object.entries(flags)) {
-    if (story.variablesState.GetVariableWithName(name) !== null) {
-      story.variablesState[name] = value
-    }
-  }
-  story.variablesState.ObserveVariableChange((name: string) => {
-    result.flags[name] = story.variablesState[name] as QuestFlags[string]
-  })
-
-  const pending = [...choices]
-  for (let guard = 0; guard < 100; guard++) {
-    if (story.canContinue) {
-      const line = (story.Continue() ?? '').trim()
-      if (line) result.lines.push(line)
-      const tags = story.currentTags ?? []
-      result.tags.push(...tags)
-      for (const tag of tags) {
-        if (tag.startsWith('flag:')) result.flags[tag.slice(5)] = true
-        if (tag.startsWith('quiz:')) story.variablesState.quiz_ok = quizOk
-      }
-      continue
-    }
-    if (story.currentChoices.length === 0) break
-    const next = pending.shift() ?? 0
-    const index =
-      typeof next === 'number'
-        ? next
-        : story.currentChoices.findIndex((choice) => choice.text.includes(next))
-    if (index < 0) throw new Error(`Немає вибору "${next}"`)
-    story.ChooseChoiceIndex(index)
-  }
-  return result
-}
 
 describe('акт 4: Остап і короткий шлях', () => {
   const shortcut = center.exits.find((exit) => exit.id === 'shortcut_mury')!

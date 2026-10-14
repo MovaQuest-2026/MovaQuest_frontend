@@ -11,6 +11,7 @@ export interface DialogueConfig {
   zone: string
   inkContent: { en: object; uk: object }
   vocabulary: DialogueVocabularyEntry[]
+  keepState?: boolean
 }
 
 const dialogueModules = import.meta.glob<{ default: DialogueConfig }>(
@@ -38,4 +39,18 @@ export function getInkVariableNames(inkContent: object): string[] {
       ? [String((entry as { 'VAR=': string })['VAR='])]
       : [],
   )
+}
+
+// Словник усіх діалогів: слово → переклад (для щоденника дня).
+export async function getAllVocabulary(): Promise<Record<string, string>> {
+  const dialogues = await Promise.all(
+    Object.values(dialogueModules).map((load) => load()),
+  )
+  const vocabulary: Record<string, string> = {}
+  for (const { default: dialogue } of dialogues) {
+    for (const entry of dialogue.vocabulary) {
+      vocabulary[entry.word] ??= entry.translation
+    }
+  }
+  return vocabulary
 }
