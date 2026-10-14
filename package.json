@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "ink": "node scripts/build-ink.mjs"
+    "ink": "node scripts/build-ink.mjs",
+    "maps:placeholder": "node scripts/gen-placeholder-maps.mjs"
   },
   "dependencies": {
     "i18next": "^26.4.2",
