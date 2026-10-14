@@ -1,0 +1,54 @@
+src/index.css
+  s_53b2d8f8e14a30::t_93f16d62fedf88 384-451
+src/components/QuestTracker.tsx
+  s_53b2d8f8e14a30::t_4b91564b8fbd73 1-19
+src/game/PhaserGame.tsx
+  s_53b2d8f8e14a30::t_59553362398d03 1,3-5,7-11,13-15,30-38
+src/store/useQuestEngine.ts
+  s_53b2d8f8e14a30::t_efe9409e4b7495 1-38
+src/components/WorldScreen.tsx
+  s_53b2d8f8e14a30::t_93f16d62fedf88 57
+  s_53b2d8f8e14a30::t_13d25d0d72c9af 4-5,7,12,19-20,28-29,34-36,42,48-52,54-56,59,77-80,83-84
+src/game/scenes/ZoneSceneBase.ts
+  s_53b2d8f8e14a30::t_ca6174faf55dcc 1-521
+src/i18n/locales/uk.json
+  s_53b2d8f8e14a30::t_93f16d62fedf88 39-54
+src/game/scenes/InteriorScene.ts
+  s_53b2d8f8e14a30::t_59553362398d03 1-11
+src/api/getCityConfig.ts
+  s_53b2d8f8e14a30::t_2f102753e4d5cb 54
+src/store/useGameStore.ts
+  s_53b2d8f8e14a30::t_2f102753e4d5cb 3-4,21-25,40-44,64-67,89-93,132-141
+src/i18n/locales/en.json
+  s_53b2d8f8e14a30::t_93f16d62fedf88 39-54
+src/game/quests/questEngine.ts
+  s_53b2d8f8e14a30::t_b9f030878da151 1-187,191,193-220
+  s_53b2d8f8e14a30::t_62663c22189c81 188-190,192
+src/game/scenes/WorldScene.ts
+  s_53b2d8f8e14a30::t_59553362398d03 1-11
+src/game/scenes/sceneKeys.ts
+  s_53b2d8f8e14a30::t_92331cfbb3f071 1-12
+CLAUDE.md
+  s_53b2d8f8e14a30::t_3a32f34855012c 40-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b12049f6b7af8b0a3458c8b864559570830393e3",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
