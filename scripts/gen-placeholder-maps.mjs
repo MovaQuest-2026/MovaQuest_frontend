@@ -1,23 +1,99 @@
 // Генерує тимчасові тайлмапи public/tilemaps/<tilemap>.json для кожної зони з vinnytsia.json.
-// Tiled JSON, тайли 32 px, шари ground і collision, tileset.png. Стіни по периметру,
-// під дверима й виходами — прохід і позначка іншим тайлом. У L3 мапи замінять справжні з Tiled.
+// Якщо в public/assets/kenney/ є паки Kenney, мапи малюються з їхніх тайлів (16 px):
+// вулиця — RPG Urban (тротуар, газон, дорога, будівлі з дверима), приміщення — Roguelike Indoors.
+// Інакше — прямокутники з tileset.png (32 px), як у L2.
+// Мапи з Tiled (без властивості generated) не перезаписуються.
 // Запуск з кореня фронтенд-репозиторію: npm run maps:placeholder
 import fs from 'node:fs'
 import path from 'node:path'
 
 const CITY_FILE = path.resolve('src/mocks/cities/vinnytsia.json')
 const OUT_DIR = path.resolve('public/tilemaps')
-const TILE = 32
+const GENERATED_MARK = 'gen-placeholder-maps'
+const KENNEY_DIR = path.resolve('public/assets/kenney')
 const MARGIN = 64
-
-// Тайли tileset.png (gid = індекс + 1): 1 трава, 2 пісок, 3 вода (колізія), 4 стіна (колізія).
-const GRASS = 1
-const SAND = 2
-const WALL = 4
 
 const city = JSON.parse(fs.readFileSync(CITY_FILE, 'utf8'))
 
-function mapSize(zone) {
+// --- Тайлсети -------------------------------------------------------------------------------
+// Індекси тайлів (0 = лівий верхній) звірені з tilemap_packed.png і roguelikeIndoor_transparent.png.
+
+const PLACEHOLDER = {
+  tileSize: 32,
+  tileset: {
+    name: 'placeholder', image: 'tileset.png', columns: 2, tilecount: 4,
+    imagewidth: 64, imageheight: 64, margin: 0, spacing: 0,
+  },
+  // 0 трава, 1 пісок, 2 вода, 3 стіна
+  outdoor: { floor: 0, marker: 1, wall: 3 },
+  interior: { floor: 1, marker: 0, wall: 3 },
+  collides: [2, 3],
+}
+
+const URBAN = {
+  name: 'kenney_urban',
+  file: 'tilemap_packed.png',
+  columns: 27, tilecount: 486, imagewidth: 432, imageheight: 288, margin: 0, spacing: 0,
+  tiles: {
+    grass: 28,
+    sidewalk: 36,
+    road: 440,
+    roofEdge: 90,
+    roof: 117,
+    cornice: 45,
+    brick: 72,
+    door: 284,
+  },
+}
+
+const INDOORS = {
+  name: 'kenney_indoors',
+  file: 'roguelikeIndoor_transparent.png',
+  columns: 27, tilecount: 486, imagewidth: 458, imageheight: 305, margin: 0, spacing: 1,
+  tiles: {
+    floor: 294,
+    carpet: 24,
+    wall: 267,
+    door: 268,
+  },
+}
+
+function findFile(dir, fileName) {
+  if (!fs.existsSync(dir)) return null
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      const found = findFile(full, fileName)
+      if (found) return found
+    } else if (entry.name === fileName) {
+      return full
+    }
+  }
+  return null
+}
+
+function kenneyTileset(pack, collides) {
+  const file = findFile(KENNEY_DIR, pack.file)
+  if (!file) return null
+  const { name, columns, tilecount, imagewidth, imageheight, margin, spacing } = pack
+  return {
+    name, columns, tilecount, imagewidth, imageheight, margin, spacing,
+    // Шлях відносно public/tilemaps/, як у Tiled.
+    image: path.relative(OUT_DIR, file).split(path.sep).join('/'),
+    collides,
+  }
+}
+
+const urbanTiles = URBAN.tiles
+const indoorTiles = INDOORS.tiles
+const kenneyUrban = kenneyTileset(URBAN, [
+  urbanTiles.roofEdge, urbanTiles.roof, urbanTiles.cornice, urbanTiles.brick,
+])
+const kenneyIndoors = kenneyTileset(INDOORS, [indoorTiles.wall])
+
+// --- Геометрія ------------------------------------------------------------------------------
+
+function mapPixelSize(zone) {
   const gates = [...zone.doors, ...zone.exits]
   // spawn у дверях і виходах — це точка в зоні призначення, тож беремо ті, що ведуть сюди.
   const arrivals = city.zones
@@ -34,71 +110,176 @@ function mapSize(zone) {
     ...points.map((point) => point.y + MARGIN),
     ...gates.map((gate) => gate.y + gate.h),
   )
-  return {
-    width: Math.max(10, Math.ceil(right / TILE)),
-    height: Math.max(8, Math.ceil(bottom / TILE)),
-  }
+  return { right, bottom }
 }
 
-function tilesUnder(rect, width, height) {
-  const tiles = []
-  const left = Math.max(0, Math.floor(rect.x / TILE))
-  const top = Math.max(0, Math.floor(rect.y / TILE))
-  const right = Math.min(width - 1, Math.ceil((rect.x + rect.w) / TILE) - 1)
-  const bottom = Math.min(height - 1, Math.ceil((rect.y + rect.h) / TILE) - 1)
-  for (let row = top; row <= bottom; row++) {
-    for (let col = left; col <= right; col++) tiles.push(row * width + col)
+class Grid {
+  constructor(zone, tileSize) {
+    const { right, bottom } = mapPixelSize(zone)
+    this.tileSize = tileSize
+    this.width = Math.max(320 / tileSize, Math.ceil(right / tileSize))
+    this.height = Math.max(256 / tileSize, Math.ceil(bottom / tileSize))
+    // Значення в шарах — індекс тайла (0-based) або -1, якщо порожньо.
+    this.ground = new Array(this.width * this.height).fill(-1)
+    this.collision = new Array(this.width * this.height).fill(-1)
   }
-  return tiles
-}
 
-function buildMap(zone) {
-  const { width, height } = mapSize(zone)
-  const floor = zone.type === 'outdoor' ? GRASS : SAND
-  const marker = zone.type === 'outdoor' ? SAND : GRASS
-  const ground = new Array(width * height).fill(floor)
-  const collision = new Array(width * height).fill(0)
+  inside(col, row) {
+    return col >= 0 && row >= 0 && col < this.width && row < this.height
+  }
 
-  for (let row = 0; row < height; row++) {
-    for (let col = 0; col < width; col++) {
-      if (row === 0 || col === 0 || row === height - 1 || col === width - 1) {
-        collision[row * width + col] = WALL
+  set(layer, col, row, tile) {
+    if (this.inside(col, row)) this[layer][row * this.width + col] = tile
+  }
+
+  fill(layer, tile) {
+    this[layer].fill(tile)
+  }
+
+  perimeter(layer, tile) {
+    for (let row = 0; row < this.height; row++) {
+      for (let col = 0; col < this.width; col++) {
+        if (row === 0 || col === 0 || row === this.height - 1 || col === this.width - 1) {
+          this.set(layer, col, row, tile)
+        }
       }
     }
   }
 
-  for (const gate of [...zone.doors, ...zone.exits]) {
-    for (const index of tilesUnder(gate, width, height)) {
-      collision[index] = 0
-      ground[index] = marker
+  ring(layer, inset, tile) {
+    for (let row = inset; row < this.height - inset; row++) {
+      for (let col = inset; col < this.width - inset; col++) {
+        const edge = row === inset || col === inset ||
+          row === this.height - 1 - inset || col === this.width - 1 - inset
+        if (edge) this.set(layer, col, row, tile)
+      }
     }
   }
 
-  const layer = (id, name, data) => ({
-    data, height, width, id, name, opacity: 1, type: 'tilelayer', visible: true, x: 0, y: 0,
-  })
+  // Клітинки під прямокутником у пікселях.
+  cells(rect) {
+    const s = this.tileSize
+    const cells = []
+    const left = Math.floor(rect.x / s)
+    const top = Math.floor(rect.y / s)
+    const right = Math.ceil((rect.x + rect.w) / s) - 1
+    const bottom = Math.ceil((rect.y + rect.h) / s) - 1
+    for (let row = top; row <= bottom; row++) {
+      for (let col = left; col <= right; col++) {
+        if (this.inside(col, row)) cells.push([col, row])
+      }
+    }
+    return cells
+  }
+}
 
+// --- Малювання ------------------------------------------------------------------------------
+
+function drawPlaceholder(zone) {
+  const grid = new Grid(zone, PLACEHOLDER.tileSize)
+  const tiles = zone.type === 'outdoor' ? PLACEHOLDER.outdoor : PLACEHOLDER.interior
+  grid.fill('ground', tiles.floor)
+  grid.perimeter('collision', tiles.wall)
+  for (const gate of [...zone.doors, ...zone.exits]) {
+    for (const [col, row] of grid.cells(gate)) {
+      grid.set('collision', col, row, -1)
+      grid.set('ground', col, row, tiles.marker)
+    }
+  }
+  return { grid, tileset: { ...PLACEHOLDER.tileset, collides: PLACEHOLDER.collides } }
+}
+
+function drawUrban(zone) {
+  const t = urbanTiles
+  const grid = new Grid(zone, 16)
+  grid.fill('ground', t.sidewalk)
+  grid.ring('ground', 1, t.grass)
+  grid.perimeter('collision', t.brick)
+
+  // Над кожними дверима — фасад будівлі: дах, карниз, цегла, двері в нижньому ряду.
+  for (const door of zone.doors) {
+    const doorCells = grid.cells(door)
+    const doorCols = [...new Set(doorCells.map(([col]) => col))]
+    const doorRow = Math.min(...doorCells.map(([, row]) => row))
+    const left = Math.min(...doorCols) - 2
+    const right = Math.max(...doorCols) + 2
+    const rows = [t.roofEdge, t.roof, t.cornice, t.brick]
+    rows.forEach((tile, index) => {
+      const row = doorRow - rows.length + index
+      for (let col = left; col <= right; col++) {
+        const isDoor = index === rows.length - 1 && doorCols.includes(col)
+        grid.set('collision', col, row, isDoor ? -1 : tile)
+        if (isDoor) grid.set('ground', col, row, t.door)
+      }
+    })
+  }
+
+  // Виходи — дорога, що виходить за край мапи.
+  for (const exit of zone.exits) {
+    for (const [col, row] of grid.cells(exit)) {
+      grid.set('collision', col, row, -1)
+      for (let depth = 0; depth < 4; depth++) {
+        const towardsRight = col >= grid.width / 2
+        grid.set('ground', towardsRight ? col - depth : col + depth, row, t.road)
+      }
+    }
+  }
+  return { grid, tileset: kenneyUrban }
+}
+
+function drawIndoors(zone) {
+  const t = indoorTiles
+  const grid = new Grid(zone, 16)
+  grid.fill('ground', t.floor)
+  grid.perimeter('collision', t.wall)
+  // Верхня стіна товща — так приміщення читається зверху.
+  for (let col = 0; col < grid.width; col++) grid.set('collision', col, 1, t.wall)
+
+  for (const door of zone.doors) {
+    for (const [col, row] of grid.cells(door)) {
+      grid.set('collision', col, row, -1)
+      grid.set('ground', col, row, t.carpet)
+    }
+  }
+  for (const exit of zone.exits) {
+    for (const [col, row] of grid.cells(exit)) {
+      grid.set('collision', col, row, -1)
+      grid.set('ground', col, row, t.door)
+    }
+  }
+  return { grid, tileset: kenneyIndoors }
+}
+
+function toTiledJson({ grid, tileset }) {
+  const layer = (id, name, data) => ({
+    data: data.map((index) => index + 1), // gid = індекс + firstgid(1), 0 — порожньо
+    height: grid.height, width: grid.width, id, name,
+    opacity: 1, type: 'tilelayer', visible: true, x: 0, y: 0,
+  })
+  const { collides, ...tilesetFields } = tileset
   return {
     compressionlevel: -1,
-    height,
-    width,
+    height: grid.height,
+    width: grid.width,
     infinite: false,
-    layers: [layer(1, 'ground', ground), layer(2, 'collision', collision)],
+    layers: [layer(1, 'ground', grid.ground), layer(2, 'collision', grid.collision)],
     nextlayerid: 3,
     nextobjectid: 1,
     orientation: 'orthogonal',
+    properties: [{ name: 'generated', type: 'string', value: GENERATED_MARK }],
     renderorder: 'right-down',
     tiledversion: '1.10.2',
-    tileheight: TILE,
-    tilewidth: TILE,
+    tileheight: grid.tileSize,
+    tilewidth: grid.tileSize,
     tilesets: [
       {
-        columns: 2, firstgid: 1, image: 'tileset.png', imageheight: 64, imagewidth: 64,
-        margin: 0, name: 'tileset', spacing: 0, tilecount: 4, tileheight: TILE, tilewidth: TILE,
-        tiles: [
-          { id: 2, properties: [{ name: 'collides', type: 'bool', value: true }] },
-          { id: 3, properties: [{ name: 'collides', type: 'bool', value: true }] },
-        ],
+        ...tilesetFields,
+        firstgid: 1,
+        tileheight: grid.tileSize,
+        tilewidth: grid.tileSize,
+        tiles: collides.map((id) => ({
+          id, properties: [{ name: 'collides', type: 'bool', value: true }],
+        })),
       },
     ],
     type: 'map',
@@ -106,9 +287,28 @@ function buildMap(zone) {
   }
 }
 
+// Мапа вважається згенерованою, якщо має властивість generated; L2-мапи без неї впізнаємо за тайлсетом tileset.png.
+function isHandMade(file) {
+  if (!fs.existsSync(file)) return false
+  const map = JSON.parse(fs.readFileSync(file, 'utf8'))
+  const generated = map.properties?.some((prop) => prop.name === 'generated')
+  const legacy = map.tilesets?.length === 1 && map.tilesets[0].image === 'tileset.png' && !map.properties
+  return !generated && !legacy
+}
+
 fs.mkdirSync(OUT_DIR, { recursive: true })
+console.log(`kenney urban:   ${kenneyUrban ? kenneyUrban.image : 'немає, плейсхолдер'}`)
+console.log(`kenney indoors: ${kenneyIndoors ? kenneyIndoors.image : 'немає, плейсхолдер'}`)
 for (const zone of city.zones) {
-  const map = buildMap(zone)
-  fs.writeFileSync(path.join(OUT_DIR, `${zone.tilemap}.json`), JSON.stringify(map))
-  console.log(`ok   ${zone.tilemap}.json  ${map.width}x${map.height}  (${zone.id})`)
+  const outFile = path.join(OUT_DIR, `${zone.tilemap}.json`)
+  if (isHandMade(outFile)) {
+    console.log(`skip ${zone.tilemap}.json  (мапа з Tiled)`)
+    continue
+  }
+  const outdoor = zone.type === 'outdoor'
+  const drawn = outdoor
+    ? kenneyUrban ? drawUrban(zone) : drawPlaceholder(zone)
+    : kenneyIndoors ? drawIndoors(zone) : drawPlaceholder(zone)
+  fs.writeFileSync(outFile, JSON.stringify(toTiledJson(drawn)))
+  console.log(`ok   ${zone.tilemap}.json  ${drawn.grid.width}x${drawn.grid.height} ${drawn.tileset.name}  (${zone.id})`)
 }
