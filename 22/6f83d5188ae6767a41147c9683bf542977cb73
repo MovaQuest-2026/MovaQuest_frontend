@@ -1,0 +1,56 @@
+public/tilemaps/embankment.json
+  s_53b2d8f8e14a30::t_fab588bd18844b 1
+scripts/gen-placeholder-maps.mjs
+  s_53b2d8f8e14a30::t_fab588bd18844b 18-44,57,70,120,213,216,234-236
+docs/ink-contract.md
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 9
+  s_53b2d8f8e14a30::t_37645bc5f69aba 78
+src/api/analytics.ts
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 29-33
+src/components/DayJournalScreen.tsx
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 1-99
+src/api/getCityConfig.ts
+  s_53b2d8f8e14a30::t_5280a20ba32c73 19
+src/game/scenes/ZoneSceneBase.ts
+  s_53b2d8f8e14a30::t_5280a20ba32c73 67-86,89-93,99-100,189,224,254-257,330,352,491-494,496,501,522,534-555,601,754,757,865-928,930-932,934-936,938-951,979-984,1003-1004,1015,1017
+  s_53b2d8f8e14a30::t_cc3f0e32ee13b3 63-64,190,225,278,929,933,937,952-978
+src/mocks/cities/vinnytsia.json
+  s_53b2d8f8e14a30::t_5280a20ba32c73 82-86
+src/i18n/locales/en.json
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 63-91
+src/index.css
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 478-506
+src/components/WorldScreen.tsx
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 6,14,25-27,53-60,78-81
+  s_53b2d8f8e14a30::t_0b46450234ec5d 82
+src/components/QuestTracker.tsx
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 9,12
+  s_53b2d8f8e14a30::t_7ba6c70393cd2f 13
+src/components/InteractionHint.tsx
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 9-12
+src/i18n/locales/uk.json
+  s_53b2d8f8e14a30::t_f4ff7109759ec2 63-91
+CLAUDE.md
+  s_53b2d8f8e14a30::t_8946745712bd91 58-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "226f83d5188ae6767a41147c9683bf542977cb73",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
