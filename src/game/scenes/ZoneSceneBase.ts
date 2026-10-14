@@ -60,15 +60,44 @@ const ROUTE_DEPTH = -100
 const GREETING_DEPTH = 100000
 const RAIN_DEPTH = 150000
 const DAYLIGHT_DEPTH = 200000
+// Підсвічені струмені фонтану світяться поверх сутінків.
+const FOUNTAIN_JETS_DEPTH = 250000
 const ARROW_DEPTH = 300000
+
+const FOUNTAIN_LANDMARK_ID = 'roshen_fountain'
+const FOUNTAIN_CUTSCENE_ID = 'fountain'
+const FOUNTAIN_AUDIO_KEY = 'audio:fountain'
+const FOUNTAIN_AUDIO_URL = '/audio/fountain.mp3'
+const WATER_TEXTURE = 'water-drop'
+const CUTSCENE_DURATION = 8000
+const CUTSCENE_PAN_DURATION = 1800
+const CUTSCENE_JETS_DELAY = 1200
+const CUTSCENE_FADE_OUT = 600
+const JET_OFFSETS = [-24, -12, 0, 12, 24]
+const JET_GRAVITY = 300
+const DUSK_TINT: DaylightTint = { color: 0x3d3a8c, alpha: 0.6 }
+// Кольори плейсхолдерів за одягом, щоб натовп і Соломію можна було розрізнити без LPC-спрайтів.
+const OUTFIT_COLORS: [string, number][] = [
+  ['red', 0xd94848],
+  ['blue', 0x4a68d9],
+  ['yellow', 0xe8c840],
+  ['green', 0x3f9a5c],
+]
 
 // Асети, яких немає на сервері, не пробуємо вантажити знову при кожному вході в зону.
 const missingTextures = new Set<string>()
+const missingAudio = new Set<string>()
+
+function characterIdOf(npc: CityNpcConfig) {
+  return npc.outfit ?? npc.sprite ?? null
+}
 
 interface NpcEntity {
   config: CityNpcConfig
   sprite: Phaser.GameObjects.Sprite
   animated: boolean
+  // Ключ LPC-текстури, якщо спрайт анімований.
+  lpcKey: string | null
   greetingText: Phaser.GameObjects.Text
   originX: number
   direction: 1 | -1
@@ -157,6 +186,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private rainArea = new Phaser.Geom.Rectangle()
   private raining = false
   private route!: Phaser.GameObjects.Graphics
+  private cutsceneRunning = false
+  private fountainSound: Phaser.Sound.BaseSound | null = null
   private npcEntities: NpcEntity[] = []
   private gates: GateEntity[] = []
   private triggers: TriggerEntity[] = []
@@ -190,6 +221,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.daylightTween = null
     this.requestedTextures = []
     this.raining = false
+    this.cutsceneRunning = false
+    this.fountainSound = null
   }
 
   preload() {
@@ -218,7 +251,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     const characterIds = [
       PLAYER_CHARACTER_ID,
-      ...this.zone.npcs.flatMap((npc) => (npc.sprite ? [npc.sprite] : [])),
+      ...this.zone.npcs.flatMap((npc) => {
+        const id = characterIdOf(npc)
+        return id ? [id] : []
+      }),
     ]
     for (const id of new Set(characterIds)) {
       this.loadSpritesheetOnce(lpcTextureKey(id), `/assets/lpc/${id}.png`)
@@ -238,6 +274,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     for (const key of this.requestedTextures) {
       if (!this.textures.exists(key)) missingTextures.add(key)
     }
+
 
     this.map = this.make.tilemap({ key: this.tilemapKey() })
     const tilesets = this.map.tilesets.flatMap((tileset) => {
@@ -290,6 +327,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       if (state.gameClock !== prev.gameClock) this.fadeDaylight()
       if (state.flags !== prev.flags) this.updateWeather()
       if (state.activeDialogue !== prev.activeDialogue) this.drawNpcRoute()
+      if (state.pendingCutscene !== prev.pendingCutscene) this.maybeStartCutscene()
     })
 
     this.time.addEvent({
@@ -311,6 +349,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     this.cameras.main.fadeIn(FADE_DURATION)
     this.openEnterDialogue()
+    this.maybeStartCutscene()
   }
 
   update(_time: number, delta: number) {
@@ -449,15 +488,17 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private createNpcs() {
     const greeting = i18next.t('world.npcGreeting')
     for (const npc of this.zone.npcs) {
-      const lpcKey = npc.sprite ? lpcTextureKey(npc.sprite) : null
-      const animated = lpcKey !== null && this.textures.exists(lpcKey)
+      const characterId = characterIdOf(npc)
+      const candidateKey = characterId ? lpcTextureKey(characterId) : null
+      const animated = candidateKey !== null && this.textures.exists(candidateKey)
+      const lpcKey = animated ? candidateKey : null
       let sprite: Phaser.GameObjects.Sprite
-      if (animated) {
+      if (lpcKey) {
         createLpcAnimations(this, lpcKey)
         sprite = this.add.sprite(npc.x, npc.y, lpcKey)
         sprite.play(lpcAnimationKey(lpcKey, 'idle', 'down'))
       } else {
-        sprite = this.add.sprite(npc.x, npc.y, NPC_PLACEHOLDER_TEXTURE)
+        sprite = this.add.sprite(npc.x, npc.y, this.npcPlaceholderTexture(npc))
       }
       sprite.setDepth(bottomOf(sprite))
 
@@ -478,6 +519,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         config: npc,
         sprite,
         animated,
+        lpcKey,
         greetingText,
         originX: npc.x,
         direction: Math.random() < 0.5 ? 1 : -1,
@@ -487,6 +529,28 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       this.npcEntities.push(entity)
       this.scheduleNpcGreeting(entity)
     }
+  }
+
+  private npcPlaceholderTexture(npc: CityNpcConfig) {
+    const outfit = npc.outfit
+    if (!outfit) return NPC_PLACEHOLDER_TEXTURE
+    const key = `npc-placeholder:${outfit}`
+    if (this.textures.exists(key)) return key
+    const color = OUTFIT_COLORS.find(([word]) => outfit.includes(word))?.[1] ?? 0xffd23f
+    const graphics = this.make.graphics({ x: 0, y: 0 })
+    graphics.fillStyle(color, 1)
+    graphics.fillRect(0, 0, PLACEHOLDER_SIZE, PLACEHOLDER_SIZE)
+    graphics.lineStyle(2, 0x000000, 0.35)
+    graphics.strokeRect(1, 1, PLACEHOLDER_SIZE - 2, PLACEHOLDER_SIZE - 2)
+    if (outfit.includes('glasses') && !outfit.includes('no_glasses')) {
+      graphics.fillStyle(0x111111, 1)
+      graphics.fillRect(6, 8, 8, 5)
+      graphics.fillRect(18, 8, 8, 5)
+      graphics.fillRect(14, 9, 4, 2)
+    }
+    graphics.generateTexture(key, PLACEHOLDER_SIZE, PLACEHOLDER_SIZE)
+    graphics.destroy()
+    return key
   }
 
   private greetingY(sprite: Phaser.GameObjects.Sprite) {
@@ -534,6 +598,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   }
 
   private targetTint(): DaylightTint {
+    if (this.cutsceneRunning) return DUSK_TINT
     const day = daylightForClock(useGameStore.getState().gameClock)
     // Під час зливи небо темнішає поверх звичайного часу доби.
     return this.raining ? mixTint(day, RAIN_TINT, RAIN_TINT_STRENGTH) : day
@@ -686,10 +751,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       }
       const dx = shelter.area.x - sprite.x
       const dy = shelter.area.y - sprite.y
-      if (entity.animated && entity.config.sprite) {
+      if (entity.lpcKey) {
         const direction: Direction =
           Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : dy < 0 ? 'up' : 'down'
-        sprite.play(lpcAnimationKey(lpcTextureKey(entity.config.sprite), 'walk', direction), true)
+        sprite.play(lpcAnimationKey(entity.lpcKey, 'walk', direction), true)
       }
       this.tweens.add({
         targets: sprite,
@@ -797,8 +862,126 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   }
 
   private isInputBlocked() {
-    const { activeDialogue, activeExercise } = useGameStore.getState()
-    return activeDialogue !== null || activeExercise !== null
+    const { activeDialogue, activeExercise, pendingCutscene } = useGameStore.getState()
+    return (
+      activeDialogue !== null ||
+      activeExercise !== null ||
+      pendingCutscene !== null ||
+      this.cutsceneRunning
+    )
+  }
+
+  private fountainPoint() {
+    const landmark = this.zone.landmarks?.find(
+      (candidate) => candidate.id === FOUNTAIN_LANDMARK_ID,
+    )
+    return landmark ? { x: landmark.x, y: landmark.y } : null
+  }
+
+  private maybeStartCutscene() {
+    const { pendingCutscene, setPendingCutscene } = useGameStore.getState()
+    if (!pendingCutscene || this.cutsceneRunning) return
+    // Поки є лише кат-сцена фонтану; невідому або не в тій зоні пропускаємо, щоб гра не застрягла.
+    if (pendingCutscene !== FOUNTAIN_CUTSCENE_ID || !this.fountainPoint()) {
+      setPendingCutscene(null)
+      return
+    }
+    this.playFountainCutscene()
+  }
+
+  // Кат-сцена фонтану: рух вимкнено, камера панорамує, сутінки, струмені в ритмі, ~8 с.
+  private playFountainCutscene() {
+    const fountain = this.fountainPoint()!
+    this.cutsceneRunning = true
+    this.setHint(null)
+    this.player.setVelocity(0)
+    this.fadeDaylight()
+
+    const landmarkImage = this.textures.exists(landmarkTextureKey(FOUNTAIN_LANDMARK_ID))
+      ? this.textures.get(landmarkTextureKey(FOUNTAIN_LANDMARK_ID)).getSourceImage().height
+      : 0
+    const jetBaseY = fountain.y - Math.max(12, landmarkImage * 0.35)
+
+    const camera = this.cameras.main
+    camera.stopFollow()
+    camera.pan(fountain.x, jetBaseY - 30, CUTSCENE_PAN_DURATION, 'Sine.easeInOut')
+
+    if (!this.textures.exists(WATER_TEXTURE)) {
+      const graphics = this.make.graphics({ x: 0, y: 0 })
+      graphics.fillStyle(0xcdefff, 1)
+      graphics.fillRect(0, 0, 2, 2)
+      graphics.generateTexture(WATER_TEXTURE, 2, 2)
+      graphics.destroy()
+    }
+    const jets = JET_OFFSETS.map((offset, index) =>
+      this.add
+        .particles(fountain.x + offset, jetBaseY, WATER_TEXTURE, {
+          speedX: { min: -10, max: 10 },
+          speedY: { onEmit: () => -this.jetSpeed(index) },
+          gravityY: JET_GRAVITY,
+          lifespan: 1400,
+          quantity: 2,
+          frequency: 25,
+          alpha: { start: 0.95, end: 0 },
+          scale: { start: 1.2, end: 0.6 },
+          emitting: false,
+        })
+        .setDepth(FOUNTAIN_JETS_DEPTH),
+    )
+    this.time.delayedCall(CUTSCENE_JETS_DELAY, () => jets.forEach((jet) => jet.start()))
+
+    void this.playFountainAudio()
+
+    this.time.delayedCall(CUTSCENE_DURATION, () => {
+      const finish = () => {
+        this.fountainSound?.stop()
+        const store = useGameStore.getState()
+        store.setPendingCutscene(null)
+        // Якщо кінцівки немає, повертаємо гравця у світ; інакше React покаже щоденник.
+        if (!store.pendingEnding) {
+          jets.forEach((jet) => jet.stop())
+          this.cutsceneRunning = false
+          this.fadeDaylight()
+          this.setupCamera()
+          camera.fadeIn(FADE_DURATION)
+        }
+      }
+      camera.fadeOut(CUTSCENE_FADE_OUT)
+      camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, finish)
+    })
+  }
+
+  // Звук фонтану необов'язковий: грає, лише якщо є public/audio/fountain.mp3.
+  // Спершу HEAD-запит — dev-сервер і Vercel на відсутній файл віддають index.html, і Phaser падав би на декодуванні.
+  private async playFountainAudio() {
+    if (missingAudio.has(FOUNTAIN_AUDIO_KEY)) return
+    if (!this.cache.audio.exists(FOUNTAIN_AUDIO_KEY)) {
+      try {
+        const response = await fetch(FOUNTAIN_AUDIO_URL, { method: 'HEAD' })
+        const type = response.headers.get('content-type') ?? ''
+        if (!response.ok || !type.startsWith('audio/')) {
+          missingAudio.add(FOUNTAIN_AUDIO_KEY)
+          return
+        }
+      } catch {
+        missingAudio.add(FOUNTAIN_AUDIO_KEY)
+        return
+      }
+      await new Promise<void>((resolve) => {
+        this.load.audio(FOUNTAIN_AUDIO_KEY, FOUNTAIN_AUDIO_URL)
+        this.load.once(Phaser.Loader.Events.COMPLETE, () => resolve())
+        this.load.start()
+      })
+    }
+    if (!this.cutsceneRunning || !this.cache.audio.exists(FOUNTAIN_AUDIO_KEY)) return
+    this.fountainSound = this.sound.add(FOUNTAIN_AUDIO_KEY)
+    this.fountainSound.play()
+  }
+
+  // Швидкість струменя змінюється синусоїдою, сусідні струмені — зі зсувом фази.
+  private jetSpeed(index: number) {
+    const t = this.time.now / 1000
+    return 170 + 70 * Math.sin(t * 2.4 + index * 0.9)
   }
 
   private isOpen(gate: GateEntity) {
@@ -817,8 +1000,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       if (!this.isPresent(entity)) continue
       // Співрозмовник не ходить, поки триває діалог.
       const talking = activeDialogue !== null && activeDialogue === entity.config.dialogueId
-      if (talking && entity.animated && entity.config.sprite) {
-        sprite.play(lpcAnimationKey(lpcTextureKey(entity.config.sprite), 'idle', 'down'), true)
+      if (talking && entity.lpcKey) {
+        sprite.play(lpcAnimationKey(entity.lpcKey, 'idle', 'down'), true)
       }
       if (entity.config.patrol && !talking) {
         sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
@@ -829,10 +1012,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
           sprite.x = entity.originX - NPC_PATROL_RANGE
           entity.direction = 1
         }
-        if (entity.animated && entity.config.sprite) {
-          const key = lpcTextureKey(entity.config.sprite)
+        if (entity.lpcKey) {
           sprite.play(
-            lpcAnimationKey(key, 'walk', entity.direction < 0 ? 'left' : 'right'),
+            lpcAnimationKey(entity.lpcKey, 'walk', entity.direction < 0 ? 'left' : 'right'),
             true,
           )
         }

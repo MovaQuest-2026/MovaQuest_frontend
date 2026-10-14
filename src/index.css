@@ -475,3 +475,32 @@ button.interaction-hint:active:not(:disabled) {
 .credits-content p {
   max-width: none;
 }
+
+.journal-screen {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.journal-screen section {
+  width: 100%;
+  max-width: 560px;
+}
+
+.journal-screen h3 {
+  margin: 8px 0;
+}
+
+.journal-ending {
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  box-sizing: border-box;
+}
+
+.journal-words,
+.journal-helped {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 170%;
+}

@@ -79,11 +79,11 @@
     },
     { "id": "embankment", "type": "outdoor", "tilemap": "embankment", "spawn": { "x": 48, "y": 240 }, "onEnterDialogue": "emb_phone",
       "npcs": [
-        { "id": "npc_crowd_1", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 300, "y": 220, "patrol": true, "sprite": "crowd_1", "outfit": "blue_jacket" },
-        { "id": "npc_crowd_2", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 420, "y": 300, "patrol": true, "sprite": "crowd_2", "outfit": "red_jacket_no_glasses" },
-        { "id": "npc_crowd_3", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 560, "y": 200, "patrol": true, "sprite": "crowd_3", "outfit": "yellow_dress" },
-        { "id": "npc_crowd_4", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 640, "y": 320, "patrol": true, "sprite": "crowd_4", "outfit": "glasses_green_coat" },
-        { "id": "npc_solomiia", "name": { "en": "Solomiia", "uk": "Соломія" }, "dialogueId": "emb_solomiia", "x": 860, "y": 160, "patrol": false, "sprite": "solomiia", "outfit": "red_jacket_glasses" }
+        { "id": "npc_crowd_1", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 300, "y": 220, "patrol": true, "outfit": "blue_jacket" },
+        { "id": "npc_crowd_2", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 420, "y": 300, "patrol": true, "outfit": "red_jacket_no_glasses" },
+        { "id": "npc_crowd_3", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 560, "y": 200, "patrol": true, "outfit": "yellow_dress" },
+        { "id": "npc_crowd_4", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 640, "y": 320, "patrol": true, "outfit": "glasses_green_coat" },
+        { "id": "npc_solomiia", "name": { "en": "Solomiia", "uk": "Соломія" }, "dialogueId": "emb_solomiia", "x": 860, "y": 160, "patrol": false, "outfit": "red_jacket_glasses" }
       ],
       "doors": [], "exits": [],
       "landmarks": [ { "id": "roshen_fountain", "image": "landmark_fountain", "x": 960, "y": 360 } ]

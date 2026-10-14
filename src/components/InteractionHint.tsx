@@ -6,7 +6,10 @@ export function InteractionHint() {
   const { t } = useTranslation()
   const hint = useGameStore((state) => state.interactionHint)
   const blocked = useGameStore(
-    (state) => state.activeDialogue !== null || state.activeExercise !== null,
+    (state) =>
+      state.activeDialogue !== null ||
+      state.activeExercise !== null ||
+      state.pendingCutscene !== null,
   )
   const requestInteract = useGameStore((state) => state.requestInteract)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)

@@ -26,6 +26,11 @@ export function trackLessonCompleted(dialogueId: string, score: number) {
   posthog.capture('lesson_completed', { dialogueId, score })
 }
 
+export function trackEndingReached(ending: string, trust: number) {
+  if (!ensureInitialized()) return
+  posthog.capture('ending_reached', { ending, trust })
+}
+
 export function trackExerciseAnswered(questionId: string, correct: boolean) {
   if (!ensureInitialized()) return
   posthog.capture('exercise_answered', { questionId, correct })

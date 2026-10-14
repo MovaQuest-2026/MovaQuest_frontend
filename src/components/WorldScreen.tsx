@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { getCityConfig } from '../api/getCityConfig'
 import { getQuestline } from '../api/getQuestline'
+import { trackEndingReached } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
 import { useQuestEngine } from '../store/useQuestEngine'
 import { PhaserGame } from '../game/PhaserGame'
@@ -10,6 +11,7 @@ import { DialogueOverlay } from './DialogueOverlay'
 import { ExerciseScreen } from './ExerciseScreen'
 import { InteractionHint } from './InteractionHint'
 import { QuestTracker } from './QuestTracker'
+import { DayJournalScreen } from './DayJournalScreen'
 
 export function WorldScreen() {
   const { t } = useTranslation()
@@ -20,6 +22,9 @@ export function WorldScreen() {
   const city = useGameStore((state) => state.cityConfig)
   const currentZone = useGameStore((state) => state.currentZone)
   const activeExercise = useGameStore((state) => state.activeExercise)
+  const pendingCutscene = useGameStore((state) => state.pendingCutscene)
+  const pendingEnding = useGameStore((state) => state.pendingEnding)
+  const gameFinished = useGameStore((state) => state.flags.game_finished === true)
   // Збережена позиція означає, що гравець уже бачив інтро цього міста.
   const [introDismissed, setIntroDismissed] = useState(
     () => useGameStore.getState().spawn !== null,
@@ -45,6 +50,14 @@ export function WorldScreen() {
     setCurrentCity(cityId ?? null)
   }, [cityId, setCurrentCity])
 
+  // Кінцівка фіксується після кат-сцени (або одразу, якщо її немає).
+  useEffect(() => {
+    if (!pendingEnding || pendingCutscene) return
+    const { flags, finishGame } = useGameStore.getState()
+    trackEndingReached(pendingEnding, Number(flags.trust ?? 0))
+    finishGame(pendingEnding)
+  }, [pendingEnding, pendingCutscene])
+
   const cityReady = city !== null && city.id === cityId
   const zoneKnown =
     cityReady && city.zones.some((zone) => zone.id === currentZone)
@@ -61,6 +74,11 @@ export function WorldScreen() {
   }
 
   const lang = nativeLanguage ?? 'en'
+
+  // Після кінцівки гра завершена: F5 і «Продовжити» ведуть у щоденник, а не у фінальний діалог.
+  if (gameFinished) {
+    return <DayJournalScreen />
+  }
 
   if (!introDismissed) {
     return (

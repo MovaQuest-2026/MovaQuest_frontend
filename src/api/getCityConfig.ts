@@ -16,6 +16,7 @@ export interface CityNpcConfig {
   x: number
   y: number
   patrol: boolean
+  // Одяг: окремий LPC-спрайт public/assets/lpc/<outfit>.png, має пріоритет над sprite.
   outfit?: string
   // id LPC-спрайтшита public/assets/lpc/<sprite>.png; без нього — плейсхолдер.
   sprite?: string

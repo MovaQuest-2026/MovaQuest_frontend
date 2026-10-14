@@ -6,7 +6,10 @@ export function QuestTracker() {
   const questStep = useGameStore((state) => state.questStep)
   const gameClock = useGameStore((state) => state.gameClock)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
+  const inCutscene = useGameStore((state) => state.pendingCutscene !== null)
   const lang = nativeLanguage ?? 'en'
+
+  if (inCutscene) return null
 
   const step = questline ? getCurrentStep(questline, { questStep }) : null
 

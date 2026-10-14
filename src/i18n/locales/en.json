@@ -60,5 +60,34 @@
   "credits": {
     "back": "Back",
     "loadError": "Could not load credits."
+  },
+  "journal": {
+    "title": "Day journal",
+    "ending": {
+      "best": {
+        "title": "The best day",
+        "text": "Solomiia's grandma invites everyone to dinner: you, Solomiia and the artist from Mury. Grandma Nina, Mrs Halyna and Ostap wave to you on the embankment. The city remembers you."
+      },
+      "good": {
+        "title": "A good day",
+        "text": "Solomiia invites you to dinner with her family. Tomorrow — a trip to Pyrohov's estate."
+      },
+      "basic": {
+        "title": "You made it",
+        "text": "The main thing is that you are here. Next time Solomiia will give you a proper tour of the city."
+      }
+    },
+    "wordsTitle": "Words learned today: {{count}}",
+    "noWords": "No new words this time — try the exercises in dialogues.",
+    "helpedTitle": "People who remember you",
+    "noHelped": "Nobody yet. Next time, help someone along the way.",
+    "helped": {
+      "helped_nina": "{{name}} — the yellow bag is found",
+      "helped_tourist": "{{name}} — finds the trolleybus stop thanks to you",
+      "knows_pirogov": "{{name}} — you know who Pyrohov was",
+      "has_drawing": "{{name}} — the umbrella and the fountain drawing"
+    },
+    "playAgain": "Play again",
+    "mainMenu": "Main menu"
   }
 }

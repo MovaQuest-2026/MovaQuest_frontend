@@ -15,10 +15,33 @@ const MARGIN = 64
 
 const city = JSON.parse(fs.readFileSync(CITY_FILE, 'utf8'))
 
-// Будинки-перешкоди на тимчасових мапах (пікселі). У центрі будинок відділяє Соборну від Мурів:
-// без короткого шляху (shortcut_mury) його треба обходити знизу.
-const BLOCKS = {
-  center: [{ x: 672, y: 0, w: 128, h: 272 }],
+// Перешкоди на тимчасових мапах (пікселі).
+// center: будинок відділяє Соборну від Мурів — без короткого шляху (shortcut_mury) його треба обходити знизу.
+// embankment: річка вздовж верху і міст через неї біля Соломії.
+const LAYOUTS = {
+  center: { blocks: [{ x: 672, y: 0, w: 128, h: 272 }] },
+  embankment: {
+    water: [{ x: 0, y: 64, w: 1024, h: 64 }],
+    bridges: [{ x: 832, y: 64, w: 64, h: 64 }],
+  },
+}
+
+function layoutOf(zone) {
+  return { blocks: [], water: [], bridges: [], ...LAYOUTS[zone.id] }
+}
+
+// Вода з колізією, міст поверх неї — прохідний.
+function drawRiver(grid, zone, { water, bridge }) {
+  const { water: waterRects, bridges } = layoutOf(zone)
+  for (const rect of waterRects) {
+    for (const [col, row] of grid.cells(rect)) grid.set('collision', col, row, water)
+  }
+  for (const rect of bridges) {
+    for (const [col, row] of grid.cells(rect)) {
+      grid.set('collision', col, row, -1)
+      grid.set('ground', col, row, bridge)
+    }
+  }
 }
 
 // --- Тайлсети -------------------------------------------------------------------------------
@@ -31,7 +54,7 @@ const PLACEHOLDER = {
     imagewidth: 64, imageheight: 64, margin: 0, spacing: 0,
   },
   // 0 трава, 1 пісок, 2 вода, 3 стіна
-  outdoor: { floor: 0, marker: 1, wall: 3 },
+  outdoor: { floor: 0, marker: 1, wall: 3, water: 2, bridge: 1 },
   interior: { floor: 1, marker: 0, wall: 3 },
   collides: [2, 3],
 }
@@ -44,6 +67,7 @@ const URBAN = {
     grass: 28,
     sidewalk: 36,
     road: 440,
+    water: 198,
     roofEdge: 90,
     roof: 117,
     cornice: 45,
@@ -93,7 +117,7 @@ function kenneyTileset(pack, collides) {
 const urbanTiles = URBAN.tiles
 const indoorTiles = INDOORS.tiles
 const kenneyUrban = kenneyTileset(URBAN, [
-  urbanTiles.roofEdge, urbanTiles.roof, urbanTiles.cornice, urbanTiles.brick,
+  urbanTiles.roofEdge, urbanTiles.roof, urbanTiles.cornice, urbanTiles.brick, urbanTiles.water,
 ])
 const kenneyIndoors = kenneyTileset(INDOORS, [indoorTiles.wall])
 
@@ -186,9 +210,10 @@ function drawPlaceholder(zone) {
   const tiles = zone.type === 'outdoor' ? PLACEHOLDER.outdoor : PLACEHOLDER.interior
   grid.fill('ground', tiles.floor)
   grid.perimeter('collision', tiles.wall)
-  for (const block of BLOCKS[zone.id] ?? []) {
+  for (const block of layoutOf(zone).blocks) {
     for (const [col, row] of grid.cells(block)) grid.set('collision', col, row, tiles.wall)
   }
+  if (zone.type === 'outdoor') drawRiver(grid, zone, tiles)
   for (const gate of [...zone.doors, ...zone.exits]) {
     for (const [col, row] of grid.cells(gate)) {
       grid.set('collision', col, row, -1)
@@ -206,7 +231,9 @@ function drawUrban(zone) {
   grid.ring('ground', 1, t.grass)
   grid.perimeter('collision', t.brick)
 
-  for (const block of BLOCKS[zone.id] ?? []) {
+  drawRiver(grid, zone, { water: t.water, bridge: t.sidewalk })
+
+  for (const block of layoutOf(zone).blocks) {
     const cells = grid.cells(block)
     const bottom = Math.max(...cells.map(([, row]) => row))
     for (const [col, row] of cells) {
