@@ -1,0 +1,35 @@
+src/api/getQuestline.ts
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 39-44,50
+src/game/quests/questEngine.ts
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 83-95,131-134,136-138
+src/game/weather.ts
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 3,5,7-9
+src/game/quests/act4.test.ts
+  s_53b2d8f8e14a30::t_6791031f75a4fe 90-91
+  s_53b2d8f8e14a30::t_194cedb454b444 1-89,92-209
+src/mocks/quests/vinnytsia_main.json
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 37-39
+docs/ink-contract.md
+  s_53b2d8f8e14a30::t_8dca80b9f8de4b 68,75-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71b5c5237084ea0c5837f8ecb82a7df82a0a12e0",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
