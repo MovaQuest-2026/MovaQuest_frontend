@@ -16,10 +16,15 @@ export function PhaserGame() {
   useEffect(() => {
     const game = new Phaser.Game({
       type: Phaser.AUTO,
-      parent: 'phaser-container',
-      width: window.innerWidth,
-      height: window.innerHeight,
       backgroundColor: '#000000',
+      pixelArt: true,
+      roundPixels: true,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        parent: 'phaser-container',
+        width: '100%',
+        height: '100%',
+      },
       physics: {
         default: 'arcade',
         arcade: {

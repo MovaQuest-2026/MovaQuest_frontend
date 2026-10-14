@@ -17,6 +17,8 @@ export interface CityNpcConfig {
   y: number
   patrol: boolean
   outfit?: string
+  // id LPC-спрайтшита public/assets/lpc/<sprite>.png; без нього — плейсхолдер.
+  sprite?: string
 }
 
 export interface DoorConfig {
@@ -42,11 +44,13 @@ export interface ExitConfig {
   spawn: Point
 }
 
+// Зображення public/assets/landmarks/<id>.png, x/y — точка посередині нижнього краю.
 export interface LandmarkConfig {
   id: string
   image: string
   x: number
   y: number
+  scale?: number
 }
 
 export interface ZoneConfig {

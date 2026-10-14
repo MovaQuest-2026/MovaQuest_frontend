@@ -37,9 +37,19 @@ src/
 - `npm run ink` (scripts/build-ink.mjs) компілює їх у
   src/mocks/dialogues/<id>.ink.json. Ці JSON-файли руками не редагуємо,
   тільки перегенеровуємо скриптом.
-- Тимчасові тайлмапи зон (прямокутники) генерує `npm run maps:placeholder`
-  (scripts/gen-placeholder-maps.mjs) у public/tilemaps/ з vinnytsia.json.
-  У L3 їх замінять мапи з Tiled.
+- Тимчасові тайлмапи зон генерує `npm run maps:placeholder`
+  (scripts/gen-placeholder-maps.mjs) у public/tilemaps/ з vinnytsia.json:
+  з тайлів Kenney, якщо паки лежать у public/assets/kenney/, інакше
+  прямокутники. Мапи з Tiled (без властивості `generated`) генератор не
+  перезаписує. Об'єкти шарів `doors`/`exits` з властивістю `id` у Tiled
+  перекривають координати дверей і виходів з конфігу.
+
+## Графіка
+- Асети: public/assets/kenney/ (тайли, CC0), public/assets/lpc/<id>.png
+  (персонажі, кадр 64×64, стандартна розкладка LPC), public/assets/landmarks/<id>.png.
+  Відсутній асет не ламає гру: персонажі стають плейсхолдерами, landmark не показується.
+- Спрайт NPC — поле `sprite` у конфігу NPC, гравець — public/assets/lpc/player.png.
+- Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.
 

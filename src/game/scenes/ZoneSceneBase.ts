@@ -8,31 +8,54 @@ import {
   type ZoneConfig,
 } from '../../api/getCityConfig'
 import { useGameStore, type InteractionHint } from '../../store/useGameStore'
+import { daylightForClock, mixTint, type DaylightTint } from '../daylight'
+import {
+  createLpcAnimations,
+  lpcAnimationKey,
+  lpcTextureKey,
+  LPC_FRAME_SIZE,
+  type Direction,
+} from '../lpc'
 import { getArrowTarget, isGateOpen } from '../quests/questEngine'
 import { sceneKeyForZone, type ZoneSceneData } from './sceneKeys'
 
-const TILE_SIZE = 32
-const MOVE_SPEED = 200
-const TILESET_KEY = 'tileset'
-const TILESET_IMAGE_KEY = 'tileset'
-const PLAYER_TEXTURE = 'player-placeholder'
-const NPC_TEXTURE = 'npc-placeholder'
-const NPC_INTERACTION_RADIUS = 48
-const NPC_PATROL_SPEED = 40
+const CAMERA_ZOOM = 2
+const MOVE_SPEED = 120
+const PLAYER_CHARACTER_ID = 'player'
+const PLAYER_PLACEHOLDER_TEXTURE = 'player-placeholder'
+const NPC_PLACEHOLDER_TEXTURE = 'npc-placeholder'
+const PLACEHOLDER_SIZE = 32
+// Хітбокс біля ніг, щоб ходити повз стіни і в дверні прорізи.
+const FEET_BODY_WIDTH = 20
+const FEET_BODY_HEIGHT = 14
+const NPC_INTERACTION_RADIUS = 40
+const NPC_PATROL_SPEED = 30
 const NPC_PATROL_RANGE = 48
 const NPC_GREETING_MIN_DELAY = 3000
 const NPC_GREETING_MAX_DELAY = 6000
-const DOOR_INTERACTION_PADDING = 16
+const DOOR_INTERACTION_PADDING = 12
 const SPAWN_SAVE_INTERVAL = 500
 const FADE_DURATION = 250
 const ON_ENTER_DIALOGUE_DELAY = 300
+const DAYLIGHT_TRANSITION = 1500
 const ARROW_EDGE_INSET = 40
+// Зверху більший відступ, щоб стрілка не ховалася під QuestTracker.
+const ARROW_TOP_INSET = 110
 const ARROW_SIZE = 14
 const ARROW_COLOR = 0xffd23f
+// Тайлові шари нижче за всіх, спрайти сортуються за y, далі — підписи, тінт доби і стрілка.
+const TILE_LAYER_DEPTH = -1000
+const GREETING_DEPTH = 100000
+const DAYLIGHT_DEPTH = 200000
+const ARROW_DEPTH = 300000
+
+// Асети, яких немає на сервері, не пробуємо вантажити знову при кожному вході в зону.
+const missingTextures = new Set<string>()
 
 interface NpcEntity {
   config: CityNpcConfig
-  sprite: Phaser.GameObjects.Image
+  sprite: Phaser.GameObjects.Sprite
+  animated: boolean
   greetingText: Phaser.GameObjects.Text
   originX: number
   direction: 1 | -1
@@ -50,13 +73,53 @@ type HintTarget =
   | { kind: 'npc'; npc: CityNpcConfig }
   | { kind: 'door'; gate: GateEntity }
 
+interface GateRect {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+function tilesetTextureKey(name: string) {
+  return `tileset:${name}`
+}
+
+function landmarkTextureKey(id: string) {
+  return `landmark:${id}`
+}
+
+// Шлях до зображення тайлсета в Tiled JSON відносний до самої мапи (public/tilemaps/).
+function resolveTilemapAsset(image: string) {
+  return new URL(image, `${window.location.origin}/tilemaps/`).pathname
+}
+
+function bottomOf(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image) {
+  return sprite.y + sprite.displayHeight * (1 - sprite.originY)
+}
+
+function tiledProperty(object: Phaser.Types.Tilemaps.TiledObject, name: string) {
+  const properties = object.properties as unknown
+  if (Array.isArray(properties)) {
+    return (properties as { name: string; value: unknown }[]).find(
+      (property) => property.name === name,
+    )?.value
+  }
+  if (properties && typeof properties === 'object') {
+    return (properties as Record<string, unknown>)[name]
+  }
+  return undefined
+}
+
 /**
- * Спільна основа сцен зон: тайлмапа, гравець, колізії, NPC, двері й виходи,
- * підказка взаємодії, стрілка квесту і переходи між зонами.
+ * Спільна основа сцен зон: тайлмапа, гравець, колізії, NPC, landmarks, двері й виходи,
+ * підказка взаємодії, стрілка квесту, тінт часу доби і переходи між зонами.
  */
 export abstract class ZoneSceneBase extends Phaser.Scene {
   protected zone!: ZoneConfig
-  private player!: Phaser.Physics.Arcade.Image
+  private map!: Phaser.Tilemaps.Tilemap
+  private player!: Phaser.Physics.Arcade.Sprite
+  private playerAnimated = false
+  private facing: Direction = 'down'
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
   private wasd!: {
     up: Phaser.Input.Keyboard.Key
@@ -65,12 +128,16 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     right: Phaser.Input.Keyboard.Key
   }
   private arrow!: Phaser.GameObjects.Graphics
+  private daylight!: Phaser.GameObjects.Rectangle
+  private daylightTint: DaylightTint = { color: 0xffffff, alpha: 0 }
+  private daylightTween: Phaser.Tweens.Tween | null = null
   private npcEntities: NpcEntity[] = []
   private gates: GateEntity[] = []
   private hintTarget: HintTarget | null = null
   private hintKey: string | null = null
   private lastSavedSpawn: { x: number; y: number } | null = null
   private transitioning = false
+  private requestedTextures: string[] = []
 
   protected abstract readonly backgroundColor: string
 
@@ -84,41 +151,86 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.hintKey = null
     this.lastSavedSpawn = null
     this.transitioning = false
+    this.playerAnimated = false
+    this.facing = 'down'
+    this.daylightTween = null
+    this.requestedTextures = []
   }
 
   preload() {
-    this.load.tilemapTiledJSON(
-      this.tilemapKey(),
-      `/tilemaps/${this.zone.tilemap}.json`,
-    )
-    this.load.image(TILESET_IMAGE_KEY, '/tilemaps/tileset.png')
-    this.ensurePlaceholderTexture(PLAYER_TEXTURE, 0xff5a5f)
-    this.ensurePlaceholderTexture(NPC_TEXTURE, 0xffd23f)
+    const tilemapKey = this.tilemapKey()
+    const queueTilesets = (data: { tilesets?: { name: string; image?: string }[] }) => {
+      for (const tileset of data.tilesets ?? []) {
+        if (tileset.image) {
+          this.loadImageOnce(
+            tilesetTextureKey(tileset.name),
+            resolveTilemapAsset(tileset.image),
+          )
+        }
+      }
+    }
+
+    const cached = this.cache.tilemap.get(tilemapKey) as { data?: object } | undefined
+    if (cached?.data) {
+      queueTilesets(cached.data)
+    } else {
+      this.load.tilemapTiledJSON(tilemapKey, `/tilemaps/${this.zone.tilemap}.json`)
+      this.load.once(
+        `filecomplete-tilemapJSON-${tilemapKey}`,
+        (_key: string, _type: string, data: object) => queueTilesets(data),
+      )
+    }
+
+    const characterIds = [
+      PLAYER_CHARACTER_ID,
+      ...this.zone.npcs.flatMap((npc) => (npc.sprite ? [npc.sprite] : [])),
+    ]
+    for (const id of new Set(characterIds)) {
+      this.loadSpritesheetOnce(lpcTextureKey(id), `/assets/lpc/${id}.png`)
+    }
+    for (const landmark of this.zone.landmarks ?? []) {
+      this.loadImageOnce(
+        landmarkTextureKey(landmark.id),
+        `/assets/landmarks/${landmark.id}.png`,
+      )
+    }
+
+    this.ensurePlaceholderTexture(PLAYER_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xff5a5f)
+    this.ensurePlaceholderTexture(NPC_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xffd23f)
   }
 
   create() {
-    const map = this.make.tilemap({ key: this.tilemapKey() })
-    const tileset = map.addTilesetImage(TILESET_KEY, TILESET_IMAGE_KEY)!
-    const groundLayer = map.createLayer('ground', tileset, 0, 0)!
-    const collisionLayer = map.createLayer('collision', tileset, 0, 0)!
-    collisionLayer.setCollisionByProperty({ collides: true })
-    groundLayer.setDepth(0)
-    collisionLayer.setDepth(1)
+    for (const key of this.requestedTextures) {
+      if (!this.textures.exists(key)) missingTextures.add(key)
+    }
 
-    const start = this.clampToMap(
-      useGameStore.getState().spawn ?? this.zone.spawn,
-      map,
-    )
-    this.player = this.physics.add.image(start.x, start.y, PLAYER_TEXTURE)
-    this.player.setCollideWorldBounds(true).setDepth(2)
-    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
-    this.physics.add.collider(this.player, collisionLayer)
+    this.map = this.make.tilemap({ key: this.tilemapKey() })
+    const tilesets = this.map.tilesets.flatMap((tileset) => {
+      const added = this.map.addTilesetImage(
+        tileset.name,
+        tilesetTextureKey(tileset.name),
+      )
+      return added ? [added] : []
+    })
+    const layers = this.map.layers.flatMap((layerData, index) => {
+      const layer = this.map.createLayer(layerData.name, tilesets, 0, 0)
+      if (!layer) return []
+      layer.setCollisionByProperty({ collides: true })
+      layer.setDepth(TILE_LAYER_DEPTH + index)
+      return [layer]
+    })
 
-    this.setupCamera(map)
+    this.createPlayer()
+    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+    for (const layer of layers) this.physics.add.collider(this.player, layer)
+
+    this.createLandmarks()
     this.createNpcs()
     this.createGates()
 
-    this.arrow = this.add.graphics().setScrollFactor(0).setDepth(10)
+    this.arrow = this.add.graphics().setDepth(ARROW_DEPTH)
+    this.createDaylight()
+    this.setupCamera()
 
     this.cursors = this.input.keyboard!.createCursorKeys()
     this.wasd = {
@@ -133,6 +245,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     const unsubscribe = useGameStore.subscribe((state, prev) => {
       if (state.interactRequest !== prev.interactRequest) this.interact()
+      if (state.gameClock !== prev.gameClock) this.fadeDaylightTo(state.gameClock)
     })
 
     this.time.addEvent({
@@ -141,8 +254,11 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       callback: () => this.saveSpawn(),
     })
 
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.handleResize, this)
+
     const handleExit = () => {
       unsubscribe()
+      this.scale.off(Phaser.Scale.Events.RESIZE, this.handleResize, this)
       this.saveSpawn()
       useGameStore.getState().setInteractionHint(null)
     }
@@ -155,12 +271,12 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
   update(_time: number, delta: number) {
     this.player.setVelocity(0)
-    this.updateNpcPatrol(delta)
-    this.drawQuestArrow()
+    this.updateNpcs(delta)
 
-    if (this.transitioning) return
-    if (this.isInputBlocked()) {
-      this.setHint(null)
+    if (this.transitioning || this.isInputBlocked()) {
+      this.animatePlayer(0, 0)
+      if (!this.transitioning) this.setHint(null)
+      this.drawQuestArrow()
       return
     }
 
@@ -169,71 +285,153 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const up = this.cursors.up.isDown || this.wasd.up.isDown
     const down = this.cursors.down.isDown || this.wasd.down.isDown
 
-    if (left) this.player.setVelocityX(-MOVE_SPEED)
-    else if (right) this.player.setVelocityX(MOVE_SPEED)
-
-    if (up) this.player.setVelocityY(-MOVE_SPEED)
-    else if (down) this.player.setVelocityY(MOVE_SPEED)
+    const velocityX = left ? -MOVE_SPEED : right ? MOVE_SPEED : 0
+    const velocityY = up ? -MOVE_SPEED : down ? MOVE_SPEED : 0
+    this.player.setVelocity(velocityX, velocityY)
+    this.animatePlayer(velocityX, velocityY)
+    this.player.setDepth(bottomOf(this.player))
 
     this.updateHint()
     this.checkExits()
+    this.drawQuestArrow()
   }
 
   private tilemapKey() {
     return `tilemap_${this.zone.tilemap}`
   }
 
-  private ensurePlaceholderTexture(key: string, color: number) {
+  private loadImageOnce(key: string, url: string) {
+    if (this.textures.exists(key) || missingTextures.has(key)) return
+    this.requestedTextures.push(key)
+    this.load.image(key, url)
+  }
+
+  private loadSpritesheetOnce(key: string, url: string) {
+    if (this.textures.exists(key) || missingTextures.has(key)) return
+    this.requestedTextures.push(key)
+    this.load.spritesheet(key, url, {
+      frameWidth: LPC_FRAME_SIZE,
+      frameHeight: LPC_FRAME_SIZE,
+    })
+  }
+
+  private ensurePlaceholderTexture(key: string, size: number, color: number) {
     if (this.textures.exists(key)) return
     const graphics = this.make.graphics({ x: 0, y: 0 })
     graphics.fillStyle(color, 1)
-    graphics.fillRect(0, 0, TILE_SIZE, TILE_SIZE)
-    graphics.generateTexture(key, TILE_SIZE, TILE_SIZE)
+    graphics.fillRect(0, 0, size, size)
+    graphics.lineStyle(2, 0x000000, 0.35)
+    graphics.strokeRect(1, 1, size - 2, size - 2)
+    graphics.generateTexture(key, size, size)
     graphics.destroy()
   }
 
-  private clampToMap(point: { x: number; y: number }, map: Phaser.Tilemaps.Tilemap) {
+  private clampToMap(point: { x: number; y: number }) {
     // Позиція зі старого збереження може бути поза меншою мапою — тримаємо гравця всередині стін.
-    const min = TILE_SIZE * 1.5
+    const minX = this.map.tileWidth * 1.5
+    const minY = this.map.tileHeight * 1.5
     return {
-      x: Phaser.Math.Clamp(point.x, min, map.widthInPixels - min),
-      y: Phaser.Math.Clamp(point.y, min, map.heightInPixels - min),
+      x: Phaser.Math.Clamp(point.x, minX, this.map.widthInPixels - minX),
+      y: Phaser.Math.Clamp(point.y, minY, this.map.heightInPixels - minY),
     }
   }
 
-  private setupCamera(map: Phaser.Tilemaps.Tilemap) {
-    const camera = this.cameras.main
-    camera.setBackgroundColor(this.backgroundColor)
-    if (
-      map.widthInPixels <= camera.width &&
-      map.heightInPixels <= camera.height
-    ) {
-      camera.centerOn(map.widthInPixels / 2, map.heightInPixels / 2)
+  private createPlayer() {
+    const start = this.clampToMap(useGameStore.getState().spawn ?? this.zone.spawn)
+    const lpcKey = lpcTextureKey(PLAYER_CHARACTER_ID)
+    this.playerAnimated = this.textures.exists(lpcKey)
+
+    if (this.playerAnimated) {
+      createLpcAnimations(this, lpcKey)
+      this.player = this.physics.add.sprite(start.x, start.y, lpcKey)
+      this.player.play(lpcAnimationKey(lpcKey, 'idle', this.facing))
+    } else {
+      this.player = this.physics.add.sprite(start.x, start.y, PLAYER_PLACEHOLDER_TEXTURE)
+    }
+
+    const frameWidth = this.player.width
+    const frameHeight = this.player.height
+    const body = this.player.body as Phaser.Physics.Arcade.Body
+    body.setSize(FEET_BODY_WIDTH, FEET_BODY_HEIGHT)
+    // LPC-персонаж стоїть на ~2 px вище низу кадру.
+    const feetGap = this.playerAnimated ? 2 : 0
+    body.setOffset(
+      (frameWidth - FEET_BODY_WIDTH) / 2,
+      frameHeight - FEET_BODY_HEIGHT - feetGap,
+    )
+    this.player.setCollideWorldBounds(true)
+    this.player.setDepth(bottomOf(this.player))
+  }
+
+  private animatePlayer(velocityX: number, velocityY: number) {
+    if (!this.playerAnimated) return
+    const key = lpcTextureKey(PLAYER_CHARACTER_ID)
+    if (velocityX === 0 && velocityY === 0) {
+      this.player.play(lpcAnimationKey(key, 'idle', this.facing), true)
       return
     }
-    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
-    camera.startFollow(this.player)
+    // Горизонталь має пріоритет при русі по діагоналі.
+    if (velocityX !== 0) this.facing = velocityX < 0 ? 'left' : 'right'
+    else this.facing = velocityY < 0 ? 'up' : 'down'
+    this.player.play(lpcAnimationKey(key, 'walk', this.facing), true)
+  }
+
+  private createLandmarks() {
+    for (const landmark of this.zone.landmarks ?? []) {
+      const key = landmarkTextureKey(landmark.id)
+      // Без зображення landmark не показуємо: генератор мап і так малює фасад над дверима.
+      if (!this.textures.exists(key)) continue
+      const image = this.add
+        .image(landmark.x, landmark.y, key)
+        .setOrigin(0.5, 1)
+        .setScale(landmark.scale ?? 1)
+        .setDepth(landmark.y)
+
+      // Колізія лише по нижній третині: за верхню частину будівлі можна зайти.
+      const blockHeight = image.displayHeight / 3
+      const block = this.add.zone(
+        landmark.x,
+        landmark.y - blockHeight / 2,
+        image.displayWidth,
+        blockHeight,
+      )
+      this.physics.add.existing(block, true)
+      this.physics.add.collider(this.player, block)
+    }
   }
 
   private createNpcs() {
     const greeting = i18next.t('world.npcGreeting')
     for (const npc of this.zone.npcs) {
-      const sprite = this.add.image(npc.x, npc.y, NPC_TEXTURE).setDepth(2)
+      const lpcKey = npc.sprite ? lpcTextureKey(npc.sprite) : null
+      const animated = lpcKey !== null && this.textures.exists(lpcKey)
+      let sprite: Phaser.GameObjects.Sprite
+      if (animated) {
+        createLpcAnimations(this, lpcKey)
+        sprite = this.add.sprite(npc.x, npc.y, lpcKey)
+        sprite.play(lpcAnimationKey(lpcKey, 'idle', 'down'))
+      } else {
+        sprite = this.add.sprite(npc.x, npc.y, NPC_PLACEHOLDER_TEXTURE)
+      }
+      sprite.setDepth(bottomOf(sprite))
+
       const greetingText = this.add
-        .text(npc.x, npc.y - 28, greeting, {
+        .text(npc.x, this.greetingY(sprite), greeting, {
           fontFamily: 'sans-serif',
-          fontSize: '14px',
+          fontSize: '8px',
           color: '#111111',
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: { x: 6, y: 3 },
+          padding: { x: 3, y: 2 },
+          resolution: CAMERA_ZOOM * 2,
         })
-        .setOrigin(0.5)
+        .setOrigin(0.5, 1)
         .setAlpha(0)
-        .setDepth(3)
+        .setDepth(GREETING_DEPTH)
 
       const entity: NpcEntity = {
         config: npc,
         sprite,
+        animated,
         greetingText,
         originX: npc.x,
         direction: Math.random() < 0.5 ? 1 : -1,
@@ -243,8 +441,36 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     }
   }
 
+  private greetingY(sprite: Phaser.GameObjects.Sprite) {
+    // У LPC-кадрі голова починається приблизно на чверті висоти.
+    const headOffset = sprite.displayHeight * (sprite.width === LPC_FRAME_SIZE ? 0.25 : 0.5)
+    return sprite.y - headOffset - 2
+  }
+
+  private gateOverrides() {
+    // Об'єкти шарів doors/exits з Tiled з властивістю id перекривають координати з конфігу.
+    const overrides = new Map<string, GateRect>()
+    for (const layerName of ['doors', 'exits'] as const) {
+      const layer = this.map.getObjectLayer(layerName)
+      for (const object of layer?.objects ?? []) {
+        const id = tiledProperty(object, 'id')
+        if (typeof id !== 'string') continue
+        overrides.set(`${layerName}:${id}`, {
+          x: object.x ?? 0,
+          y: object.y ?? 0,
+          w: object.width ?? 0,
+          h: object.height ?? 0,
+        })
+      }
+    }
+    return overrides
+  }
+
   private createGates() {
-    const add = (kind: GateEntity['kind'], config: DoorConfig | ExitConfig) => {
+    const overrides = this.gateOverrides()
+    const add = (kind: GateEntity['kind'], original: DoorConfig | ExitConfig) => {
+      const override = overrides.get(`${kind === 'door' ? 'doors' : 'exits'}:${original.id}`)
+      const config = override ? { ...original, ...override } : original
       const padding = kind === 'door' ? DOOR_INTERACTION_PADDING : 0
       const area = this.add.zone(
         config.x + config.w / 2,
@@ -257,6 +483,58 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     }
     for (const door of this.zone.doors) add('door', door)
     for (const exit of this.zone.exits) add('exit', exit)
+  }
+
+  private createDaylight() {
+    const camera = this.cameras.main
+    this.daylightTint = daylightForClock(useGameStore.getState().gameClock)
+    // scrollFactor 0 + zoom масштабують прямокутник навколо центру камери, тож він гарантовано вкриває екран.
+    this.daylight = this.add
+      .rectangle(0, 0, camera.width, camera.height, this.daylightTint.color, this.daylightTint.alpha)
+      .setOrigin(0)
+      .setScrollFactor(0)
+      .setBlendMode(Phaser.BlendModes.MULTIPLY)
+      .setDepth(DAYLIGHT_DEPTH)
+  }
+
+  private fadeDaylightTo(clock: string) {
+    const from = { ...this.daylightTint }
+    const to = daylightForClock(clock)
+    this.daylightTween?.stop()
+    const progress = { t: 0 }
+    this.daylightTween = this.tweens.add({
+      targets: progress,
+      t: 1,
+      duration: DAYLIGHT_TRANSITION,
+      ease: 'Sine.easeInOut',
+      onUpdate: () => {
+        this.daylightTint = mixTint(from, to, progress.t)
+        this.daylight.setFillStyle(this.daylightTint.color, this.daylightTint.alpha)
+      },
+    })
+  }
+
+  private setupCamera() {
+    const camera = this.cameras.main
+    camera.setBackgroundColor(this.backgroundColor)
+    camera.setZoom(CAMERA_ZOOM)
+    camera.setRoundPixels(true)
+    const viewWidth = camera.width / CAMERA_ZOOM
+    const viewHeight = camera.height / CAMERA_ZOOM
+    if (this.map.widthInPixels <= viewWidth && this.map.heightInPixels <= viewHeight) {
+      camera.stopFollow()
+      camera.removeBounds()
+      camera.centerOn(this.map.widthInPixels / 2, this.map.heightInPixels / 2)
+      return
+    }
+    camera.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+    camera.startFollow(this.player, true)
+  }
+
+  private handleResize(gameSize: Phaser.Structs.Size) {
+    this.cameras.main.setSize(gameSize.width, gameSize.height)
+    this.daylight.setSize(gameSize.width, gameSize.height)
+    this.setupCamera()
   }
 
   private openEnterDialogue() {
@@ -285,20 +563,28 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     return this.physics.overlap(this.player, gate.area)
   }
 
-  private updateNpcPatrol(delta: number) {
+  private updateNpcs(delta: number) {
     for (const entity of this.npcEntities) {
-      if (!entity.config.patrol) continue
-      entity.sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
-
-      if (entity.sprite.x >= entity.originX + NPC_PATROL_RANGE) {
-        entity.sprite.x = entity.originX + NPC_PATROL_RANGE
-        entity.direction = -1
-      } else if (entity.sprite.x <= entity.originX - NPC_PATROL_RANGE) {
-        entity.sprite.x = entity.originX - NPC_PATROL_RANGE
-        entity.direction = 1
+      const { sprite } = entity
+      if (entity.config.patrol) {
+        sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
+        if (sprite.x >= entity.originX + NPC_PATROL_RANGE) {
+          sprite.x = entity.originX + NPC_PATROL_RANGE
+          entity.direction = -1
+        } else if (sprite.x <= entity.originX - NPC_PATROL_RANGE) {
+          sprite.x = entity.originX - NPC_PATROL_RANGE
+          entity.direction = 1
+        }
+        if (entity.animated && entity.config.sprite) {
+          const key = lpcTextureKey(entity.config.sprite)
+          sprite.play(
+            lpcAnimationKey(key, 'walk', entity.direction < 0 ? 'left' : 'right'),
+            true,
+          )
+        }
       }
-
-      entity.greetingText.setPosition(entity.sprite.x, entity.sprite.y - 28)
+      sprite.setDepth(bottomOf(sprite))
+      entity.greetingText.setPosition(sprite.x, this.greetingY(sprite))
     }
   }
 
@@ -327,9 +613,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     for (const entity of this.npcEntities) {
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
-        this.player.y,
+        bottomOf(this.player),
         entity.sprite.x,
-        entity.sprite.y,
+        bottomOf(entity.sprite),
       )
       if (distance <= NPC_INTERACTION_RADIUS && distance < closestDistance) {
         closestDistance = distance
@@ -446,7 +732,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     if (target.kind === 'npc') {
       const entity = this.npcEntities.find((npc) => npc.config.id === target.id)
-      return entity ? { x: entity.sprite.x, y: entity.sprite.y } : null
+      return entity
+        ? { x: entity.sprite.x, y: entity.sprite.y - entity.sprite.displayHeight / 2 }
+        : null
     }
     const gate = this.gates.find(
       (candidate) =>
@@ -455,67 +743,55 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     return gate ? { x: gate.area.x, y: gate.area.y } : null
   }
 
+  // Стрілка малюється у світових координатах: з zoom об'єкти зі scrollFactor 0 зміщуються від центру.
   private drawQuestArrow() {
     this.arrow.clear()
     const point = this.questArrowWorldPoint()
     if (!point) return
 
     const camera = this.cameras.main
-    const screenX = point.x - camera.worldView.x
-    const screenY = point.y - camera.worldView.y
+    const view = camera.worldView
+    const inset = ARROW_EDGE_INSET / camera.zoom
+    const topInset = ARROW_TOP_INSET / camera.zoom
+    const size = ARROW_SIZE / camera.zoom
     const onScreen =
-      screenX >= ARROW_EDGE_INSET &&
-      screenX <= camera.width - ARROW_EDGE_INSET &&
-      screenY >= ARROW_EDGE_INSET &&
-      screenY <= camera.height - ARROW_EDGE_INSET
+      point.x >= view.x + inset &&
+      point.x <= view.right - inset &&
+      point.y >= view.y + topInset &&
+      point.y <= view.bottom - inset
 
     let x: number
     let y: number
     let angle: number
     if (onScreen) {
       // Ціль видно: трикутник над нею, вістрям донизу, з легким погойдуванням.
-      x = screenX
-      y = screenY - 36 + Math.sin(this.time.now / 200) * 4
+      x = point.x
+      y = point.y - size * 1.5 + Math.sin(this.time.now / 200) * 2
       angle = Math.PI / 2
     } else {
       // Ціль за кадром: трикутник біля краю екрана в її напрямку.
-      const centerX = camera.width / 2
-      const centerY = camera.height / 2
-      const dx = screenX - centerX
-      const dy = screenY - centerY
+      const dx = point.x - view.centerX
+      const dy = point.y - view.centerY
       angle = Math.atan2(dy, dx)
+      const verticalInset = dy < 0 ? topInset : inset
       const scale = Math.min(
-        (centerX - ARROW_EDGE_INSET) / Math.max(Math.abs(dx), 1),
-        (centerY - ARROW_EDGE_INSET) / Math.max(Math.abs(dy), 1),
+        (view.width / 2 - inset) / Math.max(Math.abs(dx), 1),
+        (view.height / 2 - verticalInset) / Math.max(Math.abs(dy), 1),
       )
-      x = centerX + dx * scale
-      y = centerY + dy * scale
+      x = view.centerX + dx * scale
+      y = view.centerY + dy * scale
     }
 
     const corner = (offset: number) => ({
-      x: x + Math.cos(angle + offset) * ARROW_SIZE,
-      y: y + Math.sin(angle + offset) * ARROW_SIZE,
+      x: x + Math.cos(angle + offset) * size,
+      y: y + Math.sin(angle + offset) * size,
     })
     const tip = corner(0)
     const leftCorner = corner((Math.PI * 3) / 4)
     const rightCorner = corner((-Math.PI * 3) / 4)
     this.arrow.fillStyle(ARROW_COLOR, 1)
-    this.arrow.lineStyle(2, 0x111111, 1)
-    this.arrow.fillTriangle(
-      tip.x,
-      tip.y,
-      leftCorner.x,
-      leftCorner.y,
-      rightCorner.x,
-      rightCorner.y,
-    )
-    this.arrow.strokeTriangle(
-      tip.x,
-      tip.y,
-      leftCorner.x,
-      leftCorner.y,
-      rightCorner.x,
-      rightCorner.y,
-    )
+    this.arrow.lineStyle(2 / camera.zoom, 0x111111, 1)
+    this.arrow.fillTriangle(tip.x, tip.y, leftCorner.x, leftCorner.y, rightCorner.x, rightCorner.y)
+    this.arrow.strokeTriangle(tip.x, tip.y, leftCorner.x, leftCorner.y, rightCorner.x, rightCorner.y)
   }
 }
