@@ -192,7 +192,8 @@ function drawPlaceholder(zone) {
 function drawUrban(zone) {
   const t = urbanTiles
   const grid = new Grid(zone, 16)
-  grid.fill('ground', t.sidewalk)
+  // Парк — газон, решта вулиць — тротуар з газоном уздовж стін.
+  grid.fill('ground', zone.id === 'park' ? t.grass : t.sidewalk)
   grid.ring('ground', 1, t.grass)
   grid.perimeter('collision', t.brick)
 

@@ -404,6 +404,7 @@ button.interaction-hint:active:not(:disabled) {
 
 .quest-tracker p {
   margin: 0;
+  text-align: left;
 }
 
 .quest-clock {

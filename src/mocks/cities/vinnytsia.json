@@ -23,7 +23,7 @@
       "exits": []
     },
     { "id": "vyshenka", "type": "outdoor", "tilemap": "vyshenka", "spawn": { "x": 48, "y": 240 },
-      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true, "sprite": "tourist" } ],
+      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true, "sprite": "tourist", "showRouteTo": "exit_trolley" } ],
       "doors": [
         { "id": "door_kiosk", "target": "flower_kiosk", "x": 192, "y": 128, "w": 32, "h": 16, "spawn": { "x": 128, "y": 220 } },
         { "id": "door_entrance", "target": "galyna_flat", "x": 384, "y": 128, "w": 32, "h": 16, "requiresFlag": "rain_started", "spawn": { "x": 160, "y": 260 } }

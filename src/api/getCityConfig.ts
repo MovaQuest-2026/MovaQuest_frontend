@@ -19,6 +19,8 @@ export interface CityNpcConfig {
   outfit?: string
   // id LPC-спрайтшита public/assets/lpc/<sprite>.png; без нього — плейсхолдер.
   sprite?: string
+  // id дверей або виходу: поки з NPC іде діалог, сцена малює до них пунктир (реверс-квест туриста).
+  showRouteTo?: string
 }
 
 export interface DoorConfig {

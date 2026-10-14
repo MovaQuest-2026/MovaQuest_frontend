@@ -49,6 +49,8 @@ src/
   (персонажі, кадр 64×64, стандартна розкладка LPC), public/assets/landmarks/<id>.png.
   Відсутній асет не ламає гру: персонажі стають плейсхолдерами, landmark не показується.
 - Спрайт NPC — поле `sprite` у конфігу NPC, гравець — public/assets/lpc/player.png.
+- Сцени: WorldScene (outdoor), InteriorScene (interior), TransportScene
+  (transport, фон за вікнами) на спільній основі ZoneSceneBase.
 - Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.

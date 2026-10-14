@@ -17,6 +17,7 @@ import {
   type Direction,
 } from '../lpc'
 import { getArrowTarget, isGateOpen } from '../quests/questEngine'
+import { isRainActive } from '../weather'
 import { sceneKeyForZone, type ZoneSceneData } from './sceneKeys'
 
 const CAMERA_ZOOM = 2
@@ -38,6 +39,13 @@ const SPAWN_SAVE_INTERVAL = 500
 const FADE_DURATION = 250
 const ON_ENTER_DIALOGUE_DELAY = 300
 const DAYLIGHT_TRANSITION = 1500
+const RAIN_TEXTURE = 'raindrop'
+const RAIN_TINT: DaylightTint = { color: 0x5d6b80, alpha: 0.5 }
+const RAIN_TINT_STRENGTH = 0.75
+const NPC_HIDE_SPEED = 60
+const ROUTE_COLOR = 0xffd23f
+const ROUTE_DASH = 6
+const ROUTE_GAP = 4
 const ARROW_EDGE_INSET = 40
 // Зверху більший відступ, щоб стрілка не ховалася під QuestTracker.
 const ARROW_TOP_INSET = 110
@@ -45,7 +53,9 @@ const ARROW_SIZE = 14
 const ARROW_COLOR = 0xffd23f
 // Тайлові шари нижче за всіх, спрайти сортуються за y, далі — підписи, тінт доби і стрілка.
 const TILE_LAYER_DEPTH = -1000
+const ROUTE_DEPTH = -100
 const GREETING_DEPTH = 100000
+const RAIN_DEPTH = 150000
 const DAYLIGHT_DEPTH = 200000
 const ARROW_DEPTH = 300000
 
@@ -59,6 +69,9 @@ interface NpcEntity {
   greetingText: Phaser.GameObjects.Text
   originX: number
   direction: 1 | -1
+  // Під час зливи NPC з patrol: true ідуть до найближчих дверей (hiding) і зникають (hidden).
+  hiding: boolean
+  hidden: boolean
 }
 
 interface GateEntity {
@@ -116,7 +129,7 @@ function tiledProperty(object: Phaser.Types.Tilemaps.TiledObject, name: string) 
  */
 export abstract class ZoneSceneBase extends Phaser.Scene {
   protected zone!: ZoneConfig
-  private map!: Phaser.Tilemaps.Tilemap
+  protected map!: Phaser.Tilemaps.Tilemap
   private player!: Phaser.Physics.Arcade.Sprite
   private playerAnimated = false
   private facing: Direction = 'down'
@@ -131,6 +144,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private daylight!: Phaser.GameObjects.Rectangle
   private daylightTint: DaylightTint = { color: 0xffffff, alpha: 0 }
   private daylightTween: Phaser.Tweens.Tween | null = null
+  private rain!: Phaser.GameObjects.Particles.ParticleEmitter
+  private rainArea = new Phaser.Geom.Rectangle()
+  private raining = false
+  private route!: Phaser.GameObjects.Graphics
   private npcEntities: NpcEntity[] = []
   private gates: GateEntity[] = []
   private hintTarget: HintTarget | null = null
@@ -140,6 +157,12 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private requestedTextures: string[] = []
 
   protected abstract readonly backgroundColor: string
+
+  /** Додаткові об'єкти конкретної сцени (наприклад, вікна тролейбуса). */
+  protected createZoneExtras() {}
+
+  /** Покадрове оновлення додаткових об'єктів конкретної сцени. */
+  protected updateZoneExtras(_delta: number) {}
 
   init(data: ZoneSceneData) {
     const city = useGameStore.getState().cityConfig
@@ -155,6 +178,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.facing = 'down'
     this.daylightTween = null
     this.requestedTextures = []
+    this.raining = false
   }
 
   preload() {
@@ -228,9 +252,15 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.createNpcs()
     this.createGates()
 
+    this.raining = this.isRainingHere()
+    if (this.raining) this.hidePatrolNpcs(false)
+
     this.arrow = this.add.graphics().setDepth(ARROW_DEPTH)
+    this.route = this.add.graphics().setDepth(ROUTE_DEPTH)
     this.createDaylight()
+    this.createRain()
     this.setupCamera()
+    this.createZoneExtras()
 
     this.cursors = this.input.keyboard!.createCursorKeys()
     this.wasd = {
@@ -245,7 +275,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     const unsubscribe = useGameStore.subscribe((state, prev) => {
       if (state.interactRequest !== prev.interactRequest) this.interact()
-      if (state.gameClock !== prev.gameClock) this.fadeDaylightTo(state.gameClock)
+      if (state.gameClock !== prev.gameClock) this.fadeDaylight()
+      if (state.flags !== prev.flags) this.updateWeather()
+      if (state.activeDialogue !== prev.activeDialogue) this.drawNpcRoute()
     })
 
     this.time.addEvent({
@@ -272,6 +304,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   update(_time: number, delta: number) {
     this.player.setVelocity(0)
     this.updateNpcs(delta)
+    this.updateZoneExtras(delta)
 
     if (this.transitioning || this.isInputBlocked()) {
       this.animatePlayer(0, 0)
@@ -435,6 +468,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         greetingText,
         originX: npc.x,
         direction: Math.random() < 0.5 ? 1 : -1,
+        hiding: false,
+        hidden: false,
       }
       this.npcEntities.push(entity)
       this.scheduleNpcGreeting(entity)
@@ -485,9 +520,15 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     for (const exit of this.zone.exits) add('exit', exit)
   }
 
+  private targetTint(): DaylightTint {
+    const day = daylightForClock(useGameStore.getState().gameClock)
+    // Під час зливи небо темнішає поверх звичайного часу доби.
+    return this.raining ? mixTint(day, RAIN_TINT, RAIN_TINT_STRENGTH) : day
+  }
+
   private createDaylight() {
     const camera = this.cameras.main
-    this.daylightTint = daylightForClock(useGameStore.getState().gameClock)
+    this.daylightTint = this.targetTint()
     // scrollFactor 0 + zoom масштабують прямокутник навколо центру камери, тож він гарантовано вкриває екран.
     this.daylight = this.add
       .rectangle(0, 0, camera.width, camera.height, this.daylightTint.color, this.daylightTint.alpha)
@@ -497,9 +538,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       .setDepth(DAYLIGHT_DEPTH)
   }
 
-  private fadeDaylightTo(clock: string) {
+  private fadeDaylight() {
     const from = { ...this.daylightTint }
-    const to = daylightForClock(clock)
+    const to = this.targetTint()
     this.daylightTween?.stop()
     const progress = { t: 0 }
     this.daylightTween = this.tweens.add({
@@ -512,6 +553,174 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         this.daylight.setFillStyle(this.daylightTint.color, this.daylightTint.alpha)
       },
     })
+  }
+
+  private isRainingHere() {
+    return this.zone.type === 'outdoor' && isRainActive(useGameStore.getState().flags)
+  }
+
+  private createRain() {
+    if (!this.textures.exists(RAIN_TEXTURE)) {
+      const graphics = this.make.graphics({ x: 0, y: 0 })
+      graphics.fillStyle(0xc6dcff, 1)
+      graphics.fillRect(0, 0, 1, 6)
+      graphics.generateTexture(RAIN_TEXTURE, 1, 6)
+      graphics.destroy()
+    }
+    this.updateRainArea()
+    this.rain = this.add
+      .particles(0, 0, RAIN_TEXTURE, {
+        emitZone: { type: 'random', source: this.rainArea, quantity: 0 },
+        lifespan: 450,
+        speedX: { min: -30, max: -15 },
+        speedY: { min: 220, max: 280 },
+        alpha: { start: 0.85, end: 0 },
+        quantity: 3,
+        frequency: 16,
+        emitting: this.raining,
+      })
+      .setScrollFactor(0)
+      .setDepth(RAIN_DEPTH)
+  }
+
+  private updateRainArea() {
+    // Частинки зі scrollFactor 0 масштабуються від центру камери, тож видима область — центр ± половина екрана / zoom.
+    const camera = this.cameras.main
+    const width = camera.width / CAMERA_ZOOM
+    const height = camera.height / CAMERA_ZOOM
+    this.rainArea.setTo(
+      camera.width / 2 - width / 2,
+      camera.height / 2 - height / 2 - 20,
+      width,
+      height,
+    )
+  }
+
+  private updateWeather() {
+    const raining = this.isRainingHere()
+    if (raining === this.raining) return
+    this.raining = raining
+    if (raining) {
+      this.rain.start()
+      this.hidePatrolNpcs(true)
+    } else {
+      this.rain.stop()
+      this.showPatrolNpcs()
+    }
+    this.fadeDaylight()
+  }
+
+  private nearestShelter(sprite: Phaser.GameObjects.Sprite) {
+    const candidates = this.gates.filter((gate) => gate.kind === 'door')
+    const pool = candidates.length ? candidates : this.gates
+    let best: GateEntity | null = null
+    let bestDistance = Infinity
+    for (const gate of pool) {
+      const distance = Phaser.Math.Distance.Between(sprite.x, sprite.y, gate.area.x, gate.area.y)
+      if (distance < bestDistance) {
+        bestDistance = distance
+        best = gate
+      }
+    }
+    return best
+  }
+
+  private hidePatrolNpcs(animate: boolean) {
+    for (const entity of this.npcEntities) {
+      if (!entity.config.patrol || entity.hidden || entity.hiding) continue
+      const { sprite } = entity
+      const finish = () => {
+        entity.hiding = false
+        entity.hidden = true
+        sprite.setVisible(false)
+        entity.greetingText.setVisible(false)
+      }
+      if (!animate) {
+        finish()
+        continue
+      }
+
+      entity.hiding = true
+      const shelter = this.nearestShelter(sprite)
+      const fadeOut = () =>
+        this.tweens.add({ targets: sprite, alpha: 0, duration: 200, onComplete: finish })
+      if (!shelter) {
+        fadeOut()
+        continue
+      }
+      const dx = shelter.area.x - sprite.x
+      const dy = shelter.area.y - sprite.y
+      if (entity.animated && entity.config.sprite) {
+        const direction: Direction =
+          Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : dy < 0 ? 'up' : 'down'
+        sprite.play(lpcAnimationKey(lpcTextureKey(entity.config.sprite), 'walk', direction), true)
+      }
+      this.tweens.add({
+        targets: sprite,
+        x: shelter.area.x,
+        y: shelter.area.y,
+        duration: (Math.hypot(dx, dy) / NPC_HIDE_SPEED) * 1000,
+        onComplete: fadeOut,
+      })
+    }
+  }
+
+  private showPatrolNpcs() {
+    for (const entity of this.npcEntities) {
+      if (!entity.hidden && !entity.hiding) continue
+      const { sprite, config } = entity
+      this.tweens.killTweensOf(sprite)
+      entity.hidden = false
+      entity.hiding = false
+      entity.originX = config.x
+      sprite.setPosition(config.x, config.y).setAlpha(0).setVisible(true)
+      entity.greetingText.setVisible(true)
+      this.tweens.add({ targets: sprite, alpha: 1, duration: 400 })
+    }
+  }
+
+  private isPresent(entity: NpcEntity) {
+    return !entity.hidden && !entity.hiding
+  }
+
+  // Пунктир від NPC до виходу, поки з ним іде діалог: спершу прямо (по вертикалі), потім убік.
+  private drawNpcRoute() {
+    this.route.clear()
+    const { activeDialogue } = useGameStore.getState()
+    if (!activeDialogue) return
+    const entity = this.npcEntities.find(
+      (candidate) =>
+        candidate.config.dialogueId === activeDialogue &&
+        candidate.config.showRouteTo &&
+        this.isPresent(candidate),
+    )
+    const gate = entity && this.gates.find((candidate) => candidate.config.id === entity.config.showRouteTo)
+    if (!entity || !gate) return
+
+    const start = { x: entity.sprite.x, y: bottomOf(entity.sprite) }
+    const end = { x: gate.area.x, y: gate.area.y }
+    const corner = { x: start.x, y: end.y }
+    this.route.lineStyle(2, ROUTE_COLOR, 0.95)
+    this.dashedLine(start, corner)
+    this.dashedLine(corner, end)
+    this.route.fillStyle(ROUTE_COLOR, 1)
+    this.route.fillCircle(end.x, end.y, 4)
+  }
+
+  private dashedLine(from: { x: number; y: number }, to: { x: number; y: number }) {
+    const length = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y)
+    if (length === 0) return
+    const ux = (to.x - from.x) / length
+    const uy = (to.y - from.y) / length
+    for (let offset = 0; offset < length; offset += ROUTE_DASH + ROUTE_GAP) {
+      const dashEnd = Math.min(offset + ROUTE_DASH, length)
+      this.route.lineBetween(
+        from.x + ux * offset,
+        from.y + uy * offset,
+        from.x + ux * dashEnd,
+        from.y + uy * dashEnd,
+      )
+    }
   }
 
   private setupCamera() {
@@ -534,6 +743,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private handleResize(gameSize: Phaser.Structs.Size) {
     this.cameras.main.setSize(gameSize.width, gameSize.height)
     this.daylight.setSize(gameSize.width, gameSize.height)
+    this.updateRainArea()
     this.setupCamera()
   }
 
@@ -564,9 +774,17 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   }
 
   private updateNpcs(delta: number) {
+    const { activeDialogue } = useGameStore.getState()
     for (const entity of this.npcEntities) {
       const { sprite } = entity
-      if (entity.config.patrol) {
+      if (entity.hiding) sprite.setDepth(bottomOf(sprite))
+      if (!this.isPresent(entity)) continue
+      // Співрозмовник не ходить, поки триває діалог.
+      const talking = activeDialogue !== null && activeDialogue === entity.config.dialogueId
+      if (talking && entity.animated && entity.config.sprite) {
+        sprite.play(lpcAnimationKey(lpcTextureKey(entity.config.sprite), 'idle', 'down'), true)
+      }
+      if (entity.config.patrol && !talking) {
         sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
         if (sprite.x >= entity.originX + NPC_PATROL_RANGE) {
           sprite.x = entity.originX + NPC_PATROL_RANGE
@@ -611,6 +829,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     let closestDistance = Infinity
 
     for (const entity of this.npcEntities) {
+      if (!this.isPresent(entity)) continue
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         bottomOf(this.player),
