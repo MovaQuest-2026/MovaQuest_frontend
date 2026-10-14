@@ -1,0 +1,42 @@
+src/components/StartScreen.tsx
+  s_53b2d8f8e14a30::t_1d85a75420f09f 41-43
+src/components/parseSimpleMarkdown.ts
+  s_53b2d8f8e14a30::t_1d85a75420f09f 1-55
+src/api/getCredits.ts
+  s_53b2d8f8e14a30::t_1d85a75420f09f 1-8
+src/index.css
+  s_53b2d8f8e14a30::t_1d85a75420f09f 452-476
+src/components/parseSimpleMarkdown.test.ts
+  s_53b2d8f8e14a30::t_1d85a75420f09f 1-21
+src/App.tsx
+  s_53b2d8f8e14a30::t_1d85a75420f09f 5,13
+src/components/CreditsScreen.tsx
+  s_53b2d8f8e14a30::t_1d85a75420f09f 1-53
+src/i18n/locales/uk.json
+  s_53b2d8f8e14a30::t_1d85a75420f09f 6-7,56-59
+public/CREDITS.md
+  s_53b2d8f8e14a30::t_1d85a75420f09f 1-28
+src/i18n/locales/en.json
+  s_53b2d8f8e14a30::t_1d85a75420f09f 6-7,56-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8799f1a579036d504bc9eef31adef621f273469a",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
