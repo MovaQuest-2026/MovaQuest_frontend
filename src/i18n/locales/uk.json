@@ -1,7 +1,9 @@
 {
   "start": {
     "title": "Movaquest",
-    "start": "Почати"
+    "start": "Почати",
+    "continue": "Продовжити",
+    "restart": "Почати заново"
   },
   "languageSelect": {
     "title": "Оберіть мову",
@@ -10,7 +12,18 @@
   },
   "world": {
     "continue": "Продовжити",
-    "finish": "Завершити"
+    "finish": "Завершити",
+    "npcGreeting": "Привіт!",
+    "interact": {
+      "npc": "E — поговорити з {{name}}",
+      "door": "E — увійти: {{name}}",
+      "exit": "E — піти: {{name}}"
+    },
+    "interactTouch": {
+      "npc": "Поговорити з {{name}}",
+      "door": "Увійти: {{name}}",
+      "exit": "Піти: {{name}}"
+    }
   },
   "exercise": {
     "correct": "Правильно!",
@@ -21,6 +34,7 @@
     "title": "Урок завершено!",
     "learnedCount": "Вивчено слів: {{count}}",
     "reviewTitle": "Рекомендовано повторити",
-    "goHome": "На головну"
+    "goHome": "У меню",
+    "continue": "Далі"
   }
 }

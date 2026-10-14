@@ -1,7 +1,9 @@
 {
   "start": {
     "title": "Movaquest",
-    "start": "Start"
+    "start": "Start",
+    "continue": "Continue",
+    "restart": "Start over"
   },
   "languageSelect": {
     "title": "Choose your language",
@@ -10,7 +12,18 @@
   },
   "world": {
     "continue": "Continue",
-    "finish": "Finish"
+    "finish": "Finish",
+    "npcGreeting": "Hi!",
+    "interact": {
+      "npc": "E — talk to {{name}}",
+      "door": "E — enter: {{name}}",
+      "exit": "E — go: {{name}}"
+    },
+    "interactTouch": {
+      "npc": "Talk to {{name}}",
+      "door": "Enter: {{name}}",
+      "exit": "Go: {{name}}"
+    }
   },
   "exercise": {
     "correct": "Correct!",
@@ -21,6 +34,7 @@
     "title": "Lesson complete!",
     "learnedCount": "{{count}} words learned",
     "reviewTitle": "Recommended for review",
-    "goHome": "Home"
+    "goHome": "Menu",
+    "continue": "Next"
   }
 }
