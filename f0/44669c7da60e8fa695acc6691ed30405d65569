@@ -1,0 +1,160 @@
+package.json
+  s_53b2d8f8e14a30::t_3256cd1f1d524e 10-11
+src/mocks/dialogues/bus_cashier.ink.json
+  s_53b2d8f8e14a30::t_2d32463b1279c1 1-469
+src/mocks/dialogues/bus_guard.ink.json
+  s_53b2d8f8e14a30::t_c95454433f5444 1-399
+src/mocks/dialogues/bus_nina.ink.json
+  s_53b2d8f8e14a30::t_3f2f1409ea6e1a 1-475
+src/mocks/dialogues/center_artist.ink.json
+  s_53b2d8f8e14a30::t_0bf042e6b95726 1-450
+src/mocks/dialogues/center_ostap.ink.json
+  s_53b2d8f8e14a30::t_1e16012da49808 1-558
+src/mocks/dialogues/center_tower.ink.json
+  s_53b2d8f8e14a30::t_e824df5f5ba790 1-491
+src/mocks/dialogues/emb_crowd.ink.json
+  s_53b2d8f8e14a30::t_82f74b1a48fd36 1-375
+src/mocks/dialogues/emb_phone.ink.json
+  s_53b2d8f8e14a30::t_06cfd90b4aad9a 1-311
+src/mocks/dialogues/emb_solomiia.ink.json
+  s_53b2d8f8e14a30::t_53761e944d79af 1-894
+src/mocks/dialogues/park_musician.ink.json
+  s_53b2d8f8e14a30::t_081910be33e68d 2,4-5,12-15,19,28,38-56,67,77-82,94-157,166-169,173,182,192-210,221,231-236,248-311,318-320,325,328
+src/mocks/dialogues/trolley_conductor.ink.json
+  s_53b2d8f8e14a30::t_fca1f828eb26ac 1-399
+src/mocks/dialogues/trolley_passenger.ink.json
+  s_53b2d8f8e14a30::t_582c77955fc9fb 1-404
+src/mocks/dialogues/vinnytsia_cafe.ink.json
+  s_53b2d8f8e14a30::t_a20c3415ef3a8b 5,12-38,40-43,47,56,66-73,84,94-209,213,221-284,293-319,321-324,328,337,347-354,365,375-490,494,502-565,572-579,582-584,587
+src/mocks/dialogues/vysh_flowers.ink.json
+  s_53b2d8f8e14a30::t_26b62a7791968c 1-489
+src/mocks/dialogues/vysh_galyna.ink.json
+  s_53b2d8f8e14a30::t_2145a84bf7f1a4 1-607
+src/mocks/dialogues/vysh_tourist.ink.json
+  s_53b2d8f8e14a30::t_d14a066cb8c440 1-470
+content/ink/_variables.ink
+  s_53b2d8f8e14a30::t_7b229d4903046d 1-16
+content/ink/bus_cashier.en.ink
+  s_53b2d8f8e14a30::t_441749025554f1 1-19
+content/ink/bus_cashier.uk.ink
+  s_53b2d8f8e14a30::t_d3c8b7208166fe 1-19
+content/ink/bus_guard.en.ink
+  s_53b2d8f8e14a30::t_e2d956864edc51 1-13
+content/ink/bus_guard.uk.ink
+  s_53b2d8f8e14a30::t_b699782d94c735 1-13
+content/ink/bus_nina.en.ink
+  s_53b2d8f8e14a30::t_6de3b2bd95410c 1-19
+content/ink/bus_nina.uk.ink
+  s_53b2d8f8e14a30::t_02cb439aed8507 1-19
+content/ink/center_artist.en.ink
+  s_53b2d8f8e14a30::t_b463671d62dbc5 1-17
+content/ink/center_artist.uk.ink
+  s_53b2d8f8e14a30::t_7462a96d1347a1 1-17
+content/ink/center_ostap.en.ink
+  s_53b2d8f8e14a30::t_e314a5c93afbf9 1-27
+content/ink/center_ostap.uk.ink
+  s_53b2d8f8e14a30::t_8b9540e03e72e4 1-27
+content/ink/center_tower.en.ink
+  s_53b2d8f8e14a30::t_a1cfab87c0ffab 1-21
+content/ink/center_tower.uk.ink
+  s_53b2d8f8e14a30::t_7e98ab25edcca3 1-21
+content/ink/dialogues.meta.json
+  s_53b2d8f8e14a30::t_18715cf2e3adc4 1-18
+content/ink/emb_crowd.en.ink
+  s_53b2d8f8e14a30::t_bf6662ea30273b 1-3
+content/ink/emb_crowd.uk.ink
+  s_53b2d8f8e14a30::t_b6acfe0d1434c6 1-3
+content/ink/emb_phone.en.ink
+  s_53b2d8f8e14a30::t_297d516d366ffb 1-10
+content/ink/emb_phone.uk.ink
+  s_53b2d8f8e14a30::t_47c52e23e17400 1-10
+content/ink/emb_solomiia.en.ink
+  s_53b2d8f8e14a30::t_ddca8d9c7046a3 1-51
+content/ink/emb_solomiia.uk.ink
+  s_53b2d8f8e14a30::t_489a36ff14fa28 1-51
+content/ink/park_musician.en.ink
+  s_53b2d8f8e14a30::t_8ba3653c4aad20 1-10
+content/ink/park_musician.uk.ink
+  s_53b2d8f8e14a30::t_a7aa97e0b5e119 1-10
+content/ink/trolley_conductor.en.ink
+  s_53b2d8f8e14a30::t_d38203662f9e05 1-14
+content/ink/trolley_conductor.uk.ink
+  s_53b2d8f8e14a30::t_32c1d95865f240 1-14
+content/ink/trolley_passenger.en.ink
+  s_53b2d8f8e14a30::t_b1f1ec2cae589b 1-16
+content/ink/trolley_passenger.uk.ink
+  s_53b2d8f8e14a30::t_f7060ffa61ef53 1-16
+content/ink/vinnytsia_cafe.en.ink
+  s_53b2d8f8e14a30::t_953f6704f98194 1-25
+content/ink/vinnytsia_cafe.uk.ink
+  s_53b2d8f8e14a30::t_30053c77dcfc47 1-25
+content/ink/vysh_flowers.en.ink
+  s_53b2d8f8e14a30::t_eb147f58df3623 1-21
+content/ink/vysh_flowers.uk.ink
+  s_53b2d8f8e14a30::t_e948094f322694 1-21
+content/ink/vysh_galyna.en.ink
+  s_53b2d8f8e14a30::t_0afe1049332005 1-27
+content/ink/vysh_galyna.uk.ink
+  s_53b2d8f8e14a30::t_b021022e272c86 1-27
+content/ink/vysh_tourist.en.ink
+  s_53b2d8f8e14a30::t_ba7e5590ac1231 1-19
+content/ink/vysh_tourist.uk.ink
+  s_53b2d8f8e14a30::t_5366e60453b4a5 1-19
+docs/ink-contract.md
+  s_53b2d8f8e14a30::t_d0d1a88ea88b3a 1-105
+docs/stages-and-sprints.md
+  s_53b2d8f8e14a30::t_010c6f99e995d8 1-115
+docs/story.md
+  s_53b2d8f8e14a30::t_869931f0bb6ac2 1-46
+scripts/build-ink.mjs
+  s_53b2d8f8e14a30::t_51d14c0aed52b5 1-42,44-49,51
+scripts/playtest-ink.mjs
+  s_53b2d8f8e14a30::t_65ff0780115cc3 1-27
+src/mocks/cities/vinnytsia.json
+  s_53b2d8f8e14a30::t_390d1e3c0f367a 3,5-6,8-87,90
+src/mocks/quests/vinnytsia_main.json
+  s_53b2d8f8e14a30::t_d39cd8faea7e22 1-43
+src/mocks/quizzes/bus_bag_1.json
+  s_53b2d8f8e14a30::t_5060c4b59e5a28 1-4
+src/mocks/quizzes/bus_charge_1.json
+  s_53b2d8f8e14a30::t_1cf7749502ba8d 1-4
+src/mocks/quizzes/cafe_describe_1.json
+  s_53b2d8f8e14a30::t_a5e628b7e19616 1-4
+src/mocks/quizzes/emb_find_1.json
+  s_53b2d8f8e14a30::t_298b231f921d48 1-4
+src/mocks/quizzes/pirogov_1.json
+  s_53b2d8f8e14a30::t_c550382074cb1c 1-5
+src/mocks/quizzes/tower_time_1.json
+  s_53b2d8f8e14a30::t_8a4fe1f4578528 1-4
+src/mocks/quizzes/trolley_card_1.json
+  s_53b2d8f8e14a30::t_c4f73787990a47 1-4
+src/mocks/quizzes/trolley_stop_1.json
+  s_53b2d8f8e14a30::t_b439d423e34d4a 1-4
+src/mocks/quizzes/vysh_directions_1.json
+  s_53b2d8f8e14a30::t_a524d0dc0f9270 1-4
+src/mocks/quizzes/vysh_polite_1.json
+  s_53b2d8f8e14a30::t_b5976b970cb456 1-4
+src/mocks/quizzes/vysh_price_1.json
+  s_53b2d8f8e14a30::t_0c83ec4e47f98a 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f044669c7da60e8fa695acc6691ed30405d65569",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
