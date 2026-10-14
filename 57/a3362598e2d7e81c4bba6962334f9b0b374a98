@@ -1,0 +1,30 @@
+package.json
+  s_53b2d8f8e14a30::t_2d0e448d6b3f39 34
+  s_53b2d8f8e14a30::t_d1b08b5813efa8 12-13
+  s_53b2d8f8e14a30::t_07c6ac07a38019 35
+src/game/quests/questEngine.test.ts
+  s_53b2d8f8e14a30::t_00f8ebb291271d 1-318
+package-lock.json
+  s_53b2d8f8e14a30::t_05af65f59edd37 29-30,42-69,732-756,832-889,943-959,966-975,1361-1370,1390-1403,1714-1740,1866-1948,1962-1974
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57a3362598e2d7e81c4bba6962334f9b0b374a98",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
