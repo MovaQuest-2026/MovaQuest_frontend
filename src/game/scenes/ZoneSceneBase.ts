@@ -5,6 +5,7 @@ import {
   type CityNpcConfig,
   type DoorConfig,
   type ExitConfig,
+  type TriggerConfig,
   type ZoneConfig,
 } from '../../api/getCityConfig'
 import { useGameStore, type InteractionHint } from '../../store/useGameStore'
@@ -35,6 +36,8 @@ const NPC_PATROL_RANGE = 48
 const NPC_GREETING_MIN_DELAY = 3000
 const NPC_GREETING_MAX_DELAY = 6000
 const DOOR_INTERACTION_PADDING = 12
+// Наскільки близько до закритого виходу показувати пояснення lockedHint.
+const LOCKED_HINT_PADDING = 24
 const SPAWN_SAVE_INTERVAL = 500
 const FADE_DURATION = 250
 const ON_ENTER_DIALOGUE_DELAY = 300
@@ -82,9 +85,15 @@ interface GateEntity {
   armed: boolean
 }
 
+interface TriggerEntity {
+  config: TriggerConfig
+  area: Phaser.GameObjects.Zone
+}
+
 type HintTarget =
   | { kind: 'npc'; npc: CityNpcConfig }
   | { kind: 'door'; gate: GateEntity }
+  | { kind: 'locked'; gate: GateEntity }
 
 interface GateRect {
   x: number
@@ -150,6 +159,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private route!: Phaser.GameObjects.Graphics
   private npcEntities: NpcEntity[] = []
   private gates: GateEntity[] = []
+  private triggers: TriggerEntity[] = []
   private hintTarget: HintTarget | null = null
   private hintKey: string | null = null
   private lastSavedSpawn: { x: number; y: number } | null = null
@@ -170,6 +180,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.zone = getZone(city, data.zoneId)
     this.npcEntities = []
     this.gates = []
+    this.triggers = []
     this.hintTarget = null
     this.hintKey = null
     this.lastSavedSpawn = null
@@ -251,6 +262,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.createLandmarks()
     this.createNpcs()
     this.createGates()
+    this.createTriggers()
 
     this.raining = this.isRainingHere()
     if (this.raining) this.hidePatrolNpcs(false)
@@ -325,6 +337,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.player.setDepth(bottomOf(this.player))
 
     this.updateHint()
+    this.checkTriggers()
     this.checkExits()
     this.drawQuestArrow()
   }
@@ -524,6 +537,29 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const day = daylightForClock(useGameStore.getState().gameClock)
     // Під час зливи небо темнішає поверх звичайного часу доби.
     return this.raining ? mixTint(day, RAIN_TINT, RAIN_TINT_STRENGTH) : day
+  }
+
+  private createTriggers() {
+    for (const config of this.zone.triggers ?? []) {
+      const area = this.add.zone(
+        config.x + config.w / 2,
+        config.y + config.h / 2,
+        config.w,
+        config.h,
+      )
+      this.physics.add.existing(area, true)
+      this.triggers.push({ config, area })
+    }
+  }
+
+  private checkTriggers() {
+    for (const trigger of this.triggers) {
+      const { flags, setFlag } = useGameStore.getState()
+      if (flags[trigger.config.setFlag] === true) continue
+      if (this.physics.overlap(this.player, trigger.area)) {
+        setFlag(trigger.config.setFlag, true)
+      }
+    }
   }
 
   private createDaylight() {
@@ -852,7 +888,32 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       (gate) =>
         gate.kind === 'door' && this.isOpen(gate) && this.isPlayerIn(gate),
     )
-    this.setHint(door ? { kind: 'door', gate: door } : null)
+    if (door) {
+      this.setHint({ kind: 'door', gate: door })
+      return
+    }
+
+    // Біля закритого виходу з lockedHint пояснюємо, чого бракує.
+    const locked = this.gates.find(
+      (gate) =>
+        gate.kind === 'exit' &&
+        'lockedHint' in gate.config &&
+        gate.config.lockedHint &&
+        !this.isOpen(gate) &&
+        this.isPlayerNear(gate, LOCKED_HINT_PADDING),
+    )
+    this.setHint(locked ? { kind: 'locked', gate: locked } : null)
+  }
+
+  private isPlayerNear(gate: GateEntity, padding: number) {
+    const body = this.player.body as Phaser.Physics.Arcade.Body
+    const { x, y, w, h } = gate.config
+    return (
+      body.right >= x - padding &&
+      body.left <= x + w + padding &&
+      body.bottom >= y - padding &&
+      body.top <= y + h + padding
+    )
   }
 
   private setHint(target: HintTarget | null) {
@@ -860,7 +921,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       ? null
       : target.kind === 'npc'
         ? `npc:${target.npc.id}`
-        : `door:${target.gate.config.id}`
+        : `${target.kind}:${target.gate.config.id}`
     if (key === this.hintKey) return
     this.hintKey = key
     this.hintTarget = target
@@ -873,6 +934,16 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         kind: 'door',
         id: target.gate.config.id,
         label: this.zoneLabel(target.gate.config.target),
+      }
+    } else if (target?.kind === 'locked') {
+      const key = (target.gate.config as ExitConfig).lockedHint!
+      hint = {
+        kind: 'locked',
+        id: target.gate.config.id,
+        label: {
+          en: i18next.t(key, { lng: 'en' }),
+          uk: i18next.t(key, { lng: 'uk' }),
+        },
       }
     }
     useGameStore.getState().setInteractionHint(hint)
@@ -905,7 +976,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       useGameStore.getState().setActiveDialogue(this.hintTarget.npc.dialogueId)
       return
     }
-    if (this.isOpen(this.hintTarget.gate)) {
+    if (this.hintTarget.kind === 'door' && this.isOpen(this.hintTarget.gate)) {
       this.transitionThrough(this.hintTarget.gate)
     }
   }
@@ -916,6 +987,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.setHint(null)
 
     const { target, spawn } = gate.config
+    if (target === this.zone.id) {
+      this.teleportWithinZone(spawn)
+      return
+    }
     this.cameras.main.fadeOut(FADE_DURATION)
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       const city = useGameStore.getState().cityConfig!
@@ -923,6 +998,24 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       useGameStore.setState({ currentZone: target, spawn })
       const data: ZoneSceneData = { zoneId: target }
       this.scene.start(sceneKeyForZone(targetZone), data)
+    })
+  }
+
+  // Вихід у ту саму зону (короткий шлях до Мурів): без перезапуску сцени, тільки fade і переміщення.
+  private teleportWithinZone(spawn: { x: number; y: number }) {
+    const camera = this.cameras.main
+    camera.fadeOut(FADE_DURATION)
+    camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      const point = this.clampToMap(spawn)
+      ;(this.player.body as Phaser.Physics.Arcade.Body).reset(point.x, point.y)
+      this.player.setDepth(bottomOf(this.player))
+      // Гравець міг опинитися в іншому виході — він спрацює тільки після того, як гравець з нього вийде.
+      for (const gate of this.gates) gate.armed = false
+      this.transitioning = false
+      this.lastSavedSpawn = null
+      this.saveSpawn()
+      this.setupCamera()
+      camera.fadeIn(FADE_DURATION)
     })
   }
 

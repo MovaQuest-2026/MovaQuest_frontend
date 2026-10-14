@@ -43,7 +43,19 @@ export interface ExitConfig {
   h: number
   requiresFlag?: string
   requiresFlagFalse?: string
+  // i18n-ключ підказки, яку показуємо біля закритого виходу.
+  lockedHint?: string
   spawn: Point
+}
+
+// Невидима зона: коли гравець у неї входить, ставиться flags[setFlag] = true.
+export interface TriggerConfig {
+  id: string
+  x: number
+  y: number
+  w: number
+  h: number
+  setFlag: string
 }
 
 // Зображення public/assets/landmarks/<id>.png, x/y — точка посередині нижнього краю.
@@ -65,6 +77,7 @@ export interface ZoneConfig {
   doors: DoorConfig[]
   exits: ExitConfig[]
   landmarks?: LandmarkConfig[]
+  triggers?: TriggerConfig[]
 }
 
 export interface CityConfig {

@@ -15,6 +15,12 @@ const MARGIN = 64
 
 const city = JSON.parse(fs.readFileSync(CITY_FILE, 'utf8'))
 
+// Будинки-перешкоди на тимчасових мапах (пікселі). У центрі будинок відділяє Соборну від Мурів:
+// без короткого шляху (shortcut_mury) його треба обходити знизу.
+const BLOCKS = {
+  center: [{ x: 672, y: 0, w: 128, h: 272 }],
+}
+
 // --- Тайлсети -------------------------------------------------------------------------------
 // Індекси тайлів (0 = лівий верхній) звірені з tilemap_packed.png і roguelikeIndoor_transparent.png.
 
@@ -180,6 +186,9 @@ function drawPlaceholder(zone) {
   const tiles = zone.type === 'outdoor' ? PLACEHOLDER.outdoor : PLACEHOLDER.interior
   grid.fill('ground', tiles.floor)
   grid.perimeter('collision', tiles.wall)
+  for (const block of BLOCKS[zone.id] ?? []) {
+    for (const [col, row] of grid.cells(block)) grid.set('collision', col, row, tiles.wall)
+  }
   for (const gate of [...zone.doors, ...zone.exits]) {
     for (const [col, row] of grid.cells(gate)) {
       grid.set('collision', col, row, -1)
@@ -196,6 +205,15 @@ function drawUrban(zone) {
   grid.fill('ground', zone.id === 'park' ? t.grass : t.sidewalk)
   grid.ring('ground', 1, t.grass)
   grid.perimeter('collision', t.brick)
+
+  for (const block of BLOCKS[zone.id] ?? []) {
+    const cells = grid.cells(block)
+    const bottom = Math.max(...cells.map(([, row]) => row))
+    for (const [col, row] of cells) {
+      const tile = row === bottom ? t.brick : row === bottom - 1 ? t.cornice : t.roof
+      grid.set('collision', col, row, tile)
+    }
+  }
 
   // Над кожними дверима — фасад будівлі: дах, карниз, цегла, двері в нижньому ряду.
   for (const door of zone.doors) {

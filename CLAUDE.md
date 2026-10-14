@@ -51,6 +51,10 @@ src/
 - Спрайт NPC — поле `sprite` у конфігу NPC, гравець — public/assets/lpc/player.png.
 - Сцени: WorldScene (outdoor), InteriorScene (interior), TransportScene
   (transport, фон за вікнами) на спільній основі ZoneSceneBase.
+- Конфіг зони: `triggers` (вхід у прямокутник ставить прапорець), вихід з
+  `target` = поточна зона — телепорт у межах зони, `lockedHint` — i18n-ключ
+  підказки біля закритого виходу. У квест-лінії `dialogueEffects` ставлять
+  прапорці після будь-якого діалогу незалежно від кроку.
 - Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.

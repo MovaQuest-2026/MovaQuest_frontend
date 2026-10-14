@@ -64,8 +64,9 @@
       ],
       "exits": [
         { "id": "shortcut_mury", "target": "center", "x": 640, "y": 320, "w": 32, "h": 32, "requiresFlag": "shortcut_open", "spawn": { "x": 860, "y": 200 } },
-        { "id": "exit_embankment", "target": "embankment", "x": 1184, "y": 240, "w": 32, "h": 96, "requiresFlag": "task_show_time", "spawn": { "x": 48, "y": 240 } }
+        { "id": "exit_embankment", "target": "embankment", "x": 1184, "y": 240, "w": 32, "h": 96, "requiresFlag": "task_show_time", "lockedHint": "world.locked.showTime", "spawn": { "x": 48, "y": 240 } }
       ],
+      "triggers": [ { "id": "mury_rain", "x": 816, "y": 112, "w": 176, "h": 160, "setFlag": "rain_mury" } ],
       "landmarks": [ { "id": "water_tower", "image": "landmark_tower", "x": 240, "y": 96 }, { "id": "mury", "image": "landmark_mury", "x": 920, "y": 96 } ]
     },
     { "id": "tower_interior", "type": "interior", "tilemap": "interior_tower", "spawn": { "x": 128, "y": 240 },

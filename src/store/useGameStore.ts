@@ -12,8 +12,9 @@ export interface SpawnPoint {
   y: number
 }
 
+// locked — не дія, а пояснення, чому прохід закритий (label — сам текст).
 export interface InteractionHint {
-  kind: 'npc' | 'door' | 'exit'
+  kind: 'npc' | 'door' | 'exit' | 'locked'
   id: string
   label: { en: string; uk: string }
 }

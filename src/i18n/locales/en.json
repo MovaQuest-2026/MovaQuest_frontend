@@ -24,6 +24,9 @@
       "npc": "Talk to {{name}}",
       "door": "Enter: {{name}}",
       "exit": "Go: {{name}}"
+    },
+    "locked": {
+      "showTime": "Find out when the fountain show starts first"
     }
   },
   "exercise": {

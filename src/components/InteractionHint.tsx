@@ -18,6 +18,14 @@ export function InteractionHint() {
 
   const name = hint.label[nativeLanguage ?? 'en']
 
+  if (hint.kind === 'locked') {
+    return (
+      <div className="interaction-hint" role="status">
+        {name}
+      </div>
+    )
+  }
+
   if (isTouch) {
     return (
       <button
