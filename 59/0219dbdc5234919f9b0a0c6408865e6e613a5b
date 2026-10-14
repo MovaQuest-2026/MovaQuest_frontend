@@ -1,0 +1,41 @@
+src/components/DialogueOverlay.tsx
+  s_53b2d8f8e14a30::t_c25e9db4f684a2 50,128-142,195-197
+content/ink/dialogues.meta.json
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 16
+src/game/quests/act4.test.ts
+  s_53b2d8f8e14a30::t_65a45c35bd2e24 3
+scripts/build-ink.mjs
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 43-44
+src/store/useGameStore.ts
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 46-47,71-72,99,148-156,175-178
+src/game/quests/act5.test.ts
+  s_53b2d8f8e14a30::t_65a45c35bd2e24 1-64
+src/api/getDialogue.ts
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 14,43-55
+  s_53b2d8f8e14a30::t_9d6794f3e166b2 56
+src/game/quests/inkTestUtils.ts
+  s_53b2d8f8e14a30::t_65a45c35bd2e24 1-63
+src/mocks/dialogues/emb_crowd.ink.json
+  s_53b2d8f8e14a30::t_ac38010f9df2eb 374-375
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "590219dbdc5234919f9b0a0c6408865e6e613a5b",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
