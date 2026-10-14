@@ -1,0 +1,44 @@
+public/tilemaps/center.json
+  s_53b2d8f8e14a30::t_9d07f47c574bc2 1
+src/i18n/locales/uk.json
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 27-29
+src/store/useGameStore.ts
+  s_53b2d8f8e14a30::t_31210ffa003e59 15,17
+src/api/getCityConfig.ts
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 46-47,51-60,80
+src/i18n/locales/en.json
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 27-29
+src/components/InteractionHint.tsx
+  s_53b2d8f8e14a30::t_31210ffa003e59 21-28
+src/game/scenes/ZoneSceneBase.ts
+  s_53b2d8f8e14a30::t_31210ffa003e59 8,39-40,88-92,96,162,183,265,340,542-564,891-916,924,938-947,979,990-993,1004-1018,1020
+  s_53b2d8f8e14a30::t_0b1641fb0ffc4b 1019,1021
+src/mocks/cities/vinnytsia.json
+  s_53b2d8f8e14a30::t_c7a96b1328bd7e 67,69
+scripts/gen-placeholder-maps.mjs
+  s_53b2d8f8e14a30::t_9d07f47c574bc2 18-23,189-191,209-216
+  s_53b2d8f8e14a30::t_4fe2d5da0a1ea8 217
+CLAUDE.md
+  s_53b2d8f8e14a30::t_ef0870fbd850fd 54-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a5d97118d5b6a3492e6d42c7688f8d03be3d96b",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
