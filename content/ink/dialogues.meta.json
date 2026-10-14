@@ -1,0 +1,18 @@
+{
+  "bus_cashier":       { "npcId": "npc_cashier",    "zone": "bus_station_hall", "vocabulary": [["каса","ticket office"],["розетка","socket"],["зарядити","to charge"]] },
+  "bus_nina":          { "npcId": "npc_nina",       "zone": "bus_station",      "vocabulary": [["сумка","bag"],["жовтий","yellow"],["великий","big"]] },
+  "bus_guard":         { "npcId": "npc_guard",      "zone": "bus_station",      "vocabulary": [["зупинка","stop"],["ліворуч","left"],["вихід","exit"]] },
+  "vysh_flowers":      { "npcId": "npc_florist",    "zone": "flower_kiosk",     "vocabulary": [["квіти","flowers"],["гривня","hryvnia"],["решта","change"]] },
+  "vysh_galyna":       { "npcId": "npc_galyna",     "zone": "galyna_flat",      "vocabulary": [["дощ","rain"],["парасолька","umbrella"],["будь ласка","please"]] },
+  "vysh_tourist":      { "npcId": "npc_tourist",    "zone": "vyshenka",         "vocabulary": [["прямо","straight"],["праворуч","right"]] },
+  "trolley_conductor": { "npcId": "npc_conductor",  "zone": "trolleybus",       "vocabulary": [["проїзд","fare"],["картка","card"],["квиток","ticket"]] },
+  "trolley_passenger": { "npcId": "npc_passenger",  "zone": "trolleybus",       "vocabulary": [["наступна зупинка","next stop"],["трамвай","tram"]] },
+  "park_musician":     { "npcId": "npc_musician",   "zone": "park",             "vocabulary": [["пісня","song"],["річка","river"]] },
+  "center_tower":      { "npcId": "npc_tower",      "zone": "tower_interior",   "vocabulary": [["вежа","tower"],["годинник","clock"],["вечір","evening"]] },
+  "center_ostap":      { "npcId": "npc_ostap",      "zone": "center",           "vocabulary": [["лікар","doctor"],["хірург","surgeon"]] },
+  "vinnytsia_cafe":    { "npcId": "npc_barista",    "zone": "cafe",             "vocabulary": [["з молоком","with milk"],["без цукру","without sugar"],["десерт","dessert"]] },
+  "center_artist":     { "npcId": "npc_artist",     "zone": "center",           "vocabulary": [["малюнок","drawing"],["знову","again"]] },
+  "emb_phone":         { "npcId": "phone",          "zone": "embankment",       "vocabulary": [["куртка","jacket"],["окуляри","glasses"],["міст","bridge"]] },
+  "emb_crowd":         { "npcId": "npc_crowd",      "zone": "embankment",       "vocabulary": [] },
+  "emb_solomiia":      { "npcId": "npc_solomiia",   "zone": "embankment",       "vocabulary": [["захід сонця","sunset"],["домовились","deal"]] }
+}

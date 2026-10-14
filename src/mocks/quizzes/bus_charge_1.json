@@ -1,0 +1,4 @@
+{ "id": "bus_charge_1", "type": "multiple_choice",
+  "prompt": { "en": "Ask the cashier where you can charge your phone.", "uk": "Спитай касирку, де можна зарядити телефон." },
+  "options": ["Де можна зарядити телефон?", "Де можна купити квиток?", "Де тут вихід?"],
+  "correct": "Де можна зарядити телефон?", "word": "зарядити" }

@@ -1,0 +1,43 @@
+{
+  "id": "vinnytsia_main",
+  "cityId": "vinnytsia",
+  "steps": [
+    { "id": "charge_phone", "zone": "bus_station", "target": { "npcId": "npc_cashier" },
+      "objective": { "en": "Your phone is dead. Find where to charge it", "uk": "Телефон сів. Знайди, де його зарядити" },
+      "completeWhen": { "flag": "phone_charging" } },
+    { "id": "leave_station", "zone": "bus_station", "target": { "npcId": "npc_guard" },
+      "objective": { "en": "Ask the guard where the stop to Vyshenka is", "uk": "Спитай охоронця, де зупинка на Вишеньку" },
+      "completeWhen": { "flag": "exit_bus_station" }, "advanceClockTo": "10:30" },
+    { "id": "buy_flowers", "zone": "vyshenka", "target": { "doorId": "door_kiosk" },
+      "objective": { "en": "Task 1 of 3: buy flowers for Solomiia's grandma", "uk": "Справа 1 з 3: купи квіти для бабусі Соломії" },
+      "completeWhen": { "flag": "task_flowers" } },
+    { "id": "wait_rain", "zone": "vyshenka", "target": { "doorId": "door_entrance" },
+      "objective": { "en": "It's raining! Find shelter", "uk": "Злива! Знайди, де сховатися" },
+      "startEffects": { "setFlag": "rain_started" },
+      "completeWhen": { "dialogueFinished": "vysh_galyna" } },
+    { "id": "take_trolleybus", "zone": "vyshenka", "target": { "exitId": "exit_trolley" },
+      "objective": { "en": "Take the trolleybus downtown", "uk": "Сідай у тролейбус до центру" },
+      "completeWhen": { "zoneEntered": "trolleybus" } },
+    { "id": "ride", "zone": "trolleybus", "target": { "npcId": "npc_conductor" },
+      "objective": { "en": "Pay the fare and listen for your stop: Soborna", "uk": "Оплати проїзд і слухай свою зупинку: Соборна" },
+      "completeWhen": { "dialogueFinished": "trolley_passenger" }, "completeEffects": { "setFlag": "trolley_announced" }, "advanceClockTo": "13:30" },
+    { "id": "show_time", "zone": "center", "target": { "doorId": "door_tower" },
+      "objective": { "en": "Task 2 of 3: find out when the fountain show starts", "uk": "Справа 2 з 3: дізнайся, о котрій шоу фонтану" },
+      "completeWhen": { "flag": "task_show_time" } },
+    { "id": "dessert", "zone": "center", "target": { "doorId": "door_cafe" },
+      "objective": { "en": "Task 3 of 3: buy Solomiia's favourite dessert", "uk": "Справа 3 з 3: купи улюблений десерт Соломії" },
+      "completeWhen": { "flag": "task_dessert" }, "advanceClockTo": "18:30" },
+    { "id": "go_embankment", "zone": "center", "target": { "exitId": "exit_embankment" },
+      "objective": { "en": "Head to the Roshen embankment", "uk": "Іди на набережну Рошен" },
+      "completeWhen": { "zoneEntered": "embankment" } },
+    { "id": "find_solomiia", "zone": "embankment", "target": { "npcId": "npc_solomiia", "hidden": true },
+      "objective": { "en": "Find Solomiia in the crowd", "uk": "Знайди Соломію в натовпі" },
+      "completeWhen": { "dialogueFinished": "emb_solomiia" } }
+  ],
+  "sideQuests": [
+    { "id": "nina_bag",  "optional": true, "zone": "bus_station", "target": { "npcId": "npc_nina" },  "completeWhen": { "flag": "helped_nina" } },
+    { "id": "tourist",   "optional": true, "zone": "vyshenka",    "target": { "npcId": "npc_tourist" }, "completeWhen": { "flag": "helped_tourist" } },
+    { "id": "pirogov",   "optional": true, "zone": "center",      "target": { "npcId": "npc_ostap" },  "completeWhen": { "flag": "pirogov_asked" } },
+    { "id": "artist",    "optional": true, "zone": "center",      "target": { "npcId": "npc_artist" }, "completeWhen": { "flag": "has_drawing" } }
+  ]
+}

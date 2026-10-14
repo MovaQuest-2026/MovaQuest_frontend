@@ -1,0 +1,4 @@
+{ "id": "trolley_stop_1", "type": "multiple_choice",
+  "prompt": { "en": "The announcement says the next stop is \"Central Park\". You need Soborna. What do you do?", "uk": "Оголошують зупинку «Центральний парк». Тобі треба на Соборну. Що робиш?" },
+  "options": ["Їду далі.", "Виходжу тут!", "Зупиніть, будь ласка!"],
+  "correct": "Їду далі.", "word": "наступна зупинка" }

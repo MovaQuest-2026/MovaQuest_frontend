@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ink": "node scripts/build-ink.mjs"
   },
   "dependencies": {
     "i18next": "^26.4.2",

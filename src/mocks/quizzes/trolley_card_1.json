@@ -1,0 +1,4 @@
+{ "id": "trolley_card_1", "type": "multiple_choice",
+  "prompt": { "en": "Ask the conductor if you can pay by card.", "uk": "Спитай кондукторку, чи можна оплатити карткою." },
+  "options": ["Можна оплатити карткою?", "Можна купити картку?", "Де моя картка?"],
+  "correct": "Можна оплатити карткою?", "word": "оплатити" }

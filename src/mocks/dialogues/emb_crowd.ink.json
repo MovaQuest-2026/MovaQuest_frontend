@@ -1,0 +1,375 @@
+{
+  "id": "emb_crowd",
+  "cityId": "vinnytsia",
+  "npcId": "npc_crowd",
+  "zone": "embankment",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          [
+            "ev",
+            "visit",
+            5,
+            "seq",
+            "/ev",
+            "ev",
+            "du",
+            0,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s0",
+              "c": true
+            },
+            "ev",
+            "du",
+            1,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s1",
+              "c": true
+            },
+            "ev",
+            "du",
+            2,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s2",
+              "c": true
+            },
+            "ev",
+            "du",
+            3,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s3",
+              "c": true
+            },
+            "ev",
+            "du",
+            4,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s4",
+              "c": true
+            },
+            "nop",
+            {
+              "s0": [
+                "pop",
+                "^«Я не Соломія, вибачте!» I'm not Solomiia, sorry!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s1": [
+                "pop",
+                "^No, I'm Oksana. Thanks for asking though!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s2": [
+                "pop",
+                "^Solomiia? No, I'm here with my grandson, «онук».",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s3": [
+                "pop",
+                "^Looking for someone in a red jacket? I think she's by the bridge, «біля мосту».",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s4": [
+                "pop",
+                "^I'm waiting for the show too. It starts soon!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "#f": 5
+            }
+          ],
+          "^ ",
+          "#",
+          "^speaker:npc_crowd",
+          "/#",
+          "\n",
+          "end",
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          [
+            "ev",
+            "visit",
+            5,
+            "seq",
+            "/ev",
+            "ev",
+            "du",
+            0,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s0",
+              "c": true
+            },
+            "ev",
+            "du",
+            1,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s1",
+              "c": true
+            },
+            "ev",
+            "du",
+            2,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s2",
+              "c": true
+            },
+            "ev",
+            "du",
+            3,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s3",
+              "c": true
+            },
+            "ev",
+            "du",
+            4,
+            "==",
+            "/ev",
+            {
+              "->": ".^.s4",
+              "c": true
+            },
+            "nop",
+            {
+              "s0": [
+                "pop",
+                "^Я не Соломія, вибачте!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s1": [
+                "pop",
+                "^Ні, я Оксана. Але дякую, що спитали!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s2": [
+                "pop",
+                "^Соломія? Ні, я тут з онуком.",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s3": [
+                "pop",
+                "^Шукаєте когось у червоній куртці? Здається, вона біля мосту.",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "s4": [
+                "pop",
+                "^Ой, я теж чекаю на шоу. Скоро почнеться!",
+                {
+                  "->": "0.1.35"
+                },
+                null
+              ],
+              "#f": 5
+            }
+          ],
+          "^ ",
+          "#",
+          "^speaker:npc_crowd",
+          "/#",
+          "\n",
+          "end",
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": []
+}

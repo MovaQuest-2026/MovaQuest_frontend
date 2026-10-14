@@ -1,0 +1,4 @@
+{ "id": "vysh_directions_1", "type": "multiple_choice",
+  "prompt": { "en": "On the map the stop is straight ahead, then right. Tell the tourist.", "uk": "На мапі зупинка прямо, потім праворуч. Поясни туристу." },
+  "options": ["Ідіть прямо, потім праворуч.", "Ідіть ліворуч, потім прямо.", "Ідіть назад."],
+  "correct": "Ідіть прямо, потім праворуч.", "word": "праворуч" }

@@ -1,0 +1,4 @@
+{ "id": "vysh_polite_1", "type": "multiple_choice",
+  "prompt": { "en": "Halyna offers more tea. Answer politely.", "uk": "Пані Галина пропонує ще чаю. Відповідай ввічливо." },
+  "options": ["Так, будь ласка!", "Давай.", "Наливай."],
+  "correct": "Так, будь ласка!", "word": "будь ласка" }

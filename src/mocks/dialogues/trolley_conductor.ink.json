@@ -1,0 +1,399 @@
+{
+  "id": "trolley_conductor",
+  "cityId": "vinnytsia",
+  "npcId": "npc_conductor",
+  "zone": "trolleybus",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^«Проїзд оплачуємо!» Fares, please! Cash or card, «готівка чи картка»? ",
+          "#",
+          "^speaker:npc_conductor",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Ask about paying",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Silently show your card",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Well? Go on, I'm listening. ",
+              "#",
+              "^quiz:trolley_card_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Of course you can. Tap it on the terminal. Here's your ticket, «квиток».",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Sorry? Ah, a card! Yes, you can. Here's the terminal.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Ah, a card. Tap it here.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Listen to the announcements so you don't miss your stop!",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Проїзд оплачуємо! Готівка чи картка? ",
+          "#",
+          "^speaker:npc_conductor",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Спитати про оплату",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Мовчки показати картку",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Ну? Кажіть, я слухаю. ",
+              "#",
+              "^quiz:trolley_card_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Можна, звісно. Прикладайте до терміналу. Ось ваш квиток.",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Не зрозуміла... А, картка! Так, можна. Ось термінал.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^А, картка. Прикладайте сюди.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Слухайте оголошення, щоб не проїхати свою зупинку!",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "проїзд",
+      "translation": "fare",
+      "example": ""
+    },
+    {
+      "word": "картка",
+      "translation": "card",
+      "example": ""
+    },
+    {
+      "word": "квиток",
+      "translation": "ticket",
+      "example": ""
+    }
+  ]
+}

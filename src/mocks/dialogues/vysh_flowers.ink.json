@@ -1,0 +1,489 @@
+{
+  "id": "vysh_flowers",
+  "cityId": "vinnytsia",
+  "npcId": "npc_florist",
+  "zone": "flower_kiosk",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_flowers"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Have a nice day! Grandma will be happy. ",
+                "#",
+                "^speaker:npc_florist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^«Добрий день!» Good afternoon! What flowers, «квіти», are you looking for? ",
+          "#",
+          "^speaker:npc_florist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Мені потрібні квіти для бабусі. (I need flowers for a grandma.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Я просто дивлюся. (I'm just looking.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Daisies, «ромашки», are lovely for a grandma. They cost «сто двадцять гривень», roses cost «двісті».",
+              "\n",
+              "^So how much are the daisies? ",
+              "#",
+              "^quiz:vysh_price_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Yes, 120. You give me 200, here's 80 change, «решта».",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.13"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^No, «сто двадцять», 120. Numbers are hard! Here's your change.",
+                    "\n",
+                    {
+                      "->": "0.c-0.13"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^Here are your daisies. ",
+              "#",
+              "^give:flowers",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "task_flowers",
+                "re": true
+              },
+              "^Oh, looks like rain, «дощ». Find some shelter! ",
+              "#",
+              "^clock:11:15",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Go ahead.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_flowers"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Гарного дня! Бабуся буде рада. ",
+                "#",
+                "^speaker:npc_florist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Добрий день! Які квіти шукаєте? ",
+          "#",
+          "^speaker:npc_florist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Мені потрібні квіти для бабусі.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Я просто дивлюся.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Для бабусі гарні ромашки. Ромашки коштують сто двадцять гривень, троянди двісті.",
+              "\n",
+              "^То скільки коштують ромашки? ",
+              "#",
+              "^quiz:vysh_price_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Так, сто двадцять. Ви даєте двісті, ось вісімдесят решти.",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.13"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Ні, сто двадцять. Нічого, цифри складні! Ось ваша решта.",
+                    "\n",
+                    {
+                      "->": "0.c-0.13"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^Тримайте ромашки. ",
+              "#",
+              "^give:flowers",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "task_flowers",
+                "re": true
+              },
+              "^Ой, здається, дощ починається. Сховайтеся десь! ",
+              "#",
+              "^clock:11:15",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Дивіться, будь ласка.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "квіти",
+      "translation": "flowers",
+      "example": ""
+    },
+    {
+      "word": "гривня",
+      "translation": "hryvnia",
+      "example": ""
+    },
+    {
+      "word": "решта",
+      "translation": "change",
+      "example": ""
+    }
+  ]
+}

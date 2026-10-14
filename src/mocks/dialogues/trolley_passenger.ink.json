@@ -1,0 +1,404 @@
+{
+  "id": "trolley_passenger",
+  "cityId": "vinnytsia",
+  "npcId": "npc_passenger",
+  "zone": "trolleybus",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^First time in Vinnytsia? You keep looking around. ",
+          "#",
+          "^speaker:npc_passenger",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Так, перший раз. (Yes, first time.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Так. А куди ми їдемо? (Yes. Where are we going?)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Look out of the window then. See the tram, «трамвай»? Our trams used to run in Switzerland.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Downtown, to Soborna, our main street, «головна вулиця».",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Oh, an announcement, listen!",
+              "\n",
+              "^«Увага! Наступна зупинка: Центральний парк.» You need Soborna. What do you do? ",
+              "#",
+              "^quiz:trolley_stop_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Right, stay seated. Yours is the next one. And here's Soborna!",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "stop_ok",
+                      "re": true
+                    },
+                    {
+                      "->": "0.g-0.12"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^You got off?.. No worries, you can walk to the centre through the park!",
+                    "\n",
+                    "ev",
+                    false,
+                    "/ev",
+                    {
+                      "VAR=": "stop_ok",
+                      "re": true
+                    },
+                    {
+                      "->": "0.g-0.12"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Перший раз у Вінниці? Бачу, все роздивляєшся. ",
+          "#",
+          "^speaker:npc_passenger",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Так, перший раз.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Так. А куди ми їдемо?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^О, то дивись у вікно. Бачиш трамвай? Наші трамваї колись їздили у Швейцарії.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^До центру, на Соборну. Це наша головна вулиця.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Ой, оголошення, слухай!",
+              "\n",
+              "^Увага! Наступна зупинка: «Центральний парк». А вам треба на Соборну. Що робите? ",
+              "#",
+              "^quiz:trolley_stop_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Правильно, сиди. Твоя наступна. Ось і Соборна!",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "stop_ok",
+                      "re": true
+                    },
+                    {
+                      "->": "0.g-0.12"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Ой, ти вже на вулиці?.. Нічого, через парк теж дійдеш до центру!",
+                    "\n",
+                    "ev",
+                    false,
+                    "/ev",
+                    {
+                      "VAR=": "stop_ok",
+                      "re": true
+                    },
+                    {
+                      "->": "0.g-0.12"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "наступна зупинка",
+      "translation": "next stop",
+      "example": ""
+    },
+    {
+      "word": "трамвай",
+      "translation": "tram",
+      "example": ""
+    }
+  ]
+}

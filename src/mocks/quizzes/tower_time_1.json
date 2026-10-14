@@ -1,0 +1,4 @@
+{ "id": "tower_time_1", "type": "multiple_choice",
+  "prompt": { "en": "What time is the fountain show?", "uk": "О котрій шоу фонтану?" },
+  "options": ["о восьмій вечора", "о восьмій ранку", "о сьомій вечора"],
+  "correct": "о восьмій вечора", "word": "вечір" }

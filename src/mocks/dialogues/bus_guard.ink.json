@@ -1,0 +1,399 @@
+{
+  "id": "bus_guard",
+  "cityId": "vinnytsia",
+  "npcId": "npc_guard",
+  "zone": "bus_station",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "phone_charging"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Hey, your phone is dead, I can see. The ticket office, «каса», is over there. Ask about a socket. ",
+                "#",
+                "^speaker:npc_guard",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.6"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^«Куди їдеш?» Where are you heading? ",
+          "#",
+          "^speaker:npc_guard",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^На Вишеньку. Де зупинка? (To Vyshenka. Where is the stop?)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Я просто дивлюся. (I'm just looking.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Leave the station and turn «ліворуч», left. The stop, «зупинка», is across the road.",
+              "\n",
+              "ev",
+              {
+                "VAR?": "helped_nina"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "^ I heard you gave Nina her bag back. «Молодець!» Well done. ",
+                    {
+                      "->": "0.c-0.7"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^Have a good day in Vinnytsia! ",
+              "#",
+              "^flag:exit_bus_station",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Sure. The exit is over there when you're ready.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "phone_charging"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Слухай, у тебе телефон сів, бачу. Каса он там, спитай, де розетка. ",
+                "#",
+                "^speaker:npc_guard",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.6"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Куди їдеш? ",
+          "#",
+          "^speaker:npc_guard",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^На Вишеньку. Де зупинка?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Я просто дивлюся.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Виходиш із вокзалу і ліворуч. Зупинка через дорогу.",
+              "\n",
+              "ev",
+              {
+                "VAR?": "helped_nina"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "^ Бабуся Ніна всім розповідає, як ти їй допомагаєш. Молодець. ",
+                    {
+                      "->": "0.c-0.7"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^Гарного дня у Вінниці! ",
+              "#",
+              "^flag:exit_bus_station",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Дивись, дивись. Як надумаєш, вихід там.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "зупинка",
+      "translation": "stop",
+      "example": ""
+    },
+    {
+      "word": "ліворуч",
+      "translation": "left",
+      "example": ""
+    },
+    {
+      "word": "вихід",
+      "translation": "exit",
+      "example": ""
+    }
+  ]
+}

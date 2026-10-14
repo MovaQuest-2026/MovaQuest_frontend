@@ -1,0 +1,469 @@
+{
+  "id": "bus_cashier",
+  "cityId": "vinnytsia",
+  "npcId": "npc_cashier",
+  "zone": "bus_station_hall",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^«Доброго ранку!» That's \"Good morning!\" How can I help? ",
+          "#",
+          "^speaker:npc_cashier",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "phone_charging"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^The socket, «розетка», is by the window under the board.",
+                "\n",
+                "end",
+                {
+                  "->": "0.10"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          "str",
+          "^Мій телефон розрядився. (My phone died.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Де тут вихід? (Where is the exit?)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Oh, it happens. So what do you need? ",
+              "#",
+              "^quiz:bus_charge_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^«Зарядити телефон» — to charge your phone. Of course! The socket is in the waiting hall, by the window.",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^You want to charge it, right? Say: «Де можна зарядити телефон?» The socket is by the window.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "phone_charging",
+                "re": true
+              },
+              "^And watch your bag, «сумка». It gets busy here. ",
+              "#",
+              "^clock:09:30",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^«Вихід» is to the right. But maybe charge your phone first? Your screen is black.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Доброго ранку! Чим можу допомогти? ",
+          "#",
+          "^speaker:npc_cashier",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "phone_charging"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Розетка біля вікна, під табло. Телефон уже заряджається?",
+                "\n",
+                "end",
+                {
+                  "->": "0.10"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          "str",
+          "^Мій телефон розрядився.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Де тут вихід?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Ой, буває. А що саме вам потрібно? ",
+              "#",
+              "^quiz:bus_charge_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Зарядити телефон? Звісно. Розетка в залі очікування, біля вікна.",
+                    "\n",
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Ви, мабуть, хочете зарядити телефон? Кажуть так: «Де можна зарядити телефон?» Розетка біля вікна.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "phone_charging",
+                "re": true
+              },
+              "^Тільки сумку свою не загубіть, у нас тут людно. ",
+              "#",
+              "^clock:09:30",
+              "/#",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Вихід праворуч. Але, може, спершу телефон зарядите? У вас екран чорний.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "каса",
+      "translation": "ticket office",
+      "example": ""
+    },
+    {
+      "word": "розетка",
+      "translation": "socket",
+      "example": ""
+    },
+    {
+      "word": "зарядити",
+      "translation": "to charge",
+      "example": ""
+    }
+  ]
+}

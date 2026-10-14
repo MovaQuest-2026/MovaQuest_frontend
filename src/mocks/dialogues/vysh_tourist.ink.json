@@ -1,0 +1,470 @@
+{
+  "id": "vysh_tourist",
+  "cityId": "vinnytsia",
+  "npcId": "npc_tourist",
+  "zone": "vyshenka",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "helped_tourist"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Thanks again! See you downtown. ",
+                "#",
+                "^speaker:npc_tourist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Excuse me, do you know where the trolleybus stop to the centre is? ",
+          "#",
+          "^speaker:npc_tourist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Знаю! Зараз покажу. (I know! Let me show you.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, я тут уперше. (Sorry, it's my first time here.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Oh, thanks! Which way do I go? ",
+              "#",
+              "^quiz:vysh_directions_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^«Прямо», straight, then «праворуч», right... Got it! You helped a lot.",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "helped_tourist",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Hm, that's a dead end... Never mind, I'll ask someone else. Thanks anyway!",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Me too. Let's look together!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Oh, the trolleybus is coming! ",
+              "#",
+              "^clock:12:30",
+              "/#",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "helped_tourist"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Дякую ще раз! Побачимося в центрі. ",
+                "#",
+                "^speaker:npc_tourist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Вибачте, ви не знаєте, де зупинка тролейбуса до центру? ",
+          "#",
+          "^speaker:npc_tourist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Знаю! Зараз покажу.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, я тут уперше.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Ой, дякую! Куди мені йти? ",
+              "#",
+              "^quiz:vysh_directions_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Прямо, потім праворуч... Зрозуміло! Ви мені дуже допомогли.",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "helped_tourist",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Хм, там тупик... Нічого, спитаю ще когось. Дякую все одно!",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Ой, я теж. Будемо шукати разом!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^До речі, тролейбус уже під'їжджає! ",
+              "#",
+              "^clock:12:30",
+              "/#",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "прямо",
+      "translation": "straight",
+      "example": ""
+    },
+    {
+      "word": "праворуч",
+      "translation": "right",
+      "example": ""
+    }
+  ]
+}

@@ -1,0 +1,894 @@
+{
+  "id": "emb_solomiia",
+  "cityId": "vinnytsia",
+  "npcId": "npc_solomiia",
+  "zone": "embankment",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^We finally meet! How was my day-quest? ",
+          "#",
+          "^speaker:npc_solomiia",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_flowers"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Flowers for Grandma! She'll be so happy. ",
+                "#",
+                "^take:flowers",
+                "/#",
+                "\n",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^No flowers? Never mind, we'll buy some tomorrow together.",
+                "\n",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_dessert"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^And cherry strudel! How did you know I love it? ",
+                "#",
+                "^take:dessert",
+                "/#",
+                "\n",
+                {
+                  "->": "0.18"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^No dessert? No problem, I know a great café.",
+                "\n",
+                {
+                  "->": "0.18"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_show_time"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^And you know when the show starts! «О восьмій», at eight. Any minute now.",
+                "\n",
+                {
+                  "->": "0.25"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^The show is at eight, «о восьмій». We made it just in time.",
+                "\n",
+                {
+                  "->": "0.25"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "has_drawing"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Wait, is this drawing by the artist from Mury? My grandma knows him!",
+                "\n",
+                {
+                  "->": "0.31"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^By the way, tomorrow we could visit the Pirogov estate.",
+          "\n",
+          "ev",
+          "str",
+          "^Пирогов був хірургом! (Pirogov was a surgeon!)",
+          "/str",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^А хто такий Пирогов? (Who is Pirogov?)",
+          "/str",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "!",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^Із задоволенням! (With pleasure!)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Wow, you already know! Then you'll be my tour assistant.",
+              "\n",
+              "ev",
+              {
+                "VAR?": "trust"
+              },
+              1,
+              "+",
+              {
+                "VAR=": "trust",
+                "re": true
+              },
+              "/ev",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^A famous surgeon, «хірург». I'll tell you on the way.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "polite",
+                "re": true
+              },
+              "^«Домовились!» Deal!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Look! The sun is setting... The fountain! ",
+              "#",
+              "^clock:20:00 ",
+              "/#",
+              "#",
+              "^cutscene:fountain",
+              "/#",
+              "\n",
+              [
+                "ev",
+                {
+                  "VAR?": "trust"
+                },
+                6,
+                ">=",
+                {
+                  "VAR?": "has_drawing"
+                },
+                "&&",
+                "/ev",
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_best"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                "ev",
+                {
+                  "VAR?": "trust"
+                },
+                3,
+                ">=",
+                "/ev",
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_good"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_basic"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "ending_best": [
+            "^Grandma says everyone is invited to dinner: you, me, and the artist from Mury. ",
+            "#",
+            "^ending:best",
+            "/#",
+            "\n",
+            "^See all those people waving at you? Nina, Halyna, Ostap... The city remembers you.",
+            "\n",
+            "end",
+            null
+          ],
+          "ending_good": [
+            "^Come to our place for dinner, I'll introduce you to my family. ",
+            "#",
+            "^ending:good",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "ending_basic": [
+            "^The main thing is you made it! Next time we'll do a tour together. ",
+            "#",
+            "^ending:basic",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Нарешті ми зустрілися! Як тобі мій день-квест? ",
+          "#",
+          "^speaker:npc_solomiia",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_flowers"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Квіти для бабусі! Вона буде щаслива. ",
+                "#",
+                "^take:flowers",
+                "/#",
+                "\n",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^Квітів немає? Нічого, купимо завтра разом.",
+                "\n",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_dessert"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^І вишневий штрудель! Звідки ти знаєш, що я його люблю? ",
+                "#",
+                "^take:dessert",
+                "/#",
+                "\n",
+                {
+                  "->": "0.18"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^Десерт не знайшовся? Не біда, я знаю гарну кав'ярню.",
+                "\n",
+                {
+                  "->": "0.18"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_show_time"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^І ти знаєш, о котрій шоу! О восьмій, ось-ось почнеться.",
+                "\n",
+                {
+                  "->": "0.25"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^Шоу о восьмій вечора, ми якраз встигли.",
+                "\n",
+                {
+                  "->": "0.25"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "has_drawing"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Стривай, це малюнок художника з Мурів? Моя бабуся його знає!",
+                "\n",
+                {
+                  "->": "0.31"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^До речі, завтра можемо поїхати в садибу Пирогова.",
+          "\n",
+          "ev",
+          "str",
+          "^Пирогов був хірургом! Мені Остап розповів.",
+          "/str",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^А хто такий Пирогов?",
+          "/str",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "!",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^Із задоволенням!",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Ого, ти вже знаєш! Тоді будеш моїм помічником на екскурсії.",
+              "\n",
+              "ev",
+              {
+                "VAR?": "trust"
+              },
+              1,
+              "+",
+              {
+                "VAR=": "trust",
+                "re": true
+              },
+              "/ev",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Відомий хірург. Розповім усе дорогою.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "polite",
+                "re": true
+              },
+              "^Домовились!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Дивись! Сонце сідає... Фонтан! ",
+              "#",
+              "^clock:20:00 ",
+              "/#",
+              "#",
+              "^cutscene:fountain",
+              "/#",
+              "\n",
+              [
+                "ev",
+                {
+                  "VAR?": "trust"
+                },
+                6,
+                ">=",
+                {
+                  "VAR?": "has_drawing"
+                },
+                "&&",
+                "/ev",
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_best"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                "ev",
+                {
+                  "VAR?": "trust"
+                },
+                3,
+                ">=",
+                "/ev",
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_good"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    {
+                      "->": "ending_basic"
+                    },
+                    {
+                      "->": "0.g-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "ending_best": [
+            "^Бабуся каже, що на вечерю чекає всіх: тебе, мене і художника з Мурів. ",
+            "#",
+            "^ending:best",
+            "/#",
+            "\n",
+            "^Бачиш, скільки людей тобі махають? Бабуся Ніна, пані Галина, Остап... Місто тебе запам'ятало.",
+            "\n",
+            "end",
+            null
+          ],
+          "ending_good": [
+            "^Ходімо до нас на вечерю, познайомлю тебе з родиною. ",
+            "#",
+            "^ending:good",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "ending_basic": [
+            "^Головне, що ти дістався! Наступного разу підемо на екскурсію разом. ",
+            "#",
+            "^ending:basic",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "захід сонця",
+      "translation": "sunset",
+      "example": ""
+    },
+    {
+      "word": "домовились",
+      "translation": "deal",
+      "example": ""
+    }
+  ]
+}

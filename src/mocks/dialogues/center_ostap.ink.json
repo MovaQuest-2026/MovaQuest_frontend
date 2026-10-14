@@ -1,0 +1,558 @@
+{
+  "id": "center_ostap",
+  "cityId": "vinnytsia",
+  "npcId": "npc_ostap",
+  "zone": "center",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^The courtyard on the right takes you to Mury. Good luck! ",
+                "#",
+                "^speaker:npc_ostap",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "pirogov_asked"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Pirogov was a «хірург», a surgeon, remember? Go around via Soborna. ",
+                "#",
+                "^speaker:npc_ostap",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Hi! I'm Ostap. I study to be a doctor, «лікар», at the Pirogov Medical University. Heard of him? ",
+          "#",
+          "^speaker:npc_ostap",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Ні, хто це? (No, who is that?)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Трохи. Розкажи! (A bit. Tell me!)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Mykola Pirogov was a great surgeon, «хірург». He was one of the first to operate with ether anaesthesia right in the field, during war.",
+              "\n",
+              "^He spent his last years near Vinnytsia, at the Vyshnia estate. It's a museum now.",
+              "\n",
+              "^So, a quick check: who was Pirogov? ",
+              "#",
+              "^quiz:pirogov_1",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "pirogov_asked",
+                "re": true
+              },
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Exactly! You listen well.",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "knows_pirogov",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    "^Take this courtyard, it's a shortcut to Mury. ",
+                    "#",
+                    "^flag:shortcut_open",
+                    "/#",
+                    "\n",
+                    {
+                      "->": "0.g-0.18"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Not quite. He was a «хірург», a doctor who does operations.",
+                    "\n",
+                    "^Here's a postcard with the short version. ",
+                    "#",
+                    "^give:pirogov_card",
+                    "/#",
+                    "\n",
+                    "^Go around via Soborna, you won't get lost.",
+                    "\n",
+                    {
+                      "->": "0.g-0.18"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "knows_pirogov"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Двір праворуч, і ти біля Мурів. Удачі! ",
+                "#",
+                "^speaker:npc_ostap",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "pirogov_asked"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Пирогов був хірургом, пам'ятаєш? Обходь по Соборній, не заблукаєш. ",
+                "#",
+                "^speaker:npc_ostap",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Привіт! Я Остап, вчуся на лікаря в медичному університеті імені Пирогова. Знаєш про нього? ",
+          "#",
+          "^speaker:npc_ostap",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Ні, хто це?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Трохи. Розкажи!",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Микола Пирогов був великим хірургом. Одним із перших оперував з ефірним наркозом просто на війні.",
+              "\n",
+              "^Останні роки він жив тут, біля Вінниці, у садибі Вишня. Зараз там музей.",
+              "\n",
+              "^Ну що, перевіримо? Ким був Пирогов? ",
+              "#",
+              "^quiz:pirogov_1",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "pirogov_asked",
+                "re": true
+              },
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Точно! Ти уважно слухаєш.",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "knows_pirogov",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    "^Іди через цей двір, так до Мурів швидше. ",
+                    "#",
+                    "^flag:shortcut_open",
+                    "/#",
+                    "\n",
+                    {
+                      "->": "0.g-0.18"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Не зовсім. Він був хірургом, тобто лікарем, який робить операції.",
+                    "\n",
+                    "^Тримай листівку, там коротко. ",
+                    "#",
+                    "^give:pirogov_card",
+                    "/#",
+                    "\n",
+                    "^Обходь по Соборній, не заблукаєш.",
+                    "\n",
+                    {
+                      "->": "0.g-0.18"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "лікар",
+      "translation": "doctor",
+      "example": ""
+    },
+    {
+      "word": "хірург",
+      "translation": "surgeon",
+      "example": ""
+    }
+  ]
+}

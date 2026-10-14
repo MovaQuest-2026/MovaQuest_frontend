@@ -1,0 +1,475 @@
+{
+  "id": "bus_nina",
+  "cityId": "vinnytsia",
+  "npcId": "npc_nina",
+  "zone": "bus_station",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "helped_nina"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Thank you again, «дитино» — \"my child\". Eat the cherry pies while they're warm. ",
+                "#",
+                "^speaker:npc_nina",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^«Ой лишенько!» Oh dear! Where is my bag? «Велика, жовта» — big and yellow, with honey for my granddaughter! ",
+          "#",
+          "^speaker:npc_nina",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Show her the bag you are holding",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, я не знаю. (Sorry, I don't know.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Oh, what have you got there? ",
+              "#",
+              "^quiz:bus_bag_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^«Так!» Yes! The big yellow bag. Mine! Thank you!",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "helped_nina",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    "^Here, take some cherry pies, «пиріжки». ",
+                    "#",
+                    "^give:pyrizhky",
+                    "/#",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^What? No, mine is yellow and big... oh, it's right there in your hands! Be more careful.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Oh, I'll go look by the ticket office.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "helped_nina"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Дякую тобі ще раз, дитино. Пиріжки з вишнями, їж, поки теплі. ",
+                "#",
+                "^speaker:npc_nina",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Ой лишенько! Де моя сумка? Велика, жовта, там мед для онуки! ",
+          "#",
+          "^speaker:npc_nina",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Показати сумку, яку ти тримаєш",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, я не знаю.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Ой, а що це в тебе? ",
+              "#",
+              "^quiz:bus_bag_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Так! Велика жовта сумка. Моя! Дякую, дитино!",
+                    "\n",
+                    "ev",
+                    true,
+                    "/ev",
+                    {
+                      "VAR=": "helped_nina",
+                      "re": true
+                    },
+                    "ev",
+                    {
+                      "VAR?": "trust"
+                    },
+                    1,
+                    "+",
+                    {
+                      "VAR=": "trust",
+                      "re": true
+                    },
+                    "/ev",
+                    "^Ось, тримай пиріжки з вишнями. ",
+                    "#",
+                    "^give:pyrizhky",
+                    "/#",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Що? Ні-ні, моя жовта і велика... Ой, так ось же вона, у тебе в руках! Уважніше треба, дитино.",
+                    "\n",
+                    {
+                      "->": "0.c-0.11"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Ох, піду пошукаю біля каси.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "сумка",
+      "translation": "bag",
+      "example": ""
+    },
+    {
+      "word": "жовтий",
+      "translation": "yellow",
+      "example": ""
+    },
+    {
+      "word": "великий",
+      "translation": "big",
+      "example": ""
+    }
+  ]
+}

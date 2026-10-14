@@ -1,0 +1,450 @@
+{
+  "id": "center_artist",
+  "cityId": "vinnytsia",
+  "npcId": "npc_artist",
+  "zone": "center",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "has_drawing"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Let the drawing, «малюнок», remind you of Vinnytsia. ",
+                "#",
+                "^speaker:npc_artist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Oh, rain again, «знову дощ»! My sketches will get wet... ",
+          "#",
+          "^speaker:npc_artist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Тримайте мою парасольку! (Take my umbrella!)",
+          "/str",
+          {
+            "VAR?": "has_umbrella"
+          },
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^Що ви малюєте? (What are you drawing?)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, у мене немає парасольки. (Sorry, I don't have an umbrella.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Really? Thank you, you're saving me! ",
+              "#",
+              "^take:umbrella",
+              "/#",
+              "\n",
+              "ev",
+              false,
+              "/ev",
+              {
+                "VAR=": "has_umbrella",
+                "re": true
+              },
+              "^Here, take this drawing of the fountain. I made it yesterday on the embankment. ",
+              "#",
+              "^give:drawing",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "has_drawing",
+                "re": true
+              },
+              "ev",
+              {
+                "VAR?": "trust"
+              },
+              1,
+              "+",
+              {
+                "VAR=": "trust",
+                "re": true
+              },
+              "/ev",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Mury, \"the Walls\". There used to be a monastery here, now there are exhibitions and cafés.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "\n",
+              "^No worries, I'll hide under the arch.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "has_drawing"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Хай малюнок нагадує тобі про Вінницю. ",
+                "#",
+                "^speaker:npc_artist",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Ох, знову дощ! Мої ескізи змокнуть... ",
+          "#",
+          "^speaker:npc_artist",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Тримайте мою парасольку!",
+          "/str",
+          {
+            "VAR?": "has_umbrella"
+          },
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 21
+          },
+          "ev",
+          "str",
+          "^Що ви малюєте?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Вибачте, у мене немає парасольки.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Справді? Дякую, ти мене рятуєш! ",
+              "#",
+              "^take:umbrella",
+              "/#",
+              "\n",
+              "ev",
+              false,
+              "/ev",
+              {
+                "VAR=": "has_umbrella",
+                "re": true
+              },
+              "^Ось, візьми малюнок фонтану. Я малював його вчора на набережній. ",
+              "#",
+              "^give:drawing",
+              "/#",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "has_drawing",
+                "re": true
+              },
+              "ev",
+              {
+                "VAR?": "trust"
+              },
+              1,
+              "+",
+              {
+                "VAR=": "trust",
+                "re": true
+              },
+              "/ev",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Мури. Колись тут був монастир, тепер тут виставки й кав'ярні.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "\n",
+              "^Нічого, сховаюся під аркою.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "малюнок",
+      "translation": "drawing",
+      "example": ""
+    },
+    {
+      "word": "знову",
+      "translation": "again",
+      "example": ""
+    }
+  ]
+}

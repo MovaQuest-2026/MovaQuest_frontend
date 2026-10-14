@@ -1,0 +1,311 @@
+{
+  "id": "emb_phone",
+  "cityId": "vinnytsia",
+  "npcId": "phone",
+  "zone": "embankment",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Your phone finally comes alive. A message from Solomiia: ",
+          "#",
+          "^speaker:phone ",
+          "/#",
+          "#",
+          "^clock:19:30",
+          "/#",
+          "\n",
+          "^«Я трохи запізнююсь! Шукай мене біля мосту: червона куртка й окуляри.»",
+          "\n",
+          "^Who are you looking for? ",
+          "#",
+          "^quiz:emb_find_1",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "quiz_ok"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Red jacket, «червона куртка», glasses, «окуляри», by the bridge. Let's go! ",
+                "#",
+                "^flag:know_outfit",
+                "/#",
+                "\n",
+                {
+                  "->": "0.21"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^You read it again: «червона куртка й окуляри», a red jacket and glasses. ",
+                "#",
+                "^flag:know_outfit",
+                "/#",
+                "\n",
+                {
+                  "->": "0.21"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "end",
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "^Телефон нарешті ожив. Повідомлення від Соломії: ",
+          "#",
+          "^speaker:phone ",
+          "/#",
+          "#",
+          "^clock:19:30",
+          "/#",
+          "\n",
+          "^«Я трохи запізнююсь! Шукай мене біля мосту: червона куртка й окуляри.»",
+          "\n",
+          "^Кого ти шукаєш? ",
+          "#",
+          "^quiz:emb_find_1",
+          "/#",
+          "\n",
+          "ev",
+          {
+            "VAR?": "quiz_ok"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Червона куртка, окуляри, біля мосту. Вперед! ",
+                "#",
+                "^flag:know_outfit",
+                "/#",
+                "\n",
+                {
+                  "->": "0.21"
+                },
+                null
+              ]
+            }
+          ],
+          [
+            {
+              "->": ".^.b"
+            },
+            {
+              "b": [
+                "\n",
+                "^Ти перечитуєш повідомлення ще раз: червона куртка й окуляри. ",
+                "#",
+                "^flag:know_outfit",
+                "/#",
+                "\n",
+                {
+                  "->": "0.21"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "end",
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "куртка",
+      "translation": "jacket",
+      "example": ""
+    },
+    {
+      "word": "окуляри",
+      "translation": "glasses",
+      "example": ""
+    },
+    {
+      "word": "міст",
+      "translation": "bridge",
+      "example": ""
+    }
+  ]
+}

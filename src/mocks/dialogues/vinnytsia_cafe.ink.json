@@ -2,20 +2,49 @@
   "id": "vinnytsia_cafe",
   "cityId": "vinnytsia",
   "npcId": "npc_barista",
+  "zone": "cafe",
   "inkContent": {
     "en": {
       "inkVersion": 21,
       "root": [
         [
-          "^Hi there! Welcome in — mind the step, the floor's a little uneven.",
           "\n",
-          "^I'm the barista here, and if you've got a minute while your order's getting ready, I'll teach you something new.",
+          "ev",
+          {
+            "VAR?": "task_dessert"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^«Смачного!» Enjoy! Say hi to Solomiia. ",
+                "#",
+                "^speaker:npc_barista",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
           "\n",
-          "^We've got a rule in this café: every guest leaves knowing one new word. Want to hear about the coffee, or the cup it comes in?",
+          "^Hi! «Що будеш?» What will you have? ",
+          "#",
+          "^speaker:npc_barista",
+          "/#",
           "\n",
           "ev",
           "str",
-          "^Tell me about the coffee",
+          "^Каву з молоком, будь ласка. (Coffee with milk, please.)",
           "/str",
           "/ev",
           {
@@ -24,7 +53,7 @@
           },
           "ev",
           "str",
-          "^Tell me about the cup",
+          "^Чорну каву без цукру. (Black coffee, no sugar.)",
           "/str",
           "/ev",
           {
@@ -34,7 +63,14 @@
           {
             "c-0": [
               "\n",
-              "^Our word for \"coffee\" is \"кава\" — kah-VAH. This place has been roasting кава the same way for thirty years, ever since the owner's grandmother smuggled the recipe out of Odesa in an empty flour sack.",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "polite",
+                "re": true
+              },
+              "^One coffee with milk, «з молоком»!",
               "\n",
               {
                 "->": "0.g-0"
@@ -45,7 +81,7 @@
             ],
             "c-1": [
               "\n",
-              "^We call this little cup a \"чашка\" — CHASH-kah. Every чашка in this café is a different shape on purpose, so regulars can spot their favorite one clear across the room.",
+              "^Black, «без цукру». Sure.",
               "\n",
               {
                 "->": "0.g-0"
@@ -55,10 +91,126 @@
               }
             ],
             "g-0": [
+              "^And a dessert, «десерт»?",
+              "\n",
+              "ev",
+              "str",
+              "^Мені потрібен десерт для подруги. (I need a dessert for a friend.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-2",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Ні, дякую. (No, thanks.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-3",
+                "flg": 20
+              },
+              {
+                "c-2": [
+                  "\n",
+                  "^Who's your friend? Maybe I know her. Describe her. ",
+                  "#",
+                  "^quiz:cafe_describe_1",
+                  "/#",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "quiz_ok"
+                  },
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Solomiia! The volunteer who gives tours? Of course! She always takes the cherry strudel.",
+                        "\n",
+                        "^Here you go. ",
+                        "#",
+                        "^give:dessert",
+                        "/#",
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "trust"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "trust",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.11"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "->": ".^.b"
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Hm, doesn't ring a bell... Take the cherry strudel, «вишневий штрудель», everyone loves it. ",
+                        "#",
+                        "^give:dessert",
+                        "/#",
+                        "\n",
+                        {
+                          "->": ".^.^.^.11"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "task_dessert",
+                    "re": true
+                  },
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-3": [
+                  "\n",
+                  "^Okay. I'm here if you change your mind.",
+                  "\n",
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            "g-1": [
+              "end",
               [
                 "done",
                 {
-                  "#n": "g-1"
+                  "#n": "g-2"
                 }
               ],
               null
@@ -66,7 +218,70 @@
           }
         ],
         "done",
-        null
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
       ],
       "listDefs": {}
     },
@@ -74,15 +289,43 @@
       "inkVersion": 21,
       "root": [
         [
-          "^Привіт! Заходь — обережно, тут нерівна підлога.",
           "\n",
-          "^Я тутешній бариста, і поки готується замовлення, є хвилинка навчити тебе дечого нового.",
+          "ev",
+          {
+            "VAR?": "task_dessert"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Смачного! Передавай Соломії привіт. ",
+                "#",
+                "^speaker:npc_barista",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
           "\n",
-          "^У нашій кав'ярні є правило: кожен гість йде звідси, знаючи нове слово. Розповісти про каву чи про чашку, з якої її п'ють?",
+          "^Привіт! Що будеш? ",
+          "#",
+          "^speaker:npc_barista",
+          "/#",
           "\n",
           "ev",
           "str",
-          "^Про каву",
+          "^Каву з молоком, будь ласка.",
           "/str",
           "/ev",
           {
@@ -91,7 +334,7 @@
           },
           "ev",
           "str",
-          "^Про чашку",
+          "^Чорну каву без цукру.",
           "/str",
           "/ev",
           {
@@ -101,7 +344,14 @@
           {
             "c-0": [
               "\n",
-              "^Цю каву тут обсмажують за одним рецептом уже тридцять років — відколи бабуся власниці вивезла його з Одеси в порожньому мішку з-під борошна.",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "polite",
+                "re": true
+              },
+              "^Одна кава з молоком!",
               "\n",
               {
                 "->": "0.g-0"
@@ -112,7 +362,7 @@
             ],
             "c-1": [
               "\n",
-              "^Кожна чашка в цій кав'ярні навмисно іншої форми, щоб завсідники могли впізнати свою улюблену через всю залу.",
+              "^Чорна, без цукру. Як скажеш.",
               "\n",
               {
                 "->": "0.g-0"
@@ -122,10 +372,126 @@
               }
             ],
             "g-0": [
+              "^А десерт?",
+              "\n",
+              "ev",
+              "str",
+              "^Мені потрібен десерт для подруги. Але я не знаю, який вона любить.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-2",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Ні, дякую.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-3",
+                "flg": 20
+              },
+              {
+                "c-2": [
+                  "\n",
+                  "^А хто твоя подруга? Може, я її знаю. Опиши її. ",
+                  "#",
+                  "^quiz:cafe_describe_1",
+                  "/#",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "quiz_ok"
+                  },
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Соломія! Волонтерка, водить екскурсії? Звісно знаю! Вона завжди бере вишневий штрудель.",
+                        "\n",
+                        "^Ось, тримай. ",
+                        "#",
+                        "^give:dessert",
+                        "/#",
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "trust"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "trust",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.11"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "->": ".^.b"
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Хм, не впізнаю... Візьми вишневий штрудель, його всі люблять. ",
+                        "#",
+                        "^give:dessert",
+                        "/#",
+                        "\n",
+                        {
+                          "->": ".^.^.^.11"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "task_dessert",
+                    "re": true
+                  },
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-3": [
+                  "\n",
+                  "^Добре. Якщо передумаєш, я тут.",
+                  "\n",
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            "g-1": [
+              "end",
               [
                 "done",
                 {
-                  "#n": "g-1"
+                  "#n": "g-2"
                 }
               ],
               null
@@ -133,21 +499,89 @@
           }
         ],
         "done",
-        null
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
       ],
       "listDefs": {}
     }
   },
   "vocabulary": [
     {
-      "word": "кава",
-      "translation": "coffee",
-      "example": "Ця кава смакує чудово."
+      "word": "з молоком",
+      "translation": "with milk",
+      "example": ""
     },
     {
-      "word": "чашка",
-      "translation": "cup",
-      "example": "Кожна чашка тут інша."
+      "word": "без цукру",
+      "translation": "without sugar",
+      "example": ""
+    },
+    {
+      "word": "десерт",
+      "translation": "dessert",
+      "example": ""
     }
   ]
 }

@@ -1,0 +1,4 @@
+{ "id": "vysh_price_1", "type": "multiple_choice",
+  "prompt": { "en": "How much do the daisies cost?", "uk": "Скільки коштують ромашки?" },
+  "options": ["сто двадцять гривень", "двісті гривень", "дванадцять гривень"],
+  "correct": "сто двадцять гривень", "word": "гривня" }

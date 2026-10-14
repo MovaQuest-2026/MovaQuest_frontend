@@ -1,0 +1,491 @@
+{
+  "id": "center_tower",
+  "cityId": "vinnytsia",
+  "npcId": "npc_tower",
+  "zone": "tower_interior",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_show_time"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^The show is «о восьмій вечора», at eight in the evening. Don't be late! ",
+                "#",
+                "^speaker:npc_tower",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Welcome to the Tower, «Вежа»! It's an old water tower with a clock, «годинник», over a hundred years old. ",
+          "#",
+          "^speaker:npc_tower",
+          "/#",
+          "\n",
+          [
+            "ev",
+            "str",
+            "^Що в цій вежі? (What's in this tower?)",
+            "/str",
+            "/ev",
+            {
+              "*": ".^.c-0",
+              "flg": 20
+            },
+            "ev",
+            "str",
+            "^О котрій сьогодні шоу фонтану? (What time is the fountain show today?)",
+            "/str",
+            "/ev",
+            {
+              "*": ".^.c-1",
+              "flg": 20
+            },
+            {
+              "c-0": [
+                "\n",
+                "^It used to store water for the city centre. Now it's a museum, «музей».",
+                "\n",
+                {
+                  "->": ".^.^"
+                },
+                {
+                  "->": "0.g-0"
+                },
+                {
+                  "#f": 5
+                }
+              ],
+              "c-1": [
+                "\n",
+                "^Today «о восьмій вечора». Repeat it so you don't forget! ",
+                "#",
+                "^quiz:tower_time_1",
+                "/#",
+                "\n",
+                "ev",
+                {
+                  "VAR?": "quiz_ok"
+                },
+                "/ev",
+                [
+                  {
+                    "->": ".^.b",
+                    "c": true
+                  },
+                  {
+                    "b": [
+                      "\n",
+                      "^Right, at eight in the evening!",
+                      "\n",
+                      "ev",
+                      {
+                        "VAR?": "trust"
+                      },
+                      1,
+                      "+",
+                      {
+                        "VAR=": "trust",
+                        "re": true
+                      },
+                      "/ev",
+                      {
+                        "->": ".^.^.^.11"
+                      },
+                      null
+                    ]
+                  }
+                ],
+                [
+                  {
+                    "->": ".^.b"
+                  },
+                  {
+                    "b": [
+                      "\n",
+                      "^No, «о восьмій вечора», eight in the evening. Write it down!",
+                      "\n",
+                      {
+                        "->": ".^.^.^.11"
+                      },
+                      null
+                    ]
+                  }
+                ],
+                "nop",
+                "\n",
+                "ev",
+                true,
+                "/ev",
+                {
+                  "VAR=": "task_show_time",
+                  "re": true
+                },
+                {
+                  "->": "0.g-0"
+                },
+                {
+                  "#f": 5
+                }
+              ],
+              "#n": "opts"
+            }
+          ],
+          {
+            "g-0": [
+              "^Enjoy your walk! ",
+              "#",
+              "^clock:15:00",
+              "/#",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "task_show_time"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Шоу о восьмій вечора, не запізнюйтеся! ",
+                "#",
+                "^speaker:npc_tower",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Вітаю у Вежі! Це стара водонапірна вежа з годинником, їй понад сто років. ",
+          "#",
+          "^speaker:npc_tower",
+          "/#",
+          "\n",
+          [
+            "ev",
+            "str",
+            "^Що в цій вежі?",
+            "/str",
+            "/ev",
+            {
+              "*": ".^.c-0",
+              "flg": 20
+            },
+            "ev",
+            "str",
+            "^О котрій сьогодні шоу фонтану?",
+            "/str",
+            "/ev",
+            {
+              "*": ".^.c-1",
+              "flg": 20
+            },
+            {
+              "c-0": [
+                "\n",
+                "^Колись тут зберігали воду для центру міста. Тепер тут музей.",
+                "\n",
+                {
+                  "->": ".^.^"
+                },
+                {
+                  "->": "0.g-0"
+                },
+                {
+                  "#f": 5
+                }
+              ],
+              "c-1": [
+                "\n",
+                "^Сьогодні о восьмій вечора. Повторіть, щоб не забути! ",
+                "#",
+                "^quiz:tower_time_1",
+                "/#",
+                "\n",
+                "ev",
+                {
+                  "VAR?": "quiz_ok"
+                },
+                "/ev",
+                [
+                  {
+                    "->": ".^.b",
+                    "c": true
+                  },
+                  {
+                    "b": [
+                      "\n",
+                      "^Правильно, о восьмій вечора!",
+                      "\n",
+                      "ev",
+                      {
+                        "VAR?": "trust"
+                      },
+                      1,
+                      "+",
+                      {
+                        "VAR=": "trust",
+                        "re": true
+                      },
+                      "/ev",
+                      {
+                        "->": ".^.^.^.11"
+                      },
+                      null
+                    ]
+                  }
+                ],
+                [
+                  {
+                    "->": ".^.b"
+                  },
+                  {
+                    "b": [
+                      "\n",
+                      "^Ні-ні, о восьмій вечора. Запишіть!",
+                      "\n",
+                      {
+                        "->": ".^.^.^.11"
+                      },
+                      null
+                    ]
+                  }
+                ],
+                "nop",
+                "\n",
+                "ev",
+                true,
+                "/ev",
+                {
+                  "VAR=": "task_show_time",
+                  "re": true
+                },
+                {
+                  "->": "0.g-0"
+                },
+                {
+                  "#f": 5
+                }
+              ],
+              "#n": "opts"
+            }
+          ],
+          {
+            "g-0": [
+              "^Гарної прогулянки! ",
+              "#",
+              "^clock:15:00",
+              "/#",
+              "\n",
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "вежа",
+      "translation": "tower",
+      "example": ""
+    },
+    {
+      "word": "годинник",
+      "translation": "clock",
+      "example": ""
+    },
+    {
+      "word": "вечір",
+      "translation": "evening",
+      "example": ""
+    }
+  ]
+}
