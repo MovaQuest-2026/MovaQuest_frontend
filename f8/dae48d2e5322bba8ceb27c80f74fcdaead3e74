@@ -1,0 +1,30 @@
+src/i18n/locales/en.json
+  s_53b2d8f8e14a30::t_90fabccc707eb9 4-6,15-26,37-38
+src/store/useGameStore.ts
+  s_53b2d8f8e14a30::t_ee1b6212e782de 2,6-19,25-39,42-52,55-59,65-132
+src/i18n/locales/uk.json
+  s_53b2d8f8e14a30::t_90fabccc707eb9 4-6,15-26,37-38
+src/components/StartScreen.tsx
+  s_53b2d8f8e14a30::t_27fef42094514c 3,6,8-20,27-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f8dae48d2e5322bba8ceb27c80f74fcdaead3e74",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
