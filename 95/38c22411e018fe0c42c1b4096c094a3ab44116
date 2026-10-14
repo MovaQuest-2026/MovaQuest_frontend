@@ -1,0 +1,47 @@
+public/tilemaps/embankment.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_trolleybus.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/bus_station.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/vyshenka.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/park.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_tower.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/center.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_hall.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_kiosk.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_cafe.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+public/tilemaps/interior_flat.json
+  s_53b2d8f8e14a30::t_6ed1f602fd9206 1
+scripts/gen-placeholder-maps.mjs
+  s_53b2d8f8e14a30::t_1ccec044058fb4 2-4,13,18-27,30-96,113-172,176-187,189,192-223,227-228,230-241,244-251,253,255-257,259,262-263,265,272-273,276-282,300-301,306-311,313
+  s_53b2d8f8e14a30::t_19dfc62692cec5 5,12,28-29,269,290-298,303-305,312
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9538c22411e018fe0c42c1b4096c094a3ab44116",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
