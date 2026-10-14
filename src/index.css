@@ -381,3 +381,71 @@ button.interaction-hint:hover:not(:disabled),
 button.interaction-hint:active:not(:disabled) {
   transform: translateX(-50%);
 }
+
+.quest-tracker {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: min(360px, calc(100% - 32px));
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(8, 6, 13, 0.8);
+  color: #fff;
+  font-size: 15px;
+  line-height: 135%;
+  pointer-events: none;
+}
+
+.quest-tracker p {
+  margin: 0;
+}
+
+.quest-clock {
+  font-family: var(--mono);
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.dialogue-speaker {
+  margin: 0;
+  font-weight: 600;
+  color: #d9b3ff;
+}
+
+.quiz-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.quiz-card > p:first-child {
+  font-weight: 600;
+}
+
+.quiz-card .exercise-options {
+  margin: 4px 0;
+  max-width: none;
+}
+
+.quiz-card .exercise-options button {
+  color: var(--bg);
+  text-align: left;
+}
+
+.quiz-card .exercise-options button.correct,
+.quiz-card p.correct {
+  color: #6fd39a;
+}
+
+.quiz-card .exercise-options button.incorrect,
+.quiz-card p.incorrect {
+  color: #ff8a7a;
+}

@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import type { CityConfig } from '../api/getCityConfig'
+import type { Questline } from '../api/getQuestline'
 
 export type NativeLanguage = 'en' | 'uk'
 
@@ -16,6 +18,11 @@ export interface InteractionHint {
   label: { en: string; uk: string }
 }
 
+export interface FinishedDialogueEvent {
+  dialogueId: string
+  seq: number
+}
+
 interface GameData {
   nativeLanguage: NativeLanguage | null
   currentCity: string | null
@@ -30,6 +37,11 @@ interface GameData {
   inventory: string[]
   interactionHint: InteractionHint | null
   interactRequest: number
+  cityConfig: CityConfig | null
+  questline: Questline | null
+  lastFinishedDialogue: FinishedDialogueEvent | null
+  pendingCutscene: string | null
+  pendingEnding: string | null
 }
 
 interface GameActions {
@@ -49,6 +61,10 @@ interface GameActions {
   removeItem: (item: string) => void
   setInteractionHint: (hint: InteractionHint | null) => void
   requestInteract: () => void
+  setWorldData: (cityConfig: CityConfig, questline: Questline) => void
+  finishDialogue: (dialogueId: string) => void
+  setPendingCutscene: (cutsceneId: string | null) => void
+  setPendingEnding: (endingId: string | null) => void
   resetProgress: () => void
 }
 
@@ -70,6 +86,11 @@ const initialData: GameData = {
   inventory: [],
   interactionHint: null,
   interactRequest: 0,
+  cityConfig: null,
+  questline: null,
+  lastFinishedDialogue: null,
+  pendingCutscene: null,
+  pendingEnding: null,
 }
 
 export const useGameStore = create<GameState>()(
@@ -108,6 +129,16 @@ export const useGameStore = create<GameState>()(
       setInteractionHint: (hint) => set({ interactionHint: hint }),
       requestInteract: () =>
         set((state) => ({ interactRequest: state.interactRequest + 1 })),
+      setWorldData: (cityConfig, questline) => set({ cityConfig, questline }),
+      finishDialogue: (dialogueId) =>
+        set((state) => ({
+          lastFinishedDialogue: {
+            dialogueId,
+            seq: (state.lastFinishedDialogue?.seq ?? 0) + 1,
+          },
+        })),
+      setPendingCutscene: (cutsceneId) => set({ pendingCutscene: cutsceneId }),
+      setPendingEnding: (endingId) => set({ pendingEnding: endingId }),
       resetProgress: () => {
         set(initialData)
         useGameStore.persist.clearStorage()

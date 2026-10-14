@@ -1,50 +1,62 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { getCityConfig, getZone, type CityConfig } from '../api/getCityConfig'
+import { getCityConfig } from '../api/getCityConfig'
+import { getQuestline } from '../api/getQuestline'
 import { useGameStore } from '../store/useGameStore'
+import { useQuestEngine } from '../store/useQuestEngine'
 import { PhaserGame } from '../game/PhaserGame'
 import { DialogueOverlay } from './DialogueOverlay'
 import { ExerciseScreen } from './ExerciseScreen'
 import { InteractionHint } from './InteractionHint'
+import { QuestTracker } from './QuestTracker'
 
 export function WorldScreen() {
   const { t } = useTranslation()
   const { cityId } = useParams<{ cityId: string }>()
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
   const setCurrentCity = useGameStore((state) => state.setCurrentCity)
+  const setWorldData = useGameStore((state) => state.setWorldData)
+  const city = useGameStore((state) => state.cityConfig)
   const currentZone = useGameStore((state) => state.currentZone)
-  const setCurrentZone = useGameStore((state) => state.setCurrentZone)
   const activeExercise = useGameStore((state) => state.activeExercise)
-  const [city, setCity] = useState<CityConfig | null>(null)
   // Збережена позиція означає, що гравець уже бачив інтро цього міста.
   const [introDismissed, setIntroDismissed] = useState(
     () => useGameStore.getState().spawn !== null,
   )
 
+  useQuestEngine()
+
   useEffect(() => {
     if (!cityId) return
 
     let cancelled = false
-    getCityConfig(cityId).then((config) => {
-      if (!cancelled) setCity(config)
+    getCityConfig(cityId).then(async (config) => {
+      const questline = await getQuestline(config.questlineId)
+      if (!cancelled) setWorldData(config, questline)
     })
 
     return () => {
       cancelled = true
     }
-  }, [cityId])
+  }, [cityId, setWorldData])
 
   useEffect(() => {
     setCurrentCity(cityId ?? null)
   }, [cityId, setCurrentCity])
 
-  // До L2 світ один: показуємо NPC стартової зони на тестовій тайлмапі.
-  useEffect(() => {
-    if (city && currentZone === null) setCurrentZone(city.startZone)
-  }, [city, currentZone, setCurrentZone])
+  const cityReady = city !== null && city.id === cityId
+  const zoneKnown =
+    cityReady && city.zones.some((zone) => zone.id === currentZone)
 
-  if (!city) {
+  // Нова гра або зона, якої вже немає в конфігу, — стартуємо зі стартової зони.
+  useEffect(() => {
+    if (cityReady && !zoneKnown) {
+      useGameStore.setState({ currentZone: city.startZone, spawn: null })
+    }
+  }, [city, cityReady, zoneKnown])
+
+  if (!cityReady) {
     return <div className="screen world-screen" />
   }
 
@@ -62,9 +74,14 @@ export function WorldScreen() {
     )
   }
 
+  if (!zoneKnown) {
+    return <div className="screen world-screen" />
+  }
+
   return (
     <div className="game-screen">
-      <PhaserGame zone={getZone(city, city.startZone)} />
+      <PhaserGame />
+      <QuestTracker />
       <InteractionHint />
       <DialogueOverlay />
       {activeExercise && (

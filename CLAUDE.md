@@ -37,6 +37,9 @@ src/
 - `npm run ink` (scripts/build-ink.mjs) компілює їх у
   src/mocks/dialogues/<id>.ink.json. Ці JSON-файли руками не редагуємо,
   тільки перегенеровуємо скриптом.
+- Тимчасові тайлмапи зон (прямокутники) генерує `npm run maps:placeholder`
+  (scripts/gen-placeholder-maps.mjs) у public/tilemaps/ з vinnytsia.json.
+  У L3 їх замінять мапи з Tiled.
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.
 

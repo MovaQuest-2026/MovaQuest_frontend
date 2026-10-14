@@ -51,7 +51,7 @@ export interface LandmarkConfig {
 
 export interface ZoneConfig {
   id: string
-  type: 'outdoor' | 'interior'
+  type: 'outdoor' | 'interior' | 'transport'
   tilemap: string
   spawn: Point
   onEnterDialogue?: string

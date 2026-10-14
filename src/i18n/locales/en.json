@@ -36,5 +36,21 @@
     "reviewTitle": "Recommended for review",
     "goHome": "Menu",
     "continue": "Next"
+  },
+  "dialogue": {
+    "next": "Next"
+  },
+  "zones": {
+    "bus_station": "Bus station",
+    "bus_station_hall": "Waiting hall",
+    "vyshenka": "Vyshenka",
+    "flower_kiosk": "Flower kiosk",
+    "galyna_flat": "Mrs Halyna's flat",
+    "trolleybus": "Trolleybus",
+    "park": "Park",
+    "center": "City centre",
+    "tower_interior": "Water tower",
+    "cafe": "Café",
+    "embankment": "Roshen embankment"
   }
 }

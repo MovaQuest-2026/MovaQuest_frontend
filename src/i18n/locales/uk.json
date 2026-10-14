@@ -36,5 +36,21 @@
     "reviewTitle": "Рекомендовано повторити",
     "goHome": "У меню",
     "continue": "Далі"
+  },
+  "dialogue": {
+    "next": "Далі"
+  },
+  "zones": {
+    "bus_station": "Автовокзал",
+    "bus_station_hall": "Зала очікування",
+    "vyshenka": "Вишенька",
+    "flower_kiosk": "Квітковий кіоск",
+    "galyna_flat": "Квартира пані Галини",
+    "trolleybus": "Тролейбус",
+    "park": "Парк",
+    "center": "Центр",
+    "tower_interior": "Вежа з годинником",
+    "cafe": "Кафе",
+    "embankment": "Набережна Рошен"
   }
 }
