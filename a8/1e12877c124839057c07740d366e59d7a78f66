@@ -1,0 +1,14 @@
+.gitignore
+  h_dfa0da26a12699 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a81e12877c124839057c07740d366e59d7a78f66",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
