@@ -12,6 +12,7 @@ interface ExerciseScreenProps {
 export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
   const { t } = useTranslation()
   const addLearnedWord = useGameStore((state) => state.addLearnedWord)
+  const setActiveExercise = useGameStore((state) => state.setActiveExercise)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
   const lang = nativeLanguage ?? 'en'
   const [exercises, setExercises] = useState<ExerciseSet | null>(null)
@@ -21,13 +22,18 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
 
   useEffect(() => {
     let cancelled = false
-    getExercises(dialogueId).then((set) => {
-      if (!cancelled) setExercises(set)
-    })
+    getExercises(dialogueId)
+      .then((set) => {
+        if (!cancelled) setExercises(set)
+      })
+      .catch(() => {
+        // Не в кожного діалогу є набір вправ — тоді одразу повертаємось у світ.
+        if (!cancelled) setActiveExercise(null)
+      })
     return () => {
       cancelled = true
     }
-  }, [dialogueId])
+  }, [dialogueId, setActiveExercise])
 
   if (!exercises) {
     return <div className="screen exercise-screen" />

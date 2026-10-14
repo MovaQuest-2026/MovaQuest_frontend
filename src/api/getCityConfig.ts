@@ -1,20 +1,80 @@
-export interface CityNpcConfig {
-  id: string
-  name: { en: string; uk: string }
-  dialogueId: string
+export interface LocalizedText {
+  en: string
+  uk: string
+}
+
+export interface Point {
   x: number
   y: number
 }
 
-export interface CityConfig {
+export interface CityNpcConfig {
   id: string
-  name: { en: string; uk: string }
-  culturalIntro: { en: string; uk: string }
-  tilemapKey: string
-  npcs: CityNpcConfig[]
+  name: LocalizedText
+  dialogueId: string
+  zone: string
+  x: number
+  y: number
+  patrol: boolean
+  outfit?: string
 }
 
-const cityModules = import.meta.glob<{ default: CityConfig }>(
+export interface DoorConfig {
+  id: string
+  target: string
+  x: number
+  y: number
+  w: number
+  h: number
+  requiresFlag?: string
+  spawn: Point
+}
+
+export interface ExitConfig {
+  id: string
+  target: string
+  x: number
+  y: number
+  w: number
+  h: number
+  requiresFlag?: string
+  requiresFlagFalse?: string
+  spawn: Point
+}
+
+export interface LandmarkConfig {
+  id: string
+  image: string
+  x: number
+  y: number
+}
+
+export interface ZoneConfig {
+  id: string
+  type: 'outdoor' | 'interior'
+  tilemap: string
+  spawn: Point
+  onEnterDialogue?: string
+  npcs: CityNpcConfig[]
+  doors: DoorConfig[]
+  exits: ExitConfig[]
+  landmarks?: LandmarkConfig[]
+}
+
+export interface CityConfig {
+  id: string
+  name: LocalizedText
+  culturalIntro: LocalizedText
+  startZone: string
+  questlineId: string
+  zones: ZoneConfig[]
+}
+
+type RawNpcConfig = Omit<CityNpcConfig, 'zone'>
+type RawZoneConfig = Omit<ZoneConfig, 'npcs'> & { npcs: RawNpcConfig[] }
+type RawCityConfig = Omit<CityConfig, 'zones'> & { zones: RawZoneConfig[] }
+
+const cityModules = import.meta.glob<{ default: RawCityConfig }>(
   '../mocks/cities/*.json',
 )
 
@@ -24,5 +84,21 @@ export async function getCityConfig(cityId: string): Promise<CityConfig> {
     throw new Error(`Unknown city: ${cityId}`)
   }
   const module = await loadCity()
-  return module.default
+  const raw = module.default
+  // У JSON зона NPC задається вкладеністю; в API вона явне поле, щоб NPC можна було передавати окремо від зони.
+  return {
+    ...raw,
+    zones: raw.zones.map((zone) => ({
+      ...zone,
+      npcs: zone.npcs.map((npc) => ({ ...npc, zone: zone.id })),
+    })),
+  }
+}
+
+export function getZone(city: CityConfig, zoneId: string): ZoneConfig {
+  const zone = city.zones.find((candidate) => candidate.id === zoneId)
+  if (!zone) {
+    throw new Error(`Unknown zone: ${zoneId} in city ${city.id}`)
+  }
+  return zone
 }

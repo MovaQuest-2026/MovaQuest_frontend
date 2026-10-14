@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import i18next from 'i18next'
 import type { CityNpcConfig } from '../../api/getCityConfig'
 import { useGameStore } from '../../store/useGameStore'
 
@@ -12,8 +13,9 @@ const NPC_PATROL_SPEED = 40
 const NPC_PATROL_RANGE = 48
 const NPC_GREETING_MIN_DELAY = 3000
 const NPC_GREETING_MAX_DELAY = 6000
+const SPAWN_SAVE_INTERVAL = 500
 
-interface TestLevelSceneData {
+export interface TestLevelSceneData {
   npcs?: CityNpcConfig[]
 }
 
@@ -37,6 +39,7 @@ export class TestLevelScene extends Phaser.Scene {
   private npcs: CityNpcConfig[] = []
   private npcEntities: NpcEntity[] = []
   private nearbyNpcId: string | null = null
+  private lastSavedSpawn: { x: number; y: number } | null = null
 
   constructor() {
     super(TEST_LEVEL_SCENE_KEY)
@@ -46,6 +49,7 @@ export class TestLevelScene extends Phaser.Scene {
     this.npcs = data.npcs ?? []
     this.npcEntities = []
     this.nearbyNpcId = null
+    this.lastSavedSpawn = null
   }
 
   preload() {
@@ -71,9 +75,10 @@ export class TestLevelScene extends Phaser.Scene {
     const collisionLayer = map.createLayer('collision', tileset, 0, 0)!
     collisionLayer.setCollisionByProperty({ collides: true })
 
+    const savedSpawn = useGameStore.getState().spawn
     this.player = this.physics.add.image(
-      map.widthInPixels / 2,
-      map.heightInPixels / 2,
+      savedSpawn?.x ?? map.widthInPixels / 2,
+      savedSpawn?.y ?? map.heightInPixels / 2,
       'player-placeholder',
     )
     this.player.setCollideWorldBounds(true)
@@ -88,8 +93,7 @@ export class TestLevelScene extends Phaser.Scene {
     collisionLayer.setDepth(1)
     this.player.setDepth(2)
 
-    const greeting =
-      useGameStore.getState().nativeLanguage === 'uk' ? 'Привіт!' : 'Hi!'
+    const greeting = i18next.t('world.npcGreeting')
 
     for (const npc of this.npcs) {
       const sprite = this.add.image(npc.x, npc.y, 'npc-placeholder').setDepth(2)
@@ -123,10 +127,38 @@ export class TestLevelScene extends Phaser.Scene {
       left: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       right: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
     }
+
+    this.input
+      .keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E, false)
+      .on('down', () => this.interact())
+
+    const unsubscribe = useGameStore.subscribe((state, prev) => {
+      if (state.interactRequest !== prev.interactRequest) this.interact()
+    })
+
+    this.time.addEvent({
+      delay: SPAWN_SAVE_INTERVAL,
+      loop: true,
+      callback: () => this.saveSpawn(),
+    })
+
+    const handleExit = () => {
+      unsubscribe()
+      this.saveSpawn()
+      useGameStore.getState().setInteractionHint(null)
+    }
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, handleExit)
+    this.events.once(Phaser.Scenes.Events.DESTROY, handleExit)
   }
 
   update(_time: number, delta: number) {
     this.player.setVelocity(0)
+    this.updateNpcPatrol(delta)
+
+    if (this.isInputBlocked()) {
+      this.setNearbyNpc(null)
+      return
+    }
 
     const left = this.cursors.left.isDown || this.wasd.left.isDown
     const right = this.cursors.right.isDown || this.wasd.right.isDown
@@ -139,12 +171,41 @@ export class TestLevelScene extends Phaser.Scene {
     if (up) this.player.setVelocityY(-MOVE_SPEED)
     else if (down) this.player.setVelocityY(MOVE_SPEED)
 
-    this.updateNpcPatrol(delta)
     this.updateNpcInteractions()
+  }
+
+  private isInputBlocked() {
+    const { activeDialogue, activeExercise } = useGameStore.getState()
+    return activeDialogue !== null || activeExercise !== null
+  }
+
+  private saveSpawn() {
+    if (!this.player?.active) return
+    const spawn = {
+      x: Math.round(this.player.x),
+      y: Math.round(this.player.y),
+    }
+    if (
+      this.lastSavedSpawn?.x === spawn.x &&
+      this.lastSavedSpawn?.y === spawn.y
+    ) {
+      return
+    }
+    this.lastSavedSpawn = spawn
+    useGameStore.getState().setSpawn(spawn)
+  }
+
+  private interact() {
+    if (this.isInputBlocked() || !this.nearbyNpcId) return
+    const npc = this.npcs.find((candidate) => candidate.id === this.nearbyNpcId)
+    if (!npc) return
+    this.saveSpawn()
+    useGameStore.getState().setActiveDialogue(npc.dialogueId)
   }
 
   private updateNpcPatrol(delta: number) {
     for (const entity of this.npcEntities) {
+      if (!entity.config.patrol) continue
       entity.sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
 
       if (entity.sprite.x >= entity.originX + NPC_PATROL_RANGE) {
@@ -194,12 +255,17 @@ export class TestLevelScene extends Phaser.Scene {
       }
     }
 
-    const closestNpcId = closestNpc?.id ?? null
-    if (closestNpcId !== this.nearbyNpcId) {
-      this.nearbyNpcId = closestNpcId
-      if (closestNpc) {
-        useGameStore.getState().setActiveDialogue(closestNpc.dialogueId)
-      }
-    }
+    this.setNearbyNpc(closestNpc)
+  }
+
+  private setNearbyNpc(npc: CityNpcConfig | null) {
+    const npcId = npc?.id ?? null
+    if (npcId === this.nearbyNpcId) return
+    this.nearbyNpcId = npcId
+    useGameStore
+      .getState()
+      .setInteractionHint(
+        npc ? { kind: 'npc', id: npc.id, label: npc.name } : null,
+      )
   }
 }

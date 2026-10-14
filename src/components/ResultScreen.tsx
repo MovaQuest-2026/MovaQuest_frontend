@@ -31,6 +31,10 @@ export function ResultScreen({ dialogueId, score }: ResultScreenProps) {
     trackLessonCompleted(dialogueId, score)
   }, [dialogueId, score])
 
+  function handleContinue() {
+    setActiveExercise(null)
+  }
+
   function handleGoHome() {
     setActiveExercise(null)
     navigate('/')
@@ -52,9 +56,14 @@ export function ResultScreen({ dialogueId, score }: ResultScreenProps) {
         </>
       )}
 
-      <button type="button" onClick={handleGoHome}>
-        {t('result.goHome')}
-      </button>
+      <div className="result-actions">
+        <button type="button" onClick={handleContinue}>
+          {t('result.continue')}
+        </button>
+        <button type="button" onClick={handleGoHome}>
+          {t('result.goHome')}
+        </button>
+      </div>
     </div>
   )
 }
