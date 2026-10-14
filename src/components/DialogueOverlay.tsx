@@ -4,7 +4,7 @@ import { Story } from 'inkjs'
 import { getDialogue, getInkVariableNames } from '../api/getDialogue'
 import { getExercises } from '../api/getExercises'
 import type { QuizConfig } from '../api/getQuiz'
-import { trackExerciseAnswered, trackLessonStarted } from '../api/analytics'
+import { trackLessonStarted, trackQuizAnswered } from '../api/analytics'
 import { useGameStore, type FlagValue } from '../store/useGameStore'
 import { QuizCard } from './QuizCard'
 
@@ -116,11 +116,12 @@ function DialogueSession({ dialogueId, lang }: DialogueSessionProps) {
 
   useEffect(() => {
     let cancelled = false
-    trackLessonStarted(dialogueId)
 
     Promise.all([getDialogue(dialogueId), getExercises(dialogueId)])
       .then(([dialogue, exercises]) => {
         if (cancelled) return
+        // Після перевірки cancelled: у StrictMode ефект запускається двічі, а подія має бути одна.
+        trackLessonStarted(dialogueId)
         const content = dialogue.inkContent[lang]
         const story = new Story(JSON.stringify(content))
         const variableNames = getInkVariableNames(content)
@@ -172,7 +173,7 @@ function DialogueSession({ dialogueId, lang }: DialogueSessionProps) {
     (correct: boolean, quiz: QuizConfig) => {
       const story = storyRef.current
       if (story) story.variablesState['quiz_ok'] = correct
-      trackExerciseAnswered(quiz.id, correct)
+      trackQuizAnswered(quiz.id, correct)
       if (correct) useGameStore.getState().addLearnedWord(quiz.word)
     },
     [],

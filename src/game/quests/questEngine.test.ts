@@ -5,11 +5,13 @@ import vinnytsiaCity from '../../mocks/cities/vinnytsia.json'
 import vinnytsiaQuests from '../../mocks/quests/vinnytsia_main.json'
 import {
   QUEST_COMPLETE,
+  completedStepIds,
   evaluate,
   findGateTowards,
   getArrowTarget,
   getCurrentStep,
   isGateOpen,
+  skipStep,
   type QuestEvent,
   type QuestState,
 } from './questEngine'
@@ -377,5 +379,29 @@ describe('розвилка тролейбуса', () => {
         })
       }
     }
+  })
+})
+
+describe('skipStep і completedStepIds', () => {
+  it('skipStep закриває крок за прапорцем і ставить сам прапорець', () => {
+    const patch = skipStep(questline, initialState({ questStep: 'charge' }))
+    expect(patch?.questStep).toBe('leave')
+    expect(patch?.flags.phone_charging).toBe(true)
+  })
+
+  it('skipStep закриває крок за діалогом і за зоною', () => {
+    expect(skipStep(questline, initialState({ questStep: 'talk', currentZone: 'park' }))?.questStep).toBe(QUEST_COMPLETE)
+    expect(skipStep(questline, initialState({ questStep: 'go_park' }))?.questStep).toBe('talk')
+  })
+
+  it('skipStep стартує квест, що не почався', () => {
+    expect(skipStep(questline, initialState())?.questStep).toBe('charge')
+  })
+
+  it('completedStepIds повертає всі кроки, закриті ланцюжком', () => {
+    expect(completedStepIds(questline, 'charge', 'go_park')).toEqual(['charge', 'leave'])
+    expect(completedStepIds(questline, 'talk', QUEST_COMPLETE)).toEqual(['talk'])
+    expect(completedStepIds(questline, null, 'charge')).toEqual([])
+    expect(completedStepIds(questline, 'leave', 'leave')).toEqual([])
   })
 })

@@ -1,4 +1,5 @@
 import posthog from 'posthog-js'
+import { useGameStore } from '../store/useGameStore'
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
 const POSTHOG_HOST =
@@ -16,22 +17,49 @@ function ensureInitialized(): boolean {
   return true
 }
 
-export function trackLessonStarted(dialogueId: string) {
+// Кожна подія несе місто і мову інтерфейсу. Тільки ідентифікатори — жодних ink-текстів.
+function capture(event: string, properties: Record<string, string | number | boolean | null>) {
   if (!ensureInitialized()) return
-  posthog.capture('lesson_started', { dialogueId })
+  const { currentCity, nativeLanguage } = useGameStore.getState()
+  posthog.capture(event, { cityId: currentCity, nativeLanguage, ...properties })
+}
+
+export function trackLessonStarted(dialogueId: string) {
+  capture('lesson_started', { dialogueId })
 }
 
 export function trackLessonCompleted(dialogueId: string, score: number) {
-  if (!ensureInitialized()) return
-  posthog.capture('lesson_completed', { dialogueId, score })
-}
-
-export function trackEndingReached(ending: string, trust: number) {
-  if (!ensureInitialized()) return
-  posthog.capture('ending_reached', { ending, trust })
+  capture('lesson_completed', { dialogueId, score })
 }
 
 export function trackExerciseAnswered(questionId: string, correct: boolean) {
-  if (!ensureInitialized()) return
-  posthog.capture('exercise_answered', { questionId, correct })
+  capture('exercise_answered', { questionId, correct })
+}
+
+export function trackZoneEntered(zoneId: string, gameClock: string) {
+  capture('zone_entered', { zoneId, gameClock })
+}
+
+export function trackDoorEntered(doorId: string, zoneId: string) {
+  capture('door_entered', { doorId, zoneId })
+}
+
+export function trackQuestStepCompleted(stepId: string, msSinceStart: number | null) {
+  capture('quest_step_completed', { stepId, msSinceStart })
+}
+
+export function trackQuizAnswered(quizId: string, correct: boolean) {
+  capture('quiz_answered', { quizId, correct })
+}
+
+export function trackDialogueFinished(dialogueId: string) {
+  capture('dialogue_finished', { dialogueId })
+}
+
+export function trackEndingReached(ending: string, trust: number) {
+  capture('ending_reached', { ending, trust })
+}
+
+export function trackSessionResumed(zoneId: string | null, questStep: string | null) {
+  capture('session_resumed', { zoneId, questStep })
 }

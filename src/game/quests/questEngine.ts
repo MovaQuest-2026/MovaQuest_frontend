@@ -139,6 +139,43 @@ function pick(state: QuestState): QuestPatch {
   }
 }
 
+/**
+ * Примусово завершує поточний крок (для DebugPanel): ставить прапорець з completeWhen
+ * або імітує подію і проганяє evaluate. Квест, що не почався, стартує.
+ */
+export function skipStep(questline: Questline, state: QuestState): QuestPatch | null {
+  const step = getCurrentStep(questline, state)
+  if (!step) return evaluate(questline, state, { type: 'flag' })
+
+  const { flag, dialogueFinished, zoneEntered } = step.completeWhen
+  const flags = flag ? { ...state.flags, [flag]: true } : state.flags
+  const event: QuestEvent = dialogueFinished
+    ? { type: 'dialogueFinished', dialogueId: dialogueFinished }
+    : { type: 'flag' }
+  return evaluate(
+    questline,
+    { ...state, flags, currentZone: zoneEntered ?? state.currentZone },
+    event,
+  )
+}
+
+/** Id кроків між двома значеннями questStep (не включаючи новий) — тобто завершені за одну зміну. */
+export function completedStepIds(
+  questline: Questline,
+  previous: string | null,
+  next: string | null,
+): string[] {
+  if (previous === null || previous === next) return []
+  const from = questline.steps.findIndex((step) => step.id === previous)
+  if (from === -1) return []
+  const to =
+    next === QUEST_COMPLETE
+      ? questline.steps.length
+      : questline.steps.findIndex((step) => step.id === next)
+  if (to <= from) return []
+  return questline.steps.slice(from, to).map((step) => step.id)
+}
+
 export function isGateOpen(
   gate: Pick<ExitConfig, 'requiresFlag' | 'requiresFlagFalse'>,
   flags: QuestFlags,

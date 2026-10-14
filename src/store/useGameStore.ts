@@ -24,6 +24,23 @@ export interface FinishedDialogueEvent {
   seq: number
 }
 
+export interface DoorEnteredEvent {
+  doorId: string
+  zoneId: string
+  seq: number
+}
+
+export interface ZoneRequest {
+  zoneId: string
+  seq: number
+}
+
+// Вектор віртуального джойстика, кожна вісь у діапазоні −1..1.
+export interface JoystickVector {
+  x: number
+  y: number
+}
+
 interface GameData {
   nativeLanguage: NativeLanguage | null
   currentCity: string | null
@@ -45,6 +62,11 @@ interface GameData {
   pendingEnding: string | null
   // Стан ink для діалогів з keepState, ключ — `${dialogueId}:${lang}`.
   inkStates: Record<string, string>
+  // Момент старту квесту (Date.now()), для msSinceStart в аналітиці.
+  startedAt: number | null
+  lastDoorEntered: DoorEnteredEvent | null
+  zoneRequest: ZoneRequest | null
+  joystick: JoystickVector
 }
 
 interface GameActions {
@@ -70,6 +92,9 @@ interface GameActions {
   setPendingEnding: (endingId: string | null) => void
   setInkState: (key: string, json: string) => void
   finishGame: (ending: string) => void
+  markDoorEntered: (doorId: string, zoneId: string) => void
+  requestZone: (zoneId: string) => void
+  setJoystick: (vector: JoystickVector) => void
   resetProgress: () => void
 }
 
@@ -97,6 +122,10 @@ const initialData: GameData = {
   pendingCutscene: null,
   pendingEnding: null,
   inkStates: {},
+  startedAt: null,
+  lastDoorEntered: null,
+  zoneRequest: null,
+  joystick: { x: 0, y: 0 },
 }
 
 export const useGameStore = create<GameState>()(
@@ -154,6 +183,19 @@ export const useGameStore = create<GameState>()(
           pendingEnding: null,
           pendingCutscene: null,
         })),
+      markDoorEntered: (doorId, zoneId) =>
+        set((state) => ({
+          lastDoorEntered: {
+            doorId,
+            zoneId,
+            seq: (state.lastDoorEntered?.seq ?? 0) + 1,
+          },
+        })),
+      requestZone: (zoneId) =>
+        set((state) => ({
+          zoneRequest: { zoneId, seq: (state.zoneRequest?.seq ?? 0) + 1 },
+        })),
+      setJoystick: (vector) => set({ joystick: vector }),
       resetProgress: () => {
         set(initialData)
         useGameStore.persist.clearStorage()
@@ -176,6 +218,7 @@ export const useGameStore = create<GameState>()(
         pendingCutscene: state.pendingCutscene,
         pendingEnding: state.pendingEnding,
         inkStates: state.inkStates,
+        startedAt: state.startedAt,
       }),
     },
   ),
