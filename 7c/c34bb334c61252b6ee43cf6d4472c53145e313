@@ -1,0 +1,38 @@
+src/components/InteractionHint.tsx
+  s_53b2d8f8e14a30::t_15d543e08669d4 36
+src/game/scenes/ZoneSceneBase.ts
+  s_53b2d8f8e14a30::t_bbf63383103f4d 26-27,333-335,377-388,473-478,1194-1211
+src/components/VirtualJoystick.tsx
+  s_53b2d8f8e14a30::t_15d543e08669d4 1-82
+src/components/DebugPanel.tsx
+  s_53b2d8f8e14a30::t_15d543e08669d4 1-105
+src/index.css
+  s_53b2d8f8e14a30::t_15d543e08669d4 237-239,378-388,390-394,397-420
+src/components/WorldScreen.tsx
+  s_53b2d8f8e14a30::t_1dce5c8d3be3f9 9,39
+  s_53b2d8f8e14a30::t_15d543e08669d4 1,16-19,109,117-120
+  s_53b2d8f8e14a30::t_8edf85235145c1 121
+CLAUDE.md
+  s_53b2d8f8e14a30::t_96ac4f58940c9e 64-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7cc34bb334c61252b6ee43cf6d4472c53145e313",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_53b2d8f8e14a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10c2f81f-5bf1-43fd-ac53-978b63021cbd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
