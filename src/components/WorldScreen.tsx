@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { getCityConfig } from '../api/getCityConfig'
@@ -6,12 +6,17 @@ import { getQuestline } from '../api/getQuestline'
 import { trackEndingReached } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
 import { useQuestEngine } from '../store/useQuestEngine'
+import { useAnalytics } from '../store/useAnalytics'
 import { PhaserGame } from '../game/PhaserGame'
 import { DialogueOverlay } from './DialogueOverlay'
 import { ExerciseScreen } from './ExerciseScreen'
 import { InteractionHint } from './InteractionHint'
 import { QuestTracker } from './QuestTracker'
 import { DayJournalScreen } from './DayJournalScreen'
+import { VirtualJoystick } from './VirtualJoystick'
+
+// У production import.meta.env.DEV === false, тож гілка і динамічний імпорт вирізаються з бандла.
+const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null
 
 export function WorldScreen() {
   const { t } = useTranslation()
@@ -31,6 +36,7 @@ export function WorldScreen() {
   )
 
   useQuestEngine()
+  useAnalytics()
 
   useEffect(() => {
     if (!cityId) return
@@ -100,12 +106,18 @@ export function WorldScreen() {
     <div className="game-screen">
       <PhaserGame />
       <QuestTracker />
+      <VirtualJoystick />
       <InteractionHint />
       <DialogueOverlay />
       {activeExercise && (
         <div className="world-overlay">
           <ExerciseScreen key={activeExercise} dialogueId={activeExercise} />
         </div>
+      )}
+      {DebugPanel && (
+        <Suspense fallback={null}>
+          <DebugPanel />
+        </Suspense>
       )}
     </div>
   )

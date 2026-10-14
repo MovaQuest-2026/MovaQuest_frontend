@@ -23,6 +23,8 @@ import { sceneKeyForZone, type ZoneSceneData } from './sceneKeys'
 
 const CAMERA_ZOOM = 2
 const MOVE_SPEED = 120
+// Відхилення джойстика, менше за це, вважаємо нулем.
+const JOYSTICK_DEADZONE = 0.15
 const PLAYER_CHARACTER_ID = 'player'
 const PLAYER_PLACEHOLDER_TEXTURE = 'player-placeholder'
 const NPC_PLACEHOLDER_TEXTURE = 'npc-placeholder'
@@ -328,6 +330,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       if (state.flags !== prev.flags) this.updateWeather()
       if (state.activeDialogue !== prev.activeDialogue) this.drawNpcRoute()
       if (state.pendingCutscene !== prev.pendingCutscene) this.maybeStartCutscene()
+      if (state.zoneRequest && state.zoneRequest !== prev.zoneRequest) {
+        this.handleZoneRequest(state.zoneRequest.zoneId)
+      }
     })
 
     this.time.addEvent({
@@ -369,8 +374,18 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const up = this.cursors.up.isDown || this.wasd.up.isDown
     const down = this.cursors.down.isDown || this.wasd.down.isDown
 
-    const velocityX = left ? -MOVE_SPEED : right ? MOVE_SPEED : 0
-    const velocityY = up ? -MOVE_SPEED : down ? MOVE_SPEED : 0
+    // Клавіатура має пріоритет; без натиснутих клавіш рухаємося за віртуальним джойстиком.
+    let inputX = left ? -1 : right ? 1 : 0
+    let inputY = up ? -1 : down ? 1 : 0
+    if (inputX === 0 && inputY === 0) {
+      const { joystick } = useGameStore.getState()
+      if (Math.hypot(joystick.x, joystick.y) > JOYSTICK_DEADZONE) {
+        inputX = joystick.x
+        inputY = joystick.y
+      }
+    }
+    const velocityX = inputX * MOVE_SPEED
+    const velocityY = inputY * MOVE_SPEED
     this.player.setVelocity(velocityX, velocityY)
     this.animatePlayer(velocityX, velocityY)
     this.player.setDepth(bottomOf(this.player))
@@ -455,9 +470,12 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       this.player.play(lpcAnimationKey(key, 'idle', this.facing), true)
       return
     }
-    // Горизонталь має пріоритет при русі по діагоналі.
-    if (velocityX !== 0) this.facing = velocityX < 0 ? 'left' : 'right'
-    else this.facing = velocityY < 0 ? 'up' : 'down'
+    // Напрямок за домінантною віссю; при рівних (клавіші по діагоналі) — горизонталь.
+    if (Math.abs(velocityX) >= Math.abs(velocityY)) {
+      this.facing = velocityX < 0 ? 'left' : 'right'
+    } else {
+      this.facing = velocityY < 0 ? 'up' : 'down'
+    }
     this.player.play(lpcAnimationKey(key, 'walk', this.facing), true)
   }
 
@@ -1173,6 +1191,24 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       this.teleportWithinZone(spawn)
       return
     }
+    if (gate.kind === 'door') {
+      useGameStore.getState().markDoorEntered(gate.config.id, this.zone.id)
+    }
+    this.goToZone(target, spawn)
+  }
+
+  // Запит на перехід ззовні (DebugPanel): у spawn цільової зони.
+  private handleZoneRequest(zoneId: string) {
+    const city = useGameStore.getState().cityConfig
+    const zone = city?.zones.find((candidate) => candidate.id === zoneId)
+    if (!zone || this.transitioning || this.cutsceneRunning) return
+    this.transitioning = true
+    this.player.setVelocity(0)
+    this.setHint(null)
+    this.goToZone(zone.id, zone.spawn)
+  }
+
+  private goToZone(target: string, spawn: { x: number; y: number }) {
     this.cameras.main.fadeOut(FADE_DURATION)
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       const city = useGameStore.getState().cityConfig!

@@ -234,6 +234,9 @@ button:disabled {
 
 .dialogue-overlay {
   position: absolute;
+  /* Залишаємо місце для QuestTracker зверху на маленьких екранах. */
+  max-height: calc(100% - 140px);
+  overflow-y: auto;
   left: 50%;
   bottom: 40px;
   transform: translateX(-50%);
@@ -372,14 +375,49 @@ p.incorrect {
   pointer-events: none;
 }
 
-button.interaction-hint {
+/* Тач-кнопка взаємодії: праворуч знизу, навпроти джойстика, не менше 48 px. */
+.interaction-button {
+  position: absolute;
+  right: 20px;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  z-index: 6;
+  min-width: 64px;
+  min-height: 64px;
+  max-width: calc(50% - 24px);
+  padding: 10px 16px;
+  border-radius: 20px;
   border-color: var(--accent);
-  pointer-events: auto;
+  background: rgba(8, 6, 13, 0.85);
+  color: #fff;
+  font-size: 15px;
+  line-height: 125%;
+  touch-action: manipulation;
 }
 
-button.interaction-hint:hover:not(:disabled),
-button.interaction-hint:active:not(:disabled) {
-  transform: translateX(-50%);
+.joystick {
+  position: absolute;
+  left: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 6;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(8, 6, 13, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.joystick-knob {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  pointer-events: none;
 }
 
 .quest-tracker {

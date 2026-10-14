@@ -61,6 +61,17 @@ src/
   якщо файл є (перевірка HEAD-запитом).
 - Кінець гри: прапорці `game_finished` і `ending`; WorldScreen тоді показує
   DayJournalScreen. Подія PostHog `ending_reached({ ending, trust })`.
+
+## Аналітика і dev-інструменти
+- Події PostHog — тільки через функції в src/api/analytics.ts (додають
+  `cityId` і `nativeLanguage`), лише ідентифікатори, без ink-текстів.
+  Список подій і готові інсайти — docs/analytics.md.
+- Phaser не викликає аналітику напряму: сцена пише подію в стор
+  (наприклад, `markDoorEntered`), а useAnalytics у WorldScreen її надсилає.
+- Мобільне керування: VirtualJoystick пише `joystick` у стор (тільки на
+  `pointer: coarse`), сцена додає його до клавіатурного вводу.
+- DebugPanel (клавіша `) — тільки в dev: підключається через
+  `import.meta.env.DEV ? lazy(...) : null`, стилі інлайн, у бандл не потрапляє.
 - Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.

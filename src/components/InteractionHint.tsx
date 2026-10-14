@@ -33,7 +33,7 @@ export function InteractionHint() {
     return (
       <button
         type="button"
-        className="interaction-hint"
+        className="interaction-button"
         onClick={requestInteract}
       >
         {t(`world.interactTouch.${hint.kind}`, { name })}
