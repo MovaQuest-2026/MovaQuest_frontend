@@ -34,6 +34,9 @@
       "objective": { "en": "Find Solomiia in the crowd", "uk": "Знайди Соломію в натовпі" },
       "completeWhen": { "dialogueFinished": "emb_solomiia" } }
   ],
+  "dialogueEffects": [
+    { "dialogueFinished": "center_artist", "setFlag": "rain_mury_over" }
+  ],
   "sideQuests": [
     { "id": "nina_bag",  "optional": true, "zone": "bus_station", "target": { "npcId": "npc_nina" },  "completeWhen": { "flag": "helped_nina" } },
     { "id": "tourist",   "optional": true, "zone": "vyshenka",    "target": { "npcId": "npc_tourist" }, "completeWhen": { "flag": "helped_tourist" } },

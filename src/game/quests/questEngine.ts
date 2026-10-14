@@ -75,13 +75,23 @@ export function evaluate(
   state: QuestState,
   event: QuestEvent,
 ): QuestPatch | null {
-  if (state.questStep === QUEST_COMPLETE || questline.steps.length === 0) {
-    return null
-  }
 
   let current: QuestState = { ...state }
   let pendingEvent: QuestEvent | null = event
   let changed = false
+
+  if (event.type === 'dialogueFinished') {
+    for (const effect of questline.dialogueEffects ?? []) {
+      if (effect.dialogueFinished !== event.dialogueId) continue
+      if (current.flags[effect.setFlag] === true) continue
+      current = { ...current, flags: { ...current.flags, [effect.setFlag]: true } }
+      changed = true
+    }
+  }
+
+  if (current.questStep === QUEST_COMPLETE || questline.steps.length === 0) {
+    return changed ? pick(current) : null
+  }
 
   if (current.questStep === null || !getCurrentStep(questline, current)) {
     const first = questline.steps[0]
@@ -118,11 +128,14 @@ export function evaluate(
     if (!next) break
   }
 
-  if (!changed) return null
+  return changed ? pick(current) : null
+}
+
+function pick(state: QuestState): QuestPatch {
   return {
-    flags: current.flags,
-    questStep: current.questStep,
-    gameClock: current.gameClock,
+    flags: state.flags,
+    questStep: state.questStep,
+    gameClock: state.gameClock,
   }
 }
 

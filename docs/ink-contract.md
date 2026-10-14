@@ -65,13 +65,16 @@ node scripts/build-ink.mjs
 
 ## Прапорці, які ставить квест
 
-Ці прапорці не є змінними ink і не ставляться тегами: їх пише квест-двигун з `startEffects` / `completeEffects` у `src/mocks/quests/vinnytsia_main.json`.
+Ці прапорці не є змінними ink і не ставляться тегами: їх пише квест-двигун з `startEffects` / `completeEffects` / `dialogueEffects` у `src/mocks/quests/vinnytsia_main.json` або тригер зони (`triggers` у `vinnytsia.json`).
 
 | Прапорець | Коли | Що робить фронт |
 | --- | --- | --- |
 | `rain_started` | старт кроку `wait_rain` (після покупки квітів) | дощ у зовнішніх зонах, NPC з `patrol: true` ховаються, під'їзд `door_entrance` відкривається |
 | `rain_over` | кінець кроку `wait_rain` (після діалогу `vysh_galyna`) | дощ минає, NPC повертаються |
 | `trolley_announced` | кінець кроку `ride` (після діалогу `trolley_passenger`) | тролейбус зупиняється, відкривається `exit_soborna` або `exit_park` залежно від `stop_ok` |
+| `rain_mury` | тригер `mury_rain` навколо художника в зоні `center` | знову дощ |
+| `rain_mury_over` | `dialogueEffects`: кінець діалогу `center_artist` | дощ біля Мурів минає |
+| `entered_<zoneId>` | перший вхід у зону з `onEnterDialogue` | діалог входу не повторюється |
 
 ## Як працює `quiz:`
 
