@@ -6,7 +6,7 @@
 
 - `content/ink/<dialogueId>.uk.ink` і `content/ink/<dialogueId>.en.ink` — дві незалежні версії одного діалогу.
 - `content/ink/_variables.ink` — спільні змінні. Кожен діалог починається з `INCLUDE _variables.ink`, тому список змінних в обох мовах завжди однаковий.
-- `content/ink/dialogues.meta.json` — `npcId`, зона і словник для кожного діалогу.
+- `content/ink/dialogues.meta.json` — `npcId`, зона і словник для кожного діалогу. `"keepState": true` — фронт зберігає стан ink між розмовами (лічильники відвідувань), тож `{~...}` дає нову репліку щоразу, поки не пройде всі варіанти. Зараз так у `emb_crowd`.
 - `src/mocks/quizzes/<quizId>.json` — вправи, на які посилаються теги `quiz:`.
 
 Компіляція всіх діалогів:
@@ -62,6 +62,20 @@ node scripts/build-ink.mjs
 | `flag:<name>` | ставить `flags[name] = true` для прапорців, яких немає серед змінних ink (`exit_bus_station`, `shortcut_open`, `park_route_known`, `know_outfit`) |
 | `cutscene:<id>` | після закриття діалогу запускає кат-сцену (`fountain`) |
 | `ending:<best\|good\|basic>` | після закриття діалогу показує екран "Щоденник дня" з цією кінцівкою |
+
+## Прапорці, які ставить квест
+
+Ці прапорці не є змінними ink і не ставляться тегами: їх пише квест-двигун з `startEffects` / `completeEffects` / `dialogueEffects` у `src/mocks/quests/vinnytsia_main.json` або тригер зони (`triggers` у `vinnytsia.json`).
+
+| Прапорець | Коли | Що робить фронт |
+| --- | --- | --- |
+| `rain_started` | старт кроку `wait_rain` (після покупки квітів) | дощ у зовнішніх зонах, NPC з `patrol: true` ховаються, під'їзд `door_entrance` відкривається |
+| `rain_over` | кінець кроку `wait_rain` (після діалогу `vysh_galyna`) | дощ минає, NPC повертаються |
+| `trolley_announced` | кінець кроку `ride` (після діалогу `trolley_passenger`) | тролейбус зупиняється, відкривається `exit_soborna` або `exit_park` залежно від `stop_ok` |
+| `rain_mury` | тригер `mury_rain` навколо художника в зоні `center` | знову дощ |
+| `rain_mury_over` | `dialogueEffects`: кінець діалогу `center_artist` | дощ біля Мурів минає |
+| `entered_<zoneId>` | перший вхід у зону з `onEnterDialogue` | діалог входу не повторюється |
+| `game_finished`, `ending` | після кат-сцени (тег `cutscene:`) і тегу `ending:<best\|good\|basic>` | гра завершена: замість світу показується «Щоденник дня»; `ending` — рядок з назвою кінцівки |
 
 ## Як працює `quiz:`
 

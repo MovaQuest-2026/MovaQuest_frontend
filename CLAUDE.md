@@ -37,6 +37,42 @@ src/
 - `npm run ink` (scripts/build-ink.mjs) компілює їх у
   src/mocks/dialogues/<id>.ink.json. Ці JSON-файли руками не редагуємо,
   тільки перегенеровуємо скриптом.
+- Тимчасові тайлмапи зон генерує `npm run maps:placeholder`
+  (scripts/gen-placeholder-maps.mjs) у public/tilemaps/ з vinnytsia.json:
+  з тайлів Kenney, якщо паки лежать у public/assets/kenney/, інакше
+  прямокутники. Мапи з Tiled (без властивості `generated`) генератор не
+  перезаписує. Об'єкти шарів `doors`/`exits` з властивістю `id` у Tiled
+  перекривають координати дверей і виходів з конфігу.
+
+## Графіка
+- Асети: public/assets/kenney/ (тайли, CC0), public/assets/lpc/<id>.png
+  (персонажі, кадр 64×64, стандартна розкладка LPC), public/assets/landmarks/<id>.png.
+  Відсутній асет не ламає гру: персонажі стають плейсхолдерами, landmark не показується.
+- Спрайт NPC — поле `sprite` у конфігу NPC, гравець — public/assets/lpc/player.png.
+- Сцени: WorldScene (outdoor), InteriorScene (interior), TransportScene
+  (transport, фон за вікнами) на спільній основі ZoneSceneBase.
+- Конфіг зони: `triggers` (вхід у прямокутник ставить прапорець), вихід з
+  `target` = поточна зона — телепорт у межах зони, `lockedHint` — i18n-ключ
+  підказки біля закритого виходу. У квест-лінії `dialogueEffects` ставлять
+  прапорці після будь-якого діалогу незалежно від кроку.
+- NPC з `outfit` використовує спрайт public/assets/lpc/<outfit>.png; без нього —
+  кольоровий плейсхолдер за одягом (червоний/синій/жовтий/зелений, окуляри).
+- Аудіо необов'язкове: public/audio/fountain.mp3 грає в кат-сцені фонтану,
+  якщо файл є (перевірка HEAD-запитом).
+- Кінець гри: прапорці `game_finished` і `ending`; WorldScreen тоді показує
+  DayJournalScreen. Подія PostHog `ending_reached({ ending, trust })`.
+
+## Аналітика і dev-інструменти
+- Події PostHog — тільки через функції в src/api/analytics.ts (додають
+  `cityId` і `nativeLanguage`), лише ідентифікатори, без ink-текстів.
+  Список подій і готові інсайти — docs/analytics.md.
+- Phaser не викликає аналітику напряму: сцена пише подію в стор
+  (наприклад, `markDoorEntered`), а useAnalytics у WorldScreen її надсилає.
+- Мобільне керування: VirtualJoystick пише `joystick` у стор (тільки на
+  `pointer: coarse`), сцена додає його до клавіатурного вводу.
+- DebugPanel (клавіша `) — тільки в dev: підключається через
+  `import.meta.env.DEV ? lazy(...) : null`, стилі інлайн, у бандл не потрапляє.
+- Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.
 

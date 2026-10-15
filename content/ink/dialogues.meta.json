@@ -13,6 +13,6 @@
   "vinnytsia_cafe":    { "npcId": "npc_barista",    "zone": "cafe",             "vocabulary": [["з молоком","with milk"],["без цукру","without sugar"],["десерт","dessert"]] },
   "center_artist":     { "npcId": "npc_artist",     "zone": "center",           "vocabulary": [["малюнок","drawing"],["знову","again"]] },
   "emb_phone":         { "npcId": "phone",          "zone": "embankment",       "vocabulary": [["куртка","jacket"],["окуляри","glasses"],["міст","bridge"]] },
-  "emb_crowd":         { "npcId": "npc_crowd",      "zone": "embankment",       "vocabulary": [] },
+  "emb_crowd":         { "npcId": "npc_crowd",      "zone": "embankment",       "vocabulary": [], "keepState": true },
   "emb_solomiia":      { "npcId": "npc_solomiia",   "zone": "embankment",       "vocabulary": [["захід сонця","sunset"],["домовились","deal"]] }
 }

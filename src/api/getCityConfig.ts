@@ -16,7 +16,12 @@ export interface CityNpcConfig {
   x: number
   y: number
   patrol: boolean
+  // Одяг: окремий LPC-спрайт public/assets/lpc/<outfit>.png, має пріоритет над sprite.
   outfit?: string
+  // id LPC-спрайтшита public/assets/lpc/<sprite>.png; без нього — плейсхолдер.
+  sprite?: string
+  // id дверей або виходу: поки з NPC іде діалог, сцена малює до них пунктир (реверс-квест туриста).
+  showRouteTo?: string
 }
 
 export interface DoorConfig {
@@ -39,19 +44,33 @@ export interface ExitConfig {
   h: number
   requiresFlag?: string
   requiresFlagFalse?: string
+  // i18n-ключ підказки, яку показуємо біля закритого виходу.
+  lockedHint?: string
   spawn: Point
 }
 
+// Невидима зона: коли гравець у неї входить, ставиться flags[setFlag] = true.
+export interface TriggerConfig {
+  id: string
+  x: number
+  y: number
+  w: number
+  h: number
+  setFlag: string
+}
+
+// Зображення public/assets/landmarks/<id>.png, x/y — точка посередині нижнього краю.
 export interface LandmarkConfig {
   id: string
   image: string
   x: number
   y: number
+  scale?: number
 }
 
 export interface ZoneConfig {
   id: string
-  type: 'outdoor' | 'interior'
+  type: 'outdoor' | 'interior' | 'transport'
   tilemap: string
   spawn: Point
   onEnterDialogue?: string
@@ -59,6 +78,7 @@ export interface ZoneConfig {
   doors: DoorConfig[]
   exits: ExitConfig[]
   landmarks?: LandmarkConfig[]
+  triggers?: TriggerConfig[]
 }
 
 export interface CityConfig {

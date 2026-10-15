@@ -9,20 +9,21 @@
   "questlineId": "vinnytsia_main",
   "zones": [
     { "id": "bus_station", "type": "outdoor", "tilemap": "bus_station", "spawn": { "x": 160, "y": 400 },
+      "landmarks": [ { "id": "bus_station", "image": "landmark_bus_station", "x": 272, "y": 160 } ],
       "npcs": [
-        { "id": "npc_nina",  "name": { "en": "Nina", "uk": "Бабуся Ніна" }, "dialogueId": "bus_nina",  "x": 320, "y": 260, "patrol": false },
-        { "id": "npc_guard", "name": { "en": "Guard", "uk": "Охоронець" },  "dialogueId": "bus_guard", "x": 600, "y": 220, "patrol": false }
+        { "id": "npc_nina",  "name": { "en": "Nina", "uk": "Бабуся Ніна" }, "dialogueId": "bus_nina",  "x": 320, "y": 260, "patrol": false, "sprite": "nina" },
+        { "id": "npc_guard", "name": { "en": "Guard", "uk": "Охоронець" },  "dialogueId": "bus_guard", "x": 600, "y": 220, "patrol": false, "sprite": "guard" }
       ],
       "doors": [ { "id": "door_hall", "target": "bus_station_hall", "x": 256, "y": 160, "w": 32, "h": 16, "spawn": { "x": 160, "y": 280 } } ],
       "exits": [ { "id": "exit_vyshenka", "target": "vyshenka", "x": 768, "y": 192, "w": 32, "h": 96, "requiresFlag": "exit_bus_station", "spawn": { "x": 48, "y": 240 } } ]
     },
     { "id": "bus_station_hall", "type": "interior", "tilemap": "interior_hall", "spawn": { "x": 160, "y": 280 },
-      "npcs": [ { "id": "npc_cashier", "name": { "en": "Cashier", "uk": "Касирка" }, "dialogueId": "bus_cashier", "x": 160, "y": 96, "patrol": false } ],
+      "npcs": [ { "id": "npc_cashier", "name": { "en": "Cashier", "uk": "Касирка" }, "dialogueId": "bus_cashier", "x": 160, "y": 96, "patrol": false, "sprite": "cashier" } ],
       "doors": [ { "id": "door_out", "target": "bus_station", "x": 144, "y": 304, "w": 32, "h": 16, "spawn": { "x": 272, "y": 200 } } ],
       "exits": []
     },
     { "id": "vyshenka", "type": "outdoor", "tilemap": "vyshenka", "spawn": { "x": 48, "y": 240 },
-      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true } ],
+      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true, "sprite": "tourist", "showRouteTo": "exit_trolley" } ],
       "doors": [
         { "id": "door_kiosk", "target": "flower_kiosk", "x": 192, "y": 128, "w": 32, "h": 16, "spawn": { "x": 128, "y": 220 } },
         { "id": "door_entrance", "target": "galyna_flat", "x": 384, "y": 128, "w": 32, "h": 16, "requiresFlag": "rain_started", "spawn": { "x": 160, "y": 260 } }
@@ -30,17 +31,17 @@
       "exits": [ { "id": "exit_trolley", "target": "trolleybus", "x": 768, "y": 240, "w": 32, "h": 64, "requiresFlag": "task_flowers", "spawn": { "x": 64, "y": 120 } } ]
     },
     { "id": "flower_kiosk", "type": "interior", "tilemap": "interior_kiosk", "spawn": { "x": 128, "y": 220 },
-      "npcs": [ { "id": "npc_florist", "name": { "en": "Florist", "uk": "Продавчиня квітів" }, "dialogueId": "vysh_flowers", "x": 128, "y": 96, "patrol": false } ],
+      "npcs": [ { "id": "npc_florist", "name": { "en": "Florist", "uk": "Продавчиня квітів" }, "dialogueId": "vysh_flowers", "x": 128, "y": 96, "patrol": false, "sprite": "florist" } ],
       "doors": [ { "id": "door_out", "target": "vyshenka", "x": 112, "y": 240, "w": 32, "h": 16, "spawn": { "x": 208, "y": 168 } } ], "exits": []
     },
     { "id": "galyna_flat", "type": "interior", "tilemap": "interior_flat", "spawn": { "x": 160, "y": 260 },
-      "npcs": [ { "id": "npc_galyna", "name": { "en": "Mrs Halyna", "uk": "Пані Галина" }, "dialogueId": "vysh_galyna", "x": 200, "y": 120, "patrol": false } ],
+      "npcs": [ { "id": "npc_galyna", "name": { "en": "Mrs Halyna", "uk": "Пані Галина" }, "dialogueId": "vysh_galyna", "x": 200, "y": 120, "patrol": false, "sprite": "galyna" } ],
       "doors": [ { "id": "door_out", "target": "vyshenka", "x": 144, "y": 288, "w": 32, "h": 16, "spawn": { "x": 400, "y": 168 } } ], "exits": []
     },
     { "id": "trolleybus", "type": "transport", "tilemap": "interior_trolleybus", "spawn": { "x": 64, "y": 120 },
       "npcs": [
-        { "id": "npc_conductor", "name": { "en": "Conductor", "uk": "Кондукторка" }, "dialogueId": "trolley_conductor", "x": 160, "y": 120, "patrol": false },
-        { "id": "npc_passenger", "name": { "en": "Passenger", "uk": "Пасажир" }, "dialogueId": "trolley_passenger", "x": 320, "y": 100, "patrol": false }
+        { "id": "npc_conductor", "name": { "en": "Conductor", "uk": "Кондукторка" }, "dialogueId": "trolley_conductor", "x": 160, "y": 120, "patrol": false, "sprite": "conductor" },
+        { "id": "npc_passenger", "name": { "en": "Passenger", "uk": "Пасажир" }, "dialogueId": "trolley_passenger", "x": 320, "y": 100, "patrol": false, "sprite": "passenger" }
       ],
       "doors": [],
       "exits": [
@@ -49,13 +50,13 @@
       ]
     },
     { "id": "park", "type": "outdoor", "tilemap": "park", "spawn": { "x": 48, "y": 200 },
-      "npcs": [ { "id": "npc_musician", "name": { "en": "Street musician", "uk": "Вуличний музикант" }, "dialogueId": "park_musician", "x": 300, "y": 180, "patrol": false } ],
+      "npcs": [ { "id": "npc_musician", "name": { "en": "Street musician", "uk": "Вуличний музикант" }, "dialogueId": "park_musician", "x": 300, "y": 180, "patrol": false, "sprite": "musician" } ],
       "doors": [], "exits": [ { "id": "exit_center", "target": "center", "x": 608, "y": 160, "w": 32, "h": 96, "spawn": { "x": 64, "y": 240 } } ]
     },
     { "id": "center", "type": "outdoor", "tilemap": "center", "spawn": { "x": 64, "y": 240 },
       "npcs": [
-        { "id": "npc_ostap",  "name": { "en": "Ostap", "uk": "Остап" }, "dialogueId": "center_ostap", "x": 360, "y": 260, "patrol": true },
-        { "id": "npc_artist", "name": { "en": "Artist", "uk": "Художник" }, "dialogueId": "center_artist", "x": 900, "y": 180, "patrol": false }
+        { "id": "npc_ostap",  "name": { "en": "Ostap", "uk": "Остап" }, "dialogueId": "center_ostap", "x": 360, "y": 260, "patrol": true, "sprite": "ostap" },
+        { "id": "npc_artist", "name": { "en": "Artist", "uk": "Художник" }, "dialogueId": "center_artist", "x": 900, "y": 180, "patrol": false, "sprite": "artist" }
       ],
       "doors": [
         { "id": "door_tower", "target": "tower_interior", "x": 224, "y": 128, "w": 32, "h": 16, "spawn": { "x": 128, "y": 240 } },
@@ -63,16 +64,17 @@
       ],
       "exits": [
         { "id": "shortcut_mury", "target": "center", "x": 640, "y": 320, "w": 32, "h": 32, "requiresFlag": "shortcut_open", "spawn": { "x": 860, "y": 200 } },
-        { "id": "exit_embankment", "target": "embankment", "x": 1184, "y": 240, "w": 32, "h": 96, "requiresFlag": "task_show_time", "spawn": { "x": 48, "y": 240 } }
+        { "id": "exit_embankment", "target": "embankment", "x": 1184, "y": 240, "w": 32, "h": 96, "requiresFlag": "task_show_time", "lockedHint": "world.locked.showTime", "spawn": { "x": 48, "y": 240 } }
       ],
+      "triggers": [ { "id": "mury_rain", "x": 816, "y": 112, "w": 176, "h": 160, "setFlag": "rain_mury" } ],
       "landmarks": [ { "id": "water_tower", "image": "landmark_tower", "x": 240, "y": 96 }, { "id": "mury", "image": "landmark_mury", "x": 920, "y": 96 } ]
     },
     { "id": "tower_interior", "type": "interior", "tilemap": "interior_tower", "spawn": { "x": 128, "y": 240 },
-      "npcs": [ { "id": "npc_tower", "name": { "en": "Museum guide", "uk": "Працівниця музею" }, "dialogueId": "center_tower", "x": 128, "y": 96, "patrol": false } ],
+      "npcs": [ { "id": "npc_tower", "name": { "en": "Museum guide", "uk": "Працівниця музею" }, "dialogueId": "center_tower", "x": 128, "y": 96, "patrol": false, "sprite": "tower" } ],
       "doors": [ { "id": "door_out", "target": "center", "x": 112, "y": 272, "w": 32, "h": 16, "spawn": { "x": 240, "y": 168 } } ], "exits": []
     },
     { "id": "cafe", "type": "interior", "tilemap": "interior_cafe", "spawn": { "x": 160, "y": 260 },
-      "npcs": [ { "id": "npc_barista", "name": { "en": "Barista", "uk": "Бариста" }, "dialogueId": "vinnytsia_cafe", "x": 160, "y": 96, "patrol": false } ],
+      "npcs": [ { "id": "npc_barista", "name": { "en": "Barista", "uk": "Бариста" }, "dialogueId": "vinnytsia_cafe", "x": 160, "y": 96, "patrol": false, "sprite": "barista" } ],
       "doors": [ { "id": "door_out", "target": "center", "x": 144, "y": 288, "w": 32, "h": 16, "spawn": { "x": 560, "y": 168 } } ], "exits": []
     },
     { "id": "embankment", "type": "outdoor", "tilemap": "embankment", "spawn": { "x": 48, "y": 240 }, "onEnterDialogue": "emb_phone",

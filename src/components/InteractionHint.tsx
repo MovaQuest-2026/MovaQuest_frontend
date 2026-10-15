@@ -6,7 +6,10 @@ export function InteractionHint() {
   const { t } = useTranslation()
   const hint = useGameStore((state) => state.interactionHint)
   const blocked = useGameStore(
-    (state) => state.activeDialogue !== null || state.activeExercise !== null,
+    (state) =>
+      state.activeDialogue !== null ||
+      state.activeExercise !== null ||
+      state.pendingCutscene !== null,
   )
   const requestInteract = useGameStore((state) => state.requestInteract)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
@@ -18,11 +21,19 @@ export function InteractionHint() {
 
   const name = hint.label[nativeLanguage ?? 'en']
 
+  if (hint.kind === 'locked') {
+    return (
+      <div className="interaction-hint" role="status">
+        {name}
+      </div>
+    )
+  }
+
   if (isTouch) {
     return (
       <button
         type="button"
-        className="interaction-hint"
+        className="interaction-button"
         onClick={requestInteract}
       >
         {t(`world.interactTouch.${hint.kind}`, { name })}

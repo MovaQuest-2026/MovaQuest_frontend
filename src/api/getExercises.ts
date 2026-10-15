@@ -15,12 +15,13 @@ const exerciseModules = import.meta.glob<{ default: ExerciseSet }>(
   '../mocks/exercises/*.json',
 )
 
-export async function getExercises(dialogueId: string): Promise<ExerciseSet> {
+// Вправи після діалогу необов'язкові: якщо набору немає, повертаємо null, а не помилку.
+export async function getExercises(
+  dialogueId: string,
+): Promise<ExerciseSet | null> {
   const loadExercises =
     exerciseModules[`../mocks/exercises/${dialogueId}.json`]
-  if (!loadExercises) {
-    throw new Error(`Unknown exercise set: ${dialogueId}`)
-  }
+  if (!loadExercises) return null
   const module = await loadExercises()
   return module.default
 }

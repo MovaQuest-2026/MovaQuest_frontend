@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { getExercises, type ExerciseSet } from '../api/getExercises'
 import { trackExerciseAnswered } from '../api/analytics'
 import { useGameStore } from '../store/useGameStore'
+import { MultipleChoiceQuestion } from './MultipleChoiceQuestion'
 import { ResultScreen } from './ResultScreen'
 
 interface ExerciseScreenProps {
@@ -10,26 +10,22 @@ interface ExerciseScreenProps {
 }
 
 export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
-  const { t } = useTranslation()
   const addLearnedWord = useGameStore((state) => state.addLearnedWord)
   const setActiveExercise = useGameStore((state) => state.setActiveExercise)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)
   const lang = nativeLanguage ?? 'en'
   const [exercises, setExercises] = useState<ExerciseSet | null>(null)
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [correctCount, setCorrectCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
-    getExercises(dialogueId)
-      .then((set) => {
-        if (!cancelled) setExercises(set)
-      })
-      .catch(() => {
-        // Не в кожного діалогу є набір вправ — тоді одразу повертаємось у світ.
-        if (!cancelled) setActiveExercise(null)
-      })
+    getExercises(dialogueId).then((set) => {
+      if (cancelled) return
+      // Не в кожного діалогу є набір вправ — тоді одразу повертаємось у світ.
+      if (set) setExercises(set)
+      else setActiveExercise(null)
+    })
     return () => {
       cancelled = true
     }
@@ -52,11 +48,7 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
 
   const question = exercises.questions[questionIndex]
 
-  function handleSelect(option: string) {
-    if (selectedOption) return
-
-    const correct = option === question.correct
-    setSelectedOption(option)
+  function handleAnswer(correct: boolean) {
     trackExerciseAnswered(question.id, correct)
     if (correct) {
       setCorrectCount((count) => count + 1)
@@ -64,54 +56,16 @@ export function ExerciseScreen({ dialogueId }: ExerciseScreenProps) {
     }
   }
 
-  function handleNext() {
-    setSelectedOption(null)
-    setQuestionIndex((index) => index + 1)
-  }
-
   return (
     <div className="screen exercise-screen">
-      <p>{question.prompt[lang]}</p>
-
-      <div className="exercise-options">
-        {question.options.map((option) => {
-          const isSelected = selectedOption === option
-          const isCorrectOption = option === question.correct
-
-          return (
-            <button
-              key={option}
-              type="button"
-              className={
-                selectedOption
-                  ? isCorrectOption
-                    ? 'correct'
-                    : isSelected
-                      ? 'incorrect'
-                      : ''
-                  : ''
-              }
-              disabled={selectedOption !== null}
-              onClick={() => handleSelect(option)}
-            >
-              {option}
-            </button>
-          )
-        })}
-      </div>
-
-      {selectedOption && (
-        <>
-          <p className={selectedOption === question.correct ? 'correct' : 'incorrect'}>
-            {selectedOption === question.correct
-              ? t('exercise.correct')
-              : t('exercise.incorrect')}
-          </p>
-          <button type="button" onClick={handleNext}>
-            {t('exercise.next')}
-          </button>
-        </>
-      )}
+      <MultipleChoiceQuestion
+        key={question.id}
+        prompt={question.prompt[lang]}
+        options={question.options}
+        correct={question.correct}
+        onAnswer={handleAnswer}
+        onNext={() => setQuestionIndex((index) => index + 1)}
+      />
     </div>
   )
 }

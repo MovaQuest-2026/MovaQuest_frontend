@@ -36,11 +36,18 @@ export interface SideQuest {
   completeWhen: QuestCondition
 }
 
+// Ефект кінця діалогу, незалежний від поточного кроку (наприклад, дощ біля Мурів минає).
+export interface DialogueEffect {
+  dialogueFinished: string
+  setFlag: string
+}
+
 export interface Questline {
   id: string
   cityId: string
   steps: QuestStep[]
   sideQuests: SideQuest[]
+  dialogueEffects?: DialogueEffect[]
 }
 
 const questModules = import.meta.glob<{ default: Questline }>(

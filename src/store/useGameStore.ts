@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import type { CityConfig } from '../api/getCityConfig'
+import type { Questline } from '../api/getQuestline'
 
 export type NativeLanguage = 'en' | 'uk'
 
@@ -10,10 +12,33 @@ export interface SpawnPoint {
   y: number
 }
 
+// locked — не дія, а пояснення, чому прохід закритий (label — сам текст).
 export interface InteractionHint {
-  kind: 'npc' | 'door' | 'exit'
+  kind: 'npc' | 'door' | 'exit' | 'locked'
   id: string
   label: { en: string; uk: string }
+}
+
+export interface FinishedDialogueEvent {
+  dialogueId: string
+  seq: number
+}
+
+export interface DoorEnteredEvent {
+  doorId: string
+  zoneId: string
+  seq: number
+}
+
+export interface ZoneRequest {
+  zoneId: string
+  seq: number
+}
+
+// Вектор віртуального джойстика, кожна вісь у діапазоні −1..1.
+export interface JoystickVector {
+  x: number
+  y: number
 }
 
 interface GameData {
@@ -30,6 +55,18 @@ interface GameData {
   inventory: string[]
   interactionHint: InteractionHint | null
   interactRequest: number
+  cityConfig: CityConfig | null
+  questline: Questline | null
+  lastFinishedDialogue: FinishedDialogueEvent | null
+  pendingCutscene: string | null
+  pendingEnding: string | null
+  // Стан ink для діалогів з keepState, ключ — `${dialogueId}:${lang}`.
+  inkStates: Record<string, string>
+  // Момент старту квесту (Date.now()), для msSinceStart в аналітиці.
+  startedAt: number | null
+  lastDoorEntered: DoorEnteredEvent | null
+  zoneRequest: ZoneRequest | null
+  joystick: JoystickVector
 }
 
 interface GameActions {
@@ -49,6 +86,15 @@ interface GameActions {
   removeItem: (item: string) => void
   setInteractionHint: (hint: InteractionHint | null) => void
   requestInteract: () => void
+  setWorldData: (cityConfig: CityConfig, questline: Questline) => void
+  finishDialogue: (dialogueId: string) => void
+  setPendingCutscene: (cutsceneId: string | null) => void
+  setPendingEnding: (endingId: string | null) => void
+  setInkState: (key: string, json: string) => void
+  finishGame: (ending: string) => void
+  markDoorEntered: (doorId: string, zoneId: string) => void
+  requestZone: (zoneId: string) => void
+  setJoystick: (vector: JoystickVector) => void
   resetProgress: () => void
 }
 
@@ -70,6 +116,16 @@ const initialData: GameData = {
   inventory: [],
   interactionHint: null,
   interactRequest: 0,
+  cityConfig: null,
+  questline: null,
+  lastFinishedDialogue: null,
+  pendingCutscene: null,
+  pendingEnding: null,
+  inkStates: {},
+  startedAt: null,
+  lastDoorEntered: null,
+  zoneRequest: null,
+  joystick: { x: 0, y: 0 },
 }
 
 export const useGameStore = create<GameState>()(
@@ -108,6 +164,38 @@ export const useGameStore = create<GameState>()(
       setInteractionHint: (hint) => set({ interactionHint: hint }),
       requestInteract: () =>
         set((state) => ({ interactRequest: state.interactRequest + 1 })),
+      setWorldData: (cityConfig, questline) => set({ cityConfig, questline }),
+      finishDialogue: (dialogueId) =>
+        set((state) => ({
+          lastFinishedDialogue: {
+            dialogueId,
+            seq: (state.lastFinishedDialogue?.seq ?? 0) + 1,
+          },
+        })),
+      setPendingCutscene: (cutsceneId) => set({ pendingCutscene: cutsceneId }),
+      setPendingEnding: (endingId) => set({ pendingEnding: endingId }),
+      setInkState: (key, json) =>
+        set((state) => ({ inkStates: { ...state.inkStates, [key]: json } })),
+      // Кінцівка зберігається у flags, тож після F5 гра показує щоденник, а не фінальний діалог.
+      finishGame: (ending) =>
+        set((state) => ({
+          flags: { ...state.flags, game_finished: true, ending },
+          pendingEnding: null,
+          pendingCutscene: null,
+        })),
+      markDoorEntered: (doorId, zoneId) =>
+        set((state) => ({
+          lastDoorEntered: {
+            doorId,
+            zoneId,
+            seq: (state.lastDoorEntered?.seq ?? 0) + 1,
+          },
+        })),
+      requestZone: (zoneId) =>
+        set((state) => ({
+          zoneRequest: { zoneId, seq: (state.zoneRequest?.seq ?? 0) + 1 },
+        })),
+      setJoystick: (vector) => set({ joystick: vector }),
       resetProgress: () => {
         set(initialData)
         useGameStore.persist.clearStorage()
@@ -126,6 +214,11 @@ export const useGameStore = create<GameState>()(
         spawn: state.spawn,
         inventory: state.inventory,
         learnedWords: state.learnedWords,
+        // Кат-сцена і кінцівка переживають F5 посеред кат-сцени.
+        pendingCutscene: state.pendingCutscene,
+        pendingEnding: state.pendingEnding,
+        inkStates: state.inkStates,
+        startedAt: state.startedAt,
       }),
     },
   ),

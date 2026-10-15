@@ -1,26 +1,32 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Phaser from 'phaser'
+import { useGameStore } from '../store/useGameStore'
+import { WorldScene } from './scenes/WorldScene'
+import { InteriorScene } from './scenes/InteriorScene'
+import { TransportScene } from './scenes/TransportScene'
 import {
-  TestLevelScene,
-  TEST_LEVEL_SCENE_KEY,
-  type TestLevelSceneData,
-} from './scenes/TestLevelScene'
-import type { ZoneConfig } from '../api/getCityConfig'
+  INTERIOR_SCENE_KEY,
+  TRANSPORT_SCENE_KEY,
+  WORLD_SCENE_KEY,
+  sceneKeyForZone,
+  type ZoneSceneData,
+} from './scenes/sceneKeys'
 
-interface PhaserGameProps {
-  zone: ZoneConfig
-}
-
-export function PhaserGame({ zone }: PhaserGameProps) {
-  const gameRef = useRef<Phaser.Game | null>(null)
-
+// Гра створюється один раз. Стартова сцена береться з currentZone у сторі,
+// далі переходи між зонами робить сама сцена.
+export function PhaserGame() {
   useEffect(() => {
     const game = new Phaser.Game({
       type: Phaser.AUTO,
-      parent: 'phaser-container',
-      width: window.innerWidth,
-      height: window.innerHeight,
       backgroundColor: '#000000',
+      pixelArt: true,
+      roundPixels: true,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        parent: 'phaser-container',
+        width: '100%',
+        height: '100%',
+      },
       physics: {
         default: 'arcade',
         arcade: {
@@ -28,19 +34,21 @@ export function PhaserGame({ zone }: PhaserGameProps) {
         },
       },
     })
-    game.scene.add(TEST_LEVEL_SCENE_KEY, TestLevelScene, false)
-    gameRef.current = game
+    game.scene.add(WORLD_SCENE_KEY, WorldScene, false)
+    game.scene.add(INTERIOR_SCENE_KEY, InteriorScene, false)
+    game.scene.add(TRANSPORT_SCENE_KEY, TransportScene, false)
+
+    const { cityConfig, currentZone } = useGameStore.getState()
+    const zone = cityConfig?.zones.find((candidate) => candidate.id === currentZone)
+    if (zone) {
+      const data: ZoneSceneData = { zoneId: zone.id }
+      game.scene.start(sceneKeyForZone(zone), data)
+    }
 
     return () => {
-      gameRef.current = null
       game.destroy(true)
     }
   }, [])
-
-  useEffect(() => {
-    const data: TestLevelSceneData = { npcs: zone.npcs }
-    gameRef.current?.scene.start(TEST_LEVEL_SCENE_KEY, data)
-  }, [zone])
 
   return <div id="phaser-container" />
 }

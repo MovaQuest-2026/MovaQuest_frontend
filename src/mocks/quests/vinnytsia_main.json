@@ -14,7 +14,7 @@
     { "id": "wait_rain", "zone": "vyshenka", "target": { "doorId": "door_entrance" },
       "objective": { "en": "It's raining! Find shelter", "uk": "Злива! Знайди, де сховатися" },
       "startEffects": { "setFlag": "rain_started" },
-      "completeWhen": { "dialogueFinished": "vysh_galyna" } },
+      "completeWhen": { "dialogueFinished": "vysh_galyna" }, "completeEffects": { "setFlag": "rain_over" } },
     { "id": "take_trolleybus", "zone": "vyshenka", "target": { "exitId": "exit_trolley" },
       "objective": { "en": "Take the trolleybus downtown", "uk": "Сідай у тролейбус до центру" },
       "completeWhen": { "zoneEntered": "trolleybus" } },
@@ -33,6 +33,9 @@
     { "id": "find_solomiia", "zone": "embankment", "target": { "npcId": "npc_solomiia", "hidden": true },
       "objective": { "en": "Find Solomiia in the crowd", "uk": "Знайди Соломію в натовпі" },
       "completeWhen": { "dialogueFinished": "emb_solomiia" } }
+  ],
+  "dialogueEffects": [
+    { "dialogueFinished": "center_artist", "setFlag": "rain_mury_over" }
   ],
   "sideQuests": [
     { "id": "nina_bag",  "optional": true, "zone": "bus_station", "target": { "npcId": "npc_nina" },  "completeWhen": { "flag": "helped_nina" } },
