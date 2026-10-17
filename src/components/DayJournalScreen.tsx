@@ -90,7 +90,7 @@ export function DayJournalScreen() {
         <button type="button" onClick={handlePlayAgain}>
           {t('journal.playAgain')}
         </button>
-        <button type="button" onClick={() => navigate('/')}>
+        <button type="button" onClick={() => navigate('/play')}>
           {t('journal.mainMenu')}
         </button>
       </div>

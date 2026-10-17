@@ -1,3 +1,6 @@
+@layer legacy, theme, base, components, utilities;
+
+@layer legacy {
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -541,4 +544,5 @@ p.incorrect {
   margin: 0;
   padding-left: 20px;
   line-height: 170%;
+}
 }
