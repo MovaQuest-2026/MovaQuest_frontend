@@ -37,7 +37,7 @@ export function ResultScreen({ dialogueId, score }: ResultScreenProps) {
 
   function handleGoHome() {
     setActiveExercise(null)
-    navigate('/')
+    navigate('/play')
   }
 
   return (

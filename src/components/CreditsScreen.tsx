@@ -45,7 +45,7 @@ export function CreditsScreen() {
           return <p key={index}>{block.text}</p>
         })}
       </div>
-      <button type="button" onClick={() => navigate('/')}>
+      <button type="button" onClick={() => navigate('/play')}>
         {t('credits.back')}
       </button>
     </div>

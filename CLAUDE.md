@@ -29,6 +29,16 @@ src/
   mocks/          — фікстурні дані, що імітують майбутній API
   api/            — шар доступу до даних (зараз читає з mocks/, пізніше — fetch)
   i18n/           — переклади інтерфейсу
+  landing/        — лендінг на роуті `/` (Tailwind v4, власний landing.css)
+
+## Роути і лендінг
+- `/` — лендінг (src/landing/LandingPage.tsx), `/play` — StartScreen гри,
+  далі `/language`, `/world/:cityId`, `/credits`.
+- Tailwind підключений тільки для лендінгу: landing.css імпортує лише theme
+  і utilities (без preflight) і сканує тільки src/landing. Глобальний
+  index.css обгорнутий у `@layer legacy`, тож утиліти лендінгу його
+  перекривають, а scoped-reset лежить під `.landing-root`. Стилі гри
+  лендінг не зачіпає — нові глобальні стилі гри теж пишемо в `@layer legacy`.
 
 ## Контент і діалоги (ink)
 - Сценарії діалогів лежать у content/ink/: <dialogueId>.uk.ink і
