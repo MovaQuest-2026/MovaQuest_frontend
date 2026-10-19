@@ -1,0 +1,143 @@
+src/mocks/dialogues/bus_nina.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 224-239,465-480
+src/mocks/dialogues/center_ostap.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 268-283,553-568
+src/store/useGameStore.test.ts
+  s_b8b9e5174c13e8::t_1ad2c634a2ce49 1-52
+content/ink/glade_marta.en.ink
+  s_b8b9e5174c13e8::t_b52f902bae0eef 15,17
+  s_b8b9e5174c13e8::t_70d194bb370897 1-14,16,18-53
+content/ink/glade_wall.en.ink
+  s_b8b9e5174c13e8::t_b52f902bae0eef 10,12
+  s_b8b9e5174c13e8::t_70d194bb370897 1-9,11,13-49
+src/i18n/locales/uk.json
+  s_b8b9e5174c13e8::t_14c8053743391d 92-99
+src/mocks/dialogues/trolley_passenger.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 191-206,399-414
+src/components/VirtualJoystick.tsx
+  s_b8b9e5174c13e8::t_14c8053743391d 15-16
+src/mocks/dialogues/trolley_conductor.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 186-201,389-404
+src/game/scenes/ZoneSceneBase.ts
+  s_b8b9e5174c13e8::t_ee4b0d75c975b1 600,656-660,665-669,676,685,690,696,705,731-735,737,747,777-780,786-801,892-893,1031-1033,1035-1037,1040,1063,1065,1082-1083,1088,1218-1221,1244-1248,1373,1375-1381,1387-1430,1488
+  s_b8b9e5174c13e8::t_14c8053743391d 738
+  s_b8b9e5174c13e8::t_af227596503baa 1043-1056
+  s_b8b9e5174c13e8::t_00e8f00b1a9687 5,12-16,40-42,44,46-49,108,113-120,125-126,143-144,200,202-204,207,255-258,268-306,337-340,343,345,373-374,384-387,443,455-528,557-558,560-561,567-568,570-571,573-575,586-597,599,603-604,610-613
+  s_b8b9e5174c13e8::t_33f63d2a9e7539 43,602,605-606
+  s_b8b9e5174c13e8::t_9be39165988e6e 45
+  s_b8b9e5174c13e8::t_4e37862a6f8c54 601
+src/mocks/cities/vinnytsia.json
+  s_b8b9e5174c13e8::t_87ed642d931a07 9-10,22-57
+  s_b8b9e5174c13e8::t_db477a398eadff 11-19
+  s_b8b9e5174c13e8::t_b9a0379c728589 61-62,68,73,81,85,90-91,100,105-106,120,124,129-133
+src/store/useAnalytics.ts
+  s_b8b9e5174c13e8::t_f795e9be3ce78b 6-7,10,33-43
+  s_b8b9e5174c13e8::t_1006e6e7cbde15 44
+src/mocks/quests/vinnytsia_main.json
+  s_b8b9e5174c13e8::t_87ed642d931a07 5-16
+src/mocks/dialogues/vysh_flowers.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 231-246,479-494
+src/store/useGameStore.ts
+  s_b8b9e5174c13e8::t_f795e9be3ce78b 38-49,81-82,113-115,148-149,221-255
+  s_b8b9e5174c13e8::t_ee4b0d75c975b1 83-84,116,150,256
+src/store/useQuestEngine.ts
+  s_b8b9e5174c13e8::t_91b3c6e272367b 22-24
+src/game/quests/questEngine.ts
+  s_b8b9e5174c13e8::t_8add1a3313c405 111-113,117-118,121,126
+src/mocks/dialogues/center_tower.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 232-247,481-496
+src/components/InteractionHint.tsx
+  s_b8b9e5174c13e8::t_14c8053743391d 12-13
+src/i18n/locales/en.json
+  s_b8b9e5174c13e8::t_14c8053743391d 92-99
+src/store/alphaProgress.ts
+  s_b8b9e5174c13e8::t_f795e9be3ce78b 1-14
+src/mocks/dialogues/glade_yarynka.ink.json
+  s_b8b9e5174c13e8::t_b52f902bae0eef 101,110
+  s_b8b9e5174c13e8::t_8c354df4a7c539 1-29,33-76,78-79,81-82,84,86-87,140,159,161,238,240,317,393,404-509,513-556,558-559,561-562,564,566-567,620,635,637,714,716,793,869,880-986
+  s_b8b9e5174c13e8::t_70d194bb370897 30-32,77,80,83,85,88-100,102-109,111-139,141-158,160,162-237,239,241-316,318-392,394-403,510-512,557,560,563,565,568-619,621-634,636,638-713,715,717-792,794-868,870-879
+src/mocks/dialogues/bus_cashier.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 221-236,459-474
+src/components/DebugPanel.tsx
+  s_b8b9e5174c13e8::t_074d394c4ced70 33-34,102-117
+  s_b8b9e5174c13e8::t_b45e4fc9bf91c7 118
+content/ink/glade_marta.uk.ink
+  s_b8b9e5174c13e8::t_70d194bb370897 1-51
+src/components/WorldScreen.tsx
+  s_b8b9e5174c13e8::t_db477a398eadff 38-43,111-118,121-123
+  s_b8b9e5174c13e8::t_14c8053743391d 15,19-22,78,80-82,84,86-98,141
+content/ink/glade_wall.uk.ink
+  s_b8b9e5174c13e8::t_70d194bb370897 1-47
+src/api/analytics.ts
+  s_b8b9e5174c13e8::t_f795e9be3ce78b 66-78
+src/mocks/dialogues/glade_wall.ink.json
+  s_b8b9e5174c13e8::t_b52f902bae0eef 67,76
+  s_b8b9e5174c13e8::t_8c354df4a7c539 1-30,34-42,45,47-48,50,52-53,106,108,110,128,130,207,209,286,288,362,373-478,482-491,494,496-497,499,501-502,555,557,559,573,575,652,654,731,733,807,818-924
+  s_b8b9e5174c13e8::t_70d194bb370897 31-33,43-44,46,49,51,54-66,68-75,77-105,107,109,111-127,129,131-206,208,210-285,287,289-361,363-372,479-481,492-493,495,498,500,503-554,556,558,560-572,574,576-651,653,655-730,732,734-806,808-817
+src/mocks/dialogues/park_musician.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 153-168,323-338
+content/ink/glade_yarynka.en.ink
+  s_b8b9e5174c13e8::t_b52f902bae0eef 15,17
+  s_b8b9e5174c13e8::t_70d194bb370897 1-14,16,18-54
+src/mocks/dialogues/emb_solomiia.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 436-451,889-904
+src/mocks/dialogues/glade_marta.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 1-38,42-67,71-85,87-88,90-91,93,95-96,149,162,164,245,247,324,400,411-524,528-554,558-572,574-575,577-578,580,582-583,636,647,649,728,730,807,883,894-1000
+  s_b8b9e5174c13e8::t_70d194bb370897 39-41,68-70,86,89,92,94,97-109,111-118,120-148,150-161,163,165-244,246,248-323,325-399,401-410,525-527,555-557,573,576,579,581,584-635,637-646,648,650-727,729,731-806,808-882,884-893
+  s_b8b9e5174c13e8::t_b52f902bae0eef 110,119
+src/mocks/dialogues/emb_crowd.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 182-197,381-396
+CLAUDE.md
+  s_b8b9e5174c13e8::t_d6dea50d048cc0 70-77
+src/mocks/dialogues/vysh_galyna.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 290-305,597-612
+content/ink/glade_yarynka.uk.ink
+  s_b8b9e5174c13e8::t_70d194bb370897 1-52
+src/index.css
+  s_b8b9e5174c13e8::t_b9a0379c728589 267-269,271,277-290
+  s_b8b9e5174c13e8::t_074d394c4ced70 572-630
+  s_b8b9e5174c13e8::t_9be39165988e6e 270,272-276
+public/CREDITS.md
+  s_b8b9e5174c13e8::t_1ad2c634a2ce49 21-23
+  s_b8b9e5174c13e8::t_bdbc6acff3197c 24
+src/api/getQuestline.ts
+  s_b8b9e5174c13e8::t_8add1a3313c405 29-30
+src/api/getCityConfig.ts
+  s_b8b9e5174c13e8::t_8add1a3313c405 25-28,54-66,88-105,109-112,133-136,158-164
+  s_b8b9e5174c13e8::t_db477a398eadff 122-127,137-138
+docs/ink-contract.md
+  s_b8b9e5174c13e8::t_b4387b8bc582b0 49-52,66
+src/mocks/dialogues/vysh_tourist.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 224-239,465-480
+src/mocks/dialogues/vinnytsia_cafe.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 280-295,577-592
+src/mocks/dialogues/bus_guard.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 186-201,389-404
+src/mocks/dialogues/center_artist.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 214-229,445-460
+docs/analytics.md
+  s_b8b9e5174c13e8::t_91b3c6e272367b 14-15
+src/components/ConfirmTravelDialog.tsx
+  s_b8b9e5174c13e8::t_14c8053743391d 1-74
+src/mocks/dialogues/emb_phone.ink.json
+  s_b8b9e5174c13e8::t_8c354df4a7c539 142-157,301-316
+src/game/quests/questEngine.test.ts
+  s_b8b9e5174c13e8::t_1a353705a4c832 288-292,311,324-395
+  s_b8b9e5174c13e8::t_8e8117746fa127 396-397
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "24630e63453eea1810004eee2d711c278746152d",
+  "prompts": {},
+  "sessions": {
+    "s_b8b9e5174c13e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e1726cb-9c8a-47c1-9912-548eef82c2ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
