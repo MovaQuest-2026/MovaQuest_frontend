@@ -12,7 +12,8 @@ export function VirtualJoystick() {
     (state) =>
       state.activeDialogue !== null ||
       state.activeExercise !== null ||
-      state.pendingCutscene !== null,
+      state.pendingCutscene !== null ||
+      state.pendingExit !== null,
   )
   const setJoystick = useGameStore((state) => state.setJoystick)
   const baseRef = useRef<HTMLDivElement>(null)

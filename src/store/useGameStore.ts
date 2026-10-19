@@ -35,6 +35,18 @@ export interface ZoneRequest {
   seq: number
 }
 
+// Вихід з вікном підтвердження: сцена зупинила гравця і чекає відповіді React.
+export interface PendingExit {
+  zoneId: string
+  exitId: string
+}
+
+// Рішення гравця у вікні підтвердження; сцена за seq відрізняє нове рішення від старого.
+export interface ExitDecisionEvent extends PendingExit {
+  confirmed: boolean
+  seq: number
+}
+
 // Вектор віртуального джойстика, кожна вісь у діапазоні −1..1.
 export interface JoystickVector {
   x: number
@@ -66,6 +78,10 @@ interface GameData {
   startedAt: number | null
   lastDoorEntered: DoorEnteredEvent | null
   zoneRequest: ZoneRequest | null
+  pendingExit: PendingExit | null
+  lastExitDecision: ExitDecisionEvent | null
+  // Тільки для DebugPanel: малювати physics debug, щоб підігнати colliders.
+  debugPhysics: boolean
   joystick: JoystickVector
 }
 
@@ -94,6 +110,10 @@ interface GameActions {
   finishGame: (ending: string) => void
   markDoorEntered: (doorId: string, zoneId: string) => void
   requestZone: (zoneId: string) => void
+  setPendingExit: (pending: PendingExit | null) => void
+  confirmPendingExit: () => void
+  cancelPendingExit: () => void
+  setDebugPhysics: (enabled: boolean) => void
   setJoystick: (vector: JoystickVector) => void
   resetProgress: () => void
 }
@@ -125,6 +145,9 @@ const initialData: GameData = {
   startedAt: null,
   lastDoorEntered: null,
   zoneRequest: null,
+  pendingExit: null,
+  lastExitDecision: null,
+  debugPhysics: false,
   joystick: { x: 0, y: 0 },
 }
 
@@ -195,6 +218,42 @@ export const useGameStore = create<GameState>()(
         set((state) => ({
           zoneRequest: { zoneId, seq: (state.zoneRequest?.seq ?? 0) + 1 },
         })),
+      setPendingExit: (pending) => set({ pendingExit: pending }),
+      // Прапорець і час ставимо тут, сам перехід робить сцена за lastExitDecision.
+      confirmPendingExit: () =>
+        set((state) => {
+          const pending = state.pendingExit
+          if (!pending) return state
+          const exit = state.cityConfig?.zones
+            .find((zone) => zone.id === pending.zoneId)
+            ?.exits.find((candidate) => candidate.id === pending.exitId)
+          return {
+            pendingExit: null,
+            flags: exit?.setFlagOnConfirm
+              ? { ...state.flags, [exit.setFlagOnConfirm]: true }
+              : state.flags,
+            gameClock: exit?.setClockOnConfirm ?? state.gameClock,
+            lastExitDecision: {
+              ...pending,
+              confirmed: true,
+              seq: (state.lastExitDecision?.seq ?? 0) + 1,
+            },
+          }
+        }),
+      cancelPendingExit: () =>
+        set((state) =>
+          state.pendingExit
+            ? {
+                pendingExit: null,
+                lastExitDecision: {
+                  ...state.pendingExit,
+                  confirmed: false,
+                  seq: (state.lastExitDecision?.seq ?? 0) + 1,
+                },
+              }
+            : state,
+        ),
+      setDebugPhysics: (enabled) => set({ debugPhysics: enabled }),
       setJoystick: (vector) => set({ joystick: vector }),
       resetProgress: () => {
         set(initialData)

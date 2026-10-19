@@ -6,24 +6,71 @@
     "uk": "Ранковий автобус прибуває на Західний автовокзал Вінниці. Соломія чекає тебе біля фонтану Рошен на заході сонця, але телефон щойно розрядився."
   },
   "startZone": "bus_station",
+  "startZoneByLanguage": { "en": "glade", "uk": "bus_station" },
+  "playerCharacter": "hero",
+  "zoneIntros": {
+    "glade": {
+      "title": { "en": "Prologue: the glade", "uk": "Пролог: галявина" },
+      "text": {
+        "en": "A quiet morning outside the city. In an hour a bus will take you to Vinnytsia, where Solomiia is waiting. Until then, two volunteers of a language picnic will help you learn the Ukrainian alphabet.",
+        "uk": "Тихий ранок за містом. Через годину автобус повезе тебе до Вінниці, де на тебе чекає Соломія. А поки двоє волонтерок мовного пікніка допоможуть вивчити українську абетку."
+      }
+    }
+  },
   "questlineId": "vinnytsia_main",
   "zones": [
+    { "id": "glade", "type": "outdoor",
+      "background": { "image": "glade", "width": 480, "height": 270, "fillColor": "#7fb53a" },
+      "spawn": { "x": 12, "y": 40 },
+      "colliders": [
+        { "id": "wall_left",      "x": 0,   "y": 86,  "w": 157, "h": 34 },
+        { "id": "wall_right",     "x": 180, "y": 86,  "w": 39,  "h": 34 },
+        { "id": "pillar",         "x": 212, "y": 38,  "w": 24,  "h": 34 },
+        { "id": "pillar_top",     "x": 229, "y": 0,   "w": 7,   "h": 40 },
+        { "id": "edge_left",      "x": 153, "y": 58,  "w": 4,   "h": 30 },
+        { "id": "edge_right",     "x": 180, "y": 58,  "w": 4,   "h": 30 },
+        { "id": "tree_top_left",  "x": 103, "y": 62,  "w": 22,  "h": 14 },
+        { "id": "tree_top_right", "x": 327, "y": 108, "w": 20,  "h": 14 },
+        { "id": "tree_bottom",    "x": 66,  "y": 228, "w": 22,  "h": 16 },
+        { "id": "tree_right",     "x": 456, "y": 160, "w": 20,  "h": 16 },
+        { "id": "bench",          "x": 248, "y": 100, "w": 51,  "h": 34 }
+      ],
+      "npcs": [
+        { "id": "npc_marta",   "name": { "en": "Marta",   "uk": "Марта" },   "dialogueId": "glade_marta",   "x": 276, "y": 148, "patrol": false, "character": "marta" },
+        { "id": "npc_yarynka", "name": { "en": "Yarynka", "uk": "Яринка" },  "dialogueId": "glade_yarynka", "x": 214, "y": 214, "patrol": false, "character": "yarynka" },
+        { "id": "glade_wall",  "name": { "en": "Old wall", "uk": "Стара стіна" }, "dialogueId": "glade_wall", "x": 80, "y": 126, "patrol": false, "invisible": true }
+      ],
+      "doors": [],
+      "exits": [
+        { "id": "to_vinnytsia", "target": "bus_station", "x": 248, "y": 258, "w": 32, "h": 12,
+          "spawn": { "x": 160, "y": 400 },
+          "label": { "en": "Bus to Vinnytsia", "uk": "Автобус до Вінниці" },
+          "confirm": {
+            "titleKey": "travel.toVinnytsia.title",
+            "bodyKey": "travel.toVinnytsia.body",
+            "confirmKey": "travel.toVinnytsia.confirm",
+            "cancelKey": "travel.toVinnytsia.cancel"
+          },
+          "setFlagOnConfirm": "left_glade",
+          "setClockOnConfirm": "09:00" }
+      ]
+    },
     { "id": "bus_station", "type": "outdoor", "tilemap": "bus_station", "spawn": { "x": 160, "y": 400 },
       "landmarks": [ { "id": "bus_station", "image": "landmark_bus_station", "x": 272, "y": 160 } ],
       "npcs": [
-        { "id": "npc_nina",  "name": { "en": "Nina", "uk": "Бабуся Ніна" }, "dialogueId": "bus_nina",  "x": 320, "y": 260, "patrol": false, "sprite": "nina" },
-        { "id": "npc_guard", "name": { "en": "Guard", "uk": "Охоронець" },  "dialogueId": "bus_guard", "x": 600, "y": 220, "patrol": false, "sprite": "guard" }
+        { "id": "npc_nina",  "name": { "en": "Nina", "uk": "Бабуся Ніна" }, "dialogueId": "bus_nina",  "x": 320, "y": 260, "patrol": false, "character": "yarynka", "sprite": "nina" },
+        { "id": "npc_guard", "name": { "en": "Guard", "uk": "Охоронець" },  "dialogueId": "bus_guard", "x": 600, "y": 220, "patrol": false, "character": "hero", "sprite": "guard" }
       ],
       "doors": [ { "id": "door_hall", "target": "bus_station_hall", "x": 256, "y": 160, "w": 32, "h": 16, "spawn": { "x": 160, "y": 280 } } ],
       "exits": [ { "id": "exit_vyshenka", "target": "vyshenka", "x": 768, "y": 192, "w": 32, "h": 96, "requiresFlag": "exit_bus_station", "spawn": { "x": 48, "y": 240 } } ]
     },
     { "id": "bus_station_hall", "type": "interior", "tilemap": "interior_hall", "spawn": { "x": 160, "y": 280 },
-      "npcs": [ { "id": "npc_cashier", "name": { "en": "Cashier", "uk": "Касирка" }, "dialogueId": "bus_cashier", "x": 160, "y": 96, "patrol": false, "sprite": "cashier" } ],
+      "npcs": [ { "id": "npc_cashier", "name": { "en": "Cashier", "uk": "Касирка" }, "dialogueId": "bus_cashier", "x": 160, "y": 96, "patrol": false, "character": "marta", "sprite": "cashier" } ],
       "doors": [ { "id": "door_out", "target": "bus_station", "x": 144, "y": 304, "w": 32, "h": 16, "spawn": { "x": 272, "y": 200 } } ],
       "exits": []
     },
     { "id": "vyshenka", "type": "outdoor", "tilemap": "vyshenka", "spawn": { "x": 48, "y": 240 },
-      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true, "sprite": "tourist", "showRouteTo": "exit_trolley" } ],
+      "npcs": [ { "id": "npc_tourist", "name": { "en": "Tourist", "uk": "Турист" }, "dialogueId": "vysh_tourist", "x": 520, "y": 300, "patrol": true, "character": "hero", "sprite": "tourist", "showRouteTo": "exit_trolley" } ],
       "doors": [
         { "id": "door_kiosk", "target": "flower_kiosk", "x": 192, "y": 128, "w": 32, "h": 16, "spawn": { "x": 128, "y": 220 } },
         { "id": "door_entrance", "target": "galyna_flat", "x": 384, "y": 128, "w": 32, "h": 16, "requiresFlag": "rain_started", "spawn": { "x": 160, "y": 260 } }
@@ -31,17 +78,17 @@
       "exits": [ { "id": "exit_trolley", "target": "trolleybus", "x": 768, "y": 240, "w": 32, "h": 64, "requiresFlag": "task_flowers", "spawn": { "x": 64, "y": 120 } } ]
     },
     { "id": "flower_kiosk", "type": "interior", "tilemap": "interior_kiosk", "spawn": { "x": 128, "y": 220 },
-      "npcs": [ { "id": "npc_florist", "name": { "en": "Florist", "uk": "Продавчиня квітів" }, "dialogueId": "vysh_flowers", "x": 128, "y": 96, "patrol": false, "sprite": "florist" } ],
+      "npcs": [ { "id": "npc_florist", "name": { "en": "Florist", "uk": "Продавчиня квітів" }, "dialogueId": "vysh_flowers", "x": 128, "y": 96, "patrol": false, "character": "yarynka", "sprite": "florist" } ],
       "doors": [ { "id": "door_out", "target": "vyshenka", "x": 112, "y": 240, "w": 32, "h": 16, "spawn": { "x": 208, "y": 168 } } ], "exits": []
     },
     { "id": "galyna_flat", "type": "interior", "tilemap": "interior_flat", "spawn": { "x": 160, "y": 260 },
-      "npcs": [ { "id": "npc_galyna", "name": { "en": "Mrs Halyna", "uk": "Пані Галина" }, "dialogueId": "vysh_galyna", "x": 200, "y": 120, "patrol": false, "sprite": "galyna" } ],
+      "npcs": [ { "id": "npc_galyna", "name": { "en": "Mrs Halyna", "uk": "Пані Галина" }, "dialogueId": "vysh_galyna", "x": 200, "y": 120, "patrol": false, "character": "marta", "sprite": "galyna" } ],
       "doors": [ { "id": "door_out", "target": "vyshenka", "x": 144, "y": 288, "w": 32, "h": 16, "spawn": { "x": 400, "y": 168 } } ], "exits": []
     },
     { "id": "trolleybus", "type": "transport", "tilemap": "interior_trolleybus", "spawn": { "x": 64, "y": 120 },
       "npcs": [
-        { "id": "npc_conductor", "name": { "en": "Conductor", "uk": "Кондукторка" }, "dialogueId": "trolley_conductor", "x": 160, "y": 120, "patrol": false, "sprite": "conductor" },
-        { "id": "npc_passenger", "name": { "en": "Passenger", "uk": "Пасажир" }, "dialogueId": "trolley_passenger", "x": 320, "y": 100, "patrol": false, "sprite": "passenger" }
+        { "id": "npc_conductor", "name": { "en": "Conductor", "uk": "Кондукторка" }, "dialogueId": "trolley_conductor", "x": 160, "y": 120, "patrol": false, "character": "yarynka", "sprite": "conductor" },
+        { "id": "npc_passenger", "name": { "en": "Passenger", "uk": "Пасажир" }, "dialogueId": "trolley_passenger", "x": 320, "y": 100, "patrol": false, "character": "hero", "sprite": "passenger" }
       ],
       "doors": [],
       "exits": [
@@ -50,13 +97,13 @@
       ]
     },
     { "id": "park", "type": "outdoor", "tilemap": "park", "spawn": { "x": 48, "y": 200 },
-      "npcs": [ { "id": "npc_musician", "name": { "en": "Street musician", "uk": "Вуличний музикант" }, "dialogueId": "park_musician", "x": 300, "y": 180, "patrol": false, "sprite": "musician" } ],
+      "npcs": [ { "id": "npc_musician", "name": { "en": "Street musician", "uk": "Вуличний музикант" }, "dialogueId": "park_musician", "x": 300, "y": 180, "patrol": false, "character": "hero", "sprite": "musician" } ],
       "doors": [], "exits": [ { "id": "exit_center", "target": "center", "x": 608, "y": 160, "w": 32, "h": 96, "spawn": { "x": 64, "y": 240 } } ]
     },
     { "id": "center", "type": "outdoor", "tilemap": "center", "spawn": { "x": 64, "y": 240 },
       "npcs": [
-        { "id": "npc_ostap",  "name": { "en": "Ostap", "uk": "Остап" }, "dialogueId": "center_ostap", "x": 360, "y": 260, "patrol": true, "sprite": "ostap" },
-        { "id": "npc_artist", "name": { "en": "Artist", "uk": "Художник" }, "dialogueId": "center_artist", "x": 900, "y": 180, "patrol": false, "sprite": "artist" }
+        { "id": "npc_ostap",  "name": { "en": "Ostap", "uk": "Остап" }, "dialogueId": "center_ostap", "x": 360, "y": 260, "patrol": true, "character": "hero", "sprite": "ostap" },
+        { "id": "npc_artist", "name": { "en": "Artist", "uk": "Художник" }, "dialogueId": "center_artist", "x": 900, "y": 180, "patrol": false, "character": "yarynka", "sprite": "artist" }
       ],
       "doors": [
         { "id": "door_tower", "target": "tower_interior", "x": 224, "y": 128, "w": 32, "h": 16, "spawn": { "x": 128, "y": 240 } },
@@ -70,20 +117,20 @@
       "landmarks": [ { "id": "water_tower", "image": "landmark_tower", "x": 240, "y": 96 }, { "id": "mury", "image": "landmark_mury", "x": 920, "y": 96 } ]
     },
     { "id": "tower_interior", "type": "interior", "tilemap": "interior_tower", "spawn": { "x": 128, "y": 240 },
-      "npcs": [ { "id": "npc_tower", "name": { "en": "Museum guide", "uk": "Працівниця музею" }, "dialogueId": "center_tower", "x": 128, "y": 96, "patrol": false, "sprite": "tower" } ],
+      "npcs": [ { "id": "npc_tower", "name": { "en": "Museum guide", "uk": "Працівниця музею" }, "dialogueId": "center_tower", "x": 128, "y": 96, "patrol": false, "character": "marta", "sprite": "tower" } ],
       "doors": [ { "id": "door_out", "target": "center", "x": 112, "y": 272, "w": 32, "h": 16, "spawn": { "x": 240, "y": 168 } } ], "exits": []
     },
     { "id": "cafe", "type": "interior", "tilemap": "interior_cafe", "spawn": { "x": 160, "y": 260 },
-      "npcs": [ { "id": "npc_barista", "name": { "en": "Barista", "uk": "Бариста" }, "dialogueId": "vinnytsia_cafe", "x": 160, "y": 96, "patrol": false, "sprite": "barista" } ],
+      "npcs": [ { "id": "npc_barista", "name": { "en": "Barista", "uk": "Бариста" }, "dialogueId": "vinnytsia_cafe", "x": 160, "y": 96, "patrol": false, "character": "yarynka", "sprite": "barista" } ],
       "doors": [ { "id": "door_out", "target": "center", "x": 144, "y": 288, "w": 32, "h": 16, "spawn": { "x": 560, "y": 168 } } ], "exits": []
     },
     { "id": "embankment", "type": "outdoor", "tilemap": "embankment", "spawn": { "x": 48, "y": 240 }, "onEnterDialogue": "emb_phone",
       "npcs": [
-        { "id": "npc_crowd_1", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 300, "y": 220, "patrol": true, "outfit": "blue_jacket" },
-        { "id": "npc_crowd_2", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 420, "y": 300, "patrol": true, "outfit": "red_jacket_no_glasses" },
-        { "id": "npc_crowd_3", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 560, "y": 200, "patrol": true, "outfit": "yellow_dress" },
-        { "id": "npc_crowd_4", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 640, "y": 320, "patrol": true, "outfit": "glasses_green_coat" },
-        { "id": "npc_solomiia", "name": { "en": "Solomiia", "uk": "Соломія" }, "dialogueId": "emb_solomiia", "x": 860, "y": 160, "patrol": false, "outfit": "red_jacket_glasses" }
+        { "id": "npc_crowd_1", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 300, "y": 220, "patrol": true, "character": "hero", "outfit": "blue_jacket" },
+        { "id": "npc_crowd_2", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 420, "y": 300, "patrol": true, "character": "marta", "outfit": "red_jacket_no_glasses" },
+        { "id": "npc_crowd_3", "name": { "en": "Passer-by", "uk": "Перехожа" }, "dialogueId": "emb_crowd", "x": 560, "y": 200, "patrol": true, "character": "yarynka", "outfit": "yellow_dress" },
+        { "id": "npc_crowd_4", "name": { "en": "Passer-by", "uk": "Перехожий" }, "dialogueId": "emb_crowd", "x": 640, "y": 320, "patrol": true, "character": "hero", "outfit": "glasses_green_coat" },
+        { "id": "npc_solomiia", "name": { "en": "Solomiia", "uk": "Соломія" }, "dialogueId": "emb_solomiia", "x": 860, "y": 160, "patrol": false, "character": "marta", "outfit": "red_jacket_glasses" }
       ],
       "doors": [], "exits": [],
       "landmarks": [ { "id": "roshen_fountain", "image": "landmark_fountain", "x": 960, "y": 360 } ]

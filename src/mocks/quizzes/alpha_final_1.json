@@ -1,0 +1,3 @@
+{ "id": "alpha_final_1", "type": "multiple_choice",
+  "prompt": { "en": "Read the city name: ВІННИЦЯ", "uk": "Прочитай назву міста: ВІННИЦЯ" },
+  "options": ["Vinnytsia", "Binnytsia", "Vinnuya"], "correct": "Vinnytsia", "word": "Вінниця" }

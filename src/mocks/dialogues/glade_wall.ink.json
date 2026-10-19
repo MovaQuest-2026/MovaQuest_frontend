@@ -1,0 +1,924 @@
+{
+  "id": "glade_wall",
+  "cityId": "vinnytsia",
+  "npcId": "glade_wall",
+  "zone": "glade",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_special"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Under the old letters someone scratched «Вінниця». You can read it now. ",
+                "#",
+                "^speaker:glade_wall",
+                "/#",
+                "\n",
+                {
+                  "->": "offer"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          false,
+          "/ev",
+          {
+            "->": "lesson"
+          },
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "offer": [
+            [
+              "^Want to try the exercises again? Just for practice, the score stays. ",
+              "#",
+              "^speaker:glade_wall",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^Yes, once more. (Так, ще раз.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Not now. (Не зараз.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "->": "lesson"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "end",
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "lesson": [
+            {
+              "temp=": "practice"
+            },
+            "^Five letters are carved into the old stone: Є, Ї, Ю, Я, Ь. ",
+            "#",
+            "^speaker:glade_wall",
+            "/#",
+            "\n",
+            "^Є is ye, as in \"yes\". Ї is yi, and only Ukrainian has it. Ю is yu, as in \"you\".",
+            "\n",
+            "^Я is ya, and on its own it's a whole word: «я» means \"I\".",
+            "\n",
+            "^Ь is the soft sign. It has no sound of its own, it softens the letter before it.",
+            "\n",
+            "^Which letter is also the word \"I\"? ",
+            "#",
+            "^quiz:alpha_special_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Я. Short and proud.",
+                  "\n",
+                  {
+                    "->": "lesson.22"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It's Я.",
+                  "\n",
+                  {
+                    "->": "lesson.22"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^How does Ї sound? ",
+            "#",
+            "^quiz:alpha_special_2",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Yi, as in «Україна» and «їжа», food.",
+                  "\n",
+                  {
+                    "->": "lesson.34"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It's yi. Two dots, two sounds.",
+                  "\n",
+                  {
+                    "->": "lesson.34"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^Under the carving someone scratched a city name. Read it. ",
+            "#",
+            "^quiz:alpha_final_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Vinnytsia! That's where your bus is going.",
+                  "\n",
+                  {
+                    "->": "lesson.46"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It says «Вінниця», Vinnytsia. В-І-Н-Н-И-Ц-Я.",
+                  "\n",
+                  {
+                    "->": "lesson.46"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "ev",
+            true,
+            "/ev",
+            {
+              "VAR=": "alpha_special",
+              "re": true
+            },
+            "^All 33 letters are yours. The bus stop is down the path. ",
+            "#",
+            "^flag:glade_wall_read",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_special"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Під старими літерами хтось видряпав «Вінниця». ",
+                "#",
+                "^speaker:glade_wall",
+                "/#",
+                "\n",
+                {
+                  "->": "offer"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          false,
+          "/ev",
+          {
+            "->": "lesson"
+          },
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "offer": [
+            [
+              "^Хочеш повторити вправи ще раз? Це лише тренування, рахунок не змінюється. ",
+              "#",
+              "^speaker:glade_wall",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^Так, ще раз.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Не зараз.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "->": "lesson"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "end",
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "lesson": [
+            {
+              "temp=": "practice"
+            },
+            "^На старому камені вирізьблено: Є, Ї, Ю, Я, Ь. ",
+            "#",
+            "^speaker:glade_wall",
+            "/#",
+            "\n",
+            "^Я — ще й окреме слово. Ї є тільки в українській. Ь нічого не вимовляє, а пом'якшує попередню літеру.",
+            "\n",
+            "^Яка літера є ще й словом? ",
+            "#",
+            "^quiz:alpha_special_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Я!",
+                  "\n",
+                  {
+                    "->": "lesson.18"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Це Я.",
+                  "\n",
+                  {
+                    "->": "lesson.18"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^Як звучить Ї? ",
+            "#",
+            "^quiz:alpha_special_2",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Так, як в «Україна».",
+                  "\n",
+                  {
+                    "->": "lesson.30"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^[йі], як в «Україна».",
+                  "\n",
+                  {
+                    "->": "lesson.30"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^Під літерами видряпано назву міста. Прочитай. ",
+            "#",
+            "^quiz:alpha_final_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.6"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Вінниця! Туди й їде автобус.",
+                  "\n",
+                  {
+                    "->": "lesson.42"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Тут написано «Вінниця».",
+                  "\n",
+                  {
+                    "->": "lesson.42"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "ev",
+            true,
+            "/ev",
+            {
+              "VAR=": "alpha_special",
+              "re": true
+            },
+            "^Абетка пройдена. Зупинка внизу стежки. ",
+            "#",
+            "^flag:glade_wall_read",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "я",
+      "translation": "I",
+      "example": ""
+    },
+    {
+      "word": "їжа",
+      "translation": "food",
+      "example": ""
+    },
+    {
+      "word": "Україна",
+      "translation": "Ukraine",
+      "example": ""
+    },
+    {
+      "word": "Вінниця",
+      "translation": "Vinnytsia",
+      "example": ""
+    }
+  ]
+}

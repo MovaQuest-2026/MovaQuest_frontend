@@ -11,6 +11,8 @@
 | `zone_entered` | `zoneId`, `gameClock` | гравець перейшов у зону (зокрема стартову в новій грі); після F5 не надсилається |
 | `door_entered` | `doorId`, `zoneId` | гравець зайшов у двері; `zoneId` — зона, де ці двері (id `door_out` повторюються) |
 | `quest_step_completed` | `stepId`, `msSinceStart` | крок основного квесту завершено; `msSinceStart` — мілісекунди від старту квесту в цьому збереженні |
+| `travel_confirmed` | `fromZone`, `toZone`, `stationsDone`, `alphaScore` | гравець підтвердив переїзд у вікні підтвердження (галявина → Вінниця); `stationsDone` — станцій абетки з 3, `alphaScore` — правильних відповідей з 9 |
+| `travel_cancelled` | `fromZone`, `stationsDone` | гравець натиснув «Ще ні» у вікні підтвердження |
 | `quiz_answered` | `quizId`, `correct` | відповідь на вбудовану вправу в діалозі (тег `quiz:`) |
 | `dialogue_finished` | `dialogueId` | гравець закрив діалог після `END` |
 | `ending_reached` | `ending`, `trust` | після кат-сцени фонтану; `ending` — `best` / `good` / `basic` |

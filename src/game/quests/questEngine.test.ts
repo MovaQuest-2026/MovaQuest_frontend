@@ -285,9 +285,11 @@ describe('акт 1 Вінниці на справжніх даних', () => {
   }
 
   it('проходить від приїзду до Вишеньки', () => {
-    let state = step(initialState({ currentZone: 'bus_station' }), {
-      type: 'flag',
-    })
+    // Старт з українським інтерфейсом: галявина пропущена (left_glade).
+    let state = step(
+      initialState({ currentZone: 'bus_station', flags: { left_glade: true } }),
+      { type: 'flag' },
+    )
     expect(state.questStep).toBe('charge_phone')
     expect(getArrowTarget(realCity, realQuestline, state)).toEqual({
       kind: 'door',
@@ -306,7 +308,7 @@ describe('акт 1 Вінниці на справжніх даних', () => {
     )
     expect(state.questStep).toBe('leave_station')
 
-    const exit = realCity.zones[0].exits[0]
+    const exit = realCity.zones.find((zone) => zone.id === 'bus_station')!.exits[0]
     expect(isGateOpen(exit, state.flags)).toBe(false)
 
     state = step(
@@ -316,6 +318,80 @@ describe('акт 1 Вінниці на справжніх даних', () => {
     expect(state.questStep).toBe('buy_flowers')
     expect(state.gameClock).toBe('10:30')
     expect(isGateOpen(exit, state.flags)).toBe(true)
+  })
+})
+
+describe('галявина абетки', () => {
+  const realQuestline = vinnytsiaQuests as unknown as Questline
+
+  function step(state: QuestState, event: QuestEvent): QuestState {
+    const patch = evaluate(realQuestline, state, event)
+    return patch ? { ...state, ...patch } : state
+  }
+
+  it('старт en проходить усі 4 кроки галявини', () => {
+    let state = step(
+      initialState({ currentZone: 'glade', gameClock: '08:00' }),
+      { type: 'flag' },
+    )
+    const visited: (string | null)[] = [state.questStep]
+    for (const flag of ['alpha_easy', 'alpha_new', 'alpha_special']) {
+      state = step({ ...state, flags: { ...state.flags, [flag]: true } }, { type: 'flag' })
+      visited.push(state.questStep)
+    }
+    expect(visited).toEqual(['glade_marta', 'glade_yarynka', 'glade_wall', 'glade_bus'])
+
+    state = step({ ...state, currentZone: 'bus_station' }, { type: 'zoneEntered', zoneId: 'bus_station' })
+    expect(state.questStep).toBe('charge_phone')
+  })
+
+  it('старт uk з left_glade одразу на charge_phone', () => {
+    const state = step(
+      initialState({ currentZone: 'bus_station', flags: { left_glade: true } }),
+      { type: 'flag' },
+    )
+    expect(state.questStep).toBe('charge_phone')
+    expect(state.gameClock).toBe('09:00')
+  })
+
+  it('від\'їзд після першої станції пропускає решту кроків галявини', () => {
+    let state = step(initialState({ currentZone: 'glade', gameClock: '08:00' }), { type: 'flag' })
+    state = step({ ...state, flags: { ...state.flags, alpha_easy: true } }, { type: 'flag' })
+    expect(state.questStep).toBe('glade_yarynka')
+
+    state = step({ ...state, flags: { ...state.flags, left_glade: true } }, { type: 'flag' })
+    expect(state.questStep).toBe('charge_phone')
+  })
+
+  it('skipWhen не застосовує completeEffects і advanceClockTo', () => {
+    const skipLine: Questline = {
+      id: 'skip',
+      cityId: 'test',
+      steps: [
+        {
+          id: 'first',
+          zone: 'street',
+          target: { hidden: true },
+          objective: { en: 'a', uk: 'а' },
+          completeWhen: { flag: 'never' },
+          completeEffects: { setFlag: 'first_done' },
+          advanceClockTo: '11:00',
+          skipWhen: { flag: 'left' },
+        },
+        {
+          id: 'second',
+          zone: 'street',
+          target: { hidden: true },
+          objective: { en: 'b', uk: 'б' },
+          completeWhen: { flag: 'later' },
+        },
+      ],
+      sideQuests: [],
+    }
+    const patch = evaluate(skipLine, initialState({ flags: { left: true } }), { type: 'flag' })
+    expect(patch?.questStep).toBe('second')
+    expect(patch?.flags.first_done).toBeUndefined()
+    expect(patch?.gameClock).toBe('09:00')
   })
 })
 

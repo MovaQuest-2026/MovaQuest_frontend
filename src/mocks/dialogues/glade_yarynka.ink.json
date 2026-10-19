@@ -1,0 +1,986 @@
+{
+  "id": "glade_yarynka",
+  "cityId": "vinnytsia",
+  "npcId": "npc_yarynka",
+  "zone": "glade",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_new"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Take a «пиріжок» for the road! And don't forget the old wall. ",
+                "#",
+                "^speaker:npc_yarynka",
+                "/#",
+                "\n",
+                {
+                  "->": "offer"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_easy"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Hi! Talk to Marta on the bench first, she starts with the easy letters. ",
+                "#",
+                "^speaker:npc_yarynka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.12"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Hey! I'm Yarynka. Everything on this blanket teaches a letter. ",
+          "#",
+          "^speaker:npc_yarynka",
+          "/#",
+          "\n",
+          "ev",
+          false,
+          "/ev",
+          {
+            "->": "lesson"
+          },
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "offer": [
+            [
+              "^Want to try the exercises again? Just for practice, the score stays. ",
+              "#",
+              "^speaker:npc_yarynka",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^Yes, once more. (Так, ще раз.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Not now. (Не зараз.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "->": "lesson"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "end",
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "lesson": [
+            {
+              "temp=": "practice"
+            },
+            "^Б is b, «банан». Д is d, «диня», a melon. Г is a soft h, «гарбуз», a pumpkin. Ґ is a hard g, like in \"go\".",
+            "\n",
+            "^Ж is zh, like the s in \"pleasure\". З is z. Л is l. П is p. Ф is f.",
+            "\n",
+            "^И is a short y, like i in \"bit\". Й is y, like in \"boy\".",
+            "\n",
+            "^Ц is ts, Ч is ch, Ш is sh. And Щ is shch, the end of «борщ»!",
+            "\n",
+            "^Which letter sounds like sh? ",
+            "#",
+            "^quiz:alpha_new_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Ш! Three teeth, sh-sh-sh.",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.19"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It's Ш. Щ has a little tail and sounds like shch.",
+                  "\n",
+                  {
+                    "->": "lesson.19"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^So which letter ends the word «борщ»? ",
+            "#",
+            "^quiz:alpha_new_2",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Щ! Now you can order borshch anywhere.",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.31"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It's Щ, with the little tail.",
+                  "\n",
+                  {
+                    "->": "lesson.31"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^And Г, like in «гарбуз». How does it sound? ",
+            "#",
+            "^quiz:alpha_new_3",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Right, a soft breathy h.",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.43"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^It's a soft h. The hard g is Ґ, with a hook on top.",
+                  "\n",
+                  {
+                    "->": "lesson.43"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "ev",
+            true,
+            "/ev",
+            {
+              "VAR=": "alpha_new",
+              "re": true
+            },
+            "^Fifteen more letters! The last five are carved on the old stone wall. ",
+            "#",
+            "^give:pyrizhok",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_new"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Візьми пиріжок у дорогу! І не забудь про стару стіну. ",
+                "#",
+                "^speaker:npc_yarynka",
+                "/#",
+                "\n",
+                {
+                  "->": "offer"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "alpha_easy"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Привіт! Спершу поговори з Мартою на лавці. ",
+                "#",
+                "^speaker:npc_yarynka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.12"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Привіт! Я Яринка. Усе на цьому пледі вчить якусь літеру. ",
+          "#",
+          "^speaker:npc_yarynka",
+          "/#",
+          "\n",
+          "ev",
+          false,
+          "/ev",
+          {
+            "->": "lesson"
+          },
+          [
+            "done",
+            {
+              "#n": "g-0"
+            }
+          ],
+          null
+        ],
+        "done",
+        {
+          "offer": [
+            [
+              "^Хочеш повторити вправи ще раз? Це лише тренування, рахунок не змінюється. ",
+              "#",
+              "^speaker:npc_yarynka",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^Так, ще раз.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Не зараз.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "->": "lesson"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "end",
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "lesson": [
+            {
+              "temp=": "practice"
+            },
+            "^Б — «банан», Д — «диня», Г — «гарбуз», Ґ — «ґудзик».",
+            "\n",
+            "^Ж, З, Л, П, Ф, И, Й, Ц, Ч, Ш і Щ, як у слові «борщ».",
+            "\n",
+            "^Яка літера звучить як [ш]? ",
+            "#",
+            "^quiz:alpha_new_1",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Ш!",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.15"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Це Ш. Щ має хвостик.",
+                  "\n",
+                  {
+                    "->": "lesson.15"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^Якою літерою закінчується «борщ»? ",
+            "#",
+            "^quiz:alpha_new_2",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Щ!",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.27"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Щ, з хвостиком.",
+                  "\n",
+                  {
+                    "->": "lesson.27"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "^А як звучить Г? ",
+            "#",
+            "^quiz:alpha_new_3",
+            "/#",
+            "\n",
+            "ev",
+            {
+              "VAR?": "quiz_ok"
+            },
+            "/ev",
+            [
+              {
+                "->": ".^.b",
+                "c": true
+              },
+              {
+                "b": [
+                  "\n",
+                  "^Так.",
+                  "\n",
+                  "ev",
+                  {
+                    "VAR?": "practice"
+                  },
+                  "!",
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "ev",
+                        {
+                          "VAR?": "alpha_score"
+                        },
+                        1,
+                        "+",
+                        {
+                          "VAR=": "alpha_score",
+                          "re": true
+                        },
+                        "/ev",
+                        {
+                          "->": ".^.^.^.8"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  {
+                    "->": "lesson.39"
+                  },
+                  null
+                ]
+              }
+            ],
+            [
+              {
+                "->": ".^.b"
+              },
+              {
+                "b": [
+                  "\n",
+                  "^М'яко, як видих. Тверде [ґ] — це Ґ.",
+                  "\n",
+                  {
+                    "->": "lesson.39"
+                  },
+                  null
+                ]
+              }
+            ],
+            "nop",
+            "\n",
+            "ev",
+            true,
+            "/ev",
+            {
+              "VAR=": "alpha_new",
+              "re": true
+            },
+            "^Ще п'ятнадцять літер! Останні п'ять на старій стіні. ",
+            "#",
+            "^give:pyrizhok",
+            "/#",
+            "\n",
+            "end",
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "банан",
+      "translation": "banana",
+      "example": ""
+    },
+    {
+      "word": "диня",
+      "translation": "melon",
+      "example": ""
+    },
+    {
+      "word": "гарбуз",
+      "translation": "pumpkin",
+      "example": ""
+    },
+    {
+      "word": "борщ",
+      "translation": "borshch",
+      "example": ""
+    }
+  ]
+}

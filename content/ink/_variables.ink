@@ -14,3 +14,8 @@ VAR pirogov_asked = false
 VAR knows_pirogov = false
 VAR has_umbrella = false
 VAR has_drawing = false
+// Галявина абетки (пролог для англомовного інтерфейсу)
+VAR alpha_easy = false
+VAR alpha_new = false
+VAR alpha_special = false
+VAR alpha_score = 0

@@ -9,7 +9,8 @@ export function InteractionHint() {
     (state) =>
       state.activeDialogue !== null ||
       state.activeExercise !== null ||
-      state.pendingCutscene !== null,
+      state.pendingCutscene !== null ||
+      state.pendingExit !== null,
   )
   const requestInteract = useGameStore((state) => state.requestInteract)
   const nativeLanguage = useGameStore((state) => state.nativeLanguage)

@@ -2,13 +2,18 @@ import Phaser from 'phaser'
 import i18next from 'i18next'
 import {
   getZone,
+  type BackgroundConfig,
   type CityNpcConfig,
   type DoorConfig,
   type ExitConfig,
   type TriggerConfig,
   type ZoneConfig,
 } from '../../api/getCityConfig'
-import { useGameStore, type InteractionHint } from '../../store/useGameStore'
+import {
+  useGameStore,
+  type ExitDecisionEvent,
+  type InteractionHint,
+} from '../../store/useGameStore'
 import { daylightForClock, mixTint, type DaylightTint } from '../daylight'
 import {
   createLpcAnimations,
@@ -32,6 +37,16 @@ const PLACEHOLDER_SIZE = 32
 // Хітбокс біля ніг, щоб ходити повз стіни і в дверні прорізи.
 const FEET_BODY_WIDTH = 20
 const FEET_BODY_HEIGHT = 14
+// Хітбокс статичного спрайта: 10×6 біля ніг.
+const STATIC_BODY_WIDTH = 10
+const STATIC_BODY_HEIGHT = 6
+// Погойдування статичного спрайта в русі: 2 px вгору-вниз кожні 120 мс.
+const BOB_INTERVAL = 120
+const BOB_HEIGHT = 2
+// Наскільки відсуваємо гравця від виходу після «Ще ні».
+const EXIT_CANCEL_PUSHBACK = 12
+// Відступ від краю світу, що задається background (у тайлових зонах — півтора тайла).
+const BACKGROUND_EDGE_MARGIN = 4
 const NPC_INTERACTION_RADIUS = 40
 const NPC_PATROL_SPEED = 30
 const NPC_PATROL_RANGE = 48
@@ -90,14 +105,25 @@ const OUTFIT_COLORS: [string, number][] = [
 const missingTextures = new Set<string>()
 const missingAudio = new Set<string>()
 
+// LPC-вигляд NPC: outfit має пріоритет над sprite. Статичний character перевіряється окремо і стоїть вище.
 function characterIdOf(npc: CityNpcConfig) {
   return npc.outfit ?? npc.sprite ?? null
+}
+
+function staticTextureKey(id: string) {
+  return `char:${id}`
+}
+
+function backgroundTextureKey(image: string) {
+  return `background:${image}`
 }
 
 interface NpcEntity {
   config: CityNpcConfig
   sprite: Phaser.GameObjects.Sprite
   animated: boolean
+  // Статичний кадр (character або invisible): origin (0.5, 1), depth = y, без LPC-анімацій.
+  isStatic: boolean
   // Ключ LPC-текстури, якщо спрайт анімований.
   lpcKey: string | null
   greetingText: Phaser.GameObjects.Text
@@ -114,6 +140,8 @@ interface GateEntity {
   area: Phaser.GameObjects.Zone
   // Вихід спрацьовує тільки після того, як гравець хоч раз був поза ним — щоб не вилетіти одразу після спавну.
   armed: boolean
+  // Остання позиція гравця поза виходом: туди його відсуваємо після «Ще ні».
+  lastOutside: { x: number; y: number } | null
 }
 
 interface TriggerEntity {
@@ -169,9 +197,14 @@ function tiledProperty(object: Phaser.Types.Tilemaps.TiledObject, name: string) 
  */
 export abstract class ZoneSceneBase extends Phaser.Scene {
   protected zone!: ZoneConfig
+  // Є тільки в зон з tilemap; зони з background його не мають.
   protected map!: Phaser.Tilemaps.Tilemap
+  private worldWidth = 0
+  private worldHeight = 0
+  private zoom = CAMERA_ZOOM
   private player!: Phaser.Physics.Arcade.Sprite
   private playerAnimated = false
+  private playerStatic = false
   private facing: Direction = 'down'
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
   private wasd!: {
@@ -219,6 +252,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     this.lastSavedSpawn = null
     this.transitioning = false
     this.playerAnimated = false
+    this.playerStatic = false
+    this.worldWidth = 0
+    this.worldHeight = 0
+    this.zoom = CAMERA_ZOOM
     this.facing = 'down'
     this.daylightTween = null
     this.requestedTextures = []
@@ -228,6 +265,45 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   }
 
   preload() {
+    const { background } = this.zone
+    if (background) {
+      this.loadImageOnce(
+        backgroundTextureKey(background.image),
+        `/assets/backgrounds/${background.image}.png`,
+      )
+    } else {
+      this.preloadTilemap()
+    }
+
+    const playerCharacter = useGameStore.getState().cityConfig?.playerCharacter
+    if (playerCharacter) {
+      this.loadImageOnce(staticTextureKey(playerCharacter), `/assets/characters/${playerCharacter}.png`)
+    }
+    const lpcIds = [
+      ...(playerCharacter ? [] : [PLAYER_CHARACTER_ID]),
+      ...this.zone.npcs.flatMap((npc) => {
+        if (npc.character) {
+          this.loadImageOnce(staticTextureKey(npc.character), `/assets/characters/${npc.character}.png`)
+        }
+        const id = characterIdOf(npc)
+        return id && !npc.invisible ? [id] : []
+      }),
+    ]
+    for (const id of new Set(lpcIds)) {
+      this.loadSpritesheetOnce(lpcTextureKey(id), `/assets/lpc/${id}.png`)
+    }
+    for (const landmark of this.zone.landmarks ?? []) {
+      this.loadImageOnce(
+        landmarkTextureKey(landmark.id),
+        `/assets/landmarks/${landmark.id}.png`,
+      )
+    }
+
+    this.ensurePlaceholderTexture(PLAYER_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xff5a5f)
+    this.ensurePlaceholderTexture(NPC_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xffd23f)
+  }
+
+  private preloadTilemap() {
     const tilemapKey = this.tilemapKey()
     const queueTilesets = (data: { tilesets?: { name: string; image?: string }[] }) => {
       for (const tileset of data.tilesets ?? []) {
@@ -250,26 +326,6 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         (_key: string, _type: string, data: object) => queueTilesets(data),
       )
     }
-
-    const characterIds = [
-      PLAYER_CHARACTER_ID,
-      ...this.zone.npcs.flatMap((npc) => {
-        const id = characterIdOf(npc)
-        return id ? [id] : []
-      }),
-    ]
-    for (const id of new Set(characterIds)) {
-      this.loadSpritesheetOnce(lpcTextureKey(id), `/assets/lpc/${id}.png`)
-    }
-    for (const landmark of this.zone.landmarks ?? []) {
-      this.loadImageOnce(
-        landmarkTextureKey(landmark.id),
-        `/assets/landmarks/${landmark.id}.png`,
-      )
-    }
-
-    this.ensurePlaceholderTexture(PLAYER_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xff5a5f)
-    this.ensurePlaceholderTexture(NPC_PLACEHOLDER_TEXTURE, PLACEHOLDER_SIZE, 0xffd23f)
   }
 
   create() {
@@ -278,25 +334,15 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     }
 
 
-    this.map = this.make.tilemap({ key: this.tilemapKey() })
-    const tilesets = this.map.tilesets.flatMap((tileset) => {
-      const added = this.map.addTilesetImage(
-        tileset.name,
-        tilesetTextureKey(tileset.name),
-      )
-      return added ? [added] : []
-    })
-    const layers = this.map.layers.flatMap((layerData, index) => {
-      const layer = this.map.createLayer(layerData.name, tilesets, 0, 0)
-      if (!layer) return []
-      layer.setCollisionByProperty({ collides: true })
-      layer.setDepth(TILE_LAYER_DEPTH + index)
-      return [layer]
-    })
+    this.zoom = this.computeZoom()
+    const layers = this.zone.background
+      ? this.createBackground(this.zone.background)
+      : this.createTilemapLayers()
 
     this.createPlayer()
-    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+    this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight)
     for (const layer of layers) this.physics.add.collider(this.player, layer)
+    this.createColliders()
 
     this.createLandmarks()
     this.createNpcs()
@@ -324,6 +370,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       .keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E, false)
       .on('down', () => this.interact())
 
+    this.applyPhysicsDebug()
+
     const unsubscribe = useGameStore.subscribe((state, prev) => {
       if (state.interactRequest !== prev.interactRequest) this.interact()
       if (state.gameClock !== prev.gameClock) this.fadeDaylight()
@@ -333,6 +381,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       if (state.zoneRequest && state.zoneRequest !== prev.zoneRequest) {
         this.handleZoneRequest(state.zoneRequest.zoneId)
       }
+      if (state.lastExitDecision && state.lastExitDecision !== prev.lastExitDecision) {
+        this.handleExitDecision(state.lastExitDecision)
+      }
+      if (state.debugPhysics !== prev.debugPhysics) this.applyPhysicsDebug()
     })
 
     this.time.addEvent({
@@ -388,7 +440,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const velocityY = inputY * MOVE_SPEED
     this.player.setVelocity(velocityX, velocityY)
     this.animatePlayer(velocityX, velocityY)
-    this.player.setDepth(bottomOf(this.player))
+    this.player.setDepth(this.playerStatic ? this.player.y : bottomOf(this.player))
 
     this.updateHint()
     this.checkTriggers()
@@ -398,6 +450,80 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
   private tilemapKey() {
     return `tilemap_${this.zone.tilemap}`
+  }
+
+  private createTilemapLayers() {
+    this.map = this.make.tilemap({ key: this.tilemapKey() })
+    this.worldWidth = this.map.widthInPixels
+    this.worldHeight = this.map.heightInPixels
+    const tilesets = this.map.tilesets.flatMap((tileset) => {
+      const added = this.map.addTilesetImage(
+        tileset.name,
+        tilesetTextureKey(tileset.name),
+      )
+      return added ? [added] : []
+    })
+    return this.map.layers.flatMap((layerData, index) => {
+      const layer = this.map.createLayer(layerData.name, tilesets, 0, 0)
+      if (!layer) return []
+      layer.setCollisionByProperty({ collides: true })
+      layer.setDepth(TILE_LAYER_DEPTH + index)
+      return [layer]
+    })
+  }
+
+  // Готова картинка замість тайлмапи: у нативному розмірі, origin (0, 0), під усіма спрайтами.
+  private createBackground(background: BackgroundConfig) {
+    this.worldWidth = background.width
+    this.worldHeight = background.height
+    const key = backgroundTextureKey(background.image)
+    if (this.textures.exists(key)) {
+      this.add.image(0, 0, key).setOrigin(0, 0).setDepth(TILE_LAYER_DEPTH)
+    } else if (background.fillColor) {
+      // Без картинки світ лишається прохідним: заливаємо його кольором фону.
+      const color = Phaser.Display.Color.HexStringToColor(background.fillColor).color
+      this.add
+        .rectangle(0, 0, background.width, background.height, color)
+        .setOrigin(0, 0)
+        .setDepth(TILE_LAYER_DEPTH)
+    }
+    return []
+  }
+
+  // Невидимі статичні прямокутники з colliders зони.
+  private createColliders() {
+    for (const collider of this.zone.colliders ?? []) {
+      const block = this.add.zone(
+        collider.x + collider.w / 2,
+        collider.y + collider.h / 2,
+        collider.w,
+        collider.h,
+      )
+      this.physics.add.existing(block, true)
+      this.physics.add.collider(this.player, block)
+    }
+  }
+
+  // Зона з background: цілий zoom, щоб піксель-арт не розмивався; на великому екрані картинка заповнює його.
+  private computeZoom() {
+    const { background } = this.zone
+    if (!background) return CAMERA_ZOOM
+    const { width, height } = this.cameras.main
+    const fit = Math.min(width / background.width, height / background.height)
+    return Math.max(CAMERA_ZOOM, Math.ceil(fit))
+  }
+
+  // Перемикач з DebugPanel для підгонки colliders.
+  private applyPhysicsDebug() {
+    const world = this.physics.world
+    if (useGameStore.getState().debugPhysics) {
+      if (!world.debugGraphic) world.createDebugGraphic()
+      world.drawDebug = true
+      world.debugGraphic.setVisible(true)
+    } else {
+      world.drawDebug = false
+      world.debugGraphic?.clear().setVisible(false)
+    }
   }
 
   private loadImageOnce(key: string, url: string) {
@@ -428,20 +554,25 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
   private clampToMap(point: { x: number; y: number }) {
     // Позиція зі старого збереження може бути поза меншою мапою — тримаємо гравця всередині стін.
-    const minX = this.map.tileWidth * 1.5
-    const minY = this.map.tileHeight * 1.5
+    const minX = this.map ? this.map.tileWidth * 1.5 : BACKGROUND_EDGE_MARGIN
+    const minY = this.map ? this.map.tileHeight * 1.5 : BACKGROUND_EDGE_MARGIN
     return {
-      x: Phaser.Math.Clamp(point.x, minX, this.map.widthInPixels - minX),
-      y: Phaser.Math.Clamp(point.y, minY, this.map.heightInPixels - minY),
+      x: Phaser.Math.Clamp(point.x, minX, this.worldWidth - minX),
+      y: Phaser.Math.Clamp(point.y, minY, this.worldHeight - minY),
     }
   }
 
   private createPlayer() {
     const start = this.clampToMap(useGameStore.getState().spawn ?? this.zone.spawn)
+    const playerCharacter = useGameStore.getState().cityConfig?.playerCharacter
+    const staticKey = playerCharacter ? staticTextureKey(playerCharacter) : null
     const lpcKey = lpcTextureKey(PLAYER_CHARACTER_ID)
-    this.playerAnimated = this.textures.exists(lpcKey)
+    this.playerStatic = staticKey !== null && this.textures.exists(staticKey)
+    this.playerAnimated = !playerCharacter && this.textures.exists(lpcKey)
 
-    if (this.playerAnimated) {
+    if (this.playerStatic) {
+      this.player = this.physics.add.sprite(start.x, start.y, staticKey!).setOrigin(0.5, 1)
+    } else if (this.playerAnimated) {
       createLpcAnimations(this, lpcKey)
       this.player = this.physics.add.sprite(start.x, start.y, lpcKey)
       this.player.play(lpcAnimationKey(lpcKey, 'idle', this.facing))
@@ -452,18 +583,34 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const frameWidth = this.player.width
     const frameHeight = this.player.height
     const body = this.player.body as Phaser.Physics.Arcade.Body
-    body.setSize(FEET_BODY_WIDTH, FEET_BODY_HEIGHT)
-    // LPC-персонаж стоїть на ~2 px вище низу кадру.
-    const feetGap = this.playerAnimated ? 2 : 0
-    body.setOffset(
-      (frameWidth - FEET_BODY_WIDTH) / 2,
-      frameHeight - FEET_BODY_HEIGHT - feetGap,
-    )
+    if (this.playerStatic) {
+      body.setSize(STATIC_BODY_WIDTH, STATIC_BODY_HEIGHT)
+      body.setOffset((frameWidth - STATIC_BODY_WIDTH) / 2, frameHeight - STATIC_BODY_HEIGHT)
+    } else {
+      body.setSize(FEET_BODY_WIDTH, FEET_BODY_HEIGHT)
+      // LPC-персонаж стоїть на ~2 px вище низу кадру.
+      const feetGap = this.playerAnimated ? 2 : 0
+      body.setOffset(
+        (frameWidth - FEET_BODY_WIDTH) / 2,
+        frameHeight - FEET_BODY_HEIGHT - feetGap,
+      )
+    }
     this.player.setCollideWorldBounds(true)
-    this.player.setDepth(bottomOf(this.player))
+    this.player.setDepth(this.playerStatic ? this.player.y : bottomOf(this.player))
+  }
+
+  // Статичний спрайт: flipX за горизонтальним напрямком і погойдування на 2 px, поки рухається.
+  private animateStatic(sprite: Phaser.GameObjects.Sprite, velocityX: number, moving: boolean) {
+    if (velocityX !== 0) sprite.setFlipX(velocityX < 0)
+    const raised = moving && Math.floor(this.time.now / BOB_INTERVAL) % 2 === 1
+    sprite.setOrigin(0.5, raised ? 1 + BOB_HEIGHT / sprite.height : 1)
   }
 
   private animatePlayer(velocityX: number, velocityY: number) {
+    if (this.playerStatic) {
+      this.animateStatic(this.player, velocityX, velocityX !== 0 || velocityY !== 0)
+      return
+    }
     if (!this.playerAnimated) return
     const key = lpcTextureKey(PLAYER_CHARACTER_ID)
     if (velocityX === 0 && velocityY === 0) {
@@ -506,19 +653,27 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private createNpcs() {
     const greeting = i18next.t('world.npcGreeting')
     for (const npc of this.zone.npcs) {
-      const characterId = characterIdOf(npc)
+      // Пріоритет вигляду: character > outfit > sprite (LPC) > плейсхолдер; invisible — без спрайта.
+      const staticKey = npc.character ? staticTextureKey(npc.character) : null
+      const hasStaticTexture = staticKey !== null && this.textures.exists(staticKey)
+      const isStatic = npc.invisible === true || hasStaticTexture
+      const characterId = isStatic ? null : characterIdOf(npc)
       const candidateKey = characterId ? lpcTextureKey(characterId) : null
       const animated = candidateKey !== null && this.textures.exists(candidateKey)
       const lpcKey = animated ? candidateKey : null
       let sprite: Phaser.GameObjects.Sprite
-      if (lpcKey) {
+      if (npc.invisible) {
+        sprite = this.add.sprite(npc.x, npc.y, NPC_PLACEHOLDER_TEXTURE).setOrigin(0.5, 1).setVisible(false)
+      } else if (hasStaticTexture) {
+        sprite = this.add.sprite(npc.x, npc.y, staticKey!).setOrigin(0.5, 1)
+      } else if (lpcKey) {
         createLpcAnimations(this, lpcKey)
         sprite = this.add.sprite(npc.x, npc.y, lpcKey)
         sprite.play(lpcAnimationKey(lpcKey, 'idle', 'down'))
       } else {
         sprite = this.add.sprite(npc.x, npc.y, this.npcPlaceholderTexture(npc))
       }
-      sprite.setDepth(bottomOf(sprite))
+      sprite.setDepth(this.depthFor(sprite, isStatic))
 
       const greetingText = this.add
         .text(npc.x, this.greetingY(sprite), greeting, {
@@ -527,16 +682,18 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
           color: '#111111',
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
           padding: { x: 3, y: 2 },
-          resolution: CAMERA_ZOOM * 2,
+          resolution: this.zoom * 2,
         })
         .setOrigin(0.5, 1)
         .setAlpha(0)
         .setDepth(GREETING_DEPTH)
+        .setVisible(!npc.invisible)
 
       const entity: NpcEntity = {
         config: npc,
         sprite,
         animated,
+        isStatic,
         lpcKey,
         greetingText,
         originX: npc.x,
@@ -545,7 +702,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         hidden: false,
       }
       this.npcEntities.push(entity)
-      this.scheduleNpcGreeting(entity)
+      if (!npc.invisible) this.scheduleNpcGreeting(entity)
     }
   }
 
@@ -571,7 +728,14 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     return key
   }
 
+  // Статичний спрайт має depth = y (origin внизу), решта — нижній край кадру.
+  private depthFor(sprite: Phaser.GameObjects.Sprite, isStatic: boolean) {
+    return isStatic ? sprite.y : bottomOf(sprite)
+  }
+
   private greetingY(sprite: Phaser.GameObjects.Sprite) {
+    // Статичний спрайт має origin внизу: підпис просто над головою.
+    if (sprite.originY >= 1) return sprite.y - sprite.displayHeight - 2
     // У LPC-кадрі голова починається приблизно на чверті висоти.
     const headOffset = sprite.displayHeight * (sprite.width === LPC_FRAME_SIZE ? 0.25 : 0.5)
     return sprite.y - headOffset - 2
@@ -580,6 +744,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private gateOverrides() {
     // Об'єкти шарів doors/exits з Tiled з властивістю id перекривають координати з конфігу.
     const overrides = new Map<string, GateRect>()
+    if (!this.map) return overrides
     for (const layerName of ['doors', 'exits'] as const) {
       const layer = this.map.getObjectLayer(layerName)
       for (const object of layer?.objects ?? []) {
@@ -609,10 +774,29 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         config.h + padding * 2,
       )
       this.physics.add.existing(area, true)
-      this.gates.push({ kind, config, area, armed: false })
+      this.gates.push({ kind, config, area, armed: false, lastOutside: null })
+      if (kind === 'exit' && 'label' in config && config.label) {
+        this.createExitLabel(config as ExitConfig)
+      }
     }
     for (const door of this.zone.doors) add('door', door)
     for (const exit of this.zone.exits) add('exit', exit)
+  }
+
+  // Підпис над виходом (як привітання NPC), щоб перехід було видно здалеку.
+  private createExitLabel(exit: ExitConfig) {
+    const lang = useGameStore.getState().nativeLanguage ?? 'en'
+    this.add
+      .text(exit.x + exit.w / 2, exit.y - 2, exit.label![lang], {
+        fontFamily: 'sans-serif',
+        fontSize: '8px',
+        color: '#111111',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        padding: { x: 3, y: 2 },
+        resolution: this.zoom * 2,
+      })
+      .setOrigin(0.5, 1)
+      .setDepth(GREETING_DEPTH)
   }
 
   private targetTint(): DaylightTint {
@@ -705,8 +889,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   private updateRainArea() {
     // Частинки зі scrollFactor 0 масштабуються від центру камери, тож видима область — центр ± половина екрана / zoom.
     const camera = this.cameras.main
-    const width = camera.width / CAMERA_ZOOM
-    const height = camera.height / CAMERA_ZOOM
+    const width = camera.width / this.zoom
+    const height = camera.height / this.zoom
     this.rainArea.setTo(
       camera.width / 2 - width / 2,
       camera.height / 2 - height / 2 - 20,
@@ -844,26 +1028,41 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
   private setupCamera() {
     const camera = this.cameras.main
-    camera.setBackgroundColor(this.backgroundColor)
-    camera.setZoom(CAMERA_ZOOM)
+    this.zoom = this.computeZoom()
+    camera.setBackgroundColor(this.zone.background?.fillColor ?? this.backgroundColor)
+    camera.setZoom(this.zoom)
     camera.setRoundPixels(true)
-    const viewWidth = camera.width / CAMERA_ZOOM
-    const viewHeight = camera.height / CAMERA_ZOOM
-    if (this.map.widthInPixels <= viewWidth && this.map.heightInPixels <= viewHeight) {
+    const viewWidth = camera.width / this.zoom
+    const viewHeight = camera.height / this.zoom
+    if (this.worldWidth <= viewWidth && this.worldHeight <= viewHeight) {
       camera.stopFollow()
       camera.removeBounds()
-      camera.centerOn(this.map.widthInPixels / 2, this.map.heightInPixels / 2)
+      camera.centerOn(this.worldWidth / 2, this.worldHeight / 2)
       return
     }
-    camera.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+    if (this.zone.background) {
+      // Phaser при зумі притискає меншу за екран вісь до краю, тож розширюємо bounds до розміру екрана,
+      // а світ лишаємо по центру: вільне місце заливає fillColor.
+      const boundsWidth = Math.max(this.worldWidth, viewWidth)
+      const boundsHeight = Math.max(this.worldHeight, viewHeight)
+      camera.setBounds(
+        (this.worldWidth - boundsWidth) / 2,
+        (this.worldHeight - boundsHeight) / 2,
+        boundsWidth,
+        boundsHeight,
+      )
+    } else {
+      camera.setBounds(0, 0, this.worldWidth, this.worldHeight)
+    }
     camera.startFollow(this.player, true)
   }
 
   private handleResize(gameSize: Phaser.Structs.Size) {
     this.cameras.main.setSize(gameSize.width, gameSize.height)
     this.daylight.setSize(gameSize.width, gameSize.height)
-    this.updateRainArea()
+    // Zoom зони з background залежить від розміру екрана, тож спершу камера, потім зона дощу.
     this.setupCamera()
+    this.updateRainArea()
   }
 
   private openEnterDialogue() {
@@ -880,11 +1079,13 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
   }
 
   private isInputBlocked() {
-    const { activeDialogue, activeExercise, pendingCutscene } = useGameStore.getState()
+    const { activeDialogue, activeExercise, pendingCutscene, pendingExit } =
+      useGameStore.getState()
     return (
       activeDialogue !== null ||
       activeExercise !== null ||
       pendingCutscene !== null ||
+      pendingExit !== null ||
       this.cutsceneRunning
     )
   }
@@ -1014,7 +1215,10 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     const { activeDialogue } = useGameStore.getState()
     for (const entity of this.npcEntities) {
       const { sprite } = entity
-      if (entity.hiding) sprite.setDepth(bottomOf(sprite))
+      if (entity.hiding) {
+        sprite.setDepth(this.depthFor(sprite, entity.isStatic))
+        if (entity.isStatic && !entity.config.invisible) this.animateStatic(sprite, 0, true)
+      }
       if (!this.isPresent(entity)) continue
       // Співрозмовник не ходить, поки триває діалог.
       const talking = activeDialogue !== null && activeDialogue === entity.config.dialogueId
@@ -1037,7 +1241,11 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
           )
         }
       }
-      sprite.setDepth(bottomOf(sprite))
+      if (entity.isStatic && !entity.config.invisible) {
+        const walking = entity.config.patrol && !talking
+        this.animateStatic(sprite, walking ? entity.direction : 0, walking)
+      }
+      sprite.setDepth(this.depthFor(sprite, entity.isStatic))
       entity.greetingText.setPosition(sprite.x, this.greetingY(sprite))
     }
   }
@@ -1162,11 +1370,62 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       const inside = this.isPlayerIn(gate)
       if (!inside) {
         gate.armed = true
+        gate.lastOutside = { x: this.player.x, y: this.player.y }
       } else if (gate.armed && this.isOpen(gate)) {
-        this.transitionThrough(gate)
+        if ((gate.config as ExitConfig).confirm) {
+          // Не спрацьовує повторно, поки гравець не вийде з прямокутника.
+          gate.armed = false
+          this.askExitConfirmation(gate)
+        } else {
+          this.transitionThrough(gate)
+        }
         return
       }
     }
+  }
+
+  // Зупиняє гравця і віддає рішення React: вікно підтвердження живе в UI-шарі.
+  private askExitConfirmation(gate: GateEntity) {
+    this.player.setVelocity(0)
+    this.setHint(null)
+    this.saveSpawn()
+    useGameStore.getState().setPendingExit({ zoneId: this.zone.id, exitId: gate.config.id })
+  }
+
+  private handleExitDecision(decision: ExitDecisionEvent) {
+    if (decision.zoneId !== this.zone.id || this.transitioning) return
+    const gate = this.gates.find(
+      (candidate) => candidate.kind === 'exit' && candidate.config.id === decision.exitId,
+    )
+    if (!gate) return
+    if (decision.confirmed) {
+      this.transitionThrough(gate)
+    } else {
+      this.pushBackFromExit(gate)
+    }
+  }
+
+  // «Ще ні»: гравець відсувається на 12 px назад, туди, звідки прийшов.
+  private pushBackFromExit(gate: GateEntity) {
+    const body = this.player.body as Phaser.Physics.Arcade.Body
+    const from = gate.lastOutside ?? { x: this.player.x, y: this.player.y - 1 }
+    let dx = from.x - this.player.x
+    let dy = from.y - this.player.y
+    const length = Math.hypot(dx, dy)
+    if (length === 0) {
+      dx = 0
+      dy = -1
+    } else {
+      dx /= length
+      dy /= length
+    }
+    const point = this.clampToMap({
+      x: this.player.x + dx * EXIT_CANCEL_PUSHBACK,
+      y: this.player.y + dy * EXIT_CANCEL_PUSHBACK,
+    })
+    body.reset(point.x, point.y)
+    this.lastSavedSpawn = null
+    this.saveSpawn()
   }
 
   private interact() {
@@ -1226,7 +1485,7 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
     camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       const point = this.clampToMap(spawn)
       ;(this.player.body as Phaser.Physics.Arcade.Body).reset(point.x, point.y)
-      this.player.setDepth(bottomOf(this.player))
+      this.player.setDepth(this.playerStatic ? this.player.y : bottomOf(this.player))
       // Гравець міг опинитися в іншому виході — він спрацює тільки після того, як гравець з нього вийде.
       for (const gate of this.gates) gate.armed = false
       this.transitioning = false

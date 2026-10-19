@@ -1,0 +1,3 @@
+{ "id": "alpha_special_1", "type": "multiple_choice",
+  "prompt": { "en": "Which letter is also the word \"I\"?", "uk": "Яка літера є ще й словом «я»?" },
+  "options": ["Я", "Ю", "Є"], "correct": "Я", "word": "я" }

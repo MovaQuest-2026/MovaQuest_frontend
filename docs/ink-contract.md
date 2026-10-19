@@ -46,6 +46,10 @@ node scripts/build-ink.mjs
 | `knows_pirogov` | bool | ink | правильна відповідь про Пирогова |
 | `has_umbrella` | bool | ink | парасолька від пані Галини |
 | `has_drawing` | bool | ink | малюнок від художника |
+| `alpha_easy` | bool | ink | галявина: Марта провела станцію «літери як в англійській» |
+| `alpha_new` | bool | ink | галявина: Яринка провела станцію нових літер |
+| `alpha_special` | bool | ink | галявина: прочитано стару стіну (Є, Ї, Ю, Я, Ь) |
+| `alpha_score` | int | ink | галявина: правильних відповідей на вправи абетки, 0–9 |
 
 Фронт перед стартом діалогу записує в `story.variablesState` поточні значення з `flags`, а через `story.ObserveVariable` забирає зміни назад.
 
@@ -59,7 +63,7 @@ node scripts/build-ink.mjs
 | `quiz:<quizId>` | показує рядок, ставить діалог на паузу, відкриває вправу, пише `quiz_ok`, потім продовжує |
 | `give:<item>` / `take:<item>` | змінює інвентар в UI; логіка гри все одно спирається на змінні |
 | `clock:<HH:MM>` | пересуває ігровий час |
-| `flag:<name>` | ставить `flags[name] = true` для прапорців, яких немає серед змінних ink (`exit_bus_station`, `shortcut_open`, `park_route_known`, `know_outfit`) |
+| `flag:<name>` | ставить `flags[name] = true` для прапорців, яких немає серед змінних ink (`exit_bus_station`, `shortcut_open`, `park_route_known`, `know_outfit`, `left_glade`, `glade_met_marta`, `glade_wall_read`) |
 | `cutscene:<id>` | після закриття діалогу запускає кат-сцену (`fountain`) |
 | `ending:<best\|good\|basic>` | після закриття діалогу показує екран "Щоденник дня" з цією кінцівкою |
 

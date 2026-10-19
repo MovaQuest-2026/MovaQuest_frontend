@@ -1,0 +1,3 @@
+{ "id": "alpha_special_2", "type": "multiple_choice",
+  "prompt": { "en": "How does Ї sound?", "uk": "Як звучить Ї?" },
+  "options": ["yi", "ee", "ai"], "correct": "yi", "word": "Ї" }

@@ -3,8 +3,11 @@ import {
   trackDialogueFinished,
   trackDoorEntered,
   trackSessionResumed,
+  trackTravelCancelled,
+  trackTravelConfirmed,
   trackZoneEntered,
 } from '../api/analytics'
+import { getAlphaProgress } from './alphaProgress'
 import { useGameStore } from './useGameStore'
 
 // session_resumed — один раз на завантаження сторінки, якщо світ відкрито зі збереження.
@@ -26,6 +29,18 @@ export function useAnalytics() {
       }
       if (state.lastDoorEntered && state.lastDoorEntered !== prev.lastDoorEntered) {
         trackDoorEntered(state.lastDoorEntered.doorId, state.lastDoorEntered.zoneId)
+      }
+      const decision = state.lastExitDecision
+      if (decision && decision !== prev.lastExitDecision) {
+        const { stationsDone, alphaScore } = getAlphaProgress(state.flags)
+        if (decision.confirmed) {
+          const toZone = state.cityConfig?.zones
+            .find((zone) => zone.id === decision.zoneId)
+            ?.exits.find((exit) => exit.id === decision.exitId)?.target
+          trackTravelConfirmed(decision.zoneId, toZone ?? '', stationsDone, alphaScore)
+        } else {
+          trackTravelCancelled(decision.zoneId, stationsDone)
+        }
       }
       if (
         state.lastFinishedDialogue &&
