@@ -1,19 +1,32 @@
-# glade-kit: пролог «Галявина абетки»
+# React + TypeScript + Vite
 
-Розпакувати в корінь репозиторію поверх оновленої гілки `dev`:
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-```bash
-unzip -o glade-kit.zip -d /tmp/glade && cp -r /tmp/glade/glade-kit/{public,content,src,snippets,docs} .
-cp /tmp/glade/glade-kit/prompts/L8-glade.md prompts/
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the Oxlint configuration
+
+If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "options": {
+    "typeAware": true
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  }
+}
 ```
 
-Далі `prompts/00-preamble.md` + `prompts/L8-glade.md` у Claude Code.
-
-| Шлях | Що |
-| --- | --- |
-| `public/assets/characters/` | hero, marta, yarynka у нативному розмірі пікселя (оригінали були збільшені в 4 рази) |
-| `public/assets/backgrounds/glade.png` | галявина 480×270, зменшена з Tileset.png без втрат |
-| `content/ink/` | діалоги галявини en/uk, `_variables.ink` і `dialogues.meta.json` з новими записами |
-| `src/mocks/quizzes/alpha_*.json` | 9 вправ на абетку |
-| `snippets/` | зона `glade` і кроки квесту, Claude Code переносить їх у моки й видаляє теку |
-| `docs/glade-story.md` | сюжет для команди |
+See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
