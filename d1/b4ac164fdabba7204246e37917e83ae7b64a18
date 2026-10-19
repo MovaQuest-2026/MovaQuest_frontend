@@ -1,0 +1,15 @@
+README.md
+  h_dfa0da26a12699 1,3,5-12,14-29,32
+  h_dfa0da26a12699 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d1b4ac164fdabba7204246e37917e83ae7b64a18",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
