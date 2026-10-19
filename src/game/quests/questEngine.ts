@@ -108,20 +108,22 @@ export function evaluate(
       (step) => step.id === current.questStep,
     )
     const step = questline.steps[index]
-    if (!step || !isConditionMet(step.completeWhen, current, pendingEvent)) {
+    if (!step) break
+    const skipped = step.skipWhen ? isConditionMet(step.skipWhen, current, null) : false
+    if (!skipped && !isConditionMet(step.completeWhen, current, pendingEvent)) {
       break
     }
 
-    // Подія завершення діалогу закриває не більше одного кроку.
-    if (pendingEvent?.type === 'dialogueFinished') pendingEvent = null
+    // Подія завершення діалогу закриває не більше одного кроку (пропущений крок подію не споживає).
+    if (!skipped && pendingEvent?.type === 'dialogueFinished') pendingEvent = null
 
     const next = questline.steps[index + 1]
-    let flags = applyEffects(current.flags, step.completeEffects)
+    let flags = skipped ? current.flags : applyEffects(current.flags, step.completeEffects)
     if (next) flags = applyEffects(flags, next.startEffects)
     current = {
       ...current,
       flags,
-      gameClock: step.advanceClockTo ?? current.gameClock,
+      gameClock: skipped ? current.gameClock : (step.advanceClockTo ?? current.gameClock),
       questStep: next ? next.id : QUEST_COMPLETE,
     }
     changed = true

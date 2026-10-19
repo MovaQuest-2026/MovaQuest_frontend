@@ -1,0 +1,3 @@
+{ "id": "alpha_easy_1", "type": "multiple_choice",
+  "prompt": { "en": "Read the word: МАМА", "uk": "Прочитай слово: МАМА" },
+  "options": ["mama", "nana", "tata"], "correct": "mama", "word": "мама" }

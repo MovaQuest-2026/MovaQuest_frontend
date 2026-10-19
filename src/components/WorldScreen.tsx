@@ -12,8 +12,13 @@ import { DialogueOverlay } from './DialogueOverlay'
 import { ExerciseScreen } from './ExerciseScreen'
 import { InteractionHint } from './InteractionHint'
 import { QuestTracker } from './QuestTracker'
+import { ConfirmTravelDialog } from './ConfirmTravelDialog'
 import { DayJournalScreen } from './DayJournalScreen'
 import { VirtualJoystick } from './VirtualJoystick'
+
+// Зона-пролог для англомовного інтерфейсу: там гра починається о 08:00.
+const GLADE_ZONE_ID = 'glade'
+const GLADE_START_CLOCK = '08:00'
 
 // У production import.meta.env.DEV === false, тож гілка і динамічний імпорт вирізаються з бандла.
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null
@@ -30,10 +35,12 @@ export function WorldScreen() {
   const pendingCutscene = useGameStore((state) => state.pendingCutscene)
   const pendingEnding = useGameStore((state) => state.pendingEnding)
   const gameFinished = useGameStore((state) => state.flags.game_finished === true)
-  // Збережена позиція означає, що гравець уже бачив інтро цього міста.
-  const [introDismissed, setIntroDismissed] = useState(
-    () => useGameStore.getState().spawn !== null,
-  )
+  const flags = useGameStore((state) => state.flags)
+  // Збережена позиція означає, що гравець уже бачив заставку зони, в якій відновив гру.
+  const [resumedZone] = useState(() => {
+    const { spawn, currentZone: zone } = useGameStore.getState()
+    return spawn !== null ? zone : null
+  })
 
   useQuestEngine()
   useAnalytics()
@@ -68,12 +75,27 @@ export function WorldScreen() {
   const zoneKnown =
     cityReady && city.zones.some((zone) => zone.id === currentZone)
 
-  // Нова гра або зона, якої вже немає в конфігу, — стартуємо зі стартової зони.
+  // Нова гра — стартова зона за мовою інтерфейсу; зона, якої вже немає в конфігу, — city.startZone.
   useEffect(() => {
-    if (cityReady && !zoneKnown) {
+    if (!cityReady || zoneKnown) return
+    const state = useGameStore.getState()
+    if (state.currentZone !== null) {
       useGameStore.setState({ currentZone: city.startZone, spawn: null })
+      return
     }
-  }, [city, cityReady, zoneKnown])
+    const startZone = city.startZoneByLanguage?.[nativeLanguage ?? 'en'] ?? city.startZone
+    const hasGlade = city.zones.some((zone) => zone.id === GLADE_ZONE_ID)
+    useGameStore.setState({
+      currentZone: startZone,
+      spawn: null,
+      // Старт поза галявиною одразу закриває її кроки квесту.
+      ...(startZone === GLADE_ZONE_ID
+        ? { gameClock: GLADE_START_CLOCK }
+        : hasGlade
+          ? { flags: { ...state.flags, left_glade: true } }
+          : {}),
+    })
+  }, [city, cityReady, zoneKnown, nativeLanguage])
 
   if (!cityReady) {
     return <div className="screen world-screen" />
@@ -86,12 +108,19 @@ export function WorldScreen() {
     return <DayJournalScreen />
   }
 
-  if (!introDismissed) {
+  // Заставка зони показується один раз: прапорець intro_seen_<zone> ставиться при закритті.
+  const introFlag = `intro_seen_${currentZone}`
+  const intro =
+    city.zoneIntros?.[currentZone ?? ''] ??
+    (currentZone === city.startZone
+      ? { title: city.name, text: city.culturalIntro }
+      : null)
+  if (intro && flags[introFlag] !== true && currentZone !== resumedZone) {
     return (
       <div className="screen world-screen">
-        <h1>{city.name[lang]}</h1>
-        <p>{city.culturalIntro[lang]}</p>
-        <button type="button" onClick={() => setIntroDismissed(true)}>
+        <h1>{intro.title[lang]}</h1>
+        <p>{intro.text[lang]}</p>
+        <button type="button" onClick={() => useGameStore.getState().setFlag(introFlag, true)}>
           {t('world.continue')}
         </button>
       </div>
@@ -109,6 +138,7 @@ export function WorldScreen() {
       <VirtualJoystick />
       <InteractionHint />
       <DialogueOverlay />
+      <ConfirmTravelDialog />
       {activeExercise && (
         <div className="world-overlay">
           <ExerciseScreen key={activeExercise} dialogueId={activeExercise} />

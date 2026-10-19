@@ -228,6 +228,22 @@
             {
               "VAR=": "has_drawing"
             },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
             "/ev",
             "end",
             null
@@ -459,6 +475,22 @@
             false,
             {
               "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
             },
             "/ev",
             "end",

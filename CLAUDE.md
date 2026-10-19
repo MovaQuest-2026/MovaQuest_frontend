@@ -67,6 +67,14 @@ src/
   прапорці після будь-якого діалогу незалежно від кроку.
 - NPC з `outfit` використовує спрайт public/assets/lpc/<outfit>.png; без нього —
   кольоровий плейсхолдер за одягом (червоний/синій/жовтий/зелений, окуляри).
+- Статичні персонажі: public/assets/characters/<id>.png (один кадр, нативний піксель, не масштабувати).
+  Пріоритет вигляду NPC: `character` > `outfit` > `sprite` (LPC) > плейсхолдер; `invisible` — без спрайта.
+  Гравець — `playerCharacter` міста (зараз `hero`), інакше LPC `player`.
+- Зона з `background` (public/assets/backgrounds/<image>.png) замість `tilemap`: світ = width×height,
+  колізії — `colliders`, zoom цілий (`computeZoom` у ZoneSceneBase). Підгонка colliders — physics debug у DebugPanel.
+- Старт за мовою: `startZoneByLanguage` (en → glade о 08:00, uk → bus_station з `left_glade`).
+  Вихід з `confirm` ставить `pendingExit` у стор; ConfirmTravelDialog викликає confirm/cancelPendingExit.
+  Крок квесту з `skipWhen` закривається без completeEffects і advanceClockTo.
 - Аудіо необов'язкове: public/audio/fountain.mp3 грає в кат-сцені фонтану,
   якщо файл є (перевірка HEAD-запитом).
 - Кінець гри: прапорці `game_finished` і `ending`; WorldScreen тоді показує

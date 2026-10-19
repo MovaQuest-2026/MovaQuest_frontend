@@ -26,6 +26,8 @@ export interface QuestStep {
   startEffects?: QuestEffects
   completeEffects?: QuestEffects
   advanceClockTo?: string
+  // Якщо умова виконана, крок закривається без completeEffects і advanceClockTo.
+  skipWhen?: QuestCondition
 }
 
 export interface SideQuest {

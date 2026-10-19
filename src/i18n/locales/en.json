@@ -89,5 +89,13 @@
     },
     "playAgain": "Play again",
     "mainMenu": "Main menu"
+  },
+  "travel": {
+    "toVinnytsia": {
+      "title": "Take the bus to Vinnytsia?",
+      "body": "Alphabet stations done: {{done}} of 3, correct answers: {{score}} of 9. You can't come back to the glade in this demo.",
+      "confirm": "Yes, let's go",
+      "cancel": "Not yet"
+    }
   }
 }

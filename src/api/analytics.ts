@@ -63,3 +63,16 @@ export function trackEndingReached(ending: string, trust: number) {
 export function trackSessionResumed(zoneId: string | null, questStep: string | null) {
   capture('session_resumed', { zoneId, questStep })
 }
+
+export function trackTravelConfirmed(
+  fromZone: string,
+  toZone: string,
+  stationsDone: number,
+  alphaScore: number,
+) {
+  capture('travel_confirmed', { fromZone, toZone, stationsDone, alphaScore })
+}
+
+export function trackTravelCancelled(fromZone: string, stationsDone: number) {
+  capture('travel_cancelled', { fromZone, stationsDone })
+}

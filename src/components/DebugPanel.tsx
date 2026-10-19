@@ -30,6 +30,8 @@ export default function DebugPanel() {
   const currentZone = useGameStore((state) => state.currentZone)
   const cityConfig = useGameStore((state) => state.cityConfig)
   const [clock, setClock] = useState(gameClock)
+  const debugPhysics = useGameStore((state) => state.debugPhysics)
+  const setDebugPhysics = useGameStore((state) => state.setDebugPhysics)
   const [zoneId, setZoneId] = useState(currentZone ?? '')
 
   useEffect(() => {
@@ -96,6 +98,23 @@ export default function DebugPanel() {
         <button type="button" style={buttonStyle} onClick={handleTeleport}>
           Телепорт
         </button>
+      </div>
+      <div style={rowStyle}>
+        <button
+          type="button"
+          style={buttonStyle}
+          onClick={() => useGameStore.getState().requestZone('glade')}
+        >
+          Телепорт: glade
+        </button>
+        <label>
+          <input
+            type="checkbox"
+            checked={debugPhysics}
+            onChange={(event) => setDebugPhysics(event.target.checked)}
+          />{' '}
+          physics debug
+        </label>
       </div>
       <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
         {JSON.stringify(flags, null, 1)}

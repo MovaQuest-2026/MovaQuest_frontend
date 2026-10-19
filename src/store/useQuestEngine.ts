@@ -19,6 +19,9 @@ function runQuestEngine(event: QuestEvent) {
   useGameStore.setState({ ...patch, startedAt })
 
   for (const stepId of completedStepIds(state.questline, state.questStep, patch.questStep)) {
+    // Кроки, закриті через skipWhen (галявина після left_glade), не рахуємо пройденими.
+    const skipFlag = state.questline.steps.find((step) => step.id === stepId)?.skipWhen?.flag
+    if (skipFlag && patch.flags[skipFlag] === true) continue
     trackQuestStepCompleted(stepId, startedAt === null ? null : Date.now() - startedAt)
   }
 }
