@@ -1,0 +1,139 @@
+{
+  "id": "picnic",
+  "name": {
+    "en": "Kyiv · Picnic in the park",
+    "uk": "Київ · Пікнік у парку"
+  },
+  "culturalIntro": {
+    "en": "Kyiv, a park. You and your friend Alina came to Ukraine to explore it. You already know the alphabet, but hardly any words. Olena, a friend of a friend, has laid out a blanket for a picnic with her six-year-old daughter Ivanka. Olena speaks English. Ivanka doesn't.",
+    "uk": "Київ, парк. Ти з подругою Аліною приїхав дослідити Україну. Абетку ти вже знаєш, а слів майже ні. Олена, подруга вашої спільної подруги, розстелила ковдру для пікніка зі своєю шестирічною донькою Іванкою. Олена говорить англійською. Іванка ні."
+  },
+  "startZone": "park",
+  "startClock": "12:00",
+  "completion": "level",
+  "playerCharacter": "hero",
+  "questlineId": "picnic_main",
+  "zones": [
+    {
+      "id": "park",
+      "type": "outdoor",
+      "background": {
+        "image": "glade",
+        "width": 480,
+        "height": 270,
+        "fillColor": "#7fb53a"
+      },
+      "spawn": {
+        "x": 270,
+        "y": 160
+      },
+      "colliders": [
+        {
+          "id": "wall_left",
+          "x": 0,
+          "y": 86,
+          "w": 157,
+          "h": 34
+        },
+        {
+          "id": "wall_right",
+          "x": 180,
+          "y": 86,
+          "w": 39,
+          "h": 34
+        },
+        {
+          "id": "pillar",
+          "x": 212,
+          "y": 38,
+          "w": 24,
+          "h": 34
+        },
+        {
+          "id": "pillar_top",
+          "x": 229,
+          "y": 0,
+          "w": 7,
+          "h": 40
+        },
+        {
+          "id": "edge_left",
+          "x": 153,
+          "y": 58,
+          "w": 4,
+          "h": 30
+        },
+        {
+          "id": "edge_right",
+          "x": 180,
+          "y": 58,
+          "w": 4,
+          "h": 30
+        },
+        {
+          "id": "tree_top_left",
+          "x": 103,
+          "y": 62,
+          "w": 22,
+          "h": 14
+        },
+        {
+          "id": "tree_top_right",
+          "x": 327,
+          "y": 108,
+          "w": 20,
+          "h": 14
+        },
+        {
+          "id": "tree_bottom",
+          "x": 66,
+          "y": 228,
+          "w": 22,
+          "h": 16
+        },
+        {
+          "id": "tree_right",
+          "x": 456,
+          "y": 160,
+          "w": 20,
+          "h": 16
+        },
+        {
+          "id": "bench",
+          "x": 248,
+          "y": 100,
+          "w": 51,
+          "h": 34
+        }
+      ],
+      "npcs": [
+        {
+          "id": "npc_olena",
+          "name": {
+            "en": "Olena",
+            "uk": "Олена"
+          },
+          "dialogueId": "picnic_olena",
+          "x": 214,
+          "y": 214,
+          "patrol": false,
+          "character": "marta"
+        },
+        {
+          "id": "npc_ivanka",
+          "name": {
+            "en": "Ivanka",
+            "uk": "Іванка"
+          },
+          "dialogueId": "picnic_ivanka",
+          "x": 420,
+          "y": 186,
+          "patrol": false,
+          "character": "yarynka"
+        }
+      ],
+      "doors": [],
+      "exits": []
+    }
+  ]
+}

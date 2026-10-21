@@ -531,7 +531,7 @@ function Footer() {
         <Logo tone="paper" />
         <nav aria-label="Footer" className="flex gap-6">
           <a href="mailto:hello@movaquest.example" className="py-3 hover:text-ochre">Contact</a>
-          <Link to="/credits" className="py-3 hover:text-ochre">Credits</Link>
+          <Link to="/credits" className="py-3 hover:text-ochre">Licenses</Link>
           <Link to="/play" className="py-3 hover:text-ochre">Play the prototype</Link>
         </nav>
         <p className="font-pixel text-sm text-paper/80">© 2026 MovaQuest team</p>

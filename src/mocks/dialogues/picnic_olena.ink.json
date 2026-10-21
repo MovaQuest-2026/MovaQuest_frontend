@@ -1,0 +1,1162 @@
+{
+  "id": "picnic_olena",
+  "cityId": "picnic",
+  "npcId": "npc_olena",
+  "zone": "park",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "ivanka_called"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                {
+                  "->": "feast"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "picnic_taught"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Ivanka is by the trees. Call her: «Іванко, ходи сюди!» And remember, only in Ukrainian. ",
+                "#",
+                "^speaker:npc_olena",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Привіт! There you are. Everything is ready, I just need my daughter back. Can you call her? She's by the trees. ",
+          "#",
+          "^speaker:npc_olena",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Привіт! Sure. (Hi! Sure.)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Can I just say it in English?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Great!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^In Ukrainian. Ivanka doesn't speak English, not a word. She's six.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Just tell her the picnic is ready.",
+              "\n",
+              "ev",
+              "str",
+              "^How do you say \"picnic\"?",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-2",
+                "flg": 20
+              },
+              {
+                "c-2": [
+                  "\n",
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            "g-1": [
+              "^That one you get for free. «Пікнік». Almost the same as your English word, just read it with the letters you already know. Пік-нік. Try it. ",
+              "#",
+              "^quiz:picnic_read_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Exactly!",
+                    "\n",
+                    {
+                      "->": "0.g-1.10"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^«Пікнік», picnic. П is p, І is ee, К is k, Н is n.",
+                    "\n",
+                    {
+                      "->": "0.g-1.10"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^And \"ready\" is «готовий». Together: «Пікнік готовий». How would you tell Ivanka the picnic is ready? ",
+              "#",
+              "^quiz:picnic_ready_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Perfect. Short and clear.",
+                    "\n",
+                    {
+                      "->": "0.g-1.22"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^It's «Пікнік готовий». The other phrases mean something else.",
+                    "\n",
+                    {
+                      "->": "0.g-1.22"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^One more thing. When you call her, it's «Іванко», not «Іванка». Ukrainian changes a name when you call someone. «Іванко, ходи сюди» means \"Ivanka, come here\". Which one calls her? ",
+              "#",
+              "^quiz:picnic_call_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Yes! Now go. She's by the trees on the right.",
+                    "\n",
+                    {
+                      "->": "0.g-1.34"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^It's «Іванко, ходи сюди». Names change when you call someone. Now go, she's by the trees on the right.",
+                    "\n",
+                    {
+                      "->": "0.g-1.34"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "picnic_taught",
+                "re": true
+              },
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-2"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "feast": [
+            [
+              "^Ivanka comes running after you. ",
+              "#",
+              "^speaker:narrator",
+              "/#",
+              "\n",
+              "^«Мамо! Пікнік!» (Mom! Picnic!) ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^I heard you from here. «Пікнік готовий», perfect. ",
+              "#",
+              "^speaker:npc_olena",
+              "/#",
+              "\n",
+              "^«А що є?» (And what is there?) ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^«Салат, лимонад, банани і торт.» Did you catch that? You knew all four already. ",
+              "#",
+              "^speaker:npc_olena",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^All four?",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Салат. Лимонад. Банани. Торт. (Salad. Lemonade. Bananas. Cake.)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "^Look at the blanket. Try the last one: which word means cake? ",
+                  "#",
+                  "^quiz:picnic_food_1",
+                  "/#",
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "^You read them like a local. Which one is the drink? ",
+                  "#",
+                  "^quiz:picnic_food_2",
+                  "/#",
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "g-0": [
+                  "ev",
+                  {
+                    "VAR?": "quiz_ok"
+                  },
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Right!",
+                        "\n",
+                        {
+                          "->": ".^.^.^.5"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "->": ".^.b"
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Not quite, but look: «торт» is torte, «лимонад» is lemonade.",
+                        "\n",
+                        {
+                          "->": ".^.^.^.5"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Ukrainian hands you a few hundred words like that for free, you only have to be able to read them. «Смачного!» (Enjoy your meal!)",
+                  "\n",
+                  "ev",
+                  "str",
+                  "^Смачного! (Enjoy your meal!)",
+                  "/str",
+                  "/ev",
+                  {
+                    "*": ".^.c-2",
+                    "flg": 20
+                  },
+                  "ev",
+                  "str",
+                  "^Дякую! (Thank you!)",
+                  "/str",
+                  "/ev",
+                  {
+                    "*": ".^.c-3",
+                    "flg": 20
+                  },
+                  {
+                    "c-2": [
+                      "\n",
+                      {
+                        "->": ".^.^.^.g-1"
+                      },
+                      {
+                        "#f": 5
+                      }
+                    ],
+                    "c-3": [
+                      "\n",
+                      {
+                        "->": ".^.^.^.g-1"
+                      },
+                      {
+                        "#f": 5
+                      }
+                    ]
+                  }
+                ],
+                "g-1": [
+                  "^Your first Ukrainian picnic. Well done!",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "picnic_done",
+                    "re": true
+                  },
+                  "^You called a child, and she understood you. That is the whole idea of this game. ",
+                  "#",
+                  "^ending:picnic",
+                  "/#",
+                  "\n",
+                  "end",
+                  null
+                ]
+              }
+            ],
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "ivanka_called"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                {
+                  "->": "feast"
+                },
+                {
+                  "->": "0.5"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "picnic_taught"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^Іванка біля дерев. Поклич її: «Іванко, ходи сюди!» І пам'ятай, лише українською. ",
+                "#",
+                "^speaker:npc_olena",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.11"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Привіт! Ось ти де. Усе готово, лишилося покликати доньку. Можеш її гукнути? Вона біля дерев. ",
+          "#",
+          "^speaker:npc_olena",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Привіт! Авжеж.",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Можна я скажу по-англійськи?",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              "^Чудово!",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              "^Лише українською. Іванка не знає англійської, ні слова. Їй шість.",
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^Скажи їй, що пікнік готовий.",
+              "\n",
+              "ev",
+              "str",
+              "^Як сказати «пікнік»?",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-2",
+                "flg": 20
+              },
+              {
+                "c-2": [
+                  "\n",
+                  {
+                    "->": "0.g-1"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            "g-1": [
+              "^Це слово ти вже знаєш. «Пікнік». Прочитай літерами, які вже вивчив. Пік-нік. Спробуй. ",
+              "#",
+              "^quiz:picnic_read_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Саме так!",
+                    "\n",
+                    {
+                      "->": "0.g-1.10"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^«Пікнік». П — п, І — і, К — к, Н — н.",
+                    "\n",
+                    {
+                      "->": "0.g-1.10"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^А «готовий» означає «ready». Разом: «Пікнік готовий». Як сказати Іванці, що пікнік готовий? ",
+              "#",
+              "^quiz:picnic_ready_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Ідеально. Коротко і ясно.",
+                    "\n",
+                    {
+                      "->": "0.g-1.22"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Треба «Пікнік готовий». Інші фрази означають інше.",
+                    "\n",
+                    {
+                      "->": "0.g-1.22"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "^І ще. Коли кличеш, кажеш «Іванко», а не «Іванка». Ім'я змінюється, коли до когось звертаєшся. «Іванко, ходи сюди» — це «Ivanka, come here». Яка фраза кличе її? ",
+              "#",
+              "^quiz:picnic_call_1",
+              "/#",
+              "\n",
+              "ev",
+              {
+                "VAR?": "quiz_ok"
+              },
+              "/ev",
+              [
+                {
+                  "->": ".^.b",
+                  "c": true
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Так! Тепер іди. Вона біля дерев праворуч.",
+                    "\n",
+                    {
+                      "->": "0.g-1.34"
+                    },
+                    null
+                  ]
+                }
+              ],
+              [
+                {
+                  "->": ".^.b"
+                },
+                {
+                  "b": [
+                    "\n",
+                    "^Треба «Іванко, ходи сюди». Ім'я змінюється, коли кличеш. Тепер іди, вона біля дерев праворуч.",
+                    "\n",
+                    {
+                      "->": "0.g-1.34"
+                    },
+                    null
+                  ]
+                }
+              ],
+              "nop",
+              "\n",
+              "ev",
+              true,
+              "/ev",
+              {
+                "VAR=": "picnic_taught",
+                "re": true
+              },
+              "end",
+              [
+                "done",
+                {
+                  "#n": "g-2"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "feast": [
+            [
+              "^Іванка біжить за тобою. ",
+              "#",
+              "^speaker:narrator",
+              "/#",
+              "\n",
+              "^«Мамо! Пікнік!» ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^Я чула звідси. «Пікнік готовий», чудово. ",
+              "#",
+              "^speaker:npc_olena",
+              "/#",
+              "\n",
+              "^«А що є?» ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^«Салат, лимонад, банани і торт.» Упізнав усі чотири слова? Ти їх уже знав. ",
+              "#",
+              "^speaker:npc_olena",
+              "/#",
+              "\n",
+              "ev",
+              "str",
+              "^Усі чотири?",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Салат. Лимонад. Банани. Торт.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  "^Подивись на ковдру. Спробуй останнє: яке слово означає «cake»? ",
+                  "#",
+                  "^quiz:picnic_food_1",
+                  "/#",
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "^Ти читаєш як свій. Яке слово — напій? ",
+                  "#",
+                  "^quiz:picnic_food_2",
+                  "/#",
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "g-0": [
+                  "ev",
+                  {
+                    "VAR?": "quiz_ok"
+                  },
+                  "/ev",
+                  [
+                    {
+                      "->": ".^.b",
+                      "c": true
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Правильно!",
+                        "\n",
+                        {
+                          "->": ".^.^.^.5"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "->": ".^.b"
+                    },
+                    {
+                      "b": [
+                        "\n",
+                        "^Майже, але дивись: «торт» — як torte, «лимонад» — як lemonade.",
+                        "\n",
+                        {
+                          "->": ".^.^.^.5"
+                        },
+                        null
+                      ]
+                    }
+                  ],
+                  "nop",
+                  "\n",
+                  "^Українська дарує сотні таких слів, треба лише вміти їх читати. «Смачного!»",
+                  "\n",
+                  "ev",
+                  "str",
+                  "^Смачного!",
+                  "/str",
+                  "/ev",
+                  {
+                    "*": ".^.c-2",
+                    "flg": 20
+                  },
+                  "ev",
+                  "str",
+                  "^Дякую!",
+                  "/str",
+                  "/ev",
+                  {
+                    "*": ".^.c-3",
+                    "flg": 20
+                  },
+                  {
+                    "c-2": [
+                      "\n",
+                      {
+                        "->": ".^.^.^.g-1"
+                      },
+                      {
+                        "#f": 5
+                      }
+                    ],
+                    "c-3": [
+                      "\n",
+                      {
+                        "->": ".^.^.^.g-1"
+                      },
+                      {
+                        "#f": 5
+                      }
+                    ]
+                  }
+                ],
+                "g-1": [
+                  "^Твій перший український пікнік. Молодець!",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "picnic_done",
+                    "re": true
+                  },
+                  "^Ти покликав дитину, і вона тебе зрозуміла. У цьому вся ідея гри. ",
+                  "#",
+                  "^ending:picnic",
+                  "/#",
+                  "\n",
+                  "end",
+                  null
+                ]
+              }
+            ],
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "пікнік",
+      "translation": "picnic",
+      "example": ""
+    },
+    {
+      "word": "готовий",
+      "translation": "ready",
+      "example": ""
+    },
+    {
+      "word": "Іванко, ходи сюди",
+      "translation": "Ivanka, come here",
+      "example": ""
+    },
+    {
+      "word": "салат",
+      "translation": "salad",
+      "example": ""
+    },
+    {
+      "word": "лимонад",
+      "translation": "lemonade",
+      "example": ""
+    },
+    {
+      "word": "банани",
+      "translation": "bananas",
+      "example": ""
+    },
+    {
+      "word": "торт",
+      "translation": "cake",
+      "example": ""
+    },
+    {
+      "word": "смачного",
+      "translation": "enjoy your meal",
+      "example": ""
+    }
+  ]
+}

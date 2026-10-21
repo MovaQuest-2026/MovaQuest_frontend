@@ -1,0 +1,15 @@
+{
+  "id": "picnic_food_2",
+  "type": "multiple_choice",
+  "prompt": {
+    "en": "Which word is the drink?",
+    "uk": "Яке слово — напій?"
+  },
+  "options": [
+    "Лимонад",
+    "Салат",
+    "Торт"
+  ],
+  "correct": "Лимонад",
+  "word": "лимонад"
+}

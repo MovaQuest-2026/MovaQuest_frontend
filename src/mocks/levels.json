@@ -1,0 +1,32 @@
+[
+  {
+    "id": "picnic",
+    "cityId": "picnic",
+    "order": 1,
+    "main": true,
+    "minutes": "3–5",
+    "title": {
+      "en": "Picnic in the park",
+      "uk": "Пікнік у парку"
+    },
+    "description": {
+      "en": "Kyiv. Olena speaks English, her daughter Ivanka doesn't. Learn your first words from Olena, then use them on Ivanka.",
+      "uk": "Київ. Олена говорить англійською, її донька Іванка ні. Дізнайся перші слова від Олени й застосуй їх з Іванкою."
+    }
+  },
+  {
+    "id": "vinnytsia",
+    "cityId": "vinnytsia",
+    "order": 2,
+    "main": false,
+    "minutes": "30+",
+    "title": {
+      "en": "A day in Vinnytsia",
+      "uk": "День у Вінниці"
+    },
+    "description": {
+      "en": "The full story: the alphabet glade, the bus station, and a day with Solomiia.",
+      "uk": "Повна історія: галявина абетки, автовокзал і день із Соломією."
+    }
+  }
+]

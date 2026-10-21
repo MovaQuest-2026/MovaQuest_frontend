@@ -130,6 +130,10 @@ export interface CityConfig {
   name: LocalizedText
   culturalIntro: LocalizedText
   startZone: string
+  // Ігровий час нової гри; без значення лишається 09:00.
+  startClock?: string
+  // level — після фіналу екран завершення рівня, без значення — «Щоденник дня».
+  completion?: 'level'
   // Стартова зона для мови інтерфейсу; без запису береться startZone.
   startZoneByLanguage?: Partial<Record<'en' | 'uk', string>>
   // id спрайта public/assets/characters/<id>.png для головного героя в усіх зонах.

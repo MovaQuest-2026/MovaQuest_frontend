@@ -1,4 +1,62 @@
 {
+  "picnic_olena": {
+    "cityId": "picnic",
+    "npcId": "npc_olena",
+    "zone": "park",
+    "vocabulary": [
+      [
+        "пікнік",
+        "picnic"
+      ],
+      [
+        "готовий",
+        "ready"
+      ],
+      [
+        "Іванко, ходи сюди",
+        "Ivanka, come here"
+      ],
+      [
+        "салат",
+        "salad"
+      ],
+      [
+        "лимонад",
+        "lemonade"
+      ],
+      [
+        "банани",
+        "bananas"
+      ],
+      [
+        "торт",
+        "cake"
+      ],
+      [
+        "смачного",
+        "enjoy your meal"
+      ]
+    ]
+  },
+  "picnic_ivanka": {
+    "cityId": "picnic",
+    "npcId": "npc_ivanka",
+    "zone": "park",
+    "vocabulary": [
+      [
+        "ходімо",
+        "let's go"
+      ],
+      [
+        "м'яч",
+        "ball"
+      ],
+      [
+        "дивись",
+        "look"
+      ]
+    ]
+  },
   "bus_cashier": {
     "npcId": "npc_cashier",
     "zone": "bus_station_hall",

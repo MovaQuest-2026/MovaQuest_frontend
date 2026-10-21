@@ -208,6 +208,56 @@ button:disabled {
   gap: 12px;
 }
 
+.levels-screen {
+  justify-content: flex-start;
+}
+
+.level-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.level-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.level-card h2,
+.level-card p {
+  margin: 0;
+}
+
+.level-card-main {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.level-badge {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+}
+
+.level-meta {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
 .game-screen {
   position: fixed;
   inset: 0;

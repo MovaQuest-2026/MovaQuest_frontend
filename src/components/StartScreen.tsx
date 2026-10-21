@@ -2,6 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 
+// Старт гри одразу веде в перший рівень; без мови вхід спершу відкриє вибір мови.
+const FIRST_LEVEL_ID = 'picnic'
+
 export function StartScreen() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
@@ -16,7 +19,7 @@ export function StartScreen() {
 
   function handleRestart() {
     resetProgress()
-    navigate('/language')
+    navigate(`/levels/${FIRST_LEVEL_ID}`)
   }
 
   return (
@@ -34,10 +37,13 @@ export function StartScreen() {
           </button>
         </>
       ) : (
-        <button type="button" onClick={() => navigate('/language')}>
+        <button type="button" onClick={() => navigate(`/levels/${FIRST_LEVEL_ID}`)}>
           {t('start.start')}
         </button>
       )}
+      <button type="button" onClick={() => navigate('/levels')}>
+        {t('start.levels')}
+      </button>
       <button type="button" onClick={() => navigate('/credits')}>
         {t('start.credits')}
       </button>

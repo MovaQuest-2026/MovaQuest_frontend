@@ -19,3 +19,7 @@ VAR alpha_easy = false
 VAR alpha_new = false
 VAR alpha_special = false
 VAR alpha_score = 0
+// Рівень «Пікнік у парку»
+VAR picnic_taught = false
+VAR ivanka_called = false
+VAR picnic_done = false

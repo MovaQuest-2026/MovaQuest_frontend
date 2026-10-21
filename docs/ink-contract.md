@@ -50,6 +50,9 @@ node scripts/build-ink.mjs
 | `alpha_new` | bool | ink | галявина: Яринка провела станцію нових літер |
 | `alpha_special` | bool | ink | галявина: прочитано стару стіну (Є, Ї, Ю, Я, Ь) |
 | `alpha_score` | int | ink | галявина: правильних відповідей на вправи абетки, 0–9 |
+| `picnic_taught` | bool | ink | пікнік: Олена навчила слів, Іванка відкривається |
+| `ivanka_called` | bool | ink | пікнік: Іванку покликано українською |
+| `picnic_done` | bool | ink | пікнік: фінальний діалог з Оленою, рівень пройдено |
 
 Фронт перед стартом діалогу записує в `story.variablesState` поточні значення з `flags`, а через `story.ObserveVariable` забирає зміни назад.
 
@@ -117,6 +120,10 @@ node scripts/build-ink.mjs
 | 5 | `emb_phone` | повідомлення в телефоні | `embankment` | `emb_find_1` |
 | 5 | `emb_crowd` | люди в натовпі | `embankment` | — |
 | 5 | `emb_solomiia` | Соломія | `embankment` | — |
+| рівень `picnic` | `picnic_olena` | Олена | `park` | `picnic_read_1`, `picnic_ready_1`, `picnic_call_1`, `picnic_food_1`, `picnic_food_2` |
+| рівень `picnic` | `picnic_ivanka` | Іванка | `park` | — |
+
+У `dialogues.meta.json` необов'язкове поле `cityId` (за замовчуванням `vinnytsia`). Тег `ending:picnic` завершує рівень `picnic`. Говорять `speaker:narrator` — рядки оповіді без імені.
 
 ## Перед релізом
 

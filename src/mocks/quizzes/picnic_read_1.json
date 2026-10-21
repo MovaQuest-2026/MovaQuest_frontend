@@ -1,0 +1,15 @@
+{
+  "id": "picnic_read_1",
+  "type": "multiple_choice",
+  "prompt": {
+    "en": "Read the word: ПІКНІК",
+    "uk": "Прочитай слово: ПІКНІК"
+  },
+  "options": [
+    "picnic",
+    "music",
+    "cinema"
+  ],
+  "correct": "picnic",
+  "word": "пікнік"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "picnic_call_1",
+  "type": "multiple_choice",
+  "prompt": {
+    "en": "Call Ivanka: \"Ivanka, come here!\"",
+    "uk": "Поклич Іванку: «Ivanka, come here!»"
+  },
+  "options": [
+    "Іванко, ходи сюди",
+    "Іванка, ходи сюди",
+    "Пікнік готовий"
+  ],
+  "correct": "Іванко, ходи сюди",
+  "word": "Іванко, ходи сюди"
+}

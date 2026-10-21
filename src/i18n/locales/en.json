@@ -4,7 +4,8 @@
     "start": "Start",
     "continue": "Continue",
     "restart": "Start over",
-    "credits": "Credits"
+    "credits": "Licenses",
+    "levels": "Levels"
   },
   "languageSelect": {
     "title": "Choose your language",
@@ -97,5 +98,23 @@
       "confirm": "Yes, let's go",
       "cancel": "Not yet"
     }
+  },
+  "levels": {
+    "title": "Levels",
+    "main": "Main level",
+    "minutes": "{{minutes}} min",
+    "start": "Play",
+    "continue": "Continue",
+    "replay": "Play again",
+    "completed": "Completed",
+    "back": "Back"
+  },
+  "levelComplete": {
+    "title": "Level complete",
+    "text": "You learned words from Olena and used them on Ivanka, who doesn't speak English. That is how every level of the game works: new words from a teacher, practice with the people around you.",
+    "wordsTitle": "Words you know: {{count}}",
+    "noWords": "No words yet — try the exercises in dialogues.",
+    "next": "All levels",
+    "playAgain": "Play again"
   }
 }

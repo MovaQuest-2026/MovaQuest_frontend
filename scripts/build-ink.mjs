@@ -8,7 +8,7 @@ import { PosixFileHandler } from 'inkjs/compiler/FileHandler/PosixFileHandler'
 
 const INK_DIR = path.resolve('content/ink')
 const OUT_DIR = path.resolve('src/mocks/dialogues')
-const CITY_ID = 'vinnytsia'
+const DEFAULT_CITY_ID = 'vinnytsia'
 const meta = JSON.parse(fs.readFileSync(path.join(INK_DIR, 'dialogues.meta.json'), 'utf8'))
 
 function compile(file) {
@@ -35,7 +35,7 @@ for (const [id, info] of Object.entries(meta)) {
     if (quizTags(uk) !== quizTags(en)) throw new Error(`quiz-теги різняться: uk=[${quizTags(uk)}] en=[${quizTags(en)}]`)
     const out = {
       id,
-      cityId: CITY_ID,
+      cityId: info.cityId ?? DEFAULT_CITY_ID,
       npcId: info.npcId,
       zone: info.zone,
       inkContent: { en: compile(en), uk: compile(uk) },
