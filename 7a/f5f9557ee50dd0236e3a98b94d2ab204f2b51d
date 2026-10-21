@@ -1,0 +1,147 @@
+content/ink/picnic_olena.en.ink
+  s_43ac40e86fb4e8::t_dcfa06a1a171b8 47-48,56
+  s_43ac40e86fb4e8::t_603bac5595e649 38-39
+  s_43ac40e86fb4e8::t_ee790319f252ec 1-37,40-46,49-55,57-59
+CLAUDE.md
+  s_5508887d03897c::t_175db427ace3ac 110
+  s_43ac40e86fb4e8::t_5c7b79d7621470 43-46,48-53
+  s_43ac40e86fb4e8::t_d0cfb99913b2cd 47
+  s_43ac40e86fb4e8::t_eacd71ae23d45e 104
+src/mocks/dialogues/center_ostap.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 284-295,581-592
+src/mocks/dialogues/vinnytsia_cafe.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 296-307,605-616
+src/mocks/dialogues/glade_yarynka.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 479-490,967-978
+src/mocks/dialogues/vysh_galyna.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 306-317,625-636
+src/mocks/quizzes/picnic_food_2.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-15
+scripts/build-ink.mjs
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 11,38
+src/mocks/quizzes/picnic_ready_1.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-15
+src/mocks/levels.json
+  s_43ac40e86fb4e8::t_0496432093ff0c 1-32
+src/index.css
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 211-260
+src/api/getCityConfig.ts
+  s_43ac40e86fb4e8::t_0496432093ff0c 133-136
+src/mocks/dialogues/trolley_passenger.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 207-218,427-438
+src/components/WorldScreen.tsx
+  s_43ac40e86fb4e8::t_d1941c416d6753 17,92,110
+src/mocks/dialogues/bus_nina.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 240-251,493-504
+src/mocks/dialogues/park_musician.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 169-180,351-362
+src/mocks/dialogues/vysh_tourist.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 240-251,493-504
+src/components/LanguageSelectScreen.tsx
+  s_43ac40e86fb4e8::t_d1941c416d6753 2,8-10
+  s_43ac40e86fb4e8::t_d0cfb99913b2cd 16
+src/mocks/quizzes/picnic_food_1.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-15
+src/components/LevelEntryScreen.tsx
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 1-38
+src/i18n/locales/uk.json
+  s_43ac40e86fb4e8::t_eacd71ae23d45e 7
+  s_43ac40e86fb4e8::t_d0cfb99913b2cd 8
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 101-118
+src/mocks/dialogues/picnic_ivanka.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-705
+src/App.tsx
+  s_43ac40e86fb4e8::t_d1941c416d6753 6-7,16-17
+src/mocks/dialogues/center_tower.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 248-259,509-520
+public/CREDITS.md
+  s_43ac40e86fb4e8::t_5c7b79d7621470 23
+src/mocks/dialogues/glade_marta.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 486-497,981-992
+src/mocks/dialogues/glade_wall.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 448-459,905-916
+src/store/useGameStore.ts
+  s_5508887d03897c::t_175db427ace3ac 124-137
+  s_43ac40e86fb4e8::t_d1941c416d6753 118,272-280
+src/mocks/quizzes/picnic_call_1.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-15
+src/landing/LandingPage.tsx
+  s_43ac40e86fb4e8::t_eacd71ae23d45e 534
+content/ink/picnic_ivanka.uk.ink
+  s_43ac40e86fb4e8::t_dcfa06a1a171b8 1-9,11-16,18-21,23-24,26-32,34
+  s_43ac40e86fb4e8::t_603bac5595e649 10,17,22,25,33
+src/mocks/dialogues/trolley_conductor.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 202-213,417-428
+src/mocks/dialogues/bus_guard.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 202-213,417-428
+src/api/getLevels.ts
+  s_43ac40e86fb4e8::t_0496432093ff0c 1-26
+src/components/LevelCompleteScreen.tsx
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 1-63
+src/mocks/quizzes/picnic_read_1.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-15
+src/mocks/dialogues/emb_phone.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 158-169,329-340
+src/game/quests/picnic.test.ts
+  s_43ac40e86fb4e8::t_58d480a877e539 1-41
+src/mocks/dialogues/emb_crowd.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 198-209,409-420
+src/mocks/dialogues/bus_cashier.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 237-248,487-498
+docs/ink-contract.md
+  s_43ac40e86fb4e8::t_5c7b79d7621470 53-55,123-126
+src/components/StartScreen.tsx
+  s_43ac40e86fb4e8::t_d0cfb99913b2cd 5-7,22,40,44-46
+src/mocks/quests/picnic_main.json
+  s_43ac40e86fb4e8::t_0496432093ff0c 1-49
+content/ink/picnic_ivanka.en.ink
+  s_43ac40e86fb4e8::t_dcfa06a1a171b8 1-9,11-16,18-21,23-24,26-32,34
+  s_43ac40e86fb4e8::t_603bac5595e649 10,17,22,25,33
+src/mocks/dialogues/picnic_olena.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 1-1162
+src/i18n/locales/en.json
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 101-118
+  s_43ac40e86fb4e8::t_eacd71ae23d45e 7
+  s_43ac40e86fb4e8::t_d0cfb99913b2cd 8
+src/mocks/dialogues/vysh_flowers.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 247-258,507-518
+src/mocks/cities/picnic.json
+  s_43ac40e86fb4e8::t_0496432093ff0c 1-139
+src/mocks/dialogues/center_artist.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 230-241,473-484
+content/ink/_variables.ink
+  s_43ac40e86fb4e8::t_ee790319f252ec 22-25
+content/ink/dialogues.meta.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 2-59,378
+src/components/LevelSelectScreen.tsx
+  s_43ac40e86fb4e8::t_2e613edbf8eb63 1-53
+content/ink/picnic_olena.uk.ink
+  s_43ac40e86fb4e8::t_dcfa06a1a171b8 1-37,40-59
+  s_43ac40e86fb4e8::t_603bac5595e649 38-39
+src/mocks/dialogues/emb_solomiia.ink.json
+  s_43ac40e86fb4e8::t_ab87fc89e22c29 452-463,917-928
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7af5f9557ee50dd0236e3a98b94d2ab204f2b51d",
+  "prompts": {},
+  "sessions": {
+    "s_43ac40e86fb4e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e20eda1-f0e3-42cf-824b-d5e7c3346a0c",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_5508887d03897c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "863db939-9895-4606-b721-8106d1a69382",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
