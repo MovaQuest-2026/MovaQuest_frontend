@@ -1,0 +1,51 @@
+src/mocks/dialogues/picnic_ivanka.ink.json
+  s_43ac40e86fb4e8::t_11e94377fa440e 74-78,81,84-123,125,127-133,419-423,426,429-468,470,472-478
+src/mocks/quizzes/picnic_ready_1.json
+  s_43ac40e86fb4e8::t_807960ae92ceca 5-6
+content/ink/picnic_olena.uk.ink
+  s_43ac40e86fb4e8::t_11e94377fa440e 28
+  s_43ac40e86fb4e8::t_807960ae92ceca 22
+src/game/quests/picnic.test.ts
+  s_43ac40e86fb4e8::t_11e94377fa440e 18,23
+docs/ink-contract.md
+  s_43ac40e86fb4e8::t_11e94377fa440e 123-124
+src/mocks/cities/picnic.json
+  s_43ac40e86fb4e8::t_9c89c772b0c8f2 120-121
+  s_43ac40e86fb4e8::t_3aa65d58ceb953 133-134
+content/ink/picnic_ivanka.en.ink
+  s_43ac40e86fb4e8::t_11e94377fa440e 11-16
+content/ink/picnic_ivanka.uk.ink
+  s_43ac40e86fb4e8::t_11e94377fa440e 11-16
+src/api/getCityConfig.ts
+  s_43ac40e86fb4e8::t_3aa65d58ceb953 29-30
+  s_43ac40e86fb4e8::t_9c89c772b0c8f2 31-32
+src/game/scenes/ZoneSceneBase.ts
+  s_43ac40e86fb4e8::t_86f4dfe7094a9c 1305-1314
+  s_43ac40e86fb4e8::t_c24e11ca7dd586 1325-1327
+  s_43ac40e86fb4e8::t_9c89c772b0c8f2 138-139,1234,1260-1276,1294,1302-1304
+  s_43ac40e86fb4e8::t_4f89353f4103cb 36
+  s_43ac40e86fb4e8::t_3aa65d58ceb953 35,37,1233,1252,1277-1293
+  s_43ac40e86fb4e8::t_3fc0a66cac4fad 1295
+src/mocks/dialogues/picnic_olena.ink.json
+  s_43ac40e86fb4e8::t_807960ae92ceca 181,694
+  s_43ac40e86fb4e8::t_11e94377fa440e 226,739
+content/ink/picnic_olena.en.ink
+  s_43ac40e86fb4e8::t_807960ae92ceca 22
+  s_43ac40e86fb4e8::t_11e94377fa440e 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d5c54a65904817ca59f2ae84d49c0dce5343aa8b",
+  "prompts": {},
+  "sessions": {
+    "s_43ac40e86fb4e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e20eda1-f0e3-42cf-824b-d5e7c3346a0c",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
