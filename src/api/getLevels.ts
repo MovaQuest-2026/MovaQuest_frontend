@@ -8,6 +8,8 @@ export interface LevelInfo {
   order: number
   // Основний рівень: показується першим і виділяється в списку.
   main: boolean
+  // Прихований рівень не показується у списку, але відкривається за прямим роутом /levels/:levelId.
+  hidden?: boolean
   minutes: string
   title: LocalizedText
   description: LocalizedText
@@ -18,7 +20,7 @@ const levels: LevelInfo[] = [...(levelsData as LevelInfo[])].sort(
 )
 
 export async function getLevels(): Promise<LevelInfo[]> {
-  return levels
+  return levels.filter((level) => !level.hidden)
 }
 
 export async function getLevel(levelId: string): Promise<LevelInfo | null> {

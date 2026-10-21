@@ -41,9 +41,6 @@ export function StartScreen() {
           {t('start.start')}
         </button>
       )}
-      <button type="button" onClick={() => navigate('/levels')}>
-        {t('start.levels')}
-      </button>
       <button type="button" onClick={() => navigate('/credits')}>
         {t('start.credits')}
       </button>
