@@ -1,0 +1,23 @@
+CLAUDE.md
+  s_43ac40e86fb4e8::t_1a9ed667bb2e39 47
+src/mocks/levels.json
+  s_43ac40e86fb4e8::t_1a9ed667bb2e39 30-31,33
+src/api/getLevels.ts
+  s_43ac40e86fb4e8::t_1a9ed667bb2e39 11-12,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5a6a00fbb86dc860b73d9618484ee239e939cd55",
+  "prompts": {},
+  "sessions": {
+    "s_43ac40e86fb4e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e20eda1-f0e3-42cf-824b-d5e7c3346a0c",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
