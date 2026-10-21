@@ -244,6 +244,18 @@
             {
               "VAR=": "alpha_score"
             },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
+            },
             "/ev",
             "end",
             null
@@ -491,6 +503,18 @@
             0,
             {
               "VAR=": "alpha_score"
+            },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
             },
             "/ev",
             "end",

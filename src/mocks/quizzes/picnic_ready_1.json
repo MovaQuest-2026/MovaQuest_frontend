@@ -1,0 +1,15 @@
+{
+  "id": "picnic_ready_1",
+  "type": "multiple_choice",
+  "prompt": {
+    "en": "Tell Ivanka the picnic is ready.",
+    "uk": "Скажи Іванці, що пікнік готовий."
+  },
+  "options": [
+    "Пікнік готовий",
+    "Іванко, ходи сюди",
+    "Дякую"
+  ],
+  "correct": "Пікнік готовий",
+  "word": "готовий"
+}

@@ -1,0 +1,705 @@
+{
+  "id": "picnic_ivanka",
+  "cityId": "picnic",
+  "npcId": "npc_ivanka",
+  "zone": "park",
+  "inkContent": {
+    "en": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "picnic_taught"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^«Привіт! Мама чекає біля ковдри.» (Hi! Mom is waiting by the blanket.) Maybe you should talk to her first. ",
+                "#",
+                "^speaker:npc_ivanka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.6"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "ivanka_called"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^«Ходімо!» (Let's go!) ",
+                "#",
+                "^speaker:npc_ivanka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.12"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Ivanka is kicking a ball under the tree. She hasn't noticed you. ",
+          "#",
+          "^speaker:narrator",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Іванко, ходи сюди! (Ivanka, come here!)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Іванко! (Ivanka!)",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^«Що?» (What?) ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              {
+                "->": "tell"
+              },
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "tell": [
+            [
+              "ev",
+              "str",
+              "^Пікнік готовий! (The picnic is ready!)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Your mom says the food is ready.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  {
+                    "->": "ready"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "^«Що? Я не розумію.» (What? I don't understand.) ",
+                  "#",
+                  "^speaker:npc_ivanka",
+                  "/#",
+                  "\n",
+                  "^She really doesn't speak English. Say it in Ukrainian. ",
+                  "#",
+                  "^speaker:narrator",
+                  "/#",
+                  "\n",
+                  {
+                    "->": "tell"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "ready": [
+            [
+              "^«Пікнік? Ура!» (Picnic? Hooray!) ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^«Дивись! Це мій м'яч.» (Look! This is my ball.)",
+              "\n",
+              "ev",
+              "str",
+              "^Гарний м'яч. Ходімо! (Nice ball. Let's go!)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Ходімо! (Let's go!)",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "g-0": [
+                  "^«Ходімо!» (Let's go!)",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "ivanka_called",
+                    "re": true
+                  },
+                  "^Ivanka runs to the blanket. Follow her and talk to her mom. ",
+                  "#",
+                  "^speaker:narrator",
+                  "/#",
+                  "\n",
+                  "end",
+                  null
+                ]
+              }
+            ],
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    },
+    "uk": {
+      "inkVersion": 21,
+      "root": [
+        [
+          "\n",
+          "ev",
+          {
+            "VAR?": "picnic_taught"
+          },
+          "!",
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^«Привіт! Мама чекає біля ковдри.» Може, спершу поговори з нею. ",
+                "#",
+                "^speaker:npc_ivanka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.6"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "ev",
+          {
+            "VAR?": "ivanka_called"
+          },
+          "/ev",
+          [
+            {
+              "->": ".^.b",
+              "c": true
+            },
+            {
+              "b": [
+                "\n",
+                "^«Ходімо!» ",
+                "#",
+                "^speaker:npc_ivanka",
+                "/#",
+                "\n",
+                "end",
+                {
+                  "->": "0.12"
+                },
+                null
+              ]
+            }
+          ],
+          "nop",
+          "\n",
+          "^Іванка б'є м'яч під деревом. Вона тебе ще не помітила. ",
+          "#",
+          "^speaker:narrator",
+          "/#",
+          "\n",
+          "ev",
+          "str",
+          "^Іванко, ходи сюди!",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^Іванко!",
+          "/str",
+          "/ev",
+          {
+            "*": "0.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "\n",
+              {
+                "->": "0.g-0"
+              },
+              {
+                "#f": 5
+              }
+            ],
+            "g-0": [
+              "^«Що?» ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              {
+                "->": "tell"
+              },
+              [
+                "done",
+                {
+                  "#n": "g-1"
+                }
+              ],
+              null
+            ]
+          }
+        ],
+        "done",
+        {
+          "tell": [
+            [
+              "ev",
+              "str",
+              "^Пікнік готовий!",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Your mom says the food is ready.",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  {
+                    "->": "ready"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  "^«Що? Я не розумію.» ",
+                  "#",
+                  "^speaker:npc_ivanka",
+                  "/#",
+                  "\n",
+                  "^Вона справді не знає англійської. Скажи українською. ",
+                  "#",
+                  "^speaker:narrator",
+                  "/#",
+                  "\n",
+                  {
+                    "->": "tell"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ]
+              }
+            ],
+            null
+          ],
+          "ready": [
+            [
+              "^«Пікнік? Ура!» ",
+              "#",
+              "^speaker:npc_ivanka",
+              "/#",
+              "\n",
+              "^«Дивись! Це мій м'яч.»",
+              "\n",
+              "ev",
+              "str",
+              "^Гарний м'яч. Ходімо!",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-0",
+                "flg": 20
+              },
+              "ev",
+              "str",
+              "^Ходімо!",
+              "/str",
+              "/ev",
+              {
+                "*": ".^.c-1",
+                "flg": 20
+              },
+              {
+                "c-0": [
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "c-1": [
+                  "\n",
+                  {
+                    "->": ".^.^.g-0"
+                  },
+                  {
+                    "#f": 5
+                  }
+                ],
+                "g-0": [
+                  "^«Ходімо!»",
+                  "\n",
+                  "ev",
+                  true,
+                  "/ev",
+                  {
+                    "VAR=": "ivanka_called",
+                    "re": true
+                  },
+                  "^Іванка біжить до ковдри. Іди за нею й поговори з її мамою. ",
+                  "#",
+                  "^speaker:narrator",
+                  "/#",
+                  "\n",
+                  "end",
+                  null
+                ]
+              }
+            ],
+            null
+          ],
+          "global decl": [
+            "ev",
+            0,
+            {
+              "VAR=": "trust"
+            },
+            false,
+            {
+              "VAR=": "quiz_ok"
+            },
+            false,
+            {
+              "VAR=": "polite"
+            },
+            false,
+            {
+              "VAR=": "phone_charging"
+            },
+            false,
+            {
+              "VAR=": "helped_nina"
+            },
+            false,
+            {
+              "VAR=": "helped_tourist"
+            },
+            false,
+            {
+              "VAR=": "task_flowers"
+            },
+            false,
+            {
+              "VAR=": "task_show_time"
+            },
+            false,
+            {
+              "VAR=": "task_dessert"
+            },
+            false,
+            {
+              "VAR=": "stop_ok"
+            },
+            false,
+            {
+              "VAR=": "pirogov_asked"
+            },
+            false,
+            {
+              "VAR=": "knows_pirogov"
+            },
+            false,
+            {
+              "VAR=": "has_umbrella"
+            },
+            false,
+            {
+              "VAR=": "has_drawing"
+            },
+            false,
+            {
+              "VAR=": "alpha_easy"
+            },
+            false,
+            {
+              "VAR=": "alpha_new"
+            },
+            false,
+            {
+              "VAR=": "alpha_special"
+            },
+            0,
+            {
+              "VAR=": "alpha_score"
+            },
+            false,
+            {
+              "VAR=": "picnic_taught"
+            },
+            false,
+            {
+              "VAR=": "ivanka_called"
+            },
+            false,
+            {
+              "VAR=": "picnic_done"
+            },
+            "/ev",
+            "end",
+            null
+          ]
+        }
+      ],
+      "listDefs": {}
+    }
+  },
+  "vocabulary": [
+    {
+      "word": "ходімо",
+      "translation": "let's go",
+      "example": ""
+    },
+    {
+      "word": "м'яч",
+      "translation": "ball",
+      "example": ""
+    },
+    {
+      "word": "дивись",
+      "translation": "look",
+      "example": ""
+    }
+  ]
+}

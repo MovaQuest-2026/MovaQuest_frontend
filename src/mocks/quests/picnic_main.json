@@ -1,0 +1,49 @@
+{
+  "id": "picnic_main",
+  "cityId": "picnic",
+  "steps": [
+    {
+      "id": "picnic_olena",
+      "zone": "park",
+      "target": {
+        "npcId": "npc_olena"
+      },
+      "objective": {
+        "en": "Talk to Olena on the blanket",
+        "uk": "Поговори з Оленою на ковдрі"
+      },
+      "completeWhen": {
+        "flag": "picnic_taught"
+      }
+    },
+    {
+      "id": "picnic_ivanka",
+      "zone": "park",
+      "target": {
+        "npcId": "npc_ivanka"
+      },
+      "objective": {
+        "en": "Call Ivanka by the trees, in Ukrainian",
+        "uk": "Поклич Іванку біля дерев українською"
+      },
+      "completeWhen": {
+        "flag": "ivanka_called"
+      }
+    },
+    {
+      "id": "picnic_feast",
+      "zone": "park",
+      "target": {
+        "npcId": "npc_olena"
+      },
+      "objective": {
+        "en": "Go back to the blanket and start the picnic",
+        "uk": "Повернись на ковдру й почни пікнік"
+      },
+      "completeWhen": {
+        "flag": "picnic_done"
+      }
+    }
+  ],
+  "sideQuests": []
+}

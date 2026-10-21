@@ -115,12 +115,26 @@ interface GameActions {
   cancelPendingExit: () => void
   setDebugPhysics: (enabled: boolean) => void
   setJoystick: (vector: JoystickVector) => void
+  startLevel: (cityId: string) => void
   resetProgress: () => void
 }
 
 type GameState = GameData & GameActions
 
-const SAVE_KEY = 'movaquest-save-v1'
+// v1 — збереження до пролога на галявині: вони відновлювали гравця в зонах без арту (квадрати-плейсхолдери)
+// з квестовим станом, несумісним з поточним квестом. Їх не мігруємо, а прибираємо.
+const SAVE_KEY = 'movaquest-save-v2'
+const LEGACY_SAVE_KEYS = ['movaquest-save-v1']
+
+function removeLegacySaves() {
+  try {
+    for (const key of LEGACY_SAVE_KEYS) localStorage.removeItem(key)
+  } catch {
+    // localStorage недоступний (приватний режим) — persist теж не працюватиме.
+  }
+}
+
+removeLegacySaves()
 
 const initialData: GameData = {
   nativeLanguage: null,
@@ -255,6 +269,15 @@ export const useGameStore = create<GameState>()(
         ),
       setDebugPhysics: (enabled) => set({ debugPhysics: enabled }),
       setJoystick: (vector) => set({ joystick: vector }),
+      // Новий рівень: прогрес рівня скидається, мова інтерфейсу і вивчені слова лишаються.
+      startLevel: (cityId) => {
+        set((state) => ({
+          ...initialData,
+          nativeLanguage: state.nativeLanguage,
+          learnedWords: state.learnedWords,
+          currentCity: cityId,
+        }))
+      },
       resetProgress: () => {
         set(initialData)
         useGameStore.persist.clearStorage()

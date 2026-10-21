@@ -14,6 +14,7 @@ import { InteractionHint } from './InteractionHint'
 import { QuestTracker } from './QuestTracker'
 import { ConfirmTravelDialog } from './ConfirmTravelDialog'
 import { DayJournalScreen } from './DayJournalScreen'
+import { LevelCompleteScreen } from './LevelCompleteScreen'
 import { VirtualJoystick } from './VirtualJoystick'
 
 // Зона-пролог для англомовного інтерфейсу: там гра починається о 08:00.
@@ -88,6 +89,7 @@ export function WorldScreen() {
     useGameStore.setState({
       currentZone: startZone,
       spawn: null,
+      ...(city.startClock ? { gameClock: city.startClock } : {}),
       // Старт поза галявиною одразу закриває її кроки квесту.
       ...(startZone === GLADE_ZONE_ID
         ? { gameClock: GLADE_START_CLOCK }
@@ -105,7 +107,7 @@ export function WorldScreen() {
 
   // Після кінцівки гра завершена: F5 і «Продовжити» ведуть у щоденник, а не у фінальний діалог.
   if (gameFinished) {
-    return <DayJournalScreen />
+    return city.completion === 'level' ? <LevelCompleteScreen /> : <DayJournalScreen />
   }
 
   // Заставка зони показується один раз: прапорець intro_seen_<zone> ставиться при закритті.

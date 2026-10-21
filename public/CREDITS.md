@@ -20,7 +20,7 @@ Authors per character are copied from public/assets/lpc/<characterId>.credits.tx
 
 ## Characters and glade art
 
-Hero, Marta and Yarynka sprites (public/assets/characters/) and the glade background (public/assets/backgrounds/glade.png): TODO (team artist).
+Hero, Marta and Yarynka sprites (public/assets/characters/) and the glade background (public/assets/backgrounds/glade.png, also used as the park in the «Picnic» level): TODO (team artist).
 
 ## Landmarks
 

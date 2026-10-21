@@ -40,6 +40,17 @@ src/
   перекривають, а scoped-reset лежить під `.landing-root`. Стилі гри
   лендінг не зачіпає — нові глобальні стилі гри теж пишемо в `@layer legacy`.
 
+## Рівні
+- Кожен рівень — окреме місто в src/mocks/cities/ і запис у src/mocks/levels.json
+  (читається через src/api/getLevels.ts). Перший (`order: 1`, `main: true`) —
+  `picnic` («Пікнік у парку», демо на 3–5 хв, сценарій у scene-01-park-picnic.md).
+- Старт (`/play` → «Почати») веде одразу в `/levels/picnic`. Роути: `/levels` — вибір рівня, `/levels/:levelId` — прямий вхід (продовжує
+  збереження рівня або починає заново через `startLevel`; без мови веде на
+  `/language?next=...`). `/world/:cityId` — сам світ.
+- `startLevel(cityId)` скидає прогрес рівня, але лишає мову і `learnedWords`.
+- Місто з `completion: 'level'` після `ending:` показує LevelCompleteScreen
+  замість «Щоденника дня»; `startClock` задає стартовий час нової гри.
+
 ## Контент і діалоги (ink)
 - Сценарії діалогів лежать у content/ink/: <dialogueId>.uk.ink і
   <dialogueId>.en.ink, спільні змінні — _variables.ink, метадані —
@@ -90,13 +101,13 @@ src/
   `pointer: coarse`), сцена додає його до клавіатурного вводу.
 - DebugPanel (клавіша `) — тільки в dev: підключається через
   `import.meta.env.DEV ? lazy(...) : null`, стилі інлайн, у бандл не потрапляє.
-- Нові асети записуємо в public/CREDITS.md (екран «Автори» читає саме його).
+- Нові асети записуємо в public/CREDITS.md (екран «Ліцензії» читає саме його).
 - Контракт змінних і тегів — docs/ink-contract.md. Імена змінних і тегів
   не міняємо без оновлення цього документа.
 
 ## Збереження прогресу
 - useGameStore обгорнутий у persist (zustand/middleware), ключ
-  localStorage — `movaquest-save-v1`.
+  localStorage — `movaquest-save-v2` (v1 прибирається при старті).
 - Зберігаються тільки поля з partialize: nativeLanguage, currentCity,
   flags, questStep, gameClock, currentZone, spawn, inventory,
   learnedWords. Тимчасовий стан (activeDialogue, activeExercise,

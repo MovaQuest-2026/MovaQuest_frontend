@@ -1,0 +1,15 @@
+{
+  "id": "picnic_food_1",
+  "type": "multiple_choice",
+  "prompt": {
+    "en": "Which word means \"cake\"?",
+    "uk": "Яке слово означає «cake»?"
+  },
+  "options": [
+    "Торт",
+    "Салат",
+    "Банани"
+  ],
+  "correct": "Торт",
+  "word": "торт"
+}
