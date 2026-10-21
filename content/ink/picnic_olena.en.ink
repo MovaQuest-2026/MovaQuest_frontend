@@ -19,18 +19,13 @@ INCLUDE _variables.ink
 - else:
     «Пікнік», picnic. П is p, І is ee, К is k, Н is n.
 }
-And "ready" is «готовий». Together: «Пікнік готовий». How would you tell Ivanka the picnic is ready? # quiz:picnic_ready_1
+And "ready" is «готовий». Together: «Пікнік готовий». How do you say "the picnic is ready"? # quiz:picnic_ready_1
 { quiz_ok:
     Perfect. Short and clear.
 - else:
     It's «Пікнік готовий». The other phrases mean something else.
 }
-One more thing. When you call her, it's «Іванко», not «Іванка». Ukrainian changes a name when you call someone. «Іванко, ходи сюди» means "Ivanka, come here". Which one calls her? # quiz:picnic_call_1
-{ quiz_ok:
-    Yes! Now go. She's by the trees on the right.
-- else:
-    It's «Іванко, ходи сюди». Names change when you call someone. Now go, she's by the trees on the right.
-}
+One more thing. When you call her, it's «Іванко», not «Іванка». Ukrainian changes a name when you call someone. «Іванко, ходи сюди» means "Ivanka, come here". Go to her, she's by the trees on the right. Don't shout from the blanket, walk up and call her yourself.
 ~ picnic_taught = true
 -> END
 

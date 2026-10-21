@@ -26,6 +26,10 @@ export interface CityNpcConfig {
   character?: string
   // Без спрайта і привітання над головою, але із зоною взаємодії і підписом у InteractionHint.
   invisible?: boolean
+  // Після цього прапорця NPC іде за гравцем (супутник), крім часу діалогу з ним.
+  followWhenFlag?: string
+  // Після цього прапорця NPC сам починає діалог, щойно гравець підійде.
+  autoTalkWhenFlag?: string
 }
 
 export interface DoorConfig {

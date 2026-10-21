@@ -178,7 +178,7 @@
               ],
               "nop",
               "\n",
-              "^And \"ready\" is «готовий». Together: «Пікнік готовий». How would you tell Ivanka the picnic is ready? ",
+              "^And \"ready\" is «готовий». Together: «Пікнік готовий». How do you say \"the picnic is ready\"? ",
               "#",
               "^quiz:picnic_ready_1",
               "/#",
@@ -223,50 +223,7 @@
               ],
               "nop",
               "\n",
-              "^One more thing. When you call her, it's «Іванко», not «Іванка». Ukrainian changes a name when you call someone. «Іванко, ходи сюди» means \"Ivanka, come here\". Which one calls her? ",
-              "#",
-              "^quiz:picnic_call_1",
-              "/#",
-              "\n",
-              "ev",
-              {
-                "VAR?": "quiz_ok"
-              },
-              "/ev",
-              [
-                {
-                  "->": ".^.b",
-                  "c": true
-                },
-                {
-                  "b": [
-                    "\n",
-                    "^Yes! Now go. She's by the trees on the right.",
-                    "\n",
-                    {
-                      "->": "0.g-1.34"
-                    },
-                    null
-                  ]
-                }
-              ],
-              [
-                {
-                  "->": ".^.b"
-                },
-                {
-                  "b": [
-                    "\n",
-                    "^It's «Іванко, ходи сюди». Names change when you call someone. Now go, she's by the trees on the right.",
-                    "\n",
-                    {
-                      "->": "0.g-1.34"
-                    },
-                    null
-                  ]
-                }
-              ],
-              "nop",
+              "^One more thing. When you call her, it's «Іванко», not «Іванка». Ukrainian changes a name when you call someone. «Іванко, ходи сюди» means \"Ivanka, come here\". Go to her, she's by the trees on the right. Don't shout from the blanket, walk up and call her yourself.",
               "\n",
               "ev",
               true,
@@ -734,7 +691,7 @@
               ],
               "nop",
               "\n",
-              "^А «готовий» означає «ready». Разом: «Пікнік готовий». Як сказати Іванці, що пікнік готовий? ",
+              "^А «готовий» означає «ready». Разом: «Пікнік готовий». Як сказати «the picnic is ready»? ",
               "#",
               "^quiz:picnic_ready_1",
               "/#",
@@ -779,50 +736,7 @@
               ],
               "nop",
               "\n",
-              "^І ще. Коли кличеш, кажеш «Іванко», а не «Іванка». Ім'я змінюється, коли до когось звертаєшся. «Іванко, ходи сюди» — це «Ivanka, come here». Яка фраза кличе її? ",
-              "#",
-              "^quiz:picnic_call_1",
-              "/#",
-              "\n",
-              "ev",
-              {
-                "VAR?": "quiz_ok"
-              },
-              "/ev",
-              [
-                {
-                  "->": ".^.b",
-                  "c": true
-                },
-                {
-                  "b": [
-                    "\n",
-                    "^Так! Тепер іди. Вона біля дерев праворуч.",
-                    "\n",
-                    {
-                      "->": "0.g-1.34"
-                    },
-                    null
-                  ]
-                }
-              ],
-              [
-                {
-                  "->": ".^.b"
-                },
-                {
-                  "b": [
-                    "\n",
-                    "^Треба «Іванко, ходи сюди». Ім'я змінюється, коли кличеш. Тепер іди, вона біля дерев праворуч.",
-                    "\n",
-                    {
-                      "->": "0.g-1.34"
-                    },
-                    null
-                  ]
-                }
-              ],
-              "nop",
+              "^І ще. Коли кличеш, кажеш «Іванко», а не «Іванка». Ім'я змінюється, коли до когось звертаєшся. «Іванко, ходи сюди» — це «Ivanka, come here». Іди до неї, вона біля дерев праворуч. Не кричи з ковдри, підійди й поклич сама.",
               "\n",
               "ev",
               true,
