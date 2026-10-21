@@ -27,6 +27,7 @@
     "description": {
       "en": "The full story: the alphabet glade, the bus station, and a day with Solomiia.",
       "uk": "Повна історія: галявина абетки, автовокзал і день із Соломією."
-    }
+    },
+    "hidden": true
   }
 ]

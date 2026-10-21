@@ -44,7 +44,7 @@ src/
 - Кожен рівень — окреме місто в src/mocks/cities/ і запис у src/mocks/levels.json
   (читається через src/api/getLevels.ts). Перший (`order: 1`, `main: true`) —
   `picnic` («Пікнік у парку», демо на 3–5 хв, сценарій у scene-01-park-picnic.md).
-- Старт (`/play` → «Почати») веде одразу в `/levels/picnic`. Роути: `/levels` — вибір рівня, `/levels/:levelId` — прямий вхід (продовжує
+- Старт (`/play` → «Почати») веде одразу в `/levels/picnic`. Рівень з `hidden: true` (зараз `vinnytsia`) не в меню, тільки за роутом. Роути: `/levels` — вибір рівня, `/levels/:levelId` — прямий вхід (продовжує
   збереження рівня або починає заново через `startLevel`; без мови веде на
   `/language?next=...`). `/world/:cityId` — сам світ.
 - `startLevel(cityId)` скидає прогрес рівня, але лишає мову і `learnedWords`.
