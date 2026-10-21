@@ -120,8 +120,8 @@ node scripts/build-ink.mjs
 | 5 | `emb_phone` | повідомлення в телефоні | `embankment` | `emb_find_1` |
 | 5 | `emb_crowd` | люди в натовпі | `embankment` | — |
 | 5 | `emb_solomiia` | Соломія | `embankment` | — |
-| рівень `picnic` | `picnic_olena` | Олена | `park` | `picnic_read_1`, `picnic_ready_1`, `picnic_call_1`, `picnic_food_1`, `picnic_food_2` |
-| рівень `picnic` | `picnic_ivanka` | Іванка | `park` | — |
+| рівень `picnic` | `picnic_olena` | Олена | `park` | `picnic_read_1`, `picnic_ready_1`, `picnic_food_1`, `picnic_food_2` |
+| рівень `picnic` | `picnic_ivanka` | Іванка | `park` | `picnic_call_1` |
 
 У `dialogues.meta.json` необов'язкове поле `cityId` (за замовчуванням `vinnytsia`). Тег `ending:picnic` завершує рівень `picnic`. Говорять `speaker:narrator` — рядки оповіді без імені.
 

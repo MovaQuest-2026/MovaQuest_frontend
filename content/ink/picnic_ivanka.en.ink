@@ -8,9 +8,12 @@ INCLUDE _variables.ink
     -> END
 }
 Ivanka is kicking a ball under the tree. She hasn't noticed you. # speaker:narrator
-* [Іванко, ходи сюди! (Ivanka, come here!)]
-* [Іванко! (Ivanka!)]
--
+You walk up to her. How do you call her? # quiz:picnic_call_1
+{ quiz_ok:
+    «Іванко, ходи сюди!» She turns around.
+- else:
+    It's «Іванко, ходи сюди», with «Іванко», not «Іванка». She turns around anyway.
+}
 «Що?» (What?) # speaker:npc_ivanka
 -> tell
 

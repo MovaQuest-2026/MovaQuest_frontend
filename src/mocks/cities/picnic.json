@@ -117,7 +117,8 @@
           "x": 214,
           "y": 214,
           "patrol": false,
-          "character": "marta"
+          "character": "marta",
+      "autoTalkWhenFlag": "ivanka_called"
         },
         {
           "id": "npc_ivanka",
@@ -129,7 +130,8 @@
           "x": 420,
           "y": 186,
           "patrol": false,
-          "character": "yarynka"
+          "character": "yarynka",
+      "followWhenFlag": "ivanka_called"
         }
       ],
       "doors": [],

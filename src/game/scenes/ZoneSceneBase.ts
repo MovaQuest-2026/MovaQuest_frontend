@@ -32,6 +32,9 @@ const MOVE_SPEED = 120
 const JOYSTICK_DEADZONE = 0.15
 const PLAYER_CHARACTER_ID = 'player'
 const PLAYER_PLACEHOLDER_TEXTURE = 'player-placeholder'
+// Супутник йде трохи повільніше за гравця й тримається на цій відстані (пікселі світу).
+const NPC_FOLLOW_SPEED = 100
+const NPC_FOLLOW_DISTANCE = 26
 const NPC_PLACEHOLDER_TEXTURE = 'npc-placeholder'
 const PLACEHOLDER_SIZE = 32
 // Хітбокс біля ніг, щоб ходити повз стіни і в дверні прорізи.
@@ -132,6 +135,8 @@ interface NpcEntity {
   // Під час зливи NPC з patrol: true ідуть до найближчих дверей (hiding) і зникають (hidden).
   hiding: boolean
   hidden: boolean
+  // autoTalkWhenFlag: діалог уже стартував сам, повторно не запускаємо.
+  autoTalked?: boolean
 }
 
 interface GateEntity {
@@ -1225,6 +1230,8 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       if (talking && entity.lpcKey) {
         sprite.play(lpcAnimationKey(entity.lpcKey, 'idle', 'down'), true)
       }
+      const following = !talking && this.followPlayer(entity, delta)
+      this.autoTalk(entity)
       if (entity.config.patrol && !talking) {
         sprite.x += entity.direction * NPC_PATROL_SPEED * (delta / 1000)
         if (sprite.x >= entity.originX + NPC_PATROL_RANGE) {
@@ -1242,12 +1249,48 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
         }
       }
       if (entity.isStatic && !entity.config.invisible) {
-        const walking = entity.config.patrol && !talking
+        const walking = (entity.config.patrol && !talking) || following
         this.animateStatic(sprite, walking ? entity.direction : 0, walking)
       }
       sprite.setDepth(this.depthFor(sprite, entity.isStatic))
       entity.greetingText.setPosition(sprite.x, this.greetingY(sprite))
     }
+  }
+
+  // NPC з autoTalkWhenFlag сам починає діалог, коли після прапорця гравець підходить до нього.
+  private autoTalk(entity: NpcEntity) {
+    const flag = entity.config.autoTalkWhenFlag
+    if (!flag || entity.autoTalked) return
+    const { flags, activeDialogue, activeExercise, setActiveDialogue } = useGameStore.getState()
+    if (flags[flag] !== true || activeDialogue !== null || activeExercise !== null) return
+    const distance = Phaser.Math.Distance.Between(
+      this.player.x,
+      bottomOf(this.player),
+      entity.sprite.x,
+      bottomOf(entity.sprite),
+    )
+    if (distance > NPC_INTERACTION_RADIUS) return
+    entity.autoTalked = true
+    setActiveDialogue(entity.config.dialogueId)
+  }
+
+  // NPC з followWhenFlag після прапорця йде за гравцем і зупиняється поруч. Повертає true, якщо рухається.
+  private followPlayer(entity: NpcEntity, delta: number) {
+    const flag = entity.config.followWhenFlag
+    if (!flag || useGameStore.getState().flags[flag] !== true) return false
+    const { sprite } = entity
+    const dx = this.player.x - sprite.x
+    const dy = this.player.y - sprite.y
+    const distance = Math.hypot(dx, dy)
+    if (distance <= NPC_FOLLOW_DISTANCE) return false
+    const step = Math.min(NPC_FOLLOW_SPEED * (delta / 1000), distance - NPC_FOLLOW_DISTANCE)
+    sprite.x += (dx / distance) * step
+    sprite.y += (dy / distance) * step
+    entity.direction = dx < 0 ? -1 : 1
+    if (entity.lpcKey) {
+      sprite.play(lpcAnimationKey(entity.lpcKey, 'walk', dx < 0 ? 'left' : 'right'), true)
+    }
+    return true
   }
 
   private scheduleNpcGreeting(entity: NpcEntity) {
@@ -1256,14 +1299,19 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
       NPC_GREETING_MAX_DELAY,
     )
     this.time.delayedCall(delay, () => {
-      this.tweens.add({
-        targets: entity.greetingText,
-        alpha: 1,
-        duration: 200,
-        yoyo: true,
-        hold: 1400,
-        ease: 'Sine.easeInOut',
-      })
+      // Супутник, що йде за гравцем, більше не вітається.
+      const followFlag = entity.config.followWhenFlag
+      const following = followFlag && useGameStore.getState().flags[followFlag] === true
+      if (!following) {
+        this.tweens.add({
+          targets: entity.greetingText,
+          alpha: 1,
+          duration: 200,
+          yoyo: true,
+          hold: 1400,
+          ease: 'Sine.easeInOut',
+        })
+      }
       this.scheduleNpcGreeting(entity)
     })
   }
@@ -1274,6 +1322,9 @@ export abstract class ZoneSceneBase extends Phaser.Scene {
 
     for (const entity of this.npcEntities) {
       if (!this.isPresent(entity)) continue
+      // Супутник, що йде за гравцем, не перехоплює взаємодію з NPC поруч.
+      const followFlag = entity.config.followWhenFlag
+      if (followFlag && useGameStore.getState().flags[followFlag] === true) continue
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         bottomOf(this.player),

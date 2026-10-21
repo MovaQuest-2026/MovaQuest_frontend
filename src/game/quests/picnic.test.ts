@@ -15,12 +15,12 @@ describe('рівень «Пікнік у парку»', () => {
     const run = runDialogue(picnicOlena, {})
     expect(run.flags.picnic_taught).toBe(true)
     expect(run.tags).toEqual(
-      expect.arrayContaining(['quiz:picnic_read_1', 'quiz:picnic_ready_1', 'quiz:picnic_call_1']),
+      expect.arrayContaining(['quiz:picnic_read_1', 'quiz:picnic_ready_1']),
     )
   })
 
   it('англійською Іванка не розуміє, українською кличеться', () => {
-    const run = runDialogue(picnicIvanka, { picnic_taught: true }, { choices: [0, 'Your mom', 0, 0] })
+    const run = runDialogue(picnicIvanka, { picnic_taught: true }, { choices: ['Your mom', 0, 0] })
     expect(run.lines.some((line) => line.includes('Я не розумію'))).toBe(true)
     expect(run.flags.ivanka_called).toBe(true)
   })
