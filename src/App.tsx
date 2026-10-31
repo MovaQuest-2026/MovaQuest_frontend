@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { StartScreen } from './components/StartScreen'
 import { LanguageSelectScreen } from './components/LanguageSelectScreen'
@@ -6,6 +7,8 @@ import { CreditsScreen } from './components/CreditsScreen'
 import { LevelSelectScreen } from './components/LevelSelectScreen'
 import { LevelEntryScreen } from './components/LevelEntryScreen'
 import { LandingPage } from './landing/LandingPage'
+
+const PrototypeApp = lazy(() => import('./prototype/PrototypeApp'))
 
 function App() {
   return (
@@ -17,6 +20,14 @@ function App() {
       <Route path="/levels/:levelId" element={<LevelEntryScreen />} />
       <Route path="/world/:cityId" element={<WorldScreen />} />
       <Route path="/credits" element={<CreditsScreen />} />
+      <Route
+        path="/prototype/*"
+        element={
+          <Suspense fallback={null}>
+            <PrototypeApp />
+          </Suspense>
+        }
+      />
     </Routes>
   )
 }
