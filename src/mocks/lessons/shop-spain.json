@@ -1,0 +1,199 @@
+{
+  "id": "shop-spain",
+  "title": { "en": "At the corner shop", "uk": "У магазинчику" },
+  "description": {
+    "en": "Buy a bag of chips from Lucía in a Madrid corner shop and pay without fuss.",
+    "uk": "Купіть пачку чипсів у Лусії в мадридському магазинчику і розрахуйтеся без зайвих клопотів."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 60,
+  "cover": "/clips/shop-spain/cover.jpg",
+  "startSceneId": "s1_order",
+  "scenes": [
+    {
+      "id": "s1_order",
+      "kind": "prompt",
+      "clip": "s1_order",
+      "subtitles": {
+        "es": "¡Hola, buenas! ¿Qué te pongo?",
+        "en": "Hi there! What can I get you?",
+        "uk": "Привіт! Що вам подати?"
+      },
+      "choice": {
+        "task": { "en": "Ask for a bag of chips.", "uk": "Попросіть пачку чипсів." },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Quería una bolsa de patatas fritas, por favor.",
+            "translation": { "en": "I'd like a bag of chips, please.", "uk": "Мені, будь ласка, пачку чипсів." },
+            "accept": [
+              "queria una bolsa de patatas fritas por favor",
+              "una bolsa de patatas fritas por favor",
+              "me pones una bolsa de patatas fritas"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "Quería un refresco, por favor.",
+            "translation": { "en": "I'd like a soft drink, please.", "uk": "Мені, будь ласка, напій." },
+            "accept": [
+              "queria un refresco por favor",
+              "un refresco por favor",
+              "me pones un refresco"
+            ]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... esto... ¿me pones... eso?",
+            "translation": { "en": "Uh... um... can I get... that?", "uk": "Е-е... ну... дайте... оце?" }
+          }
+        ],
+        "next": { "correct": "s2_pay", "wrong": "s1w_drink", "unclear": "s1u_repeat" }
+      }
+    },
+    {
+      "id": "s1u_repeat",
+      "kind": "reaction",
+      "clip": "s1u_repeat",
+      "subtitles": {
+        "es": "Perdona, ¿puedes repetir, por favor?",
+        "en": "Sorry, could you repeat that, please?",
+        "uk": "Вибачте, повторіть, будь ласка?"
+      },
+      "next": "$return"
+    },
+    {
+      "id": "s1w_drink",
+      "kind": "prompt",
+      "clip": "s1w_drink",
+      "subtitles": {
+        "es": "Aquí tienes tu refresco.",
+        "en": "Here's your soft drink.",
+        "uk": "Ось ваш напій."
+      },
+      "choice": {
+        "task": {
+          "en": "Tell her this is not what you ordered.",
+          "uk": "Скажіть, що це не те, що ви замовляли."
+        },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Perdona, quería patatas fritas, no un refresco.",
+            "translation": {
+              "en": "Sorry, I wanted chips, not a soft drink.",
+              "uk": "Вибачте, мені були потрібні чипси, а не напій."
+            },
+            "accept": [
+              "perdona queria patatas fritas no un refresco",
+              "queria patatas fritas no un refresco",
+              "perdona queria patatas fritas"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "Vale, gracias, me quedo con el refresco.",
+            "translation": {
+              "en": "Okay, thanks, I'll keep the soft drink.",
+              "uk": "Гаразд, дякую, залишу напій собі."
+            },
+            "accept": [
+              "vale gracias me quedo con el refresco",
+              "me quedo con el refresco",
+              "vale me quedo con el refresco"
+            ]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... no... es que... esto...",
+            "translation": { "en": "Uh... no... it's just... um...", "uk": "Е-е... ні... просто... ну..." }
+          }
+        ],
+        "next": { "correct": "s2_pay", "wrong": "e_soda", "unclear": "s1u_repeat" }
+      }
+    },
+    {
+      "id": "s2_pay",
+      "kind": "prompt",
+      "clip": "s2_pay",
+      "subtitles": {
+        "es": "Aquí tienes. Son dos euros con cincuenta.",
+        "en": "Here you go. That's two euros fifty.",
+        "uk": "Ось, будь ласка. Це два євро п'ятдесят."
+      },
+      "choice": {
+        "task": {
+          "en": "Pay and tell her to keep the change.",
+          "uk": "Заплатіть і скажіть, що решти не треба."
+        },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Toma, tres euros. Quédate con el cambio.",
+            "translation": { "en": "Here, three euros. Keep the change.", "uk": "Ось, три євро. Решти не треба." },
+            "accept": [
+              "toma tres euros quedate con el cambio",
+              "tres euros quedate con el cambio",
+              "quedate con el cambio"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "Es muy caro. No lo quiero.",
+            "translation": {
+              "en": "That's too expensive. I don't want it.",
+              "uk": "Це занадто дорого. Я цього не хочу."
+            },
+            "accept": ["es muy caro no lo quiero", "es muy caro", "no lo quiero"]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... ¿cuánto...? Esto... no sé...",
+            "translation": {
+              "en": "Uh... how much...? I don't know...",
+              "uk": "Е-е... скільки...? Не знаю..."
+            }
+          }
+        ],
+        "next": { "correct": "e_done", "wrong": "s2w_refuse", "unclear": "s1u_repeat" }
+      }
+    },
+    {
+      "id": "e_done",
+      "kind": "end",
+      "clip": "e_done",
+      "outcome": "perfect",
+      "subtitles": {
+        "es": "¡Gracias! ¡Que tengas un buen día!",
+        "en": "Thanks! Have a nice day!",
+        "uk": "Дякую! Гарного дня!"
+      }
+    },
+    {
+      "id": "s2w_refuse",
+      "kind": "end",
+      "clip": "s2w_refuse",
+      "outcome": "missed",
+      "subtitles": {
+        "es": "Vale, no pasa nada. Hasta luego.",
+        "en": "Okay, no problem. See you later.",
+        "uk": "Гаразд, нічого страшного. До побачення."
+      }
+    },
+    {
+      "id": "e_soda",
+      "kind": "end",
+      "clip": "e_soda",
+      "outcome": "partial",
+      "subtitles": {
+        "es": "Perfecto, son dos euros. ¡Hasta luego!",
+        "en": "Perfect, that's two euros. See you later!",
+        "uk": "Чудово, це два євро. До побачення!"
+      }
+    }
+  ]
+}
