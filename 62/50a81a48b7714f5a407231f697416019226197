@@ -1,0 +1,24 @@
+CLAUDE.md
+  s_966bd02d031598::t_3b8b8aee4d6689 1,3-4,6-12,14-15,17-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6250a81a48b7714f5a407231f697416019226197",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_966bd02d031598": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "243a8346-34a6-459b-a575-9de40e4052c5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
