@@ -1,0 +1,38 @@
+src/mocks/lessons/index.json
+  s_966bd02d031598::t_c845ea118b5c13 1-35
+scripts/make-placeholder-clips.sh
+  s_966bd02d031598::t_e9c64b07ead4f5 1-51
+src/types/lesson.ts
+  s_966bd02d031598::t_568fa6a39d4ba8 1-7
+src/types/catalog.ts
+  s_966bd02d031598::t_eea57c8a7dac89 1-7
+src/api/getLesson.ts
+  s_966bd02d031598::t_eea57c8a7dac89 1-12
+src/mocks/lessons/shop-spain.json
+  s_966bd02d031598::t_c845ea118b5c13 1-199
+src/api/getLessons.ts
+  s_966bd02d031598::t_eea57c8a7dac89 1-12
+src/api/lessons.test.ts
+  s_966bd02d031598::t_eea57c8a7dac89 1-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6a300358c3be14be017ea8462dffeaf952b8851f",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_966bd02d031598": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "243a8346-34a6-459b-a575-9de40e4052c5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
