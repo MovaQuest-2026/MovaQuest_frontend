@@ -84,7 +84,8 @@
     "micDenied": "Microphone is blocked. Tap a phrase to answer instead.",
     "notFound": "Lesson not found.",
     "seek": "Seek",
-    "clipError": "This video couldn't be loaded."
+    "clipError": "This video couldn't be loaded.",
+    "micError": "Couldn't record. Try again or tap a phrase."
   },
   "result": {
     "title": "Lesson result",

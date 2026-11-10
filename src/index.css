@@ -645,3 +645,162 @@ img {
   font-weight: 700;
   font-size: 1.05rem;
 }
+
+.choice-panel__try {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.toast {
+  align-self: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.85rem;
+  font-weight: 700;
+  animation: toast-in 0.2s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.mic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.mic__button {
+  --level: 0;
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mic__button:disabled {
+  opacity: 0.7;
+}
+
+.mic__icon {
+  width: 32px;
+  height: 32px;
+  position: relative;
+}
+
+.mic__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  transform: scale(calc(1 + var(--level) * 0.6));
+  transition: transform 80ms linear;
+}
+
+.mic__button--evaluating .mic__ring,
+.mic__button--requestingPermission .mic__ring {
+  animation: mic-pulse 1s ease-in-out infinite;
+}
+
+.mic__button--denied,
+.mic__button--error {
+  background: var(--surface-2);
+}
+
+@keyframes mic-pulse {
+  50% {
+    transform: scale(1.25);
+    opacity: 0.15;
+  }
+}
+
+.mic__label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  min-height: 1.2em;
+}
+
+.mic__notice {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phrase-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 38dvh;
+  overflow-y: auto;
+}
+
+.phrase-card {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.phrase-card__es {
+  font-weight: 700;
+}
+
+.phrase-card__tr {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.dev-panel {
+  align-self: center;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.6);
+  font: 12px/1 ui-monospace, monospace;
+}
+
+.dev-panel__title {
+  padding: 0 6px;
+  color: var(--warning);
+}
+
+.dev-panel button {
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: #fff;
+  font: inherit;
+}
+
+.dev-panel button[aria-pressed='true'] {
+  background: var(--warning);
+  color: #000;
+}

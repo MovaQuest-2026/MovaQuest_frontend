@@ -2,10 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
+import { ChoicePanel } from '../features/player/ChoicePanel'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
 import { SubtitleLayer } from '../features/player/SubtitleLayer'
 import { upcomingClips } from '../features/player/sceneMachine'
 import { useClipPreloader } from '../features/player/useClipPreloader'
+import { DevSpeechPanel } from '../features/speech/DevSpeechPanel'
 import { VideoStage, type VideoStageHandle } from '../features/player/VideoStage'
 import { localize } from '../i18n/localize'
 import { clipUrl, selectCurrentScene, usePlayerStore } from '../store/usePlayerStore'
@@ -101,6 +103,7 @@ export function LessonPlayerPage() {
 
       <div className="player__overlay">
         <PlayerTopBar />
+        <DevSpeechPanel />
         <button
           type="button"
           className="player__tap-area"
@@ -115,13 +118,8 @@ export function LessonPlayerPage() {
 
         <SubtitleLayer subtitles={scene.subtitles} />
 
-        {status === 'awaitingChoice' && scene.choice && (
-          <div className="choice-panel">
-            <p className="choice-panel__task">{localize(scene.choice.task, lang)}</p>
-            <button type="button" className="btn btn--primary btn--block" disabled>
-              {t('player.speak')}
-            </button>
-          </div>
+        {scene.choice && (status === 'awaitingChoice' || status === 'listening' || status === 'evaluating') && (
+          <ChoicePanel lessonId={lesson.id} sceneId={scene.id} choice={scene.choice} machine={machine} />
         )}
 
         {showControls && <PlayerControls onSeek={seek} />}
