@@ -1,0 +1,31 @@
+src/landing/landing.css
+  s_966bd02d031598::t_ac134b578793d9 1-137
+src/landing/LandingPage.tsx
+  s_966bd02d031598::t_8e4c33b3c52294 534
+  s_966bd02d031598::t_e108ade54308af 552
+  s_966bd02d031598::t_ac134b578793d9 1-533,535-551,553-569
+  s_966bd02d031598::t_0b0984b809ef97 570
+src/landing/PixelScene.tsx
+  s_966bd02d031598::t_ac134b578793d9 1-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1078118122db3b5cf8174c6aab96cdf7474a4e70",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_966bd02d031598": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "243a8346-34a6-459b-a575-9de40e4052c5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
