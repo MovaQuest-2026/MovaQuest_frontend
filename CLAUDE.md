@@ -20,6 +20,14 @@ Vite, React 18, TypeScript, react-router-dom, Zustand (з persist), react-i18nex
 - Логіка сцен це автомат у features/player/sceneMachine.ts без React, з юніт-тестами.
 - Урок описується JSON за типами з src/types/lesson.ts. Кліпи лежать у public/clips/<lessonId>/<clipId>.mp4, ім'я файлу дорівнює id кліпу.
 
+## Лендінг і роути
+- `/` — лендінг (src/landing/LandingPage.tsx), лишається в корені. Кнопка «Play the prototype» веде на `/home`.
+- `/home` («Головна») одразу відкриває останній незавершений урок (`activeLesson` у useUserStore, продовжує з поточної сцени через `restoreState`), інакше перший урок стрічки. Онбординг теж завершується на `/home`.
+- Нижнє меню (TabBar): Головна / Серії / Профіль (хаб уроків в інтерфейсі називається «Серії», роут лишається `/lessons`), є і в плеєрі. Відео стартує одразу, якщо на сторінці вже був жест (`navigator.userActivation`), інакше «Tap to start».
+- Стрічка уроків у плеєрі: свайп угору — наступний урок, вниз — попередній (порядок index.json без `comingSoon`; на десктопі коліщатко і ↑/↓). Жести — `useFeedGestures`, сусіди — `useLessonFeed`. Свайпи ігноруються над панеллю вибору й контролами.
+- `/onboarding`, `/lessons`, `/lesson/:lessonId`, `/lesson/:lessonId/result`, `/profile`. Сторінки застосунку без пройденого онбордингу редіректять на `/onboarding`.
+- Tailwind підключений тільки для лендінгу: landing.css імпортує theme і utilities (без preflight) і сканує тільки src/landing. Глобальні стилі застосунку (src/index.css) лежать у `@layer app`, тож утиліти лендінгу їх перекривають. Нові глобальні стилі теж пишемо в `@layer app`.
+
 ## Мобільні вимоги (Android Chrome першим)
 - Layout на 100dvh, safe-area insets, без горизонтального скролу.
 - <video> з playsinline. Звук вмикається після першого жесту користувача.

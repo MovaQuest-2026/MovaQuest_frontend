@@ -1,7 +1,10 @@
 [
   {
     "id": "shop-spain",
-    "title": { "en": "At the corner shop", "uk": "У магазинчику" },
+    "title": {
+      "en": "At the corner shop",
+      "uk": "У магазинчику"
+    },
     "description": {
       "en": "Buy a bag of chips from Lucía in a Madrid corner shop and pay without fuss.",
       "uk": "Купіть пачку чипсів у Лусії в мадридському магазинчику і розрахуйтеся без зайвих клопотів."
@@ -12,18 +15,24 @@
   },
   {
     "id": "hotel-checkin",
-    "title": { "en": "Hotel check-in", "uk": "Заселення в готель" },
+    "title": {
+      "en": "Hotel check-in",
+      "uk": "Заселення в готель"
+    },
     "description": {
-      "en": "Check in, ask about breakfast and get the Wi-Fi password.",
-      "uk": "Заселіться, запитайте про сніданок і дізнайтеся пароль від Wi-Fi."
+      "en": "Check in at a small hotel in Valencia and find out when breakfast is.",
+      "uk": "Заселіться в невеликий готель у Валенсії і дізнайтеся, о котрій сніданок."
     },
     "level": "A2",
-    "cover": "/clips/hotel-checkin/cover.jpg",
-    "comingSoon": true
+    "durationSec": 60,
+    "cover": "/clips/hotel-checkin/cover.jpg"
   },
   {
     "id": "taxi-ride",
-    "title": { "en": "Taxi ride", "uk": "Поїздка на таксі" },
+    "title": {
+      "en": "Taxi ride",
+      "uk": "Поїздка на таксі"
+    },
     "description": {
       "en": "Tell the driver where to go and agree on the fare.",
       "uk": "Скажіть водієві, куди їхати, і домовтеся про ціну."

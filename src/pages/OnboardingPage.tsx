@@ -25,7 +25,7 @@ export function OnboardingPage() {
   const finish = (permission?: MicPermission) => {
     if (permission) setMicPermission(permission)
     completeOnboarding()
-    navigate('/lessons', { replace: true })
+    navigate('/home', { replace: true })
   }
 
   const allowMic = async () => {

@@ -3,6 +3,7 @@ import lessonJson from '../../mocks/lessons/shop-spain.json'
 import type { BranchKind, Lesson } from '../../types/lesson'
 import {
   createInitialState,
+  restoreState,
   stumbles,
   transition,
   upcomingClips,
@@ -119,5 +120,32 @@ describe('sceneMachine', () => {
     expect(upcomingClips(lesson, createInitialState(lesson)).sort()).toEqual(['s1u_repeat', 's1w_drink', 's2_pay'])
     const atRepeat = run([...play, answer('unclear'), { type: 'CLIP_READY' }])
     expect(upcomingClips(lesson, atRepeat)).toEqual(['s1_order'])
+  })
+})
+
+describe('restoreState', () => {
+  it('resumes a choice point on its last frame', () => {
+    const saved = run([...play, answer('unclear'), ...play, { type: 'START_LISTENING' }])
+    const restored = restoreState(lesson, saved)
+    expect(restored).toMatchObject({
+      status: 'awaitingChoice',
+      entry: 'resume',
+      currentSceneId: 's1_order',
+      retryCount: 1,
+    })
+    expect(restored!.entryId).toBe(saved.entryId + 1)
+  })
+
+  it('replays a scene that was playing, keeping $return working', () => {
+    const saved = run([...play, answer('unclear'), { type: 'CLIP_READY' }])
+    const restored = restoreState(lesson, saved)!
+    expect(restored).toMatchObject({ status: 'loading', entry: 'play', currentSceneId: 's1u_repeat' })
+    expect(run(play, restored)).toMatchObject({ status: 'awaitingChoice', currentSceneId: 's1_order' })
+  })
+
+  it('ignores finished runs and snapshots from another lesson version', () => {
+    const ended = run([...play, answer('correct'), ...play, answer('correct'), ...play])
+    expect(restoreState(lesson, ended)).toBeNull()
+    expect(restoreState(lesson, { ...createInitialState(lesson), currentSceneId: 'gone' })).toBeNull()
   })
 })

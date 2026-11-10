@@ -18,6 +18,8 @@ interface VideoStageProps {
   onEnded: () => void
   onProgress: (currentTime: number, duration: number) => void
   onError: () => void
+  /** Браузер заблокував відтворення зі звуком (не було жесту користувача). */
+  onPlayBlocked: () => void
 }
 
 const END_OFFSET = 0.05
@@ -44,7 +46,7 @@ function waitForEvent(el: HTMLVideoElement, event: string): Promise<void> {
 // Два <video> у ping-pong: наступний кліп готується в прихованому елементі
 // і показується лише після готовності кадру — без чорного екрана між кліпами.
 export const VideoStage = forwardRef<VideoStageHandle, VideoStageProps>(function VideoStage(
-  { src, entryId, startAtEnd, shouldPlay, playbackRate, onReady, onEnded, onProgress, onError },
+  { src, entryId, startAtEnd, shouldPlay, playbackRate, onReady, onEnded, onProgress, onError, onPlayBlocked },
   ref,
 ) {
   const videoA = useRef<HTMLVideoElement>(null)
@@ -53,8 +55,8 @@ export const VideoStage = forwardRef<VideoStageHandle, VideoStageProps>(function
   const [active, setActive] = useState(0)
   const [readyEntry, setReadyEntry] = useState<number | null>(null)
 
-  const callbacks = useRef({ onReady, onEnded, onProgress, onError })
-  callbacks.current = { onReady, onEnded, onProgress, onError }
+  const callbacks = useRef({ onReady, onEnded, onProgress, onError, onPlayBlocked })
+  callbacks.current = { onReady, onEnded, onProgress, onError, onPlayBlocked }
   const rateRef = useRef(playbackRate)
   rateRef.current = playbackRate
 
@@ -131,7 +133,9 @@ export const VideoStage = forwardRef<VideoStageHandle, VideoStageProps>(function
     if (readyEntry !== entryId) return
     if (shouldPlay) {
       if (v.ended || v.currentTime >= v.duration - END_OFFSET) v.currentTime = 0
-      v.play().catch(() => {})
+      v.play().catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === 'NotAllowedError') callbacks.current.onPlayBlocked()
+      })
     } else {
       v.pause()
     }
@@ -170,7 +174,7 @@ export const VideoStage = forwardRef<VideoStageHandle, VideoStageProps>(function
         <video
           key={i}
           ref={r}
-          className={`video-stage__video${i === active ? ' video-stage__video--active' : ''}`}
+          className={`video-stage__video${i === active && readyEntry !== null ? ' video-stage__video--active' : ''}`}
           playsInline
           preload="auto"
           disablePictureInPicture

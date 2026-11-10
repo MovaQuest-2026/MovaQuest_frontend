@@ -18,8 +18,10 @@
     "B2": "B2 · Upper intermediate"
   },
   "tabs": {
-    "lessons": "Lessons",
-    "profile": "Profile"
+    "home": "Home",
+    "lessons": "Series",
+    "profile": "Profile",
+    "label": "Main navigation"
   },
   "onboarding": {
     "title": "Welcome",
@@ -48,7 +50,7 @@
     }
   },
   "lessons": {
-    "title": "Lessons",
+    "title": "Series",
     "subtitle": "Short video stories. Answer out loud when the video pauses.",
     "duration": "{{minutes}} min",
     "durationSec": "{{seconds}} sec",
@@ -57,7 +59,7 @@
       "completed": "Completed",
       "comingSoon": "Coming soon"
     },
-    "empty": "No lessons yet."
+    "empty": "No series yet."
   },
   "outcome": {
     "perfect": "Perfect",
@@ -90,7 +92,7 @@
   "result": {
     "title": "Lesson result",
     "tryAgain": "Try again",
-    "backToLessons": "Back to lessons",
+    "backToLessons": "Back to series",
     "noResult": "You haven't finished this lesson yet.",
     "startLesson": "Start lesson",
     "outcomes": {
@@ -114,7 +116,8 @@
       "unclear": "Not understood"
     },
     "times": "×{{count}}",
-    "phrases": "Phrases from this lesson"
+    "phrases": "Phrases from this lesson",
+    "nextLesson": "Next lesson"
   },
   "profile": {
     "title": "Profile",

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
 import { stumbles } from '../features/player/sceneMachine'
+import { useLessonFeed } from '../features/player/useLessonFeed'
 import { localize } from '../i18n/localize'
 import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
@@ -21,6 +22,7 @@ export function LessonResultPage() {
   const saved = useUserStore((s) => s.completedLessons[lessonId])
   const lastResult = usePlayerStore((s) => (s.lastResult?.lessonId === lessonId ? s.lastResult : null))
   const [lesson, setLesson] = useState<Lesson | null>(null)
+  const feed = useLessonFeed(lessonId)
 
   useEffect(() => {
     let cancelled = false
@@ -111,9 +113,18 @@ export function LessonResultPage() {
       </section>
 
       <div className="stack">
+        {feed.next && (
+          <button
+            type="button"
+            className="btn btn--primary btn--block"
+            onClick={() => navigate(`/lesson/${feed.next}`, { replace: true, state: { enter: 'next' } })}
+          >
+            {t('result.nextLesson')}
+          </button>
+        )}
         <button
           type="button"
-          className="btn btn--primary btn--block"
+          className={`btn btn--block${feed.next ? '' : ' btn--primary'}`}
           onClick={() => navigate(`/lesson/${lessonId}`, { replace: true })}
         >
           {t('result.tryAgain')}

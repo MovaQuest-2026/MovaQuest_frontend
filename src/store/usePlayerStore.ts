@@ -4,6 +4,7 @@ import { trackTransition } from '../features/player/playerAnalytics'
 import {
   createInitialState,
   getScene,
+  restoreState,
   transition,
   type HistoryEntry,
   type MachineEvent,
@@ -22,8 +23,9 @@ export interface LessonRunResult {
 interface PlayerState {
   lesson: Lesson | null
   machine: MachineState | null
-  /** Перший дотик «Tap to start» був: після нього звук дозволено. */
+  /** Відтворення запущене (дотиком «Tap to start» або автоматично після жесту). */
   started: boolean
+  startTracked: boolean
   userPaused: boolean
   currentTime: number
   duration: number
@@ -33,19 +35,34 @@ interface PlayerState {
   load: (lesson: Lesson) => void
   dispatch: (event: MachineEvent) => void
   start: () => void
+  /** Браузер не дав відтворити зі звуком: знову показуємо «Tap to start». */
+  playBlocked: () => void
   setUserPaused: (paused: boolean) => void
   setProgress: (currentTime: number, duration: number) => void
   unload: () => void
 }
 
-const emptySession = { lesson: null, machine: null, started: false, userPaused: false, currentTime: 0, duration: 0 }
+const emptySession = {
+  lesson: null,
+  machine: null,
+  started: false,
+  startTracked: false,
+  userPaused: false,
+  currentTime: 0,
+  duration: 0,
+}
 
 // Тимчасовий стан плеєра (не persist). Логіка переходів — у sceneMachine.
 export const usePlayerStore = create<PlayerState>()((set, get) => ({
   ...emptySession,
   lastResult: null,
 
-  load: (lesson) => set({ ...emptySession, lesson, machine: createInitialState(lesson) }),
+  // Незавершений урок продовжується з поточної сцени, інакше починається спочатку.
+  load: (lesson) => {
+    const { activeLesson } = useUserStore.getState()
+    const restored = activeLesson?.lessonId === lesson.id ? restoreState(lesson, activeLesson.machine) : null
+    set({ ...emptySession, lesson, machine: restored ?? createInitialState(lesson) })
+  },
 
   dispatch: (event) => {
     const { lesson, machine, started } = get()
@@ -59,18 +76,27 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
       ...(sceneChanged ? { currentTime: 0, duration: 0, userPaused: false } : {}),
       ...(ended ? { lastResult: { lessonId: lesson.id, outcome: next.outcome!, history: next.history } } : {}),
     })
-    if (ended) useUserStore.getState().recordLessonResult(lesson.id, next.outcome!)
+    const user = useUserStore.getState()
+    if (ended) {
+      user.recordLessonResult(lesson.id, next.outcome!)
+      user.setActiveLesson(null)
+    } else if (started) {
+      user.setActiveLesson({ lessonId: lesson.id, machine: next })
+    }
     trackTransition(lesson, machine, next, event, started)
   },
 
   start: () => {
-    const { lesson, machine, started } = get()
-    set({ started: true, userPaused: false })
-    if (!lesson || !machine || started) return
+    const { lesson, machine, startTracked } = get()
+    set({ started: true, startTracked: true, userPaused: false })
+    if (!lesson || !machine) return
+    useUserStore.getState().setActiveLesson({ lessonId: lesson.id, machine })
+    if (startTracked) return
     trackLessonStarted(lesson.id)
     // Якщо кліп уже готовий, CLIP_READY відбувся до старту — фіксуємо сцену тут.
     if (machine.status === 'playing') trackSceneStarted(lesson.id, machine.currentSceneId)
   },
+  playBlocked: () => set({ started: false }),
   setUserPaused: (userPaused) => set({ userPaused }),
   setProgress: (currentTime, duration) => set({ currentTime, duration }),
   unload: () => set(emptySession),

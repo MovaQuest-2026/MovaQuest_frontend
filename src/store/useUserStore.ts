@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import type { MachineState } from '../features/player/sceneMachine'
 import type { Lang, Lesson, Scene } from '../types/lesson'
 
 export type Level = Lesson['level']
@@ -7,6 +8,12 @@ export type Outcome = NonNullable<Scene['outcome']>
 export type SubtitleMode = 'es+en' | 'es+uk' | 'es' | 'off'
 export type PlaybackRate = 0.75 | 1
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
+
+/** Незавершений урок, який відкриває вкладка «Головна». */
+export interface ActiveLesson {
+  lessonId: string
+  machine: MachineState
+}
 
 export interface CompletedLesson {
   outcome: Outcome
@@ -23,6 +30,7 @@ interface UserState {
   subtitleMode: SubtitleMode
   playbackRate: PlaybackRate
   completedLessons: Record<string, CompletedLesson>
+  activeLesson: ActiveLesson | null
 
   setInterfaceLanguage: (lang: Lang) => void
   setLevel: (level: Level) => void
@@ -33,6 +41,7 @@ interface UserState {
   completeOnboarding: () => void
   recordLessonResult: (lessonId: string, outcome: Outcome) => void
   resetProgress: () => void
+  setActiveLesson: (active: ActiveLesson | null) => void
 }
 
 // crypto.randomUUID є лише в secure context, тож для http://192.168.x.x потрібен запасний шлях.
@@ -57,6 +66,7 @@ export const useUserStore = create<UserState>()(
       subtitleMode: 'es+en',
       playbackRate: 1,
       completedLessons: {},
+      activeLesson: null,
 
       // Режим субтитрів з перекладом іде за мовою інтерфейсу.
       setInterfaceLanguage: (lang) =>
@@ -77,7 +87,8 @@ export const useUserStore = create<UserState>()(
             [lessonId]: { outcome, completedAt: new Date().toISOString() },
           },
         })),
-      resetProgress: () => set({ completedLessons: {} }),
+      resetProgress: () => set({ completedLessons: {}, activeLesson: null }),
+      setActiveLesson: (activeLesson) => set({ activeLesson }),
     }),
     { name: 'movaquest-user-v1', version: 1 },
   ),

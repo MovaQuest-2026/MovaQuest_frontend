@@ -1,3 +1,7 @@
+/* Стилі застосунку лежать у шарі app: утиліти Tailwind лендінгу (шар utilities) їх перекривають. */
+@layer app, theme, base, components, utilities;
+
+@layer app {
 :root {
   --bg: #0b0b0f;
   --surface: #17171f;
@@ -362,9 +366,8 @@ img {
   right: 0;
   bottom: 0;
   display: flex;
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid var(--border);
+  background: #000;
+  border-top: 1px solid rgb(255 255 255 / 0.12);
   padding: 0 var(--safe-right) var(--safe-bottom) var(--safe-left);
   z-index: 10;
 }
@@ -373,16 +376,23 @@ img {
   flex: 1;
   height: var(--tabbar-h);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   text-decoration: none;
-  color: var(--text-dim);
-  font-weight: 600;
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .tabbar__item.active {
-  color: var(--text);
-  box-shadow: inset 0 2px 0 var(--accent);
+  color: #fff;
+}
+
+.tabbar__icon {
+  width: 26px;
+  height: 26px;
 }
 
 /* ---------- Profile ---------- */
@@ -841,4 +851,137 @@ img {
 
 .result-list__quote {
   font-weight: 700;
+}
+
+/* Плеєр із нижньою таб-панеллю: відео закінчується над нею. */
+.player--with-tabbar {
+  margin-bottom: calc(var(--tabbar-h) + var(--safe-bottom));
+}
+
+.player--with-tabbar .player__overlay {
+  padding-bottom: 0;
+}
+
+.player__tap-area {
+  position: relative;
+}
+
+.player__seek-flash {
+  position: absolute;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  margin-top: -32px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: seek-flash 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+.player__seek-flash--back {
+  left: 12%;
+}
+
+.player__seek-flash--forward {
+  right: 12%;
+}
+
+@keyframes seek-flash {
+  from {
+    opacity: 1;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+}
+
+/* ---------- Стрічка уроків (свайп угору/вниз) ---------- */
+
+.player--with-tabbar {
+  touch-action: none;
+}
+
+.phrase-list {
+  touch-action: pan-y;
+}
+
+.player--leave-next .video-stage,
+.player--leave-next .player__overlay {
+  animation: feed-leave-next 0.26s ease-in forwards;
+}
+
+.player--leave-prev .video-stage,
+.player--leave-prev .player__overlay {
+  animation: feed-leave-prev 0.26s ease-in forwards;
+}
+
+.player--enter-next .video-stage,
+.player--enter-next .player__overlay {
+  animation: feed-enter-next 0.3s ease-out;
+}
+
+.player--enter-prev .video-stage,
+.player--enter-prev .player__overlay {
+  animation: feed-enter-prev 0.3s ease-out;
+}
+
+.player--bounce-next .video-stage,
+.player--bounce-next .player__overlay {
+  animation: feed-bounce-next 0.4s ease-out;
+}
+
+.player--bounce-prev .video-stage,
+.player--bounce-prev .player__overlay {
+  animation: feed-bounce-prev 0.4s ease-out;
+}
+
+@keyframes feed-leave-next {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes feed-leave-prev {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes feed-enter-next {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes feed-enter-prev {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes feed-bounce-next {
+  40% {
+    transform: translateY(-48px);
+  }
+}
+
+@keyframes feed-bounce-prev {
+  40% {
+    transform: translateY(48px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player .video-stage,
+  .player .player__overlay {
+    animation-duration: 0.01s !important;
+  }
 }

@@ -3,14 +3,15 @@ import { getLesson } from './getLesson'
 import { getLessons } from './getLessons'
 
 describe('lessons api', () => {
-  it('lists the catalog with one playable lesson and two stubs', async () => {
+  it('lists the catalog: two playable lessons and one stub', async () => {
     const list = await getLessons()
     expect(list.map((l) => l.id)).toEqual(['shop-spain', 'hotel-checkin', 'taxi-ride'])
-    expect(list.filter((l) => l.comingSoon).map((l) => l.id)).toEqual(['hotel-checkin', 'taxi-ride'])
+    expect(list.filter((l) => l.comingSoon).map((l) => l.id)).toEqual(['taxi-ride'])
   })
 
-  it('loads shop-spain with a consistent scene graph', async () => {
-    const lesson = await getLesson('shop-spain')
+  it.each(['shop-spain', 'hotel-checkin'])('loads %s with a consistent scene graph', async (id) => {
+    const lesson = await getLesson(id)
+    expect(lesson.id).toBe(id)
     const ids = new Set(lesson.scenes.map((s) => s.id))
     expect(ids.has(lesson.startSceneId)).toBe(true)
     for (const scene of lesson.scenes) {

@@ -173,3 +173,25 @@ export function upcomingClips(lesson: Lesson, state: MachineState): string[] {
 export function stumbles(history: HistoryEntry[]): HistoryEntry[] {
   return history.filter((h) => h.branch === 'wrong' || h.branch === 'unclear')
 }
+
+/**
+ * Відновлює збережений стан незавершеного уроку. Поточна сцена грає заново,
+ * а якщо користувач зупинився на виборі — знову стоїмо на останньому кадрі.
+ * Повертає null, якщо знімок не підходить до уроку (урок змінився або завершений).
+ */
+export function restoreState(lesson: Lesson, saved: MachineState): MachineState | null {
+  if (saved.status === 'ended') return null
+  const ids = new Set(lesson.scenes.map((s) => s.id))
+  if (!ids.has(saved.currentSceneId)) return null
+  if (saved.lastChoiceSceneId && !ids.has(saved.lastChoiceSceneId)) return null
+  const scene = getScene(lesson, saved.currentSceneId)
+  const atChoice =
+    scene.choice !== undefined &&
+    (saved.status === 'awaitingChoice' || saved.status === 'listening' || saved.status === 'evaluating')
+  return {
+    ...saved,
+    status: atChoice ? 'awaitingChoice' : 'loading',
+    entry: atChoice ? 'resume' : 'play',
+    entryId: saved.entryId + 1,
+  }
+}
