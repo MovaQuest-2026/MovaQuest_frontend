@@ -188,7 +188,13 @@ img {
   gap: 8px;
 }
 
+.segmented--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .segmented__item {
+  overflow-wrap: anywhere;
   flex: 1 1 0;
   min-width: 64px;
   min-height: var(--tap);

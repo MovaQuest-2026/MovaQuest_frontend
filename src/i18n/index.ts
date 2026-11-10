@@ -2,6 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import uk from './locales/uk.json'
+import { useUserStore } from '../store/useUserStore'
 
 export const SUPPORTED_LANGUAGES = ['en', 'uk'] as const
 
@@ -12,7 +13,7 @@ i18n.use(initReactI18next).init({
     en: { translation: en },
     uk: { translation: uk },
   },
-  lng: 'en',
+  lng: useUserStore.getState().interfaceLanguage,
   fallbackLng: 'en',
   supportedLngs: SUPPORTED_LANGUAGES,
   interpolation: {

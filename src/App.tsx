@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useUserStore } from './store/useUserStore'
+import { useSyncLanguage } from './i18n/useSyncLanguage'
 import { OnboardingPage } from './pages/OnboardingPage'
 import { LessonsPage } from './pages/LessonsPage'
 import { LessonPlayerPage } from './pages/LessonPlayerPage'
@@ -12,6 +13,7 @@ function RootRedirect() {
 }
 
 function App() {
+  useSyncLanguage()
   return (
     <Routes>
       <Route path="/" element={<RootRedirect />} />
