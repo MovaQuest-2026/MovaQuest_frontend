@@ -82,7 +82,9 @@
     "speak": "Tap to speak",
     "stop": "Tap to stop",
     "micDenied": "Microphone is blocked. Tap a phrase to answer instead.",
-    "notFound": "Lesson not found."
+    "notFound": "Lesson not found.",
+    "seek": "Seek",
+    "clipError": "This video couldn't be loaded."
   },
   "result": {
     "title": "Lesson result",
