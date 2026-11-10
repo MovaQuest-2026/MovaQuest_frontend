@@ -1,0 +1,186 @@
+{
+  "id": "hotel-checkin",
+  "title": { "en": "Hotel check-in", "uk": "Заселення в готель" },
+  "description": {
+    "en": "Check in at a small hotel in Valencia and find out when breakfast is.",
+    "uk": "Заселіться в невеликий готель у Валенсії і дізнайтеся, о котрій сніданок."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 60,
+  "cover": "/clips/hotel-checkin/cover.jpg",
+  "startSceneId": "s1_greet",
+  "scenes": [
+    {
+      "id": "s1_greet",
+      "kind": "prompt",
+      "clip": "s1_greet",
+      "subtitles": {
+        "es": "¡Buenas tardes! Te damos la bienvenida al Hotel Sol. ¿En qué puedo ayudarte?",
+        "en": "Good afternoon! Welcome to Hotel Sol. How can I help you?",
+        "uk": "Добрий день! Ласкаво просимо до готелю «Сонце». Чим можу допомогти?"
+      },
+      "choice": {
+        "task": {
+          "en": "Say you have a reservation in your name.",
+          "uk": "Скажіть, що у вас є бронювання на ваше ім'я."
+        },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Hola, tengo una reserva a mi nombre.",
+            "translation": { "en": "Hi, I have a reservation in my name.", "uk": "Добрий день, у мене бронювання на моє ім'я." },
+            "accept": [
+              "hola tengo una reserva a mi nombre",
+              "tengo una reserva a mi nombre",
+              "tengo una reserva"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "Hola, quiero una habitación para esta noche.",
+            "translation": { "en": "Hi, I'd like a room for tonight.", "uk": "Добрий день, мені потрібен номер на сьогодні." },
+            "accept": [
+              "hola quiero una habitacion para esta noche",
+              "quiero una habitacion para esta noche",
+              "una habitacion para esta noche"
+            ]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... ¿habitación...? Esto...",
+            "translation": { "en": "Uh... room...? Um...", "uk": "Е-е... номер...? Ну..." }
+          }
+        ],
+        "next": { "correct": "s2_passport", "wrong": "s1w_full", "unclear": "s_repeat" }
+      }
+    },
+    {
+      "id": "s_repeat",
+      "kind": "reaction",
+      "clip": "s_repeat",
+      "subtitles": {
+        "es": "Perdona, ¿puedes repetir, por favor?",
+        "en": "Sorry, could you repeat that, please?",
+        "uk": "Вибачте, повторіть, будь ласка?"
+      },
+      "next": "$return"
+    },
+    {
+      "id": "s1w_full",
+      "kind": "prompt",
+      "clip": "s1w_full",
+      "subtitles": {
+        "es": "Lo siento, esta noche estamos completos. ¿Tienes reserva?",
+        "en": "Sorry, we're fully booked tonight. Do you have a reservation?",
+        "uk": "На жаль, сьогодні все зайнято. У вас є бронювання?"
+      },
+      "choice": {
+        "task": {
+          "en": "Say that yes, you booked online.",
+          "uk": "Скажіть, що так, ви бронювали онлайн."
+        },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Ah, sí, perdona. Reservé por internet.",
+            "translation": { "en": "Oh, yes, sorry. I booked online.", "uk": "А, так, вибачте. Я бронював через інтернет." },
+            "accept": [
+              "ah si perdona reserve por internet",
+              "si reserve por internet",
+              "reserve por internet"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "No, no tengo reserva.",
+            "translation": { "en": "No, I don't have a reservation.", "uk": "Ні, у мене немає бронювання." },
+            "accept": ["no no tengo reserva", "no tengo reserva", "no tengo"]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... sí... no... ¿internet?",
+            "translation": { "en": "Uh... yes... no... internet?", "uk": "Е-е... так... ні... інтернет?" }
+          }
+        ],
+        "next": { "correct": "s2_passport", "wrong": "e_nobed", "unclear": "s_repeat" }
+      }
+    },
+    {
+      "id": "s2_passport",
+      "kind": "prompt",
+      "clip": "s2_passport",
+      "subtitles": {
+        "es": "Perfecto. ¿Me dejas tu pasaporte, por favor?",
+        "en": "Perfect. Can I have your passport, please?",
+        "uk": "Чудово. Можна ваш паспорт, будь ласка?"
+      },
+      "choice": {
+        "task": {
+          "en": "Hand over your passport and ask what time breakfast is.",
+          "uk": "Дайте паспорт і запитайте, о котрій сніданок."
+        },
+        "maxRetries": 2,
+        "phrases": [
+          {
+            "branch": "correct",
+            "es": "Aquí tienes. ¿A qué hora es el desayuno?",
+            "translation": { "en": "Here you go. What time is breakfast?", "uk": "Ось, будь ласка. О котрій сніданок?" },
+            "accept": [
+              "aqui tienes a que hora es el desayuno",
+              "a que hora es el desayuno",
+              "a que hora es el desayuno por favor"
+            ]
+          },
+          {
+            "branch": "wrong",
+            "es": "Aquí tienes. ¿Dónde está la playa?",
+            "translation": { "en": "Here you go. Where is the beach?", "uk": "Ось, будь ласка. Де пляж?" },
+            "accept": ["aqui tienes donde esta la playa", "donde esta la playa", "la playa"]
+          },
+          {
+            "branch": "unclear",
+            "es": "Eh... pasaporte... esto... ¿comida?",
+            "translation": { "en": "Uh... passport... um... food?", "uk": "Е-е... паспорт... ну... їжа?" }
+          }
+        ],
+        "next": { "correct": "e_done", "wrong": "e_beach", "unclear": "s_repeat" }
+      }
+    },
+    {
+      "id": "e_done",
+      "kind": "end",
+      "clip": "e_done",
+      "outcome": "perfect",
+      "subtitles": {
+        "es": "De siete a diez. ¡Que disfrutes de tu estancia!",
+        "en": "From seven to ten. Enjoy your stay!",
+        "uk": "З сьомої до десятої. Гарного відпочинку!"
+      }
+    },
+    {
+      "id": "e_beach",
+      "kind": "end",
+      "clip": "e_beach",
+      "outcome": "partial",
+      "subtitles": {
+        "es": "A diez minutos andando. Tu habitación es la doscientos cuatro.",
+        "en": "Ten minutes' walk. Your room is two-oh-four.",
+        "uk": "Десять хвилин пішки. Ваш номер — двісті чотири."
+      }
+    },
+    {
+      "id": "e_nobed",
+      "kind": "end",
+      "clip": "e_nobed",
+      "outcome": "missed",
+      "subtitles": {
+        "es": "Lo siento mucho. Prueba en el hostal de enfrente.",
+        "en": "I'm very sorry. Try the hostel across the street.",
+        "uk": "Мені дуже шкода. Спробуйте хостел навпроти."
+      }
+    }
+  ]
+}

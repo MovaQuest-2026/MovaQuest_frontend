@@ -1,32 +1,66 @@
-# React + TypeScript + Vite
+# MovaQuest
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Mobile-first веб-застосунок для того, щоб освіжити іспанську перед поїздкою. Користувач дивиться вертикальну відеоісторію (9:16), у ключових місцях відео стає на паузу, і він відповідає голосом. Інтерфейс англійською (за замовчуванням) і українською.
 
-Currently, two official plugins are available:
+Стек: Vite, React 18, TypeScript, react-router-dom, Zustand, react-i18next, PostHog. Зараз усе працює на моках, бекенду немає. Правила й архітектура описані в [CLAUDE.md](CLAUDE.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Команди
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev        # dev-сервер, http://localhost:5173
+npm test           # vitest: автомат сцен, API-моки, аналітика
+npm run lint       # oxlint
+npm run build      # tsc + vite build у dist/
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Плейсхолдер-кліпи для уроку (потрібні `ffmpeg`, `jq` і шрифт DejaVu: `sudo apt install ffmpeg jq fonts-dejavu-core`):
+
+```bash
+scripts/make-placeholder-clips.sh            # shop-spain за замовчуванням
+```
+
+Скрипт кладе `public/clips/shop-spain/<clipId>.mp4` і `cover.jpg`. Справжні кліпи пізніше замінять ці файли під тими самими іменами.
+
+### Змінні середовища
+
+Див. [.env.example](.env.example). Без `VITE_POSTHOG_KEY` аналітика вимкнена, і `posthog-js` не потрапляє в бандл (вантажиться окремим чанком лише за наявності ключа).
+
+### Dev-режим розпізнавання
+
+Розпізнавання мови поки мок ([src/api/evaluateSpeech.ts](src/api/evaluateSpeech.ts)). Якщо додати `?dev=1` до адреси уроку (`/lesson/shop-spain?dev=1`), угорі з'являється панель `correct / wrong / unclear`: мок повертає вибрану гілку. Без вибору: запис менший за 4 КБ дає `unclear`, інакше випадково correct 50%, wrong 30%, unclear 20%.
+
+## Запуск і перевірка на Android
+
+Мікрофон працює лише в secure context (https або `localhost`). Адреса `http://192.168.x.x:5173` ним не є, тож через неї мікрофон не запрацює. Робочих способів два.
+
+**1. USB-налагодження з `adb reverse`.** На телефоні ввімкни «Параметри розробника» → «Налагодження USB» і підключи кабель.
+
+```bash
+npm run dev -- --host
+adb devices                      # телефон має бути у списку зі статусом device
+adb reverse tcp:5173 tcp:5173
+```
+
+Відкрий на телефоні Chrome за адресою `http://localhost:5173`. Консоль і мережу телефона видно на комп'ютері в `chrome://inspect/#devices`.
+
+**2. Превʼю-деплой на Vercel.** Після `git push` Vercel збирає превʼю для гілки. Це https, мікрофон працює, посилання можна показати іншим.
+
+### Чекліст ручної перевірки
+
+Перевіряй на Android Chrome або в DevTools з розміром 360×800 (режим пристрою, touch).
+
+- [ ] **Онбординг:** чиста вкладка (або очищений localStorage) → `/` веде на `/onboarding`. Мова перемикає інтерфейс одразу. Рівень і мета зберігаються. Після завершення відкривається `/lessons`, і `/` далі веде туди.
+- [ ] **Мікрофон дозволено:** «Allow microphone» → системний запит → «Microphone is ready». У профілі «Test microphone» записує 3 с і відтворює.
+- [ ] **Мікрофон заборонено:** заборони доступ у запиті або в налаштуваннях сайту. На точці вибору дотик по мікрофону показує пояснення і кнопку «Show phrases», відповідь дотиком по картці працює.
+- [ ] **Головна:** без розпочатого уроку вкладка «Головна» відкриває перший урок стрічки. Почни урок, перейди в «Профіль» і назад у «Головну»: відео продовжується з тієї самої сцени без «Tap to start». Після перезавантаження сторінки урок теж продовжується, але спершу з'являється «Tap to start». Після завершення уроку «Головна» знову відкриває перший урок.
+- [ ] **Стрічка уроків:** у плеєрі свайп угору відкриває наступний урок (`shop-spain` → `hotel-checkin`), свайп вниз — попередній; на першому й останньому уроці екран лише «пружинить». Свайп над панеллю вибору не перемикає урок, а список фраз скролиться. Короткий дотик і далі ставить паузу/перемотує.
+- [ ] **Гілка correct:** s1_order → s2_pay → e_done, результат «Perfect», урок у списку позначений пройденим.
+- [ ] **Гілка wrong:** s1_order (напій) → s1w_drink → «залишу напій» → e_soda («Partial»). Варіант з виправленням: s1w_drink → correct → s2_pay → e_done. Відмова платити в s2_pay → s2w_refuse («Missed»).
+- [ ] **Гілка unclear:** два unclear поспіль (`?dev=1` → unclear) → сцена «Perdona, ¿puedes repetir?» → повернення на ту саму точку вибору без повторного кліпу, лічильник «Try 2 of 2», фрази відкриваються самі з тостом «Here are the phrases».
+- [ ] **Перемотка:** дотик по лівій третині відео — назад на 5 с, по правій — вперед на 5 с, по середині — пауза. Кнопки −5 / +5 і повзунок теж працюють. На точці вибору перемотка назад програє кліп ще раз і знову зупиняється на останньому кадрі.
+- [ ] **Швидкість 0.75×:** перемикач у плеєрі і в профілі, налаштування зберігається між уроками.
+- [ ] **Субтитри:** кнопка CC перебирає «es + переклад → тільки es → вимкнено». Переклад іде за мовою інтерфейсу.
+- [ ] **Вихід посеред уроку:** ✕ або вкладка «Lessons» у нижній панелі веде на `/lessons`, звук і мікрофон зупиняються, повторний вхід починає урок спочатку.
+- [ ] **360×800:** немає горизонтального скролу, кнопки не менші за 44 px, нічого не перекривається safe-area (виріз камери, жестова панель).
+- [ ] **Результат:** «Try again» починає урок заново, «Back to lessons» веде до списку. Скидання прогресу в профілі очищає позначки.

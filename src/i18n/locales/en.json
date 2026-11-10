@@ -1,120 +1,158 @@
 {
-  "start": {
-    "title": "Movaquest",
-    "start": "Start",
-    "continue": "Continue",
-    "restart": "Start over",
-    "credits": "Licenses",
-    "levels": "Levels"
-  },
-  "languageSelect": {
-    "title": "Choose your language",
-    "english": "English",
-    "ukrainian": "Українська"
-  },
-  "world": {
-    "continue": "Continue",
-    "finish": "Finish",
-    "npcGreeting": "Hi!",
-    "interact": {
-      "npc": "E — talk to {{name}}",
-      "door": "E — enter: {{name}}",
-      "exit": "E — go: {{name}}"
-    },
-    "interactTouch": {
-      "npc": "Talk to {{name}}",
-      "door": "Enter: {{name}}",
-      "exit": "Go: {{name}}"
-    },
-    "locked": {
-      "showTime": "Find out when the fountain show starts first"
-    }
-  },
-  "exercise": {
-    "correct": "Correct!",
-    "incorrect": "Incorrect",
-    "next": "Next"
-  },
-  "result": {
-    "title": "Lesson complete!",
-    "learnedCount": "{{count}} words learned",
-    "reviewTitle": "Recommended for review",
-    "goHome": "Menu",
-    "continue": "Next"
-  },
-  "dialogue": {
-    "next": "Next"
-  },
-  "zones": {
-    "bus_station": "Bus station",
-    "bus_station_hall": "Waiting hall",
-    "vyshenka": "Vyshenka",
-    "flower_kiosk": "Flower kiosk",
-    "galyna_flat": "Mrs Halyna's flat",
-    "trolleybus": "Trolleybus",
-    "park": "Park",
-    "center": "City centre",
-    "tower_interior": "Water tower",
-    "cafe": "Café",
-    "embankment": "Roshen embankment"
-  },
-  "credits": {
+  "app": {
+    "name": "MovaQuest",
+    "loading": "Loading…",
+    "error": "Something went wrong.",
     "back": "Back",
-    "loadError": "Could not load credits."
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
-  "journal": {
-    "title": "Day journal",
-    "ending": {
-      "best": {
-        "title": "The best day",
-        "text": "Solomiia's grandma invites everyone to dinner: you, Solomiia and the artist from Mury. Grandma Nina, Mrs Halyna and Ostap wave to you on the embankment. The city remembers you."
-      },
-      "good": {
-        "title": "A good day",
-        "text": "Solomiia invites you to dinner with her family. Tomorrow — a trip to Pyrohov's estate."
-      },
-      "basic": {
-        "title": "You made it",
-        "text": "The main thing is that you are here. Next time Solomiia will give you a proper tour of the city."
-      }
-    },
-    "wordsTitle": "Words learned today: {{count}}",
-    "noWords": "No new words this time — try the exercises in dialogues.",
-    "helpedTitle": "People who remember you",
-    "noHelped": "Nobody yet. Next time, help someone along the way.",
-    "helped": {
-      "helped_nina": "{{name}} — the yellow bag is found",
-      "helped_tourist": "{{name}} — finds the trolleybus stop thanks to you",
-      "knows_pirogov": "{{name}} — you know who Pyrohov was",
-      "has_drawing": "{{name}} — the umbrella and the fountain drawing"
-    },
-    "playAgain": "Play again",
-    "mainMenu": "Main menu"
-  },
-  "travel": {
-    "toVinnytsia": {
-      "title": "Take the bus to Vinnytsia?",
-      "body": "Alphabet stations done: {{done}} of 3, correct answers: {{score}} of 9. You can't come back to the glade in this demo.",
-      "confirm": "Yes, let's go",
-      "cancel": "Not yet"
-    }
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
   },
   "levels": {
-    "title": "Levels",
-    "main": "Main level",
-    "minutes": "{{minutes}} min",
-    "start": "Play",
-    "continue": "Continue",
-    "replay": "Play again",
-    "completed": "Completed",
-    "back": "Back"
+    "A1": "A1 · Beginner",
+    "A2": "A2 · Elementary",
+    "B1": "B1 · Intermediate",
+    "B2": "B2 · Upper intermediate"
   },
-  "levelComplete": {
-    "title": "Level complete",
-    "text": "You learned words from Olena and used them on Ivanka, who doesn't speak English. That is how every level of the game works: new words from a teacher, practice with the people around you.",
-    "wordsTitle": "Words you know: {{count}}",
-    "noWords": "No words yet — try the exercises in dialogues.",
-    "next": "All levels",
-    "playAgain": "Play again"
+  "tabs": {
+    "home": "Home",
+    "lessons": "Series",
+    "profile": "Profile",
+    "label": "Main navigation"
+  },
+  "onboarding": {
+    "title": "Welcome",
+    "stepOf": "Step {{step}} of {{total}}",
+    "next": "Next",
+    "finish": "Start learning",
+    "language": {
+      "title": "Choose your interface language",
+      "subtitle": "You can change it later in your profile."
+    },
+    "level": {
+      "title": "How good is your Spanish?",
+      "subtitle": "Pick the level that feels closest. It only tunes your recommendations.",
+      "goalLabel": "Trip goal (optional)",
+      "goalPlaceholder": "e.g. Erasmus semester in Madrid"
+    },
+    "mic": {
+      "title": "You'll answer with your voice",
+      "body": "At key moments the video pauses and Lucía waits for your reply. We use the microphone only while you answer. Audio is not stored.",
+      "allow": "Allow microphone",
+      "skip": "Skip for now",
+      "requesting": "Waiting for permission…",
+      "granted": "Microphone is ready.",
+      "denied": "Microphone access was blocked. You can still answer by tapping phrases.",
+      "unsupported": "This browser can't access the microphone here. Open the app over HTTPS."
+    }
+  },
+  "lessons": {
+    "title": "Series",
+    "subtitle": "Short video stories. Answer out loud when the video pauses.",
+    "duration": "{{minutes}} min",
+    "durationSec": "{{seconds}} sec",
+    "status": {
+      "new": "New",
+      "completed": "Completed",
+      "comingSoon": "Coming soon"
+    },
+    "empty": "No series yet."
+  },
+  "outcome": {
+    "perfect": "Perfect",
+    "partial": "Partial",
+    "missed": "Missed"
+  },
+  "player": {
+    "title": "Lesson",
+    "tapToStart": "Tap to start",
+    "exit": "Exit lesson",
+    "play": "Play",
+    "pause": "Pause",
+    "back5": "Back 5 seconds",
+    "forward5": "Forward 5 seconds",
+    "speed": "Playback speed",
+    "subtitles": "Subtitles",
+    "showPhrases": "Show phrases",
+    "hidePhrases": "Hide phrases",
+    "phrasesShown": "Here are the phrases",
+    "tryOf": "Try {{current}} of {{total}}",
+    "listening": "Lucía is listening…",
+    "speak": "Tap to speak",
+    "stop": "Tap to stop",
+    "micDenied": "Microphone is blocked. Tap a phrase to answer instead.",
+    "notFound": "Lesson not found.",
+    "seek": "Seek",
+    "clipError": "This video couldn't be loaded.",
+    "micError": "Couldn't record. Try again or tap a phrase."
+  },
+  "result": {
+    "title": "Lesson result",
+    "tryAgain": "Try again",
+    "backToLessons": "Back to series",
+    "noResult": "You haven't finished this lesson yet.",
+    "startLesson": "Start lesson",
+    "outcomes": {
+      "perfect": {
+        "title": "Perfect!",
+        "body": "You got exactly what you came for. Nice work!"
+      },
+      "partial": {
+        "title": "Almost there",
+        "body": "You left the shop, but not with what you wanted. Fix the moment that went sideways and try again."
+      },
+      "missed": {
+        "title": "Not this time",
+        "body": "The conversation ended before you got what you needed. Replay it: the phrases are below."
+      }
+    },
+    "stumbles": "Moments to practise",
+    "stumblesNone": "No slips — every answer was understood.",
+    "branch": {
+      "wrong": "Wrong turn",
+      "unclear": "Not understood"
+    },
+    "times": "×{{count}}",
+    "phrases": "Phrases from this lesson",
+    "nextLesson": "Next lesson"
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "Interface language",
+    "level": "Spanish level",
+    "goal": "Trip goal",
+    "goalPlaceholder": "Where are you going and why?",
+    "subtitles": "Subtitles",
+    "subtitleModes": {
+      "es+en": "Spanish + English",
+      "es+uk": "Spanish + Ukrainian",
+      "es": "Spanish only",
+      "off": "Off"
+    },
+    "speed": "Video speed",
+    "mic": {
+      "title": "Microphone",
+      "test": "Test microphone",
+      "recording": "Recording… {{seconds}}",
+      "playing": "Playing back…",
+      "hint": "Records 3 seconds and plays them back. Nothing is uploaded.",
+      "denied": "Microphone access was blocked. Allow it in the browser site settings.",
+      "unsupported": "Microphone isn't available in this browser or over plain HTTP.",
+      "error": "Couldn't record audio."
+    },
+    "progress": {
+      "title": "Progress",
+      "completed_one": "{{count}} lesson completed",
+      "completed_other": "{{count}} lessons completed"
+    },
+    "reset": {
+      "button": "Reset progress",
+      "title": "Reset progress?",
+      "body": "All completed lessons will be cleared. Your settings stay.",
+      "confirm": "Reset"
+    }
   }
 }
