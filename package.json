@@ -1,5 +1,5 @@
 {
-  "name": "idealaps",
+  "name": "movaquest",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,15 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "ink": "node scripts/build-ink.mjs",
-    "maps:placeholder": "node scripts/gen-placeholder-maps.mjs",
     "test": "vitest run"
   },
   "dependencies": {
     "i18next": "^26.4.2",
-    "i18next-browser-languagedetector": "^8.2.1",
-    "inkjs": "^2.4.0",
-    "phaser": "^4.2.1",
     "posthog-js": "^1.434.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -25,13 +20,11 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.13.3",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
-    "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.3"
