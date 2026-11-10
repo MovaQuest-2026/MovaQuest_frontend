@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
+import { trackMicDenied } from '../../api/analytics'
 import { evaluateSpeech } from '../../api/evaluateSpeech'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { useUserStore } from '../../store/useUserStore'
@@ -46,10 +47,11 @@ export function MicButton({ lessonId, sceneId, disabled, phrasesRevealed, onShow
       setMicPermission(capture.state === 'denied' ? 'denied' : 'unsupported')
       if (!deniedReported.current) {
         deniedReported.current = true
+        trackMicDenied(lessonId, sceneId)
         onDenied?.()
       }
     }
-  }, [capture.state, denied, dispatch, setMicPermission, onDenied])
+  }, [capture.state, denied, dispatch, setMicPermission, onDenied, lessonId, sceneId])
 
   const onTap = async () => {
     if (uiState === 'listening') {

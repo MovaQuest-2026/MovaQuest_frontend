@@ -90,7 +90,31 @@
   "result": {
     "title": "Lesson result",
     "tryAgain": "Try again",
-    "backToLessons": "Back to lessons"
+    "backToLessons": "Back to lessons",
+    "noResult": "You haven't finished this lesson yet.",
+    "startLesson": "Start lesson",
+    "outcomes": {
+      "perfect": {
+        "title": "Perfect!",
+        "body": "You got exactly what you came for. Nice work!"
+      },
+      "partial": {
+        "title": "Almost there",
+        "body": "You left the shop, but not with what you wanted. Fix the moment that went sideways and try again."
+      },
+      "missed": {
+        "title": "Not this time",
+        "body": "The conversation ended before you got what you needed. Replay it: the phrases are below."
+      }
+    },
+    "stumbles": "Moments to practise",
+    "stumblesNone": "No slips — every answer was understood.",
+    "branch": {
+      "wrong": "Wrong turn",
+      "unclear": "Not understood"
+    },
+    "times": "×{{count}}",
+    "phrases": "Phrases from this lesson"
   },
   "profile": {
     "title": "Profile",

@@ -804,3 +804,41 @@ img {
   background: var(--warning);
   color: #000;
 }
+
+/* ---------- Result ---------- */
+
+.result-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.result-hero--perfect {
+  border-color: color-mix(in srgb, var(--success) 50%, var(--border));
+}
+
+.result-hero--partial {
+  border-color: color-mix(in srgb, var(--warning) 50%, var(--border));
+}
+
+.result-hero--missed {
+  border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
+}
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-list__quote {
+  font-weight: 700;
+}
