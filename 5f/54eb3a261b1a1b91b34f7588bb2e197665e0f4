@@ -1,0 +1,51 @@
+src/features/speech/DevSpeechPanel.tsx
+  s_966bd02d031598::t_dd7b9a4d710b61 1-29
+src/api/evaluateSpeech.ts
+  s_966bd02d031598::t_7ff96b6244a467 1-62
+src/features/player/stableShuffle.test.ts
+  s_966bd02d031598::t_61e5594024cb92 1-18
+src/index.css
+  s_966bd02d031598::t_dd7b9a4d710b61 648-806
+src/i18n/locales/uk.json
+  s_966bd02d031598::t_dd7b9a4d710b61 87-88
+src/pages/LessonPlayerPage.tsx
+  s_966bd02d031598::t_dd7b9a4d710b61 5,10,106,121-122
+src/features/player/stableShuffle.ts
+  s_966bd02d031598::t_61e5594024cb92 1-20
+src/features/player/ChoicePanel.tsx
+  s_966bd02d031598::t_9f12bb2d036cc0 66-73
+  s_966bd02d031598::t_718f6ad51f1259 25,56-62,64-65,74
+  s_966bd02d031598::t_61e5594024cb92 9
+  s_966bd02d031598::t_4141c98829c95e 24,31-32,34-35,37-38
+  s_966bd02d031598::t_dd7b9a4d710b61 1-8,10-23,26-30,33,36,39-55,63,75-92
+src/api/devOverrides.ts
+  s_966bd02d031598::t_7ff96b6244a467 1-16
+src/features/speech/useSpeechCapture.ts
+  s_966bd02d031598::t_7ff96b6244a467 1-146
+src/i18n/locales/en.json
+  s_966bd02d031598::t_dd7b9a4d710b61 87-88
+src/features/player/MicButton.tsx
+  s_966bd02d031598::t_718f6ad51f1259 15,21,114-118
+  s_966bd02d031598::t_dd7b9a4d710b61 1-14,16-20,22-113,119-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f54eb3a261b1a1b91b34f7588bb2e197665e0f4",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_966bd02d031598": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "243a8346-34a6-459b-a575-9de40e4052c5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
