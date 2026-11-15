@@ -1,11 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { MachineState } from '../features/player/sceneMachine'
-import type { Lang, Lesson, Scene } from '../types/lesson'
+import type { MachineState } from '../features/player/gapMachine'
+import type { Lang, Lesson, Outcome } from '../types/lesson'
 
 export type Level = Lesson['level']
-export type Outcome = NonNullable<Scene['outcome']>
-export type SubtitleMode = 'es+en' | 'es+uk' | 'es' | 'off'
+export type { Outcome }
+/** Іспанські субтитри увімкнено чи ні. */
+export type SubtitleMode = 'on' | 'off'
 export type PlaybackRate = 0.75 | 1
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
 
@@ -17,6 +18,9 @@ export interface ActiveLesson {
 
 export interface CompletedLesson {
   outcome: Outcome
+  /** Скільки пауз розв'язано правильно з усіх. */
+  correct: number
+  total: number
   completedAt: string // ISO
 }
 
@@ -39,7 +43,7 @@ interface UserState {
   setSubtitleMode: (mode: SubtitleMode) => void
   setPlaybackRate: (rate: PlaybackRate) => void
   completeOnboarding: () => void
-  recordLessonResult: (lessonId: string, outcome: Outcome) => void
+  recordLessonResult: (lessonId: string, outcome: Outcome, correct: number, total: number) => void
   resetProgress: () => void
   setActiveLesson: (active: ActiveLesson | null) => void
 }
@@ -63,34 +67,40 @@ export const useUserStore = create<UserState>()(
       goal: '',
       onboardingDone: false,
       micPermission: 'unknown',
-      subtitleMode: 'es+en',
+      subtitleMode: 'on',
       playbackRate: 1,
       completedLessons: {},
       activeLesson: null,
 
-      // Режим субтитрів з перекладом іде за мовою інтерфейсу.
-      setInterfaceLanguage: (lang) =>
-        set((s) => ({
-          interfaceLanguage: lang,
-          subtitleMode: s.subtitleMode === 'es+en' || s.subtitleMode === 'es+uk' ? `es+${lang}` : s.subtitleMode,
-        })),
+      setInterfaceLanguage: (interfaceLanguage) => set({ interfaceLanguage }),
       setLevel: (level) => set({ level }),
       setGoal: (goal) => set({ goal }),
       setMicPermission: (micPermission) => set({ micPermission }),
       setSubtitleMode: (subtitleMode) => set({ subtitleMode }),
       setPlaybackRate: (playbackRate) => set({ playbackRate }),
       completeOnboarding: () => set({ onboardingDone: true }),
-      recordLessonResult: (lessonId, outcome) =>
+      recordLessonResult: (lessonId, outcome, correct, total) =>
         set((s) => ({
           completedLessons: {
             ...s.completedLessons,
-            [lessonId]: { outcome, completedAt: new Date().toISOString() },
+            [lessonId]: { outcome, correct, total, completedAt: new Date().toISOString() },
           },
         })),
       resetProgress: () => set({ completedLessons: {}, activeLesson: null }),
       setActiveLesson: (activeLesson) => set({ activeLesson }),
     }),
-    { name: 'movaquest-user-v1', version: 1 },
+    {
+      name: 'movaquest-user-v1',
+      version: 2,
+      // v2: уроки стали відео з паузами. Старий прогрес (сцени й гілки) не переноситься,
+      // режими субтитрів з перекладом стають просто «увімкнено».
+      migrate: (persisted, version) => {
+        const state = persisted as Partial<UserState>
+        if (version >= 2) return state
+        const subtitleMode: SubtitleMode = (state.subtitleMode as string) === 'off' ? 'off' : 'on'
+        return { ...state, subtitleMode, completedLessons: {}, activeLesson: null }
+      },
+    },
   ),
 )
 

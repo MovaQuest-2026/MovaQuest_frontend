@@ -1,20 +1,21 @@
+import { usePlayerStore } from '../../store/usePlayerStore'
 import { useUserStore } from '../../store/useUserStore'
-import type { Scene } from '../../types/lesson'
+import type { Cue } from '../../types/lesson'
 
 interface SubtitleLayerProps {
-  subtitles: Scene['subtitles']
+  cues: Cue[]
 }
 
-export function SubtitleLayer({ subtitles }: SubtitleLayerProps) {
+// Іспанські субтитри за часом відео. Перекладу немає: це ламало б завдання «скажи наступне слово».
+export function SubtitleLayer({ cues }: SubtitleLayerProps) {
   const mode = useUserStore((s) => s.subtitleMode)
-  if (mode === 'off') return null
-  const translation = mode === 'es+en' ? subtitles.en : mode === 'es+uk' ? subtitles.uk : null
+  const cue = usePlayerStore((s) => cues.find((c) => s.currentTime >= c.start && s.currentTime < c.end) ?? null)
+  if (mode === 'off' || !cue) return null
   return (
     <div className="subtitles" aria-live="polite">
       <p className="subtitles__es" lang="es">
-        {subtitles.es}
+        {cue.es}
       </p>
-      {translation && <p className="subtitles__tr">{translation}</p>}
     </div>
   )
 }

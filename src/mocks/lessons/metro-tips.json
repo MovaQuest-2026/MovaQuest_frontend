@@ -1,0 +1,103 @@
+{
+  "id": "metro-tips",
+  "title": {
+    "en": "Getting around Madrid",
+    "uk": "Як пересуватися Мадридом"
+  },
+  "description": {
+    "en": "A local shares quick transport tips. Fill in the words and answer her question.",
+    "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 23,
+  "cover": "/clips/metro-tips/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/metro-tips/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 3.0,
+      "es": "Para moverte por Madrid,"
+    },
+    {
+      "start": 3.0,
+      "end": 6.0,
+      "es": "lo más rápido es el"
+    },
+    {
+      "start": 6.0,
+      "end": 8.0,
+      "es": "metro."
+    },
+    {
+      "start": 8.0,
+      "end": 11.0,
+      "es": "La tarjeta de transporte"
+    },
+    {
+      "start": 11.0,
+      "end": 14.0,
+      "es": "cuesta solo dos"
+    },
+    {
+      "start": 14.0,
+      "end": 16.0,
+      "es": "euros."
+    },
+    {
+      "start": 16.0,
+      "end": 19.5,
+      "es": "¿Y cómo se dice «ticket» en España?"
+    },
+    {
+      "start": 19.5,
+      "end": 23.0,
+      "es": "¡Billete! Un billete sencillo."
+    }
+  ],
+  "gaps": [
+    {
+      "id": "g1",
+      "kind": "nextWord",
+      "pauseAt": 6.0,
+      "context": "lo más rápido es el",
+      "answer": "metro",
+      "translation": {
+        "en": "metro, subway",
+        "uk": "метро"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g2",
+      "kind": "nextWord",
+      "pauseAt": 14.0,
+      "context": "La tarjeta de transporte cuesta solo dos",
+      "answer": "euros",
+      "translation": {
+        "en": "euros",
+        "uk": "євро"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g3",
+      "kind": "answer",
+      "pauseAt": 19.5,
+      "context": "¿Y cómo se dice «ticket» en España?",
+      "answer": "billete",
+      "accept": [
+        "un billete",
+        "el billete"
+      ],
+      "translation": {
+        "en": "ticket",
+        "uk": "квиток"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

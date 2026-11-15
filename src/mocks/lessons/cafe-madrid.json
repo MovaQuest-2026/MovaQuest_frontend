@@ -1,0 +1,104 @@
+{
+  "id": "cafe-madrid",
+  "title": {
+    "en": "Coffee in Madrid",
+    "uk": "Кава в Мадриді"
+  },
+  "description": {
+    "en": "A barista takes an order. Guess how the customer finishes each line.",
+    "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 22,
+  "cover": "/clips/cafe-madrid/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/cafe-madrid/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 3.0,
+      "es": "¡Hola! ¿Qué te pongo?"
+    },
+    {
+      "start": 3.0,
+      "end": 5.5,
+      "es": "Un café con"
+    },
+    {
+      "start": 5.5,
+      "end": 7.0,
+      "es": "leche, por favor."
+    },
+    {
+      "start": 7.0,
+      "end": 10.0,
+      "es": "¡Marchando! ¿Algo más?"
+    },
+    {
+      "start": 10.0,
+      "end": 13.0,
+      "es": "¿Para tomar aquí o para"
+    },
+    {
+      "start": 13.0,
+      "end": 15.0,
+      "es": "llevar?"
+    },
+    {
+      "start": 15.0,
+      "end": 18.0,
+      "es": "Son tres euros con"
+    },
+    {
+      "start": 18.0,
+      "end": 20.0,
+      "es": "cincuenta."
+    },
+    {
+      "start": 20.0,
+      "end": 22.0,
+      "es": "¡Gracias, hasta luego!"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "g1",
+      "kind": "nextWord",
+      "pauseAt": 5.5,
+      "context": "Un café con",
+      "answer": "leche",
+      "translation": {
+        "en": "milk",
+        "uk": "молоко"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g2",
+      "kind": "nextWord",
+      "pauseAt": 13.0,
+      "context": "¿Para tomar aquí o para",
+      "answer": "llevar",
+      "translation": {
+        "en": "to take away",
+        "uk": "з собою"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g3",
+      "kind": "nextWord",
+      "pauseAt": 18.0,
+      "context": "Son tres euros con",
+      "answer": "cincuenta",
+      "translation": {
+        "en": "fifty (cents)",
+        "uk": "п'ятдесят (центів)"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

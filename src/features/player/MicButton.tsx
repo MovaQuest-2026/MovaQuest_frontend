@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { trackMicDenied } from '../../api/analytics'
-import { evaluateSpeech } from '../../api/evaluateSpeech'
+import { evaluateAnswer } from '../../api/evaluateAnswer'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { useUserStore } from '../../store/useUserStore'
 import { useSpeechCapture } from '../speech/useSpeechCapture'
@@ -11,15 +11,13 @@ export type MicUiState = 'idle' | 'requestingPermission' | 'listening' | 'evalua
 
 interface MicButtonProps {
   lessonId: string
-  sceneId: string
+  gapId: string
   disabled?: boolean
-  phrasesRevealed: boolean
-  onShowPhrases: () => void
   onDenied?: () => void
 }
 
 // Дотик починає запис, повторний дотик або 1.5 с тиші зупиняє.
-export function MicButton({ lessonId, sceneId, disabled, phrasesRevealed, onShowPhrases, onDenied }: MicButtonProps) {
+export function MicButton({ lessonId, gapId, disabled, onDenied }: MicButtonProps) {
   const { t } = useTranslation()
   const capture = useSpeechCapture()
   const [evaluating, setEvaluating] = useState(false)
@@ -47,11 +45,11 @@ export function MicButton({ lessonId, sceneId, disabled, phrasesRevealed, onShow
       setMicPermission(capture.state === 'denied' ? 'denied' : 'unsupported')
       if (!deniedReported.current) {
         deniedReported.current = true
-        trackMicDenied(lessonId, sceneId)
+        trackMicDenied(lessonId, gapId)
         onDenied?.()
       }
     }
-  }, [capture.state, denied, dispatch, setMicPermission, onDenied, lessonId, sceneId])
+  }, [capture.state, denied, dispatch, setMicPermission, onDenied, lessonId, gapId])
 
   const onTap = async () => {
     if (uiState === 'listening') {
@@ -69,8 +67,8 @@ export function MicButton({ lessonId, sceneId, disabled, phrasesRevealed, onShow
     dispatch({ type: 'STOP_LISTENING' })
     setEvaluating(true)
     try {
-      const result = await evaluateSpeech(lessonId, sceneId, blob)
-      dispatch({ type: 'RESULT', branch: result.branch, source: 'voice' })
+      const result = await evaluateAnswer(lessonId, gapId, blob)
+      dispatch({ type: 'RESULT', verdict: result.verdict, heard: result.transcript, source: 'voice' })
     } catch {
       setFailed(true)
       dispatch({ type: 'CANCEL_LISTENING' })
@@ -111,14 +109,7 @@ export function MicButton({ lessonId, sceneId, disabled, phrasesRevealed, onShow
         {label}
       </p>
       {uiState === 'denied' && (
-        <div className="notice notice--error mic__notice">
-          <p>{t('player.micDenied')}</p>
-          {!phrasesRevealed && (
-            <button type="button" className="btn btn--block" onClick={onShowPhrases}>
-              {t('player.showPhrases')}
-            </button>
-          )}
-        </div>
+        <p className="notice notice--error mic__notice">{t('player.micDenied')}</p>
       )}
       {uiState === 'error' && <p className="notice notice--error mic__notice">{t('player.micError')}</p>}
     </div>

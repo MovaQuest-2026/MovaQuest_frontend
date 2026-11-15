@@ -7,7 +7,7 @@ import { SUPPORTED_LANGUAGES } from '../i18n'
 import { useUserStore, type Level, type PlaybackRate, type SubtitleMode } from '../store/useUserStore'
 
 const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']
-const SUBTITLE_MODES: SubtitleMode[] = ['es+en', 'es+uk', 'es', 'off']
+const SUBTITLE_MODES: SubtitleMode[] = ['on', 'off']
 const RATES: PlaybackRate[] = [0.75, 1]
 
 export function ProfilePage() {
@@ -69,7 +69,6 @@ export function ProfilePage() {
             value={subtitleMode}
             options={SUBTITLE_MODES.map((m) => ({ value: m, label: t(`profile.subtitleModes.${m}`) }))}
             onChange={setSubtitleMode}
-            columns={2}
           />
         </section>
 

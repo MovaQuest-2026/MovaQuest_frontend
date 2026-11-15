@@ -1,27 +1,27 @@
 import { useState } from 'react'
-import { isDevMode, setForcedBranch } from '../../api/devOverrides'
-import type { BranchKind } from '../../types/lesson'
+import { isDevMode, setForcedVerdict } from '../../api/devOverrides'
+import type { Verdict } from '../../lib/matchAnswer'
 
-const BRANCHES: BranchKind[] = ['correct', 'wrong', 'unclear']
+const VERDICTS: Verdict[] = ['correct', 'wrong', 'unclear']
 
 // Видно тільки з ?dev=1. Примусово задає результат мок-розпізнавання.
 // Службова панель для розробки, тому тексти не локалізуються.
 export function DevSpeechPanel() {
-  const [forced, setForced] = useState<BranchKind | null>(null)
+  const [forced, setForced] = useState<Verdict | null>(null)
   if (!isDevMode()) return null
 
-  const choose = (branch: BranchKind) => {
-    const next = forced === branch ? null : branch
+  const choose = (verdict: Verdict) => {
+    const next = forced === verdict ? null : verdict
     setForced(next)
-    setForcedBranch(next)
+    setForcedVerdict(next)
   }
 
   return (
     <div className="dev-panel" role="group" aria-label="dev: force speech result">
       <span className="dev-panel__title">dev</span>
-      {BRANCHES.map((b) => (
-        <button key={b} type="button" aria-pressed={forced === b} onClick={() => choose(b)}>
-          {b}
+      {VERDICTS.map((v) => (
+        <button key={v} type="button" aria-pressed={forced === v} onClick={() => choose(v)}>
+          {v}
         </button>
       ))}
     </div>

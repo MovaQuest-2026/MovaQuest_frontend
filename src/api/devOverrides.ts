@@ -1,16 +1,16 @@
-import type { BranchKind } from '../types/lesson'
+import type { Verdict } from '../lib/matchAnswer'
 
 // Dev-перемикач для мок-розпізнавання (?dev=1). Живе лише в пам'яті вкладки.
-let forcedBranch: BranchKind | null = null
+let forcedVerdict: Verdict | null = null
 
 export function isDevMode(): boolean {
   return new URLSearchParams(window.location.search).get('dev') === '1'
 }
 
-export function getForcedBranch(): BranchKind | null {
-  return isDevMode() ? forcedBranch : null
+export function getForcedVerdict(): Verdict | null {
+  return isDevMode() ? forcedVerdict : null
 }
 
-export function setForcedBranch(branch: BranchKind | null) {
-  forcedBranch = branch
+export function setForcedVerdict(verdict: Verdict | null) {
+  forcedVerdict = verdict
 }

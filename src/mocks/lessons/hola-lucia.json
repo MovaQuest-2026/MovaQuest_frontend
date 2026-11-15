@@ -1,0 +1,102 @@
+{
+  "id": "hola-lucia",
+  "title": {
+    "en": "Meet Lucía",
+    "uk": "Знайомтеся, Лусія"
+  },
+  "description": {
+    "en": "Lucía introduces herself and quizzes you. Short, easy answers.",
+    "uk": "Лусія розповідає про себе і ставить запитання. Короткі й прості відповіді."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 21,
+  "cover": "/clips/hola-lucia/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/hola-lucia/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 3.0,
+      "es": "¡Hola! Me llamo Lucía."
+    },
+    {
+      "start": 3.0,
+      "end": 6.0,
+      "es": "Soy de Sevilla, en el sur de"
+    },
+    {
+      "start": 6.0,
+      "end": 8.0,
+      "es": "España."
+    },
+    {
+      "start": 8.0,
+      "end": 11.5,
+      "es": "Pregunta: ¿cuántos días tiene una semana?"
+    },
+    {
+      "start": 11.5,
+      "end": 13.5,
+      "es": "¡Siete!"
+    },
+    {
+      "start": 13.5,
+      "end": 17.0,
+      "es": "Mi color favorito es el azul, como el"
+    },
+    {
+      "start": 17.0,
+      "end": 19.0,
+      "es": "mar."
+    },
+    {
+      "start": 19.0,
+      "end": 21.0,
+      "es": "¡Hasta pronto!"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "g1",
+      "kind": "nextWord",
+      "pauseAt": 6.0,
+      "context": "Soy de Sevilla, en el sur de",
+      "answer": "España",
+      "translation": {
+        "en": "Spain",
+        "uk": "Іспанія"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g2",
+      "kind": "answer",
+      "pauseAt": 11.5,
+      "context": "¿Cuántos días tiene una semana?",
+      "answer": "siete",
+      "accept": [
+        "siete dias"
+      ],
+      "translation": {
+        "en": "seven",
+        "uk": "сім"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g3",
+      "kind": "nextWord",
+      "pauseAt": 17.0,
+      "context": "Mi color favorito es el azul, como el",
+      "answer": "mar",
+      "translation": {
+        "en": "sea",
+        "uk": "море"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

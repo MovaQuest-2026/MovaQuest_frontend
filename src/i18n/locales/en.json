@@ -40,24 +40,25 @@
     },
     "mic": {
       "title": "You'll answer with your voice",
-      "body": "At key moments the video pauses and Lucía waits for your reply. We use the microphone only while you answer. Audio is not stored.",
+      "body": "Short Spanish videos pause right before the next word or an answer. Say it out loud and we'll check it. We use the microphone only while you answer. Audio is not stored.",
       "allow": "Allow microphone",
       "skip": "Skip for now",
       "requesting": "Waiting for permission…",
       "granted": "Microphone is ready.",
-      "denied": "Microphone access was blocked. You can still answer by tapping phrases.",
+      "denied": "Microphone access was blocked. You can still type your answers.",
       "unsupported": "This browser can't access the microphone here. Open the app over HTTPS."
     }
   },
   "lessons": {
     "title": "Series",
-    "subtitle": "Short video stories. Answer out loud when the video pauses.",
+    "subtitle": "Short Spanish videos. When one pauses, say the next word or the answer.",
     "duration": "{{minutes}} min",
     "durationSec": "{{seconds}} sec",
     "status": {
       "new": "New",
       "completed": "Completed",
-      "comingSoon": "Coming soon"
+      "comingSoon": "Coming soon",
+      "score": "{{correct}}/{{total}}"
     },
     "empty": "No series yet."
   },
@@ -67,27 +68,45 @@
     "missed": "Missed"
   },
   "player": {
-    "title": "Lesson",
+    "title": "Video",
     "tapToStart": "Tap to start",
-    "exit": "Exit lesson",
+    "exit": "Exit video",
     "play": "Play",
     "pause": "Pause",
     "back5": "Back 5 seconds",
     "forward5": "Forward 5 seconds",
     "speed": "Playback speed",
     "subtitles": "Subtitles",
-    "showPhrases": "Show phrases",
-    "hidePhrases": "Hide phrases",
-    "phrasesShown": "Here are the phrases",
+    "progress": "{{done}} of {{total}} pauses done",
+    "gapKind": {
+      "nextWord": "What's the next word?",
+      "answer": "Answer the question"
+    },
     "tryOf": "Try {{current}} of {{total}}",
-    "listening": "Lucía is listening…",
+    "wrong": "Not quite. Try again.",
+    "wrongHeard": "Heard «{{heard}}». Not quite, try again.",
+    "unclear": "Didn't catch that. Say it once more.",
+    "hint": "Hint",
+    "replay": "Replay",
+    "skip": "Skip",
+    "continue": "Continue",
+    "resolution": {
+      "correct": "¡Muy bien!",
+      "revealed": "The answer was",
+      "skipped": "Skipped. The answer:"
+    },
+    "typeInstead": "Type instead",
+    "speakInstead": "Answer by voice",
+    "typePlaceholder": "Type the word",
+    "check": "Check",
+    "listening": "Checking…",
     "speak": "Tap to speak",
     "stop": "Tap to stop",
-    "micDenied": "Microphone is blocked. Tap a phrase to answer instead.",
-    "notFound": "Lesson not found.",
+    "micDenied": "Microphone is blocked. Type your answer instead.",
+    "notFound": "Video not found.",
     "seek": "Seek",
     "clipError": "This video couldn't be loaded.",
-    "micError": "Couldn't record. Try again or tap a phrase."
+    "micError": "Couldn't record. Try again or type the answer."
   },
   "result": {
     "title": "Lesson result",
@@ -98,26 +117,27 @@
     "outcomes": {
       "perfect": {
         "title": "Perfect!",
-        "body": "You got exactly what you came for. Nice work!"
+        "body": "You got every pause right."
       },
       "partial": {
-        "title": "Almost there",
-        "body": "You left the shop, but not with what you wanted. Fix the moment that went sideways and try again."
+        "title": "Nice work",
+        "body": "Most words landed. Replay the video to catch the rest."
       },
       "missed": {
-        "title": "Not this time",
-        "body": "The conversation ended before you got what you needed. Replay it: the phrases are below."
+        "title": "Keep going",
+        "body": "These were tricky. Look at the words below and try the video again."
       }
     },
-    "stumbles": "Moments to practise",
-    "stumblesNone": "No slips — every answer was understood.",
-    "branch": {
-      "wrong": "Wrong turn",
-      "unclear": "Not understood"
+    "nextLesson": "Next video",
+    "score": "{{correct}} of {{total}} right",
+    "words": "Words from this video",
+    "firstTry": "First try",
+    "afterTries": "On try {{count}}",
+    "resolution": {
+      "revealed": "Shown",
+      "skipped": "Skipped"
     },
-    "times": "×{{count}}",
-    "phrases": "Phrases from this lesson",
-    "nextLesson": "Next lesson"
+    "youSaid": "You said: {{heard}}"
   },
   "profile": {
     "title": "Profile",
@@ -127,9 +147,7 @@
     "goalPlaceholder": "Where are you going and why?",
     "subtitles": "Subtitles",
     "subtitleModes": {
-      "es+en": "Spanish + English",
-      "es+uk": "Spanish + Ukrainian",
-      "es": "Spanish only",
+      "on": "Spanish",
       "off": "Off"
     },
     "speed": "Video speed",
