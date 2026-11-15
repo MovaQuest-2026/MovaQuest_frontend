@@ -1,0 +1,109 @@
+src/features/player/video/tiktokProtocol.test.ts
+  s_a42e1d063f2603::t_6a9552815172ca 1-39
+src/store/useUserStore.ts
+  s_a42e1d063f2603::t_44c33592d86870 3-4,7-9,21-23,46,70,75,82,86,92-103
+scripts/make-placeholder-clips.sh
+  s_a42e1d063f2603::t_89992cad0112c6 2-4,6,11,13,18,21-49,53-58,60-65,68
+  s_a42e1d063f2603::t_0d053781353d16 50-52
+src/types/lesson.ts
+  s_a42e1d063f2603::t_0c51e07ee87334 3-55
+src/pages/LessonPlayerPage.tsx
+  s_a42e1d063f2603::t_c83ef77f9c2b60 12-13
+  s_a42e1d063f2603::t_b5e58127498ad9 6-7,14,17,21-22,36,42,54,103-110,119-131,163,173-175,177,181-183,189-192,196,203-208,227,229-230,233,241,246-248
+src/i18n/locales/en.json
+  s_a42e1d063f2603::t_0d053781353d16 131
+  s_a42e1d063f2603::t_ea39b536fbc4e9 43,48,54,60-61,71,73,80-84,86-102,105-106,109,120,123-124,127-128,132-138,140,150
+src/index.css
+  s_a42e1d063f2603::t_54984298ba54c2 652,751,1019
+  s_a42e1d063f2603::t_ebfe11089caf26 734-736
+  s_a42e1d063f2603::t_a808e88c751b36 643,647,655-663,668,674-699,701-733,737-748,758-813
+src/features/player/gapMachine.test.ts
+  s_a42e1d063f2603::t_999d8c50c74d6b 1-167
+src/mocks/lessons/metro-tips.json
+  s_a42e1d063f2603::t_3474aef932ec4a 1-103
+src/features/player/video/FileVideo.tsx
+  s_a42e1d063f2603::t_5f8667e8c63e82 2-17,21-121
+  s_a42e1d063f2603::t_c83ef77f9c2b60 1,18-20
+src/features/player/video/tiktokProtocol.ts
+  s_a42e1d063f2603::t_98358b94ab96d3 1-83
+src/pages/LessonResultPage.tsx
+  s_a42e1d063f2603::t_e7c132bf2283a1 5,10,51-53,60,65,67-68,70-72,74-84,116-123,125
+src/i18n/locales/uk.json
+  s_a42e1d063f2603::t_ea39b536fbc4e9 43,48,54,60-61,71,73,80-84,86-102,105-106,109,120,123-124,127-128,132-138,140,150
+  s_a42e1d063f2603::t_0d053781353d16 131
+src/api/evaluateAnswer.ts
+  s_a42e1d063f2603::t_1946b94f7a85b0 1-62
+src/api/devOverrides.ts
+  s_a42e1d063f2603::t_5cc6d1106ae744 1,4,10-11,14-15
+README.md
+  s_a42e1d063f2603::t_f1ffde8cfd5e91 3,12,17,20-21,24-32,40,62-75
+src/features/player/playerAnalytics.ts
+  s_a42e1d063f2603::t_abf8651e17a7c1 2-5,9,12-13,15,17-18,21-25,29-30
+src/features/player/PlayerControls.tsx
+  s_a42e1d063f2603::t_78463a63c49f7a 5-7,9-14,17,29-36,41-42,46-55,60-65,69,76-97
+src/api/analytics.ts
+  s_a42e1d063f2603::t_eed72d89fd2460 3-4,46-47,50-51,54-55,58-59,62-63,66-67
+src/mocks/lessons/hola-lucia.json
+  s_a42e1d063f2603::t_3474aef932ec4a 1-102
+src/store/usePlayerStore.ts
+  s_a42e1d063f2603::t_3b7724e2439c67 2,7,10-12,18,24-25,41,49,57,62,66-71,82,86-87,92,100,104-107
+src/features/player/MicButton.tsx
+  s_a42e1d063f2603::t_e0a41c47bacd6c 5,14,20,48,52,70-71,112
+src/features/player/video/types.ts
+  s_a42e1d063f2603::t_e7267dcaab900c 1-20
+src/mocks/lessons/cafe-madrid.json
+  s_a42e1d063f2603::t_3474aef932ec4a 1-104
+src/pages/ProfilePage.tsx
+  s_a42e1d063f2603::t_44c33592d86870 10
+src/features/player/video/VideoSurface.tsx
+  s_a42e1d063f2603::t_9517774705a8fc 1-17
+src/features/speech/DevSpeechPanel.tsx
+  s_a42e1d063f2603::t_e2821a375242b7 2-3,5,10,13-14,16,22-24
+CLAUDE.md
+  s_a42e1d063f2603::t_5ca4eb6f115da2 4,6-18,26-29,33,35
+src/features/player/useFeedGestures.ts
+  s_a42e1d063f2603::t_7e66d07bfe59bd 8
+src/api/lessons.test.ts
+  s_a42e1d063f2603::t_7bd33c88634736 2,6-7,9,11-12,15,18-40
+src/features/player/GapPanel.tsx
+  s_a42e1d063f2603::t_01118c84f70d96 1-25,31-137
+  s_a42e1d063f2603::t_0d053781353d16 26-30
+src/features/player/video/source.ts
+  s_a42e1d063f2603::t_c83ef77f9c2b60 1-6
+src/lib/matchAnswer.test.ts
+  s_a42e1d063f2603::t_c4a929921b4323 1-50
+src/pages/LessonsPage.tsx
+  s_a42e1d063f2603::t_db7869628bf453 108
+src/features/player/video/TikTokVideo.tsx
+  s_a42e1d063f2603::t_c83ef77f9c2b60 1,27-29
+  s_a42e1d063f2603::t_f534b2ba8b72d0 2-26,30-131
+src/features/player/gapMachine.ts
+  s_a42e1d063f2603::t_09d4eee25949ec 1-202
+src/lib/matchAnswer.ts
+  s_a42e1d063f2603::t_dcc4ecde39e3f5 1-66
+src/features/player/SubtitleLayer.tsx
+  s_a42e1d063f2603::t_7ee4e71a2c3124 1,3,6,9-10,12-13,17
+src/mocks/lessons/index.json
+  s_a42e1d063f2603::t_3474aef932ec4a 3,5-6,9-10,13-14,17,19-20,23-24,27-28,31,33-34,37-52,55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aefc593d98900335aecc6b44d04ab18fb7916e96",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a42e1d063f2603": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a5f0db7b-9f4a-46df-ac75-560313a3f2e8",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
