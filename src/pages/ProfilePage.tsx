@@ -4,10 +4,16 @@ import { Segmented } from '../components/Segmented'
 import { TabBar } from '../components/TabBar'
 import { useMicTest } from '../features/speech/useMicTest'
 import { SUPPORTED_LANGUAGES } from '../i18n'
-import { useUserStore, type Level, type PlaybackRate, type SubtitleMode } from '../store/useUserStore'
+import {
+  SUBTITLE_LANGS,
+  useUserStore,
+  type Level,
+  type PlaybackRate,
+  type ThemePreference,
+} from '../store/useUserStore'
 
 const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']
-const SUBTITLE_MODES: SubtitleMode[] = ['on', 'off']
+const THEMES: ThemePreference[] = ['system', 'light', 'dark']
 const RATES: PlaybackRate[] = [0.75, 1]
 
 export function ProfilePage() {
@@ -18,10 +24,11 @@ export function ProfilePage() {
   const lang = useUserStore((s) => s.interfaceLanguage)
   const level = useUserStore((s) => s.level)
   const goal = useUserStore((s) => s.goal)
-  const subtitleMode = useUserStore((s) => s.subtitleMode)
+  const subtitleLangs = useUserStore((s) => s.subtitleLangs)
+  const theme = useUserStore((s) => s.theme)
   const playbackRate = useUserStore((s) => s.playbackRate)
   const completedCount = useUserStore((s) => Object.keys(s.completedLessons).length)
-  const { setInterfaceLanguage, setLevel, setGoal, setSubtitleMode, setPlaybackRate, resetProgress } =
+  const { setInterfaceLanguage, setTheme, setLevel, setGoal, toggleSubtitleLang, setPlaybackRate, resetProgress } =
     useUserStore.getState()
 
   const micBusy = mic.state === 'recording' || mic.state === 'playing'
@@ -35,9 +42,21 @@ export function ProfilePage() {
           <span className="field__label">{t('profile.language')}</span>
           <Segmented
             label={t('profile.language')}
+            compact
             value={lang}
             options={SUPPORTED_LANGUAGES.map((l) => ({ value: l, label: t(`languages.${l}`) }))}
             onChange={setInterfaceLanguage}
+          />
+        </section>
+
+        <section className="field">
+          <span className="field__label">{t('profile.theme')}</span>
+          <Segmented
+            label={t('profile.theme')}
+            compact
+            value={theme}
+            options={THEMES.map((m) => ({ value: m, label: t(`profile.themes.${m}`) }))}
+            onChange={setTheme}
           />
         </section>
 
@@ -64,12 +83,24 @@ export function ProfilePage() {
 
         <section className="field">
           <span className="field__label">{t('profile.subtitles')}</span>
-          <Segmented
-            label={t('profile.subtitles')}
-            value={subtitleMode}
-            options={SUBTITLE_MODES.map((m) => ({ value: m, label: t(`profile.subtitleModes.${m}`) }))}
-            onChange={setSubtitleMode}
-          />
+          {/* Кілька мов одночасно, тому перемикачі, а не Segmented. */}
+          <div className="segmented segmented--compact" role="group" aria-label={t('profile.subtitles')}>
+            {SUBTITLE_LANGS.map((l) => (
+              <button
+                key={l}
+                type="button"
+                className="segmented__item"
+                lang={l}
+                aria-pressed={subtitleLangs.includes(l)}
+                onClick={() => toggleSubtitleLang(l)}
+              >
+                {t(`subtitleLangs.${l}`)}
+              </button>
+            ))}
+          </div>
+          <span className="muted">
+            {subtitleLangs.length === 0 ? t('profile.subtitlesOff') : t('profile.subtitlesHint')}
+          </span>
         </section>
 
         <section className="field">

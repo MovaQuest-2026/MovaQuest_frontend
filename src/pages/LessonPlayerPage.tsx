@@ -13,7 +13,6 @@ import { supportsPlaybackRate } from '../features/player/video/source'
 import { VideoSurface } from '../features/player/video/VideoSurface'
 import type { VideoHandle } from '../features/player/video/types'
 import { DevSpeechPanel } from '../features/speech/DevSpeechPanel'
-import { localize } from '../i18n/localize'
 import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 
@@ -22,7 +21,7 @@ const SEEK_STEP = 5
 const REPLAY_SEC = 4
 const FEED_TRANSITION_MS = 260
 
-// Без жесту користувача браузер не дасть відтворити зі звуком — тоді показуємо «Tap to start».
+// Без жесту користувача браузер дозволяє автозапуск лише без звуку.
 function hasUserActivation(): boolean {
   return navigator.userActivation?.hasBeenActive ?? false
 }
@@ -41,10 +40,10 @@ export function LessonPlayerPage() {
   const machine = usePlayerStore((s) => s.machine)
   const startAt = usePlayerStore((s) => s.startAt)
   const started = usePlayerStore((s) => s.started)
+  const muted = usePlayerStore((s) => s.muted)
   const userPaused = usePlayerStore((s) => s.userPaused)
-  const { dispatch, start, setUserPaused, setProgress } = usePlayerStore.getState()
+  const { dispatch, setUserPaused, setProgress, setMuted } = usePlayerStore.getState()
   const playbackRate = useUserStore((s) => s.playbackRate)
-  const lang = useUserStore((s) => s.interfaceLanguage)
   const location = useLocation()
   // Анімація входу після свайпу грає один раз на навігацію, а не після кожної «пружинки».
   const [enteredKey, setEnteredKey] = useState<string | null>(null)
@@ -80,8 +79,9 @@ export function LessonPlayerPage() {
         if (cancelled) return
         const player = usePlayerStore.getState()
         player.load(l)
-        // Як у стрічці: якщо користувач уже торкався сторінки, відео стартує одразу зі звуком.
-        if (hasUserActivation()) player.start()
+        // Як у стрічці: відео стартує одразу. Якщо користувач ще не торкався сторінки, без звуку.
+        player.setMuted(!hasUserActivation())
+        player.start()
         setLoaded({ lessonId, state: 'ready' })
       })
       .catch(() => {
@@ -111,7 +111,25 @@ export function LessonPlayerPage() {
 
   const onReady = useCallback(() => dispatch({ type: 'CLIP_READY' }), [dispatch])
   const onEnded = useCallback(() => dispatch({ type: 'CLIP_ENDED' }), [dispatch])
-  const onPlayBlocked = useCallback(() => usePlayerStore.getState().playBlocked(), [])
+  const onAutoplayMuted = useCallback(() => usePlayerStore.getState().setMuted(true), [])
+
+  // Перший дотик будь-де вмикає звук. Дотик по самому відео при цьому не ставить його на паузу.
+  useEffect(() => {
+    if (!muted) return
+    const unmute = (e: Event) => {
+      setMuted(false)
+      if ((e.target as Element | null)?.closest?.('.player__tap-area')) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+    window.addEventListener('click', unmute, { capture: true })
+    window.addEventListener('keydown', unmute, { capture: true })
+    return () => {
+      window.removeEventListener('click', unmute, { capture: true })
+      window.removeEventListener('keydown', unmute, { capture: true })
+    }
+  }, [muted, setMuted])
   const onError = useCallback(() => setLoaded({ lessonId, state: 'clipError' }), [lessonId])
 
   const seek = (time: number) => {
@@ -191,12 +209,13 @@ export function LessonPlayerPage() {
           source={lesson.video}
           startAt={startAt}
           shouldPlay={shouldPlay}
+          muted={muted}
           playbackRate={playbackRate}
           onReady={onReady}
           onTime={setProgress}
           onEnded={onEnded}
           onError={onError}
-          onPlayBlocked={onPlayBlocked}
+          onAutoplayMuted={onAutoplayMuted}
         />
 
         <div className="player__overlay">
@@ -206,6 +225,11 @@ export function LessonPlayerPage() {
             gapIndex={machine.gapIndex}
             canChangeSpeed={supportsPlaybackRate(lesson.video)}
           />
+          {muted && (
+            <button type="button" className="player__unmute" onClick={() => setMuted(false)}>
+              <span aria-hidden="true">🔇</span> {t('player.unmute')}
+            </button>
+          )}
           <DevSpeechPanel />
           <button
             type="button"
@@ -232,23 +256,6 @@ export function LessonPlayerPage() {
 
           {showControls && !answering && <PlayerControls lesson={lesson} onSeek={seek} />}
         </div>
-
-        {!started && (
-          <button
-            type="button"
-            className="player__start"
-            onClick={() => {
-              videoRef.current?.unlock()
-              start()
-            }}
-          >
-            <span className="player__start-title">{localize(lesson.title, lang)}</span>
-            {lesson.video.type === 'tiktok' && lesson.video.author && (
-              <span className="player__start-author">@{lesson.video.author}</span>
-            )}
-            <span className="player__start-cta">▶ {t('player.tapToStart')}</span>
-          </button>
-        )}
       </main>
       <TabBar />
     </>

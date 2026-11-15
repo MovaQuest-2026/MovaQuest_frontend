@@ -2,11 +2,13 @@
   "id": "metro-tips",
   "title": {
     "en": "Getting around Madrid",
-    "uk": "Як пересуватися Мадридом"
+    "uk": "Як пересуватися Мадридом",
+    "es": "Moverse por Madrid"
   },
   "description": {
     "en": "A local shares quick transport tips. Fill in the words and answer her question.",
-    "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання."
+    "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання.",
+    "es": "Una madrileña da consejos rápidos de transporte. Completa las palabras y responde a su pregunta."
   },
   "targetLanguage": "es",
   "level": "A2",
@@ -18,51 +20,83 @@
   },
   "cues": [
     {
-      "start": 0.0,
-      "end": 3.0,
-      "es": "Para moverte por Madrid,"
+      "start": 0,
+      "end": 3,
+      "es": "Para moverte por Madrid,",
+      "tr": {
+        "en": "To get around Madrid,",
+        "uk": "Щоб пересуватися Мадридом,"
+      }
     },
     {
-      "start": 3.0,
-      "end": 6.0,
-      "es": "lo más rápido es el"
+      "start": 3,
+      "end": 6,
+      "es": "lo más rápido es el",
+      "tr": {
+        "en": "the fastest option is the",
+        "uk": "найшвидше — це"
+      }
     },
     {
-      "start": 6.0,
-      "end": 8.0,
-      "es": "metro."
+      "start": 6,
+      "end": 8,
+      "es": "metro.",
+      "tr": {
+        "en": "metro.",
+        "uk": "метро."
+      }
     },
     {
-      "start": 8.0,
-      "end": 11.0,
-      "es": "La tarjeta de transporte"
+      "start": 8,
+      "end": 11,
+      "es": "La tarjeta de transporte",
+      "tr": {
+        "en": "The transport card",
+        "uk": "Транспортна картка"
+      }
     },
     {
-      "start": 11.0,
-      "end": 14.0,
-      "es": "cuesta solo dos"
+      "start": 11,
+      "end": 14,
+      "es": "cuesta solo dos",
+      "tr": {
+        "en": "costs only two",
+        "uk": "коштує лише два"
+      }
     },
     {
-      "start": 14.0,
-      "end": 16.0,
-      "es": "euros."
+      "start": 14,
+      "end": 16,
+      "es": "euros.",
+      "tr": {
+        "en": "euros.",
+        "uk": "євро."
+      }
     },
     {
-      "start": 16.0,
+      "start": 16,
       "end": 19.5,
-      "es": "¿Y cómo se dice «ticket» en España?"
+      "es": "¿Y cómo se dice «ticket» en España?",
+      "tr": {
+        "en": "And how do you say “ticket” in Spain?",
+        "uk": "А як в Іспанії кажуть «ticket»?"
+      }
     },
     {
       "start": 19.5,
-      "end": 23.0,
-      "es": "¡Billete! Un billete sencillo."
+      "end": 23,
+      "es": "¡Billete! Un billete sencillo.",
+      "tr": {
+        "en": "Billete! A single ticket.",
+        "uk": "Billete! Квиток в один бік."
+      }
     }
   ],
   "gaps": [
     {
       "id": "g1",
       "kind": "nextWord",
-      "pauseAt": 6.0,
+      "pauseAt": 6,
       "context": "lo más rápido es el",
       "answer": "metro",
       "translation": {
@@ -74,7 +108,7 @@
     {
       "id": "g2",
       "kind": "nextWord",
-      "pauseAt": 14.0,
+      "pauseAt": 14,
       "context": "La tarjeta de transporte cuesta solo dos",
       "answer": "euros",
       "translation": {

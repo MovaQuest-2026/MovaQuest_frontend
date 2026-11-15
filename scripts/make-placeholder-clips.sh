@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Генерує плейсхолдер-відео для уроку: public/clips/<lessonId>/video.mp4 і cover.jpg.
-# 720x1280, тривалість = durationSec. На кадрі: id уроку, таймер і рядки cues у свій час
-# (як вшиті субтитри в TikTok). Звук: тихий тон, вищий під час кожного рядка («мовлення»).
+# 720x1280, тривалість = durationSec. На кадрі рядки cues у свій час (як вшиті субтитри в TikTok).
+# Звук: тихий тон, вищий під час кожного рядка («мовлення»).
 #
-# Використання: scripts/make-placeholder-clips.sh [lessonId ...]   (без аргументів: усі уроки з type=file)
+# Використання: scripts/make-placeholder-clips.sh [--debug] [lessonId ...]   (без id: усі уроки з type=file)
+#   --debug  вшити в кадр id уроку й таймер, щоб звіряти, на якій секунді спрацьовує пауза.
 # Потрібні: ffmpeg (з libx264, aac, drawtext), jq, шрифт DejaVuSans.
 set -euo pipefail
 
@@ -17,6 +18,12 @@ command -v ffmpeg >/dev/null || { echo "ffmpeg не знайдено. Встан
 command -v jq >/dev/null || { echo "jq не знайдено. Встанови: sudo apt install jq" >&2; missing=1; }
 [[ -f "$FONT" && -f "$FONT_BOLD" ]] || { echo "Шрифт DejaVu не знайдено. Встанови: sudo apt install fonts-dejavu-core" >&2; missing=1; }
 (( missing == 0 )) || exit 1
+
+debug=0
+if [[ "${1:-}" == --debug ]]; then
+  debug=1
+  shift
+fi
 
 if (( $# > 0 )); then
   ids=("$@")
@@ -42,15 +49,23 @@ for i in "${!ids[@]}"; do
   color="${palette[$((i % ${#palette[@]}))]}"
 
   # Текст кожного рядка в окремому файлі: так drawtext не потребує екранування.
-  vf="drawtext=fontfile=$FONT:text='$id':fontcolor=white@0.6:fontsize=36:x=(w-text_w)/2:y=120"
-  vf+=",drawtext=fontfile=$FONT:text='%{pts\\:hms}':fontcolor=white@0.6:fontsize=32:x=(w-text_w)/2:y=180"
+  vf="null"
+  if (( debug )); then
+    vf+=",drawtext=fontfile=$FONT:text='$id':fontcolor=white@0.6:fontsize=36:x=(w-text_w)/2:y=120"
+    vf+=",drawtext=fontfile=$FONT:text='%{pts\\:hms}':fontcolor=white@0.6:fontsize=32:x=(w-text_w)/2:y=180"
+  fi
   af_expr="0.02*sin(2*PI*220*t)"
   n=0
   while IFS=$'\t' read -r start end text; do
     # Перенос по ~20 символів: на вузькому екрані (9:20) кадр обрізається з боків.
-    printf '%s' "$text" | fold -s -w 20 | sed 's/ *$//' > "$TMP/$id-$n.txt"
-    vf+=",drawtext=fontfile=$FONT_BOLD:textfile=$TMP/$id-$n.txt:fontcolor=white:fontsize=40:line_spacing=10"
-    vf+=":box=1:boxcolor=black@0.5:boxborderw=18:x=(w-text_w)/2:y=h*0.62:enable='between(t,$start,$end)'"
+    # Кожен рядок окремим drawtext: новий ffmpeg малює \n у textfile як квадратик.
+    k=0
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      printf '%s' "$line" > "$TMP/$id-$n-$k.txt"
+      vf+=",drawtext=fontfile=$FONT_BOLD:textfile=$TMP/$id-$n-$k.txt:fontcolor=white:fontsize=40"
+      vf+=":box=1:boxcolor=black@0.5:boxborderw=12:x=(w-text_w)/2:y=h*0.62+$k*64:enable='between(t,$start,$end)'"
+      k=$((k + 1))
+    done < <(printf '%s' "$text" | fold -s -w 20 | sed 's/ *$//')
     af_expr+="+0.04*between(t,$start,$end-0.15)*sin(2*PI*(330+40*$n)*t)"
     n=$((n + 1))
   done < <(jq -r '.cues[] | [.start, .end, .es] | @tsv' "$json")

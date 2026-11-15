@@ -54,6 +54,7 @@ export function OnboardingPage() {
           <p className="page__subtitle">{t('onboarding.language.subtitle')}</p>
           <Segmented
             label={t('onboarding.language.title')}
+            compact
             value={lang}
             options={SUPPORTED_LANGUAGES.map((l) => ({ value: l, label: t(`languages.${l}`) }))}
             onChange={setInterfaceLanguage}

@@ -9,14 +9,14 @@ interface FileVideoProps extends VideoSurfaceProps {
 
 // Локальний mp4 в одному <video playsinline>.
 export const FileVideo = forwardRef<VideoHandle, FileVideoProps>(function FileVideo(
-  { src, startAt, shouldPlay, playbackRate, onReady, onTime, onEnded, onError, onPlayBlocked },
+  { src, startAt, shouldPlay, muted, playbackRate, onReady, onTime, onEnded, onError, onAutoplayMuted },
   ref,
 ) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [ready, setReady] = useState(false)
-  const callbacks = useRef({ onReady, onTime, onEnded, onError, onPlayBlocked })
+  const callbacks = useRef({ onReady, onTime, onEnded, onError, onAutoplayMuted })
   useLayoutEffect(() => {
-    callbacks.current = { onReady, onTime, onEnded, onError, onPlayBlocked }
+    callbacks.current = { onReady, onTime, onEnded, onError, onAutoplayMuted }
   })
   const startAtRef = useRef(startAt)
 
@@ -26,18 +26,6 @@ export const FileVideo = forwardRef<VideoHandle, FileVideoProps>(function FileVi
       if (!v || !Number.isFinite(v.duration)) return
       v.currentTime = Math.min(Math.max(0, time), Math.max(0, v.duration - END_OFFSET))
       callbacks.current.onTime(v.currentTime, v.duration)
-    },
-    unlock: () => {
-      const v = videoRef.current
-      if (!v || !v.paused) return
-      // Короткий беззвучний play/pause у межах жесту дозволяє потім грати зі звуком.
-      v.muted = true
-      v.play()
-        .then(() => v.pause())
-        .catch(() => {})
-        .finally(() => {
-          v.muted = false
-        })
     },
   }))
 
@@ -75,12 +63,20 @@ export const FileVideo = forwardRef<VideoHandle, FileVideoProps>(function FileVi
     if (!ready) return
     if (shouldPlay) {
       v.play().catch((err: unknown) => {
-        if (err instanceof DOMException && err.name === 'NotAllowedError') callbacks.current.onPlayBlocked()
+        if (!(err instanceof DOMException && err.name === 'NotAllowedError') || v.muted) return
+        // Автозапуск зі звуком заборонено: граємо без звуку, звук увімкне перший дотик.
+        v.muted = true
+        callbacks.current.onAutoplayMuted()
+        v.play().catch(() => {})
       })
     } else {
       v.pause()
     }
   }, [ready, shouldPlay])
+
+  useEffect(() => {
+    videoRef.current!.muted = muted
+  }, [muted])
 
   useEffect(() => {
     const v = videoRef.current!
@@ -107,6 +103,7 @@ export const FileVideo = forwardRef<VideoHandle, FileVideoProps>(function FileVi
         ref={videoRef}
         className={`video-stage__video${ready ? ' video-stage__video--active' : ''}`}
         playsInline
+        muted={muted}
         preload="auto"
         disablePictureInPicture
         disableRemotePlayback

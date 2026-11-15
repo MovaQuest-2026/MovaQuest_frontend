@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
 import type { GapResult } from '../features/player/gapMachine'
 import { useLessonFeed } from '../features/player/useLessonFeed'
-import { localize } from '../i18n/localize'
+import { localize, translate } from '../i18n/localize'
 import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 import type { Lesson } from '../types/lesson'
@@ -71,7 +71,9 @@ export function LessonResultPage() {
                 <p className="result-list__quote" lang="es">
                   {gap.context} <strong className="result-list__answer">{gap.answer}</strong>
                 </p>
-                <p className="phrase-card__tr">{localize(gap.translation, lang)}</p>
+                {translate(gap.translation, lang) && (
+                  <p className="phrase-card__tr">{translate(gap.translation, lang)}</p>
+                )}
                 {r && (
                   <div className="row">
                     <span className={`badge badge--${badgeTone(r)}`}>{resolutionLabel(r, t)}</span>

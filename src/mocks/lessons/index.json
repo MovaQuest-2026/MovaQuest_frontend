@@ -3,11 +3,13 @@
     "id": "cafe-madrid",
     "title": {
       "en": "Coffee in Madrid",
-      "uk": "Кава в Мадриді"
+      "uk": "Кава в Мадриді",
+      "es": "Un café en Madrid"
     },
     "description": {
       "en": "A barista takes an order. Guess how the customer finishes each line.",
-      "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу."
+      "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу.",
+      "es": "Un barista toma nota de un pedido. Adivina cómo termina el cliente cada frase."
     },
     "level": "A2",
     "durationSec": 22,
@@ -17,11 +19,13 @@
     "id": "metro-tips",
     "title": {
       "en": "Getting around Madrid",
-      "uk": "Як пересуватися Мадридом"
+      "uk": "Як пересуватися Мадридом",
+      "es": "Moverse por Madrid"
     },
     "description": {
       "en": "A local shares quick transport tips. Fill in the words and answer her question.",
-      "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання."
+      "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання.",
+      "es": "Una madrileña da consejos rápidos de transporte. Completa las palabras y responde a su pregunta."
     },
     "level": "A2",
     "durationSec": 23,
@@ -31,11 +35,13 @@
     "id": "hola-lucia",
     "title": {
       "en": "Meet Lucía",
-      "uk": "Знайомтеся, Лусія"
+      "uk": "Знайомтеся, Лусія",
+      "es": "Conoce a Lucía"
     },
     "description": {
       "en": "Lucía introduces herself and quizzes you. Short, easy answers.",
-      "uk": "Лусія розповідає про себе і ставить запитання. Короткі й прості відповіді."
+      "uk": "Лусія розповідає про себе і ставить запитання. Короткі й прості відповіді.",
+      "es": "Lucía se presenta y te hace preguntas. Respuestas cortas y fáciles."
     },
     "level": "A1",
     "durationSec": 21,
@@ -45,11 +51,13 @@
     "id": "tiktok-street",
     "title": {
       "en": "Street interviews",
-      "uk": "Вуличні інтерв'ю"
+      "uk": "Вуличні інтерв'ю",
+      "es": "Entrevistas en la calle"
     },
     "description": {
       "en": "Real Spanish TikToks with pauses for your answers.",
-      "uk": "Справжні іспанські тіктоки з паузами для ваших відповідей."
+      "uk": "Справжні іспанські тіктоки з паузами для ваших відповідей.",
+      "es": "TikToks reales en español con pausas para tus respuestas."
     },
     "level": "B1",
     "cover": "/clips/tiktok-street/cover.jpg",

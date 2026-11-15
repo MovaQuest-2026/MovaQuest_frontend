@@ -1,0 +1,186 @@
+{
+  "app": {
+    "name": "MovaQuest",
+    "loading": "Cargando…",
+    "error": "Algo ha salido mal.",
+    "back": "Atrás",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Cerrar"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська",
+    "es": "Español"
+  },
+  "levels": {
+    "A1": "A1 · Principiante",
+    "A2": "A2 · Básico",
+    "B1": "B1 · Intermedio",
+    "B2": "B2 · Intermedio alto"
+  },
+  "tabs": {
+    "home": "Inicio",
+    "lessons": "Series",
+    "profile": "Perfil",
+    "label": "Navegación principal"
+  },
+  "onboarding": {
+    "title": "Te damos la bienvenida",
+    "stepOf": "Paso {{step}} de {{total}}",
+    "next": "Siguiente",
+    "finish": "Empezar a aprender",
+    "language": {
+      "title": "Elige el idioma de la interfaz",
+      "subtitle": "Puedes cambiarlo más tarde en tu perfil."
+    },
+    "level": {
+      "title": "¿Qué nivel de español tienes?",
+      "subtitle": "Elige el nivel que más se acerque. Solo ajusta las recomendaciones.",
+      "goalLabel": "Objetivo del viaje (opcional)",
+      "goalPlaceholder": "p. ej., un semestre de Erasmus en Madrid"
+    },
+    "mic": {
+      "title": "Vas a responder con la voz",
+      "body": "Los vídeos cortos en español se paran justo antes de la siguiente palabra o de una respuesta. Dila en voz alta y la comprobamos. Solo usamos el micrófono mientras respondes. El audio no se guarda.",
+      "allow": "Permitir el micrófono",
+      "skip": "Ahora no",
+      "requesting": "Esperando el permiso…",
+      "granted": "El micrófono está listo.",
+      "denied": "El acceso al micrófono está bloqueado. Puedes escribir tus respuestas.",
+      "unsupported": "Este navegador no puede usar el micrófono aquí. Abre la app con HTTPS."
+    }
+  },
+  "lessons": {
+    "title": "Series",
+    "subtitle": "Vídeos cortos en español. Cuando uno se pare, di la siguiente palabra o la respuesta.",
+    "duration": "{{minutes}} min",
+    "durationSec": "{{seconds}} s",
+    "status": {
+      "new": "Nuevo",
+      "completed": "Completado",
+      "comingSoon": "Muy pronto",
+      "score": "{{correct}}/{{total}}"
+    },
+    "empty": "Todavía no hay series."
+  },
+  "outcome": {
+    "perfect": "Perfecto",
+    "partial": "Parcial",
+    "missed": "Fallado"
+  },
+  "player": {
+    "title": "Vídeo",
+    "unmute": "Activar sonido",
+    "play": "Reproducir",
+    "pause": "Pausa",
+    "back5": "Retroceder 5 segundos",
+    "forward5": "Avanzar 5 segundos",
+    "speed": "Velocidad de reproducción",
+    "subtitles": "Subtítulos",
+    "progress": "{{done}} de {{total}} pausas hechas",
+    "gapKind": {
+      "nextWord": "¿Cuál es la siguiente palabra?",
+      "answer": "Responde a la pregunta"
+    },
+    "tryOf": "Intento {{current}} de {{total}}",
+    "wrong": "Casi. Inténtalo otra vez.",
+    "wrongHeard": "He oído «{{heard}}». Casi, inténtalo otra vez.",
+    "unclear": "No te he entendido. Repítelo, por favor.",
+    "hint": "Pista",
+    "replay": "Repetir",
+    "skip": "Saltar",
+    "continue": "Seguir",
+    "resolution": {
+      "correct": "¡Muy bien!",
+      "revealed": "La respuesta era",
+      "skipped": "Saltado. La respuesta:"
+    },
+    "typeInstead": "Escribir",
+    "speakInstead": "Responder con la voz",
+    "typePlaceholder": "Escribe la palabra",
+    "check": "Comprobar",
+    "listening": "Comprobando…",
+    "speak": "Toca para hablar",
+    "stop": "Toca para parar",
+    "micDenied": "El micrófono está bloqueado. Escribe tu respuesta.",
+    "notFound": "No se ha encontrado el vídeo.",
+    "seek": "Buscar",
+    "clipError": "No se ha podido cargar este vídeo.",
+    "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta."
+  },
+  "result": {
+    "title": "Resultado de la lección",
+    "tryAgain": "Volver a intentarlo",
+    "backToLessons": "Volver a las series",
+    "noResult": "Todavía no has terminado esta lección.",
+    "startLesson": "Empezar la lección",
+    "outcomes": {
+      "perfect": {
+        "title": "¡Perfecto!",
+        "body": "Has acertado todas las pausas."
+      },
+      "partial": {
+        "title": "¡Buen trabajo!",
+        "body": "Has acertado casi todas. Vuelve a ver el vídeo para pillar el resto."
+      },
+      "missed": {
+        "title": "Sigue así",
+        "body": "Eran difíciles. Repasa las palabras de abajo y vuelve a intentarlo."
+      }
+    },
+    "nextLesson": "Siguiente vídeo",
+    "score": "{{correct}} de {{total}} bien",
+    "words": "Palabras de este vídeo",
+    "firstTry": "A la primera",
+    "afterTries": "En el intento {{count}}",
+    "resolution": {
+      "revealed": "Mostrada",
+      "skipped": "Saltada"
+    },
+    "youSaid": "Has dicho: {{heard}}"
+  },
+  "profile": {
+    "title": "Perfil",
+    "language": "Idioma de la interfaz",
+    "theme": "Tema",
+    "themes": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "level": "Nivel de español",
+    "goal": "Objetivo del viaje",
+    "goalPlaceholder": "¿Adónde vas y para qué?",
+    "subtitles": "Subtítulos",
+    "subtitlesHint": "Elige uno o varios idiomas. El español es el audio original.",
+    "subtitlesOff": "Desactivados",
+    "speed": "Velocidad del vídeo",
+    "mic": {
+      "title": "Micrófono",
+      "test": "Probar el micrófono",
+      "recording": "Grabando… {{seconds}}",
+      "playing": "Reproduciendo…",
+      "hint": "Graba 3 segundos y los reproduce. No se sube nada.",
+      "denied": "El acceso al micrófono está bloqueado. Permítelo en los ajustes del sitio del navegador.",
+      "unsupported": "El micrófono no está disponible en este navegador o sin HTTPS.",
+      "error": "No se ha podido grabar el audio."
+    },
+    "progress": {
+      "title": "Progreso",
+      "completed_one": "{{count}} lección completada",
+      "completed_other": "{{count}} lecciones completadas"
+    },
+    "reset": {
+      "button": "Borrar el progreso",
+      "title": "¿Borrar el progreso?",
+      "body": "Se borrarán todas las lecciones completadas. Tus ajustes se quedan.",
+      "confirm": "Borrar"
+    }
+  },
+  "subtitleLangs": {
+    "es": "Español",
+    "en": "English",
+    "uk": "Українська"
+  }
+}

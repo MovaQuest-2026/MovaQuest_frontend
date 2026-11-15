@@ -1,5 +1,11 @@
-export type Lang = 'en' | 'uk'
-export type Localized = Record<Lang, string>
+/** Мова інтерфейсу. */
+export type Lang = 'en' | 'uk' | 'es'
+/** Мови перекладу контенту. Іспанська тут не потрібна: це мова самих відео. */
+export type TranslationLang = 'en' | 'uk'
+/** Переклад слова чи фрази з іспанської. */
+export type Translation = Record<TranslationLang, string>
+/** Текст інтерфейсу уроку (назва, опис): є всіма мовами інтерфейсу, es необов'язкова. */
+export type Localized = Translation & { es?: string }
 
 /**
  * Звідки береться відео.
@@ -10,11 +16,16 @@ export type VideoSource =
   | { type: 'file'; src: string }
   | { type: 'tiktok'; videoId: string; author?: string }
 
+/** Мова субтитрів: іспанський оригінал або переклад. */
+export type SubtitleLang = 'es' | TranslationLang
+
 /** Рядок субтитрів. Час у секундах від початку відео. */
 export interface Cue {
   start: number
   end: number
   es: string
+  /** Переклад рядка. Не має підказувати відповідь до паузи, як і сам рядок. */
+  tr?: Partial<Translation>
 }
 
 /**
@@ -33,7 +44,7 @@ export interface Gap {
   answer: string
   /** Інші прийнятні варіанти (нормалізовані: нижній регістр, без діакритики й пунктуації). */
   accept?: string[]
-  translation: Localized
+  translation: Translation
   /** Скільки невдалих спроб до автоматичного показу відповіді. */
   maxAttempts: number
 }

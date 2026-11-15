@@ -2,11 +2,13 @@
   "id": "cafe-madrid",
   "title": {
     "en": "Coffee in Madrid",
-    "uk": "Кава в Мадриді"
+    "uk": "Кава в Мадриді",
+    "es": "Un café en Madrid"
   },
   "description": {
     "en": "A barista takes an order. Guess how the customer finishes each line.",
-    "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу."
+    "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу.",
+    "es": "Un barista toma nota de un pedido. Adivina cómo termina el cliente cada frase."
   },
   "targetLanguage": "es",
   "level": "A2",
@@ -18,49 +20,85 @@
   },
   "cues": [
     {
-      "start": 0.0,
-      "end": 3.0,
-      "es": "¡Hola! ¿Qué te pongo?"
+      "start": 0,
+      "end": 3,
+      "es": "¡Hola! ¿Qué te pongo?",
+      "tr": {
+        "en": "Hi! What can I get you?",
+        "uk": "Привіт! Що вам подати?"
+      }
     },
     {
-      "start": 3.0,
+      "start": 3,
       "end": 5.5,
-      "es": "Un café con"
+      "es": "Un café con",
+      "tr": {
+        "en": "A coffee with",
+        "uk": "Каву з"
+      }
     },
     {
       "start": 5.5,
-      "end": 7.0,
-      "es": "leche, por favor."
+      "end": 7,
+      "es": "leche, por favor.",
+      "tr": {
+        "en": "milk, please.",
+        "uk": "молоком, будь ласка."
+      }
     },
     {
-      "start": 7.0,
-      "end": 10.0,
-      "es": "¡Marchando! ¿Algo más?"
+      "start": 7,
+      "end": 10,
+      "es": "¡Marchando! ¿Algo más?",
+      "tr": {
+        "en": "Coming right up! Anything else?",
+        "uk": "Вже готуємо! Ще щось?"
+      }
     },
     {
-      "start": 10.0,
-      "end": 13.0,
-      "es": "¿Para tomar aquí o para"
+      "start": 10,
+      "end": 13,
+      "es": "¿Para tomar aquí o para",
+      "tr": {
+        "en": "For here or to",
+        "uk": "Тут чи"
+      }
     },
     {
-      "start": 13.0,
-      "end": 15.0,
-      "es": "llevar?"
+      "start": 13,
+      "end": 15,
+      "es": "llevar?",
+      "tr": {
+        "en": "go?",
+        "uk": "з собою?"
+      }
     },
     {
-      "start": 15.0,
-      "end": 18.0,
-      "es": "Son tres euros con"
+      "start": 15,
+      "end": 18,
+      "es": "Son tres euros con",
+      "tr": {
+        "en": "That's three euros",
+        "uk": "З вас три євро"
+      }
     },
     {
-      "start": 18.0,
-      "end": 20.0,
-      "es": "cincuenta."
+      "start": 18,
+      "end": 20,
+      "es": "cincuenta.",
+      "tr": {
+        "en": "fifty.",
+        "uk": "п'ятдесят."
+      }
     },
     {
-      "start": 20.0,
-      "end": 22.0,
-      "es": "¡Gracias, hasta luego!"
+      "start": 20,
+      "end": 22,
+      "es": "¡Gracias, hasta luego!",
+      "tr": {
+        "en": "Thanks, see you!",
+        "uk": "Дякую, до побачення!"
+      }
     }
   ],
   "gaps": [
@@ -79,7 +117,7 @@
     {
       "id": "g2",
       "kind": "nextWord",
-      "pauseAt": 13.0,
+      "pauseAt": 13,
       "context": "¿Para tomar aquí o para",
       "answer": "llevar",
       "translation": {
@@ -91,7 +129,7 @@
     {
       "id": "g3",
       "kind": "nextWord",
-      "pauseAt": 18.0,
+      "pauseAt": 18,
       "context": "Son tres euros con",
       "answer": "cincuenta",
       "translation": {

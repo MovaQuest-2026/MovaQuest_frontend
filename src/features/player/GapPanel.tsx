@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { evaluateTypedAnswer } from '../../api/evaluateAnswer'
-import { localize } from '../../i18n/localize'
+import { translate } from '../../i18n/localize'
 import { answerHint } from '../../lib/matchAnswer'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { useUserStore } from '../../store/useUserStore'
@@ -47,6 +47,8 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
     setText('')
   }
 
+  const translation = translate(gap.translation, lang)
+
   if (result) {
     const correct = result.resolution === 'correct'
     return (
@@ -55,7 +57,7 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
         <p className="gap-panel__answer" lang="es">
           {gap.answer}
         </p>
-        <p className="gap-panel__translation">{localize(gap.translation, lang)}</p>
+        {translation && <p className="gap-panel__translation">{translation}</p>}
         <button type="button" className="btn btn--primary btn--block" onClick={() => dispatch({ type: 'CONTINUE' })}>
           ▶ {t('player.continue')}
         </button>

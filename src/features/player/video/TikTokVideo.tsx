@@ -18,7 +18,7 @@ interface TikTokVideoProps extends VideoSurfaceProps {
 
 // Відео з TikTok через офіційний Embed Player. Швидкість відтворення плеєр не підтримує.
 export const TikTokVideo = forwardRef<VideoHandle, TikTokVideoProps>(function TikTokVideo(
-  { videoId, startAt, shouldPlay, onReady, onTime, onEnded, onError },
+  { videoId, startAt, shouldPlay, muted, onReady, onTime, onEnded, onError },
   ref,
 ) {
   const frameRef = useRef<HTMLIFrameElement>(null)
@@ -42,7 +42,6 @@ export const TikTokVideo = forwardRef<VideoHandle, TikTokVideoProps>(function Ti
       clock.current = { ...c, time: t, at: performance.now() }
       callbacks.current.onTime(t, c.duration)
     },
-    unlock: () => {},
   }))
 
   useEffect(() => {
@@ -91,11 +90,15 @@ export const TikTokVideo = forwardRef<VideoHandle, TikTokVideoProps>(function Ti
     }
   }, [videoId])
 
+  // Звук окремим ефектом і раніше за play: без жесту користувача автозапуск дозволено лише без звуку.
+  useEffect(() => {
+    if (ready) send({ type: muted ? 'mute' : 'unMute' })
+  }, [ready, muted])
+
   useEffect(() => {
     if (!ready) return
     if (shouldPlay) {
       send({ type: 'play' })
-      send({ type: 'unMute' })
     } else {
       send({ type: 'pause' })
       clock.current = { ...clock.current, playing: false }

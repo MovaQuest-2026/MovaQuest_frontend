@@ -5,11 +5,13 @@
     "error": "Something went wrong.",
     "back": "Back",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "close": "Close"
   },
   "languages": {
     "en": "English",
-    "uk": "Українська"
+    "uk": "Українська",
+    "es": "Español"
   },
   "levels": {
     "A1": "A1 · Beginner",
@@ -69,8 +71,7 @@
   },
   "player": {
     "title": "Video",
-    "tapToStart": "Tap to start",
-    "exit": "Exit video",
+    "unmute": "Turn on sound",
     "play": "Play",
     "pause": "Pause",
     "back5": "Back 5 seconds",
@@ -142,14 +143,18 @@
   "profile": {
     "title": "Profile",
     "language": "Interface language",
+    "theme": "Theme",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
     "level": "Spanish level",
     "goal": "Trip goal",
     "goalPlaceholder": "Where are you going and why?",
     "subtitles": "Subtitles",
-    "subtitleModes": {
-      "on": "Spanish",
-      "off": "Off"
-    },
+    "subtitlesHint": "Pick one or more languages. Spanish is the original audio.",
+    "subtitlesOff": "Off",
     "speed": "Video speed",
     "mic": {
       "title": "Microphone",
@@ -172,5 +177,10 @@
       "body": "All completed lessons will be cleared. Your settings stay.",
       "confirm": "Reset"
     }
+  },
+  "subtitleLangs": {
+    "es": "Español",
+    "en": "English",
+    "uk": "Українська"
   }
 }

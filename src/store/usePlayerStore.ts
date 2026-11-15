@@ -23,8 +23,10 @@ interface PlayerState {
   machine: MachineState | null
   /** Секунда, з якої стартує відео (відновлення незавершеного уроку). */
   startAt: number
-  /** Відтворення запущене (дотиком «Tap to start» або автоматично після жесту). */
+  /** Відтворення запущене: урок стартує сам одразу після завантаження. */
   started: boolean
+  /** Відео грає без звуку, поки користувач не торкнеться сторінки (політика автозапуску браузерів). */
+  muted: boolean
   startTracked: boolean
   userPaused: boolean
   currentTime: number
@@ -35,8 +37,7 @@ interface PlayerState {
   load: (lesson: Lesson) => void
   dispatch: (event: MachineEvent) => void
   start: () => void
-  /** Браузер не дав відтворити зі звуком: знову показуємо «Tap to start». */
-  playBlocked: () => void
+  setMuted: (muted: boolean) => void
   setUserPaused: (paused: boolean) => void
   /** Час відео: оновлює прогрес і перевіряє, чи не час ставити паузу. */
   setProgress: (currentTime: number, duration: number) => void
@@ -48,6 +49,7 @@ const emptySession = {
   machine: null,
   startAt: 0,
   started: false,
+  muted: false,
   startTracked: false,
   userPaused: false,
   currentTime: 0,
@@ -99,7 +101,7 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     useUserStore.getState().setActiveLesson({ lessonId: lesson.id, machine })
     if (!startTracked) trackLessonStarted(lesson.id)
   },
-  playBlocked: () => set({ started: false }),
+  setMuted: (muted) => set({ muted }),
   setUserPaused: (userPaused) => set({ userPaused }),
   setProgress: (currentTime, duration) => {
     set({ currentTime, duration })

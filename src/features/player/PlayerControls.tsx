@@ -1,8 +1,7 @@
-import type { CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePlayerStore } from '../../store/usePlayerStore'
-import { useUserStore } from '../../store/useUserStore'
+import { SUBTITLE_LANGS, useUserStore } from '../../store/useUserStore'
 import type { Lesson } from '../../types/lesson'
 import type { GapResult } from './gapMachine'
 
@@ -16,16 +15,16 @@ interface PlayerTopBarProps {
 
 export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: PlayerTopBarProps) {
   const { t } = useTranslation()
-  const subtitleMode = useUserStore((s) => s.subtitleMode)
+  const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const playbackRate = useUserStore((s) => s.playbackRate)
-  const { setSubtitleMode, setPlaybackRate } = useUserStore.getState()
+  const { toggleSubtitleLang, setPlaybackRate } = useUserStore.getState()
+  const [ccOpen, setCcOpen] = useState(false)
+
+  const ccState =
+    subtitleLangs.length > 0 ? subtitleLangs.map((l) => t(`subtitleLangs.${l}`)).join(', ') : t('profile.subtitlesOff')
 
   return (
     <div className="player-topbar">
-      <Link to="/lessons" className="icon-btn" aria-label={t('player.exit')}>
-        ✕
-      </Link>
-      <div className="spacer" />
       <ol className="gap-dots" aria-label={t('player.progress', { done: results.length, total: lesson.gaps.length })}>
         {lesson.gaps.map((g, i) => {
           const r = results.find((x) => x.gapId === g.id)
@@ -33,25 +32,56 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
           return <li key={g.id} className={`gap-dots__dot gap-dots__dot--${state}`} />
         })}
       </ol>
-      <div className="spacer" />
-      <button
-        type="button"
-        className="icon-btn icon-btn--text"
-        aria-label={`${t('player.subtitles')}: ${t(`profile.subtitleModes.${subtitleMode}`)}`}
-        aria-pressed={subtitleMode === 'on'}
-        onClick={() => setSubtitleMode(subtitleMode === 'on' ? 'off' : 'on')}
-      >
-        <span className={subtitleMode === 'off' ? 'strike' : undefined}>CC</span>
-      </button>
-      {canChangeSpeed && (
+      <div className="player-topbar__actions">
         <button
           type="button"
           className="icon-btn icon-btn--text"
-          aria-label={t('player.speed')}
-          onClick={() => setPlaybackRate(playbackRate === 1 ? 0.75 : 1)}
+          aria-label={`${t('player.subtitles')}: ${ccState}`}
+          aria-expanded={ccOpen}
+          aria-haspopup="true"
+          onClick={() => setCcOpen((v) => !v)}
         >
-          {playbackRate}×
+          <span className={subtitleLangs.length === 0 ? 'strike' : undefined}>CC</span>
         </button>
+        {canChangeSpeed && (
+          <button
+            type="button"
+            className="icon-btn icon-btn--text"
+            aria-label={t('player.speed')}
+            onClick={() => setPlaybackRate(playbackRate === 1 ? 0.75 : 1)}
+          >
+            {playbackRate}×
+          </button>
+        )}
+      </div>
+
+      {ccOpen && (
+        <>
+          <button
+            type="button"
+            className="cc-menu__backdrop"
+            aria-label={t('app.close')}
+            onClick={() => setCcOpen(false)}
+          />
+          <div className="cc-menu" role="group" aria-label={t('player.subtitles')}>
+            <p className="cc-menu__title">{t('player.subtitles')}</p>
+            {SUBTITLE_LANGS.map((l) => (
+              <button
+                key={l}
+                type="button"
+                role="checkbox"
+                className="cc-menu__item"
+                aria-checked={subtitleLangs.includes(l)}
+                onClick={() => toggleSubtitleLang(l)}
+              >
+                <span className="cc-menu__check" aria-hidden="true">
+                  {subtitleLangs.includes(l) ? '✓' : ''}
+                </span>
+                <span lang={l}>{t(`subtitleLangs.${l}`)}</span>
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

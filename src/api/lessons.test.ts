@@ -16,11 +16,18 @@ describe('lessons api', () => {
     const lesson = await getLesson(id)
     expect(lesson.id).toBe(id)
     expect(lesson.gaps.length).toBeGreaterThan(0)
+    // Назва й опис є всіма мовами інтерфейсу, зокрема іспанською.
+    for (const text of [lesson.title, lesson.description]) {
+      expect(text.en && text.uk && text.es).toBeTruthy()
+    }
     if (lesson.video.type === 'file') expect(lesson.video.src).toBe(`/clips/${id}/video.mp4`)
 
     for (const cue of lesson.cues) {
       expect(cue.end).toBeGreaterThan(cue.start)
       expect(cue.end).toBeLessThanOrEqual(lesson.durationSec)
+      // Субтитри можна вмикати мовою інтерфейсу: кожен рядок має переклад.
+      expect(cue.tr?.en?.trim()).toBeTruthy()
+      expect(cue.tr?.uk?.trim()).toBeTruthy()
     }
 
     const ids = new Set<string>()
