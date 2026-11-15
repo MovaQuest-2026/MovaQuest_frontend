@@ -9,11 +9,14 @@ interface SegmentedProps<T extends string | number> {
   options: SegmentedOption<T>[]
   onChange: (value: T) => void
   columns?: 2
+  /** Вужчі кнопки, щоб три довгі підписи влізли в рядок на 360px. */
+  compact?: boolean
 }
 
-export function Segmented<T extends string | number>({ label, value, options, onChange, columns }: SegmentedProps<T>) {
+export function Segmented<T extends string | number>({ label, value, options, onChange, columns, compact }: SegmentedProps<T>) {
+  const className = ['segmented', columns && 'segmented--grid', compact && 'segmented--compact'].filter(Boolean).join(' ')
   return (
-    <div className={columns ? 'segmented segmented--grid' : 'segmented'} role="group" aria-label={label}>
+    <div className={className} role="group" aria-label={label}>
       {options.map((o) => (
         <button
           key={String(o.value)}

@@ -1,0 +1,136 @@
+{
+  "id": "hola-lucia",
+  "title": {
+    "en": "Meet Lucía",
+    "uk": "Знайомтеся, Лусія",
+    "es": "Conoce a Lucía"
+  },
+  "description": {
+    "en": "Lucía introduces herself and quizzes you. Short, easy answers.",
+    "uk": "Лусія розповідає про себе і ставить запитання. Короткі й прості відповіді.",
+    "es": "Lucía se presenta y te hace preguntas. Respuestas cortas y fáciles."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 21,
+  "cover": "/clips/hola-lucia/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/hola-lucia/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0,
+      "end": 3,
+      "es": "¡Hola! Me llamo Lucía.",
+      "tr": {
+        "en": "Hi! My name is Lucía.",
+        "uk": "Привіт! Мене звати Лусія."
+      }
+    },
+    {
+      "start": 3,
+      "end": 6,
+      "es": "Soy de Sevilla, en el sur de",
+      "tr": {
+        "en": "I'm from Seville, in the south of",
+        "uk": "Я із Севільї, на півдні"
+      }
+    },
+    {
+      "start": 6,
+      "end": 8,
+      "es": "España.",
+      "tr": {
+        "en": "Spain.",
+        "uk": "Іспанії."
+      }
+    },
+    {
+      "start": 8,
+      "end": 11.5,
+      "es": "Pregunta: ¿cuántos días tiene una semana?",
+      "tr": {
+        "en": "Question: how many days are in a week?",
+        "uk": "Запитання: скільки днів у тижні?"
+      }
+    },
+    {
+      "start": 11.5,
+      "end": 13.5,
+      "es": "¡Siete!",
+      "tr": {
+        "en": "Seven!",
+        "uk": "Сім!"
+      }
+    },
+    {
+      "start": 13.5,
+      "end": 17,
+      "es": "Mi color favorito es el azul, como el",
+      "tr": {
+        "en": "My favourite colour is blue, like the",
+        "uk": "Мій улюблений колір — синій, як"
+      }
+    },
+    {
+      "start": 17,
+      "end": 19,
+      "es": "mar.",
+      "tr": {
+        "en": "sea.",
+        "uk": "море."
+      }
+    },
+    {
+      "start": 19,
+      "end": 21,
+      "es": "¡Hasta pronto!",
+      "tr": {
+        "en": "See you soon!",
+        "uk": "До зустрічі!"
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "g1",
+      "kind": "nextWord",
+      "pauseAt": 6,
+      "context": "Soy de Sevilla, en el sur de",
+      "answer": "España",
+      "translation": {
+        "en": "Spain",
+        "uk": "Іспанія"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g2",
+      "kind": "answer",
+      "pauseAt": 11.5,
+      "context": "¿Cuántos días tiene una semana?",
+      "answer": "siete",
+      "accept": [
+        "siete dias"
+      ],
+      "translation": {
+        "en": "seven",
+        "uk": "сім"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "g3",
+      "kind": "nextWord",
+      "pauseAt": 17,
+      "context": "Mi color favorito es el azul, como el",
+      "answer": "mar",
+      "translation": {
+        "en": "sea",
+        "uk": "море"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import { Suspense, lazy, type ReactNode } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useUserStore } from './store/useUserStore'
 import { useSyncLanguage } from './i18n/useSyncLanguage'
+import { useSyncTheme } from './lib/useSyncTheme'
 import { LandingPage } from './landing/LandingPage'
 import { HomePage } from './pages/HomePage'
 import { OnboardingPage } from './pages/OnboardingPage'
@@ -21,6 +22,7 @@ function RequireOnboarding({ children }: { children: ReactNode }) {
 
 function App() {
   useSyncLanguage()
+  useSyncTheme()
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />

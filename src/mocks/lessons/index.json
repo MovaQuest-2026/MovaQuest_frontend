@@ -1,44 +1,66 @@
 [
   {
-    "id": "shop-spain",
+    "id": "cafe-madrid",
     "title": {
-      "en": "At the corner shop",
-      "uk": "У магазинчику"
+      "en": "Coffee in Madrid",
+      "uk": "Кава в Мадриді",
+      "es": "Un café en Madrid"
     },
     "description": {
-      "en": "Buy a bag of chips from Lucía in a Madrid corner shop and pay without fuss.",
-      "uk": "Купіть пачку чипсів у Лусії в мадридському магазинчику і розрахуйтеся без зайвих клопотів."
+      "en": "A barista takes an order. Guess how the customer finishes each line.",
+      "uk": "Бариста приймає замовлення. Вгадайте, як клієнт закінчить кожну фразу.",
+      "es": "Un barista toma nota de un pedido. Adivina cómo termina el cliente cada frase."
     },
     "level": "A2",
-    "durationSec": 60,
-    "cover": "/clips/shop-spain/cover.jpg"
+    "durationSec": 22,
+    "cover": "/clips/cafe-madrid/cover.jpg"
   },
   {
-    "id": "hotel-checkin",
+    "id": "metro-tips",
     "title": {
-      "en": "Hotel check-in",
-      "uk": "Заселення в готель"
+      "en": "Getting around Madrid",
+      "uk": "Як пересуватися Мадридом",
+      "es": "Moverse por Madrid"
     },
     "description": {
-      "en": "Check in at a small hotel in Valencia and find out when breakfast is.",
-      "uk": "Заселіться в невеликий готель у Валенсії і дізнайтеся, о котрій сніданок."
+      "en": "A local shares quick transport tips. Fill in the words and answer her question.",
+      "uk": "Місцева ділиться порадами про транспорт. Доповніть слова й дайте відповідь на її запитання.",
+      "es": "Una madrileña da consejos rápidos de transporte. Completa las palabras y responde a su pregunta."
     },
     "level": "A2",
-    "durationSec": 60,
-    "cover": "/clips/hotel-checkin/cover.jpg"
+    "durationSec": 23,
+    "cover": "/clips/metro-tips/cover.jpg"
   },
   {
-    "id": "taxi-ride",
+    "id": "hola-lucia",
     "title": {
-      "en": "Taxi ride",
-      "uk": "Поїздка на таксі"
+      "en": "Meet Lucía",
+      "uk": "Знайомтеся, Лусія",
+      "es": "Conoce a Lucía"
     },
     "description": {
-      "en": "Tell the driver where to go and agree on the fare.",
-      "uk": "Скажіть водієві, куди їхати, і домовтеся про ціну."
+      "en": "Lucía introduces herself and quizzes you. Short, easy answers.",
+      "uk": "Лусія розповідає про себе і ставить запитання. Короткі й прості відповіді.",
+      "es": "Lucía se presenta y te hace preguntas. Respuestas cortas y fáciles."
+    },
+    "level": "A1",
+    "durationSec": 21,
+    "cover": "/clips/hola-lucia/cover.jpg"
+  },
+  {
+    "id": "tiktok-street",
+    "title": {
+      "en": "Street interviews",
+      "uk": "Вуличні інтерв'ю",
+      "es": "Entrevistas en la calle"
+    },
+    "description": {
+      "en": "Real Spanish TikToks with pauses for your answers.",
+      "uk": "Справжні іспанські тіктоки з паузами для ваших відповідей.",
+      "es": "TikToks reales en español con pausas para tus respuestas."
     },
     "level": "B1",
-    "cover": "/clips/taxi-ride/cover.jpg",
+    "cover": "/clips/tiktok-street/cover.jpg",
     "comingSoon": true
   }
 ]

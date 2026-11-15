@@ -39,7 +39,7 @@ export function TabBar() {
   )
 
   return (
-    <nav className="tabbar" aria-label={t('tabs.label')}>
+    <nav className={`tabbar${inLesson ? ' tabbar--video' : ''}`} aria-label={t('tabs.label')}>
       {/* В уроці «Головна» — це поточне відео: дотик не перезапускає його. */}
       {tab('home', inLesson ? pathname : '/home', inLesson)}
       {tab('lessons', '/lessons')}

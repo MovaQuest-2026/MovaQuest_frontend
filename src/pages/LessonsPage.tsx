@@ -105,7 +105,7 @@ function StatusBadge({ lesson, result }: LessonCardProps) {
   if (result) {
     return (
       <span className={`badge badge--${result.outcome}`}>
-        {t('lessons.status.completed')} · {t(`outcome.${result.outcome}`)}
+        {t('lessons.status.completed')} · {t('lessons.status.score', { correct: result.correct, total: result.total })}
       </span>
     )
   }

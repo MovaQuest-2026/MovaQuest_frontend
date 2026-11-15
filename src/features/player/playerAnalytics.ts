@@ -1,37 +1,32 @@
 import {
-  trackChoiceMade,
+  trackAnswerChecked,
+  trackGapReached,
+  trackGapResolved,
+  trackHintShown,
   trackLessonCompleted,
-  trackPhrasesRevealed,
-  trackRetry,
-  trackSceneStarted,
 } from '../../api/analytics'
 import type { Lesson } from '../../types/lesson'
-import type { MachineEvent, MachineState } from './sceneMachine'
+import type { MachineEvent, MachineState } from './gapMachine'
 
 // Переводить переходи автомата в події аналітики. Викликається зі стору після кожного dispatch.
-export function trackTransition(
-  lesson: Lesson,
-  prev: MachineState,
-  next: MachineState,
-  event: MachineEvent,
-  started: boolean,
-) {
-  const sceneId = prev.currentSceneId
+export function trackTransition(lesson: Lesson, prev: MachineState, next: MachineState, event: MachineEvent) {
+  const gap = lesson.gaps[prev.gapIndex]
 
-  if (event.type === 'RESULT' && next !== prev) {
-    trackChoiceMade(lesson.id, sceneId, event.branch, event.source)
-    if (event.branch === 'unclear') trackRetry(lesson.id, sceneId, next.retryCount)
+  if (gap && prev.status === 'playing' && next.status === 'awaitingAnswer') trackGapReached(lesson.id, gap.id)
+
+  if (gap && event.type === 'RESULT' && next !== prev) {
+    trackAnswerChecked(lesson.id, gap.id, event.verdict, event.source, prev.attempts + 1)
   }
 
-  if (next.phrasesRevealed && !prev.phrasesRevealed) {
-    trackPhrasesRevealed(lesson.id, next.lastChoiceSceneId ?? sceneId, next.autoRevealed)
-  }
+  if (gap && next.hintShown && !prev.hintShown) trackHintShown(lesson.id, gap.id)
 
-  if (started && prev.status === 'loading' && next.status === 'playing') {
-    trackSceneStarted(lesson.id, next.currentSceneId)
+  if (next.results.length > prev.results.length) {
+    const r = next.results[next.results.length - 1]
+    trackGapResolved(lesson.id, r.gapId, r.resolution, r.attempts)
   }
 
   if (next.status === 'ended' && prev.status !== 'ended' && next.outcome) {
-    trackLessonCompleted(lesson.id, next.outcome)
+    const correct = next.results.filter((r) => r.resolution === 'correct').length
+    trackLessonCompleted(lesson.id, next.outcome, correct, lesson.gaps.length)
   }
 }

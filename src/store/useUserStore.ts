@@ -1,11 +1,15 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { MachineState } from '../features/player/sceneMachine'
-import type { Lang, Lesson, Scene } from '../types/lesson'
+import type { MachineState } from '../features/player/gapMachine'
+import type { Lang, Lesson, Outcome, SubtitleLang } from '../types/lesson'
 
 export type Level = Lesson['level']
-export type Outcome = NonNullable<Scene['outcome']>
-export type SubtitleMode = 'es+en' | 'es+uk' | 'es' | 'off'
+export type { Outcome }
+export type { SubtitleLang }
+/** Порядок рядків субтитрів: спершу оригінал, далі переклади. */
+export const SUBTITLE_LANGS: SubtitleLang[] = ['es', 'en', 'uk']
+/** system: як у налаштуваннях пристрою (prefers-color-scheme). */
+export type ThemePreference = 'system' | 'light' | 'dark'
 export type PlaybackRate = 0.75 | 1
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
 
@@ -17,6 +21,9 @@ export interface ActiveLesson {
 
 export interface CompletedLesson {
   outcome: Outcome
+  /** Скільки пауз розв'язано правильно з усіх. */
+  correct: number
+  total: number
   completedAt: string // ISO
 }
 
@@ -27,7 +34,9 @@ interface UserState {
   goal: string
   onboardingDone: boolean
   micPermission: MicPermission
-  subtitleMode: SubtitleMode
+  /** Які мови субтитрів показувати. Порожній список: субтитри вимкнено. */
+  subtitleLangs: SubtitleLang[]
+  theme: ThemePreference
   playbackRate: PlaybackRate
   completedLessons: Record<string, CompletedLesson>
   activeLesson: ActiveLesson | null
@@ -36,10 +45,11 @@ interface UserState {
   setLevel: (level: Level) => void
   setGoal: (goal: string) => void
   setMicPermission: (permission: MicPermission) => void
-  setSubtitleMode: (mode: SubtitleMode) => void
+  toggleSubtitleLang: (lang: SubtitleLang) => void
+  setTheme: (theme: ThemePreference) => void
   setPlaybackRate: (rate: PlaybackRate) => void
   completeOnboarding: () => void
-  recordLessonResult: (lessonId: string, outcome: Outcome) => void
+  recordLessonResult: (lessonId: string, outcome: Outcome, correct: number, total: number) => void
   resetProgress: () => void
   setActiveLesson: (active: ActiveLesson | null) => void
 }
@@ -54,6 +64,22 @@ function createUserId(): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
 }
 
+/**
+ * Міграція збереженого стану.
+ * v2: уроки стали відео з паузами, старий прогрес (сцени й гілки) не переноситься.
+ * v3: замість «субтитри так/ні» список мов субтитрів; додано тему.
+ */
+export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
+  let state = { ...(persisted as Record<string, unknown>) }
+  if (version < 2) state = { ...state, completedLessons: {}, activeLesson: null }
+  if (version < 3) {
+    const { subtitleMode, ...rest } = state
+    const subtitleLangs: SubtitleLang[] = subtitleMode === 'off' ? [] : ['es']
+    state = { ...rest, subtitleLangs, theme: 'system' }
+  }
+  return state
+}
+
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
@@ -63,34 +89,40 @@ export const useUserStore = create<UserState>()(
       goal: '',
       onboardingDone: false,
       micPermission: 'unknown',
-      subtitleMode: 'es+en',
+      subtitleLangs: ['es'],
+      theme: 'system',
       playbackRate: 1,
       completedLessons: {},
       activeLesson: null,
 
-      // Режим субтитрів з перекладом іде за мовою інтерфейсу.
-      setInterfaceLanguage: (lang) =>
-        set((s) => ({
-          interfaceLanguage: lang,
-          subtitleMode: s.subtitleMode === 'es+en' || s.subtitleMode === 'es+uk' ? `es+${lang}` : s.subtitleMode,
-        })),
+      setInterfaceLanguage: (interfaceLanguage) => set({ interfaceLanguage }),
       setLevel: (level) => set({ level }),
       setGoal: (goal) => set({ goal }),
       setMicPermission: (micPermission) => set({ micPermission }),
-      setSubtitleMode: (subtitleMode) => set({ subtitleMode }),
+      toggleSubtitleLang: (lang) =>
+        set((s) => ({
+          subtitleLangs: s.subtitleLangs.includes(lang)
+            ? s.subtitleLangs.filter((l) => l !== lang)
+            : SUBTITLE_LANGS.filter((l) => l === lang || s.subtitleLangs.includes(l)),
+        })),
+      setTheme: (theme) => set({ theme }),
       setPlaybackRate: (playbackRate) => set({ playbackRate }),
       completeOnboarding: () => set({ onboardingDone: true }),
-      recordLessonResult: (lessonId, outcome) =>
+      recordLessonResult: (lessonId, outcome, correct, total) =>
         set((s) => ({
           completedLessons: {
             ...s.completedLessons,
-            [lessonId]: { outcome, completedAt: new Date().toISOString() },
+            [lessonId]: { outcome, correct, total, completedAt: new Date().toISOString() },
           },
         })),
       resetProgress: () => set({ completedLessons: {}, activeLesson: null }),
       setActiveLesson: (activeLesson) => set({ activeLesson }),
     }),
-    { name: 'movaquest-user-v1', version: 1 },
+    {
+      name: 'movaquest-user-v1',
+      version: 3,
+      migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
+    },
   ),
 )
 

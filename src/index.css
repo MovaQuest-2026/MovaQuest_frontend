@@ -14,9 +14,15 @@
   --success: #3ecf8e;
   --warning: #f5b84b;
   --danger: #ff6b6b;
+  --panel-bg: rgb(23 23 31 / 0.92);
+  --tabbar-bg: #000;
+  --tabbar-fg: rgb(255 255 255 / 0.55);
+  --tabbar-fg-active: #fff;
+  --tabbar-border: rgb(255 255 255 / 0.12);
   --radius: 14px;
   --tap: 44px;
-  --tabbar-h: 60px;
+  /* Низька панель, як у стрічках коротких відео. */
+  --tabbar-h: 48px;
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
@@ -30,6 +36,48 @@
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   text-size-adjust: 100%;
+}
+
+/* Світла тема. data-theme ставить useSyncTheme (вибір у профілі або системна тема);
+   до запуску JS діє prefers-color-scheme. Відео й плеєр лишаються темними в обох темах. */
+:root[data-theme='light'] {
+  --bg: #f6f6f8;
+  --surface: #ffffff;
+  --surface-2: #ececf1;
+  --border: #d9d9e1;
+  --text: #15151c;
+  --text-dim: #5d5d6a;
+  --accent: #e5343c;
+  --success: #0f9a63;
+  --warning: #b97806;
+  --danger: #d63a3a;
+  --panel-bg: rgb(255 255 255 / 0.94);
+  --tabbar-bg: #fff;
+  --tabbar-fg: rgb(21 21 28 / 0.5);
+  --tabbar-fg-active: #15151c;
+  --tabbar-border: rgb(21 21 28 / 0.1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #f6f6f8;
+    --surface: #ffffff;
+    --surface-2: #ececf1;
+    --border: #d9d9e1;
+    --text: #15151c;
+    --text-dim: #5d5d6a;
+    --accent: #e5343c;
+    --success: #0f9a63;
+    --warning: #b97806;
+    --danger: #d63a3a;
+    --panel-bg: rgb(255 255 255 / 0.94);
+    --tabbar-bg: #fff;
+    --tabbar-fg: rgb(21 21 28 / 0.5);
+    --tabbar-fg-active: #15151c;
+    --tabbar-border: rgb(21 21 28 / 0.1);
+    color-scheme: light;
+  }
 }
 
 *,
@@ -209,6 +257,12 @@ img {
   font-weight: 600;
 }
 
+.segmented--compact .segmented__item {
+  padding-inline: 4px;
+  font-size: 0.9rem;
+  overflow-wrap: normal;
+}
+
 .segmented__item[aria-pressed='true'] {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 20%, var(--surface));
@@ -366,10 +420,18 @@ img {
   right: 0;
   bottom: 0;
   display: flex;
-  background: #000;
-  border-top: 1px solid rgb(255 255 255 / 0.12);
+  background: var(--tabbar-bg);
+  border-top: 1px solid var(--tabbar-border);
   padding: 0 var(--safe-right) var(--safe-bottom) var(--safe-left);
   z-index: 10;
+}
+
+/* Під відео панель завжди чорна, як у стрічці, незалежно від теми. */
+.tabbar--video {
+  --tabbar-bg: #000;
+  --tabbar-fg: rgb(255 255 255 / 0.55);
+  --tabbar-fg-active: #fff;
+  --tabbar-border: transparent;
 }
 
 .tabbar__item {
@@ -379,20 +441,21 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 1px;
   text-decoration: none;
-  color: rgb(255 255 255 / 0.55);
-  font-size: 0.72rem;
+  color: var(--tabbar-fg);
+  font-size: 0.66rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .tabbar__item.active {
-  color: #fff;
+  color: var(--tabbar-fg-active);
 }
 
 .tabbar__icon {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
 }
 
 /* ---------- Profile ---------- */
@@ -446,7 +509,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-dim);
+  color: rgb(255 255 255 / 0.6);
 }
 
 .video-stage {
@@ -492,10 +555,87 @@ img {
 }
 
 .player-topbar {
-  display: flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
+}
+
+.player-topbar__actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  gap: 8px;
+}
+
+.player-topbar .gap-dots {
+  grid-column: 2;
+}
+
+/* Вибір мов субтитрів просто з плеєра. */
+.cc-menu {
+  position: absolute;
+  top: calc(100% - 2px);
+  right: 12px;
+  z-index: 2;
+  min-width: 200px;
+  padding: 6px;
+  border-radius: var(--radius);
+  background: var(--panel-bg);
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  animation: panel-in 0.15s ease-out;
+}
+
+.cc-menu__title {
+  padding: 6px 10px 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.cc-menu__item {
+  min-height: var(--tap);
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.cc-menu__check {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--accent-text);
+}
+
+.cc-menu__item[aria-checked='true'] .cc-menu__check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.cc-menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  cursor: default;
 }
 
 .icon-btn {
@@ -546,6 +686,26 @@ img {
   justify-content: center;
 }
 
+.player__unmute {
+  position: absolute;
+  /* Під верхньою панеллю (8px + 44px + 8px), щоб не накривати точки прогресу. */
+  top: calc(var(--safe-top) + 64px);
+  left: 12px;
+  z-index: 1;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: panel-in 0.2s ease-out;
+}
+
 .player__notice {
   margin: 0 16px 8px;
 }
@@ -557,22 +717,24 @@ img {
   pointer-events: none;
 }
 
-.subtitles__es {
+.subtitles__line {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e4e4e7;
+}
+
+/* Перший рядок (зазвичай іспанський оригінал) головний. */
+.subtitles__line:first-child {
   font-size: 1.15rem;
   font-weight: 700;
   color: #fff;
-}
-
-.subtitles__tr {
-  font-size: 0.95rem;
-  color: #e4e4e7;
 }
 
 .player-controls {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px 10px;
+  padding: 0 12px 2px;
 }
 
 .scrubber {
@@ -613,71 +775,172 @@ img {
   background: #fff;
 }
 
-.player__start {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  background: rgb(0 0 0 / 0.55);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px;
-}
-
-.player__start-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.player__start-cta {
-  min-height: var(--tap);
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: var(--accent);
-  font-weight: 700;
-}
-
-.choice-panel {
+.gap-panel {
   margin: 0 12px 8px;
   padding: 14px;
   border-radius: var(--radius);
-  background: rgb(23 23 31 / 0.88);
+  background: var(--panel-bg);
+  color: var(--text);
   backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: panel-in 0.2s ease-out;
 }
 
-.choice-panel__task {
+.gap-panel--correct {
+  box-shadow: inset 0 0 0 2px var(--success);
+}
+
+.gap-panel--revealed {
+  box-shadow: inset 0 0 0 2px var(--warning);
+}
+
+.gap-panel__task {
   font-weight: 700;
   font-size: 1.05rem;
 }
 
-.choice-panel__try {
+.gap-panel__try {
   font-size: 0.75rem;
   color: var(--text-dim);
   white-space: nowrap;
 }
 
-.toast {
-  align-self: center;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 0.85rem;
+.gap-panel__context {
+  font-size: 1.2rem;
   font-weight: 700;
-  animation: toast-in 0.2s ease-out;
+  line-height: 1.35;
 }
 
-@keyframes toast-in {
+.gap-panel__blank {
+  display: inline-block;
+  padding: 0 6px;
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  white-space: pre;
+}
+
+.gap-panel__feedback {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.gap-panel__feedback--wrong {
+  color: var(--danger);
+}
+
+.gap-panel__verdict {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.gap-panel--correct .gap-panel__verdict {
+  color: var(--success);
+}
+
+.gap-panel__answer {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.gap-panel__translation {
+  color: var(--text-dim);
+}
+
+.gap-panel__form {
+  display: flex;
+  gap: 8px;
+}
+
+.gap-panel__form .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.gap-panel__actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gap-panel__actions .btn {
+  padding-inline: 4px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.link-btn {
+  align-self: center;
+  min-height: var(--tap);
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+@keyframes panel-in {
   from {
     opacity: 0;
     transform: translateY(6px);
   }
+}
+
+.gap-dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+
+.gap-dots__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.3);
+}
+
+.gap-dots__dot--current {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.gap-dots__dot--correct {
+  background: var(--success);
+}
+
+.gap-dots__dot--revealed,
+.gap-dots__dot--skipped {
+  background: var(--warning);
+}
+
+.scrubber-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.scrubber__mark {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 9px;
+  margin: -4.5px 0 0 -2px;
+  border-radius: 2px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.video-stage__frame {
+  border: 0;
+  pointer-events: none;
 }
 
 .mic {
@@ -749,30 +1012,6 @@ img {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.phrase-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 38dvh;
-  overflow-y: auto;
-}
-
-.phrase-card {
-  width: 100%;
-  min-height: var(--tap);
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
 .phrase-card__es {
@@ -909,7 +1148,7 @@ img {
   touch-action: none;
 }
 
-.phrase-list {
+.gap-panel {
   touch-action: pan-y;
 }
 

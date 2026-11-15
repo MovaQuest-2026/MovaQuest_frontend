@@ -3,23 +3,25 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
 import { TabBar } from '../components/TabBar'
-import { ChoicePanel } from '../features/player/ChoicePanel'
+import { GapPanel } from '../features/player/GapPanel'
+import { clampSeek, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
 import { SubtitleLayer } from '../features/player/SubtitleLayer'
-import { upcomingClips } from '../features/player/sceneMachine'
-import { useClipPreloader } from '../features/player/useClipPreloader'
 import { useFeedGestures } from '../features/player/useFeedGestures'
 import { useLessonFeed, type FeedDirection } from '../features/player/useLessonFeed'
+import { supportsPlaybackRate } from '../features/player/video/source'
+import { VideoSurface } from '../features/player/video/VideoSurface'
+import type { VideoHandle } from '../features/player/video/types'
 import { DevSpeechPanel } from '../features/speech/DevSpeechPanel'
-import { VideoStage, type VideoStageHandle } from '../features/player/VideoStage'
-import { localize } from '../i18n/localize'
-import { clipUrl, selectCurrentScene, usePlayerStore } from '../store/usePlayerStore'
+import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 
 const SEEK_STEP = 5
+/** «Послухати ще раз»: на скільки секунд відмотати від паузи. */
+const REPLAY_SEC = 4
 const FEED_TRANSITION_MS = 260
 
-// Без жесту користувача браузер не дасть відтворити зі звуком — тоді показуємо «Tap to start».
+// Без жесту користувача браузер дозволяє автозапуск лише без звуку.
 function hasUserActivation(): boolean {
   return navigator.userActivation?.hasBeenActive ?? false
 }
@@ -30,25 +32,25 @@ export function LessonPlayerPage() {
   const { lessonId = '' } = useParams()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const stageRef = useRef<VideoStageHandle>(null)
+  const videoRef = useRef<VideoHandle>(null)
   const [loaded, setLoaded] = useState<{ lessonId: string; state: LoadState } | null>(null)
   const load: LoadState = loaded?.lessonId === lessonId ? loaded.state : 'loading'
 
   const lesson = usePlayerStore((s) => s.lesson)
   const machine = usePlayerStore((s) => s.machine)
-  const scene = usePlayerStore(selectCurrentScene)
+  const startAt = usePlayerStore((s) => s.startAt)
   const started = usePlayerStore((s) => s.started)
+  const muted = usePlayerStore((s) => s.muted)
   const userPaused = usePlayerStore((s) => s.userPaused)
-  const { dispatch, start, setUserPaused, setProgress } = usePlayerStore.getState()
+  const { dispatch, setUserPaused, setProgress, setMuted } = usePlayerStore.getState()
   const playbackRate = useUserStore((s) => s.playbackRate)
-  const lang = useUserStore((s) => s.interfaceLanguage)
   const location = useLocation()
   // Анімація входу після свайпу грає один раз на навігацію, а не після кожної «пружинки».
   const [enteredKey, setEnteredKey] = useState<string | null>(null)
   const enterFrom =
     enteredKey === location.key ? undefined : (location.state as { enter?: FeedDirection } | null)?.enter
 
-  // Стрічка уроків: свайп угору — наступний, вниз — попередній. На краях стрічки — «пружинка».
+  // Стрічка: свайп угору — наступне відео, вниз — попереднє. На краях стрічки — «пружинка».
   const feed = useLessonFeed(lessonId)
   const [motion, setMotion] = useState<{ kind: 'leave' | 'bounce'; dir: FeedDirection; id: number } | null>(null)
   const motionTimer = useRef(0)
@@ -77,8 +79,9 @@ export function LessonPlayerPage() {
         if (cancelled) return
         const player = usePlayerStore.getState()
         player.load(l)
-        // Як у стрічці: якщо користувач уже торкався сторінки, відео стартує одразу зі звуком.
-        if (hasUserActivation()) player.start()
+        // Як у стрічці: відео стартує одразу. Якщо користувач ще не торкався сторінки, без звуку.
+        player.setMuted(!hasUserActivation())
+        player.start()
         setLoaded({ lessonId, state: 'ready' })
       })
       .catch(() => {
@@ -97,20 +100,53 @@ export function LessonPlayerPage() {
     if (machine?.status === 'ended') navigate(`/lesson/${lessonId}/result`, { replace: true })
   }, [machine?.status, lessonId, navigate])
 
-  const preload = lesson && machine ? upcomingClips(lesson, machine).map((c) => clipUrl(lesson.id, c)) : []
-  useClipPreloader(started ? preload : [])
+  // Відео стало на паузу трохи пізніше за pauseAt (кадр або подія TikTok): повертаємо рівно на межу.
+  const status = machine?.status
+  useEffect(() => {
+    if (status !== 'awaitingAnswer') return
+    const s = usePlayerStore.getState()
+    const gap = s.lesson && s.machine ? currentGap(s.lesson, s.machine) : null
+    if (gap && s.currentTime > gap.pauseAt) videoRef.current?.seek(gap.pauseAt - PAUSE_LEAD)
+  }, [status])
 
   const onReady = useCallback(() => dispatch({ type: 'CLIP_READY' }), [dispatch])
   const onEnded = useCallback(() => dispatch({ type: 'CLIP_ENDED' }), [dispatch])
-  const onPlayBlocked = useCallback(() => usePlayerStore.getState().playBlocked(), [])
+  const onAutoplayMuted = useCallback(() => usePlayerStore.getState().setMuted(true), [])
+
+  // Перший дотик будь-де вмикає звук. Дотик по самому відео при цьому не ставить його на паузу.
+  useEffect(() => {
+    if (!muted) return
+    const unmute = (e: Event) => {
+      setMuted(false)
+      if ((e.target as Element | null)?.closest?.('.player__tap-area')) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+    window.addEventListener('click', unmute, { capture: true })
+    window.addEventListener('keydown', unmute, { capture: true })
+    return () => {
+      window.removeEventListener('click', unmute, { capture: true })
+      window.removeEventListener('keydown', unmute, { capture: true })
+    }
+  }, [muted, setMuted])
   const onError = useCallback(() => setLoaded({ lessonId, state: 'clipError' }), [lessonId])
 
   const seek = (time: number) => {
     const s = usePlayerStore.getState()
-    if (s.machine?.status === 'awaitingChoice' && time < s.duration - 0.1) {
-      dispatch({ type: 'REPLAY' })
-    }
-    stageRef.current?.seek(time)
+    if (!s.lesson || !s.machine) return
+    if (s.machine.status === 'feedback') return
+    const target = clampSeek(s.lesson, s.machine, time, s.duration)
+    if (s.machine.status === 'awaitingAnswer' && target < s.currentTime - 0.1) dispatch({ type: 'REPLAY' })
+    videoRef.current?.seek(target)
+  }
+
+  const replay = () => {
+    const s = usePlayerStore.getState()
+    const gap = s.lesson && s.machine ? currentGap(s.lesson, s.machine) : null
+    if (!gap) return
+    dispatch({ type: 'REPLAY' })
+    videoRef.current?.seek(Math.max(0, gap.pauseAt - REPLAY_SEC))
   }
 
   // Дотик по відео: ліва третина — назад на 5 с, права — вперед на 5 с, середина — пауза.
@@ -142,7 +178,7 @@ export function LessonPlayerPage() {
     )
   }
 
-  if (load === 'loading' || !lesson || !machine || !scene) {
+  if (load === 'loading' || !lesson || !machine) {
     return <main className="player player--loading">{t('app.loading')}</main>
   }
 
@@ -152,35 +188,48 @@ export function LessonPlayerPage() {
       ? ` player--enter-${enterFrom}`
       : ''
 
-  const status = machine.status
-  const playing = status === 'playing'
+  const playing = machine.status === 'playing'
+  const gap = currentGap(lesson, machine)
+  const answering = isAnswering(machine) || machine.status === 'feedback'
   const shouldPlay = started && playing && !userPaused
-  const showControls = started && (playing || status === 'awaitingChoice')
+  const showControls = started && (playing || machine.status === 'awaitingAnswer')
 
   return (
     <>
-      <main key={lesson.id} className={`player player--with-tabbar${motionClass}`}
+      <main
+        key={lesson.id}
+        className={`player player--with-tabbar${motionClass}`}
         {...gestures}
         onAnimationEnd={(e) => {
           if (e.animationName.startsWith('feed-enter')) setEnteredKey(location.key)
         }}
       >
-        <VideoStage
-          ref={stageRef}
-          src={clipUrl(lesson.id, scene.clip)}
-          entryId={machine.entryId}
-          startAtEnd={machine.entry === 'resume'}
+        <VideoSurface
+          ref={videoRef}
+          source={lesson.video}
+          startAt={startAt}
           shouldPlay={shouldPlay}
+          muted={muted}
           playbackRate={playbackRate}
           onReady={onReady}
+          onTime={setProgress}
           onEnded={onEnded}
-          onProgress={setProgress}
           onError={onError}
-          onPlayBlocked={onPlayBlocked}
+          onAutoplayMuted={onAutoplayMuted}
         />
 
         <div className="player__overlay">
-          <PlayerTopBar />
+          <PlayerTopBar
+            lesson={lesson}
+            results={machine.results}
+            gapIndex={machine.gapIndex}
+            canChangeSpeed={supportsPlaybackRate(lesson.video)}
+          />
+          {muted && (
+            <button type="button" className="player__unmute" onClick={() => setMuted(false)}>
+              <span aria-hidden="true">🔇</span> {t('player.unmute')}
+            </button>
+          )}
           <DevSpeechPanel />
           <button
             type="button"
@@ -199,28 +248,14 @@ export function LessonPlayerPage() {
 
           {load === 'clipError' && <p className="notice notice--error player__notice">{t('player.clipError')}</p>}
 
-          <SubtitleLayer subtitles={scene.subtitles} />
+          {!answering && <SubtitleLayer cues={lesson.cues} />}
 
-          {scene.choice && (status === 'awaitingChoice' || status === 'listening' || status === 'evaluating') && (
-            <ChoicePanel lessonId={lesson.id} sceneId={scene.id} choice={scene.choice} machine={machine} />
+          {gap && answering && (
+            <GapPanel key={gap.id} lessonId={lesson.id} gap={gap} machine={machine} onReplay={replay} />
           )}
 
-          {showControls && <PlayerControls onSeek={seek} />}
+          {showControls && !answering && <PlayerControls lesson={lesson} onSeek={seek} />}
         </div>
-
-        {!started && (
-          <button
-            type="button"
-            className="player__start"
-            onClick={() => {
-              stageRef.current?.unlock()
-              start()
-            }}
-          >
-            <span className="player__start-title">{localize(lesson.title, lang)}</span>
-            <span className="player__start-cta">▶ {t('player.tapToStart')}</span>
-          </button>
-        )}
       </main>
       <TabBar />
     </>

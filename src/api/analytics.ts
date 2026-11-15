@@ -1,6 +1,7 @@
 import type { PostHog } from 'posthog-js'
 import { useUserStore } from '../store/useUserStore'
-import type { BranchKind } from '../types/lesson'
+import type { Verdict } from '../lib/matchAnswer'
+import type { Outcome } from '../types/lesson'
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
 const POSTHOG_HOST =
@@ -42,26 +43,26 @@ export function trackLessonStarted(lessonId: string) {
   capture('lesson_started', { lessonId })
 }
 
-export function trackSceneStarted(lessonId: string, sceneId: string) {
-  capture('scene_started', { lessonId, sceneId })
+export function trackGapReached(lessonId: string, gapId: string) {
+  capture('gap_reached', { lessonId, gapId })
 }
 
-export function trackPhrasesRevealed(lessonId: string, sceneId: string, auto: boolean) {
-  capture('phrases_revealed', { lessonId, sceneId, auto })
+export function trackAnswerChecked(lessonId: string, gapId: string, verdict: Verdict, input: 'voice' | 'text', attempt: number) {
+  capture('answer_checked', { lessonId, gapId, verdict, input, attempt })
 }
 
-export function trackChoiceMade(lessonId: string, sceneId: string, branch: BranchKind, input: 'voice' | 'tap') {
-  capture('choice_made', { lessonId, sceneId, branch, input })
+export function trackHintShown(lessonId: string, gapId: string) {
+  capture('hint_shown', { lessonId, gapId })
 }
 
-export function trackRetry(lessonId: string, sceneId: string, count: number) {
-  capture('retry', { lessonId, sceneId, count })
+export function trackGapResolved(lessonId: string, gapId: string, resolution: 'correct' | 'revealed' | 'skipped', attempts: number) {
+  capture('gap_resolved', { lessonId, gapId, resolution, attempts })
 }
 
-export function trackMicDenied(lessonId: string, sceneId: string) {
-  capture('mic_denied', { lessonId, sceneId })
+export function trackMicDenied(lessonId: string, gapId: string) {
+  capture('mic_denied', { lessonId, gapId })
 }
 
-export function trackLessonCompleted(lessonId: string, outcome: 'perfect' | 'partial' | 'missed') {
-  capture('lesson_completed', { lessonId, outcome })
+export function trackLessonCompleted(lessonId: string, outcome: Outcome, correct: number, total: number) {
+  capture('lesson_completed', { lessonId, outcome, correct, total })
 }
