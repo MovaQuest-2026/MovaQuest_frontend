@@ -26,7 +26,7 @@ Vite, React 18, TypeScript, react-router-dom, Zustand (з persist), react-i18nex
 - Логіка уроку це автомат у features/player/gapMachine.ts без React, з юніт-тестами.
 - Урок описується JSON за типами з src/types/lesson.ts: `video`, `cues`, `gaps`.
 - Джерело відео (`VideoSource`): `file` (локальний mp4 у public/clips/<lessonId>/video.mp4) або `tiktok` (`videoId`, офіційний Embed Player `https://www.tiktok.com/player/v1/<id>`, керування через postMessage, див. features/player/video/tiktokProtocol.ts). Обидва реалізують один інтерфейс `VideoHandle` / `VideoSurfaceProps`. Плеєр TikTok не вміє змінювати швидкість, тож кнопка швидкості для нього схована.
-- Плейсхолдер-відео генерує scripts/make-placeholder-clips.sh з `cues` уроку.
+- Плейсхолдер-відео генерує scripts/make-placeholder-clips.sh з `cues` уроку. Справжні кліпи кодує scripts/encode-clip.sh (720×1280, H.264 + AAC, faststart). Кліпи лежать у git у public/clips і потрапляють у білд; scripts/clips.test.ts перевіряє, що всі `cover` і `video.src` існують і закодовані з faststart. vercel.json не переписує `/clips/` на index.html.
 
 ## Лендінг і роути
 - `/` — лендінг (src/landing/LandingPage.tsx), лишається в корені. Кнопка «Play the prototype» веде на `/home`.
