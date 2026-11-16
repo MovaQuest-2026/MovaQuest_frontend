@@ -1,0 +1,36 @@
+scripts/clips.test.ts
+  s_d0e8eff3b662f2::t_327cc88a8733bb 1-67
+README.md
+  s_d0e8eff3b662f2::t_5b20930078266a 12
+  s_d0e8eff3b662f2::t_d7b4c38766f945 27-58
+tsconfig.node.json
+  s_d0e8eff3b662f2::t_298b795d3bf073 22
+vercel.json
+  s_d0e8eff3b662f2::t_298b795d3bf073 3
+scripts/encode-clip.sh
+  s_d0e8eff3b662f2::t_ce9a360911eb48 35
+  s_d0e8eff3b662f2::t_ea84e8c15e7db2 1-34,36-64
+CLAUDE.md
+  s_d0e8eff3b662f2::t_5b20930078266a 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0085a73a552143c5c6fd8b709b383bd1e6f4b623",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d0e8eff3b662f2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "214d003c-617c-4a3e-93ac-7c5544287669",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
