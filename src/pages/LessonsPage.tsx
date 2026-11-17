@@ -58,6 +58,7 @@ interface LessonCardProps {
 function LessonCard({ lesson, result }: LessonCardProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
+  const saved = useUserStore((s) => s.savedLessons.includes(lesson.id))
   const [coverFailed, setCoverFailed] = useState(false)
 
   const body = (
@@ -80,6 +81,7 @@ function LessonCard({ lesson, result }: LessonCardProps) {
           <span className="badge">{lesson.level}</span>
           {lesson.durationSec !== undefined && <span className="badge">{formatDuration(lesson.durationSec, t)}</span>}
           <StatusBadge lesson={lesson} result={result} />
+          {saved && <span className="badge badge--saved">{t('social.savedBadge')}</span>}
         </div>
       </div>
     </>

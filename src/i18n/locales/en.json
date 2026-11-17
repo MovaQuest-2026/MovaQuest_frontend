@@ -182,5 +182,25 @@
     "es": "Español",
     "en": "English",
     "uk": "Українська"
+  },
+  "social": {
+    "actions": "Video actions",
+    "like": "Like",
+    "comments": "Comments",
+    "commentsCount_one": "{{count}} comment",
+    "commentsCount_other": "{{count}} comments",
+    "save": "Save",
+    "saved": "Saved to your list",
+    "unsaved": "Removed from saved",
+    "share": "Share",
+    "shareText": "Learn Spanish with this video: {{title}}",
+    "linkCopied": "Link copied",
+    "shareFailed": "Couldn't share. Try again.",
+    "addComment": "Add a comment…",
+    "send": "Send",
+    "you": "You",
+    "noComments": "No comments yet. Be the first!",
+    "commentsError": "Couldn't load comments.",
+    "savedBadge": "Saved"
   }
 }

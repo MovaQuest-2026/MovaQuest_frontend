@@ -1,0 +1,16 @@
+{
+  "cafe-madrid": [
+    { "id": "c1", "author": "marta.viaja", "text": "«Un café con leche» — lo dije antes que él 😄", "createdAt": "2026-11-12T09:14:00Z", "likes": 214 },
+    { "id": "c2", "author": "oleh_in_madrid", "text": "Finally I understand what the barista says every morning", "createdAt": "2026-11-13T18:02:00Z", "likes": 88 },
+    { "id": "c3", "author": "lena.es", "text": "¿Alguien más pidió «para llevar» y le dieron una taza? 😅", "createdAt": "2026-11-15T07:40:00Z", "likes": 41 }
+  ],
+  "metro-tips": [
+    { "id": "m1", "author": "nacho_metro", "text": "La tarjeta transporte público es lo mejor, de verdad", "createdAt": "2026-11-10T11:20:00Z", "likes": 132 },
+    { "id": "m2", "author": "sofiia.travels", "text": "Saved this before my Erasmus 🙏", "createdAt": "2026-11-14T16:05:00Z", "likes": 57 },
+    { "id": "m3", "author": "pablo.mad", "text": "La línea 6 es circular, ¡ojo!", "createdAt": "2026-11-16T08:31:00Z", "likes": 23 }
+  ],
+  "hola-lucia": [
+    { "id": "h1", "author": "anna_k", "text": "¡Hola Lucía! Muy buen ritmo para empezar", "createdAt": "2026-11-11T19:45:00Z", "likes": 302 },
+    { "id": "h2", "author": "dmytro.learns", "text": "Got all the pauses on the first try 💪", "createdAt": "2026-11-15T21:10:00Z", "likes": 64 }
+  ]
+}

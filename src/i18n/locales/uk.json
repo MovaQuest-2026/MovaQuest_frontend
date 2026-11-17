@@ -184,5 +184,27 @@
     "es": "Español",
     "en": "English",
     "uk": "Українська"
+  },
+  "social": {
+    "actions": "Дії з відео",
+    "like": "Подобається",
+    "comments": "Коментарі",
+    "commentsCount_one": "{{count}} коментар",
+    "commentsCount_few": "{{count}} коментарі",
+    "commentsCount_many": "{{count}} коментарів",
+    "commentsCount_other": "{{count}} коментаря",
+    "save": "Зберегти",
+    "saved": "Додано до збереженого",
+    "unsaved": "Прибрано зі збереженого",
+    "share": "Поділитися",
+    "shareText": "Вчу іспанську з цим відео: {{title}}",
+    "linkCopied": "Посилання скопійовано",
+    "shareFailed": "Не вдалося поділитися. Спробуйте ще раз.",
+    "addComment": "Додати коментар…",
+    "send": "Надіслати",
+    "you": "Ви",
+    "noComments": "Коментарів ще немає. Будьте першими!",
+    "commentsError": "Не вдалося завантажити коментарі.",
+    "savedBadge": "Збережено"
   }
 }

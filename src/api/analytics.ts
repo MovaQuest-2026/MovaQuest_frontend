@@ -66,3 +66,23 @@ export function trackMicDenied(lessonId: string, gapId: string) {
 export function trackLessonCompleted(lessonId: string, outcome: Outcome, correct: number, total: number) {
   capture('lesson_completed', { lessonId, outcome, correct, total })
 }
+
+export function trackLessonLiked(lessonId: string, liked: boolean) {
+  capture('lesson_liked', { lessonId, liked })
+}
+
+export function trackLessonSaved(lessonId: string, saved: boolean) {
+  capture('lesson_saved', { lessonId, saved })
+}
+
+export function trackCommentsOpened(lessonId: string) {
+  capture('comments_opened', { lessonId })
+}
+
+export function trackCommentPosted(lessonId: string) {
+  capture('comment_posted', { lessonId })
+}
+
+export function trackLessonShared(lessonId: string, method: 'native' | 'copy') {
+  capture('lesson_shared', { lessonId, method })
+}

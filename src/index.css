@@ -1224,3 +1224,275 @@ img {
     animation-duration: 0.01s !important;
   }
 }
+
+/* ---------- Колонка дій (лайк, коментарі, збереження, поширення) ---------- */
+
+@layer app {
+.player__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.player__stage .player__tap-area {
+  flex: 1;
+}
+
+.action-rail {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-rail__btn {
+  min-width: 52px;
+  min-height: var(--tap);
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.6));
+}
+
+.action-rail__icon {
+  width: 34px;
+  height: 34px;
+  fill: currentColor;
+  transition: transform 0.15s ease-out;
+}
+
+.action-rail__btn:active .action-rail__icon {
+  transform: scale(0.88);
+}
+
+.action-rail__count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Червоне серце й жовта закладка, як звикли користувачі стрічок. Кольори фіксовані: плеєр темний в обох темах. */
+.action-rail__btn--like.is-active .action-rail__icon {
+  fill: #fe2c55;
+  animation: rail-pop 0.3s ease-out;
+}
+
+.action-rail__btn--save.is-active .action-rail__icon {
+  fill: #facc15;
+  animation: rail-pop 0.3s ease-out;
+}
+
+@keyframes rail-pop {
+  40% {
+    transform: scale(1.25);
+  }
+}
+
+.action-toast {
+  position: absolute;
+  top: calc(var(--safe-top) + 64px);
+  left: 50%;
+  z-index: 3;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.75);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transform: translateX(-50%);
+  animation: toast-in 2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+  }
+  10%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.comments-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border: 0;
+  background: rgb(0 0 0 / 0.3);
+  cursor: default;
+}
+
+.comments-sheet {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 5;
+  height: 65%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px 16px 0 0;
+  background: var(--surface);
+  color: var(--text);
+  animation: sheet-up 0.22s ease-out;
+  touch-action: pan-y;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.comments-sheet__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.comments-sheet__title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.comments-sheet__close {
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.comments-sheet__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 16px;
+}
+
+.comments-sheet__list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comments-sheet__empty {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.comment {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.comment__avatar {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.comment__body {
+  min-width: 0;
+}
+
+.comment__body p {
+  margin: 0;
+}
+
+.comment__author {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.comment__text {
+  overflow-wrap: anywhere;
+}
+
+.comment__meta {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.comments-sheet__form {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px calc(8px + var(--safe-bottom));
+  border-top: 1px solid var(--border);
+}
+
+.comments-sheet__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+}
+
+.comments-sheet__send {
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.comments-sheet__send:disabled {
+  opacity: 0.4;
+}
+
+.badge--saved {
+  background: color-mix(in srgb, var(--warning) 25%, transparent);
+  color: var(--warning);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-rail__icon,
+  .comments-sheet,
+  .action-toast {
+    animation: none !important;
+    transition: none;
+  }
+}
+}
