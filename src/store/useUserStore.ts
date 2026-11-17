@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import type { Account } from '../types/account'
 import type { MachineState } from '../features/player/gapMachine'
 import type { Lang, Lesson, Outcome, SubtitleLang } from '../types/lesson'
 
@@ -29,6 +30,12 @@ export interface CompletedLesson {
 
 interface UserState {
   userId: string
+  /** Поточний обліковий запис. null: користувач не ввійшов, сторінки застосунку ведуть на /auth. */
+  account: Account | null
+  /** Акаунт є, а онбординг не завершено (немає профілю): сторінки застосунку ведуть на /onboarding. */
+  onboardingPending: boolean
+  /** Користувач закрив підказку «Увійдіть» над відео: більше її не показуємо. */
+  signInPromptDismissed: boolean
   interfaceLanguage: Lang
   level: Level
   goal: string
@@ -45,6 +52,9 @@ interface UserState {
   /** Збережені уроки (закладка в стрічці). */
   savedLessons: string[]
 
+  setAccount: (account: Account | null) => void
+  dismissSignInPrompt: () => void
+  setOnboardingPending: (pending: boolean) => void
   setInterfaceLanguage: (lang: Lang) => void
   setLevel: (level: Level) => void
   setGoal: (goal: string) => void
@@ -79,6 +89,10 @@ function createUserId(): string {
  * v2: уроки стали відео з паузами, старий прогрес (сцени й гілки) не переноситься.
  * v3: замість «субтитри так/ні» список мов субтитрів; додано тему.
  * v4: лайки й збереження уроків.
+ * v5: обліковий запис (спершу порожній).
+ * v6: вхід необов'язковий, його можна пропустити (authSkipped).
+ * v7: замість authSkipped підказка над відео, яку можна закрити (signInPromptDismissed).
+ * v8: onboardingPending (уточнюється з профілю акаунта під час запуску, див. useOnboardingCheck).
  */
 export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
   let state = { ...(persisted as Record<string, unknown>) }
@@ -89,6 +103,13 @@ export function migrateUserState(persisted: unknown, version: number): Record<st
     state = { ...rest, subtitleLangs, theme: 'system' }
   }
   if (version < 4) state = { ...state, likedLessons: [], savedLessons: [] }
+  if (version < 5) state = { ...state, account: null }
+  if (version < 6) state = { ...state, authSkipped: false }
+  if (version < 7) {
+    const { authSkipped: _skipped, ...rest } = state
+    state = { ...rest, signInPromptDismissed: false }
+  }
+  if (version < 8) state = { ...state, onboardingPending: false }
   return state
 }
 
@@ -96,6 +117,9 @@ export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       userId: createUserId(),
+      account: null,
+      signInPromptDismissed: false,
+      onboardingPending: false,
       interfaceLanguage: 'en',
       level: 'A2',
       goal: '',
@@ -109,6 +133,9 @@ export const useUserStore = create<UserState>()(
       likedLessons: [],
       savedLessons: [],
 
+      setAccount: (account) => set({ account }),
+      dismissSignInPrompt: () => set({ signInPromptDismissed: true }),
+      setOnboardingPending: (onboardingPending) => set({ onboardingPending }),
       setInterfaceLanguage: (interfaceLanguage) => set({ interfaceLanguage }),
       setLevel: (level) => set({ level }),
       setGoal: (goal) => set({ goal }),
@@ -136,7 +163,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'movaquest-user-v1',
-      version: 4,
+      version: 8,
       migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
     },
   ),

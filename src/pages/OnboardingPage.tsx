@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { getProfile, saveProfile } from '../api/profile'
+import { applyProfile } from '../features/account/applyProfile'
 import { useTranslation } from 'react-i18next'
 import { Segmented } from '../components/Segmented'
 import { requestMicAccess } from '../features/speech/microphone'
@@ -12,6 +14,8 @@ const TOTAL_STEPS = 3
 export function OnboardingPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  // Куди повернутися після онбордингу (state.from), інакше найновіше відео.
+  const from = (useLocation().state as { from?: string } | null)?.from
   const [step, setStep] = useState(1)
   const [requesting, setRequesting] = useState(false)
 
@@ -22,11 +26,48 @@ export function OnboardingPage() {
   const { setInterfaceLanguage, setLevel, setGoal, setMicPermission, completeOnboarding } =
     useUserStore.getState()
 
-  const finish = (permission?: MicPermission) => {
+  const account = useUserStore((s) => s.account)
+  const [saving, setSaving] = useState(false)
+  const [saveFailed, setSaveFailed] = useState(false)
+
+  // Відповіді онбордингу йдуть у профіль акаунта (майбутня таблиця profiles, див. src/api/profile.ts).
+  // Дозвіл на мікрофон лишається на пристрої.
+  const finish = async (permission?: MicPermission) => {
     if (permission) setMicPermission(permission)
+    if (!account || saving) return
+    setSaving(true)
+    setSaveFailed(false)
+    try {
+      await saveProfile(account.id, { interfaceLanguage: lang, level, goal })
+    } catch {
+      setSaveFailed(true)
+      setSaving(false)
+      return
+    }
     completeOnboarding()
-    navigate('/home', { replace: true })
+    useUserStore.getState().setOnboardingPending(false)
+    navigate(from?.startsWith('/') ? from : '/app', { replace: true })
   }
+
+  // Онбординг уже завершили (наприклад, на іншому пристрої): беремо профіль і йдемо далі.
+  const accountId = account?.id
+  useEffect(() => {
+    if (!accountId) return
+    let cancelled = false
+    getProfile(accountId)
+      .then((profile) => {
+        if (cancelled || !profile) return
+        applyProfile(profile)
+        navigate(from?.startsWith('/') ? from : '/app', { replace: true })
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [accountId, from, navigate])
+
+  // Онбординг іде після реєстрації: без акаунта спершу вхід.
+  if (!account) return <Navigate to="/auth" replace state={{ from }} />
 
   const allowMic = async () => {
     setRequesting(true)
@@ -121,14 +162,19 @@ export function OnboardingPage() {
             >
               {t('onboarding.mic.allow')}
             </button>
-            <button type="button" className="btn btn--ghost btn--block" onClick={() => finish('skipped')}>
+            <button type="button" className="btn btn--ghost btn--block" disabled={saving} onClick={() => void finish('skipped')}>
               {t('onboarding.mic.skip')}
             </button>
           </>
         )}
+        {step === TOTAL_STEPS && saveFailed && (
+          <p className="notice notice--error" role="alert">
+            {t('onboarding.saveFailed')}
+          </p>
+        )}
         {step === TOTAL_STEPS && micAnswered && (
-          <button type="button" className="btn btn--primary btn--block" onClick={() => finish()}>
-            {t('onboarding.finish')}
+          <button type="button" className="btn btn--primary btn--block" disabled={saving} onClick={() => void finish()}>
+            {saving ? t('app.loading') : t('onboarding.finish')}
           </button>
         )}
         {step > 1 && (

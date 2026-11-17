@@ -40,8 +40,8 @@ export function TabBar() {
 
   return (
     <nav className={`tabbar${inLesson ? ' tabbar--video' : ''}`} aria-label={t('tabs.label')}>
-      {/* В уроці «Головна» — це поточне відео: дотик не перезапускає його. */}
-      {tab('home', inLesson ? pathname : '/home', inLesson)}
+      {/* «Головна» — найновіше відео (/app). В уроці вкладка підсвічена як поточна. */}
+      {tab('home', '/app', inLesson)}
       {tab('lessons', '/lessons')}
       {tab('profile', '/profile')}
     </nav>

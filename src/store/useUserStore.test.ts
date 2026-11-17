@@ -21,6 +21,9 @@ describe('useUserStore', () => {
       theme: 'system',
       likedLessons: [],
       savedLessons: [],
+      account: null,
+      signInPromptDismissed: false,
+      onboardingPending: false,
     })
     expect(migrateUserState({ subtitleMode: 'off' }, 2)).toMatchObject({ subtitleLangs: [] })
   })

@@ -4,4 +4,6 @@ import type { Lesson } from './lesson'
 export type LessonSummary = Pick<Lesson, 'id' | 'title' | 'description' | 'level' | 'cover'> & {
   durationSec?: number
   comingSoon?: boolean
+  /** Коли урок додано (ISO-дата). Стрічка й /app починаються з найновіших. */
+  addedAt?: string
 }
