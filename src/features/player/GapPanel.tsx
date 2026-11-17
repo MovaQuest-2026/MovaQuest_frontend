@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { evaluateTypedAnswer, MOCK_SPEECH } from '../../api/evaluateAnswer'
+import { evaluateTypedAnswer } from '../../api/evaluateAnswer'
 import { translate } from '../../i18n/localize'
 import { answerHint } from '../../lib/matchAnswer'
 import { usePlayerStore } from '../../store/usePlayerStore'
@@ -28,11 +28,11 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
   // Якщо мікрофон уже заборонений, одразу пропонуємо ввести відповідь текстом.
   const [typing, setTyping] = useState(() => {
     const permission = useUserStore.getState().micPermission
-    return permission === 'denied' || permission === 'unsupported' || guestVoiceBlocked()
+    return permission === 'denied' || permission === 'unsupported'
   })
   const [micDenied, setMicDenied] = useState(false)
-  // Розпізнавання голосу на бекенді вимагає сесії; гостю пропонуємо увійти або писати текстом.
-  const [signInNeeded, setSignInNeeded] = useState(guestVoiceBlocked)
+  // Якщо бекенд знову вимагатиме сесію для розпізнавання (401), пропонуємо увійти або писати текстом.
+  const [signInNeeded, setSignInNeeded] = useState(false)
   const [text, setText] = useState('')
 
   const busy = machine.status === 'listening' || machine.status === 'evaluating'
@@ -155,8 +155,4 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
       )}
     </section>
   )
-}
-
-function guestVoiceBlocked(): boolean {
-  return !MOCK_SPEECH && !useUserStore.getState().account
 }

@@ -24,7 +24,7 @@ interface TranscriptionResponse {
 /** STT із впевненістю нижче цього порога не вважаємо відповіддю. */
 const MIN_CONFIDENCE = 0.5
 
-/** Голос недоступний: гість без сесії (бекенд повертає 401) або сервіс розпізнавання не працює. */
+/** Голос недоступний: бекенд вимагає сесію (401; на MVP ендпоінт відкритий, але це може повернутися). */
 export class SpeechError extends Error {
   readonly code: 'signInRequired' | 'unavailable'
   constructor(code: 'signInRequired' | 'unavailable') {
@@ -38,8 +38,8 @@ export const MOCK_SPEECH = import.meta.env.VITE_MOCK_SPEECH === 'true'
 
 /**
  * Розпізнавання голосу: POST /api/v1/transcription (multipart: `audio`, повторюване поле `hint`).
- * Бекенд віддає лише транскрипт, а вердикт рахуємо тут через matchAnswer. Ендпоінт вимагає сесію:
- * для гостя кидаємо SpeechError('signInRequired'), щоб інтерфейс запропонував увійти або ввести текстом.
+ * Бекенд віддає лише транскрипт, а вердикт рахуємо тут через matchAnswer. На MVP ендпоінт відкритий для гостей;
+ * якщо бекенд знову вимагатиме сесію (401), кидаємо SpeechError('signInRequired'): інтерфейс запропонує увійти або ввести текстом.
  * Аудіо ніде не зберігаємо й не логуємо.
  */
 export async function evaluateAnswer(lessonId: string, gapId: string, audio: Blob): Promise<EvaluateResult> {
