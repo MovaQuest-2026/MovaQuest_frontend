@@ -89,6 +89,24 @@ export function gapAtTime(lesson: Lesson, time: number): Gap | null {
   )
 }
 
+/** На скільки секунд відмотуємо до паузи, щоб знову почути контекст («Ще раз», повтор слова, стрілки слів). */
+export const CONTEXT_LEAD_SEC = 4
+
+/**
+ * Куди перемотати стрілками «попереднє / наступне слово». Попереднє: початок контексту останньої паузи,
+ * що лишилась позаду (або початок відео). Наступне: початок контексту першої паузи попереду.
+ * null, якщо в цей бік перемотувати нікуди.
+ */
+export function wordJumpTarget(lesson: Lesson, time: number, dir: 'prev' | 'next'): number | null {
+  if (dir === 'prev') {
+    const behind = lesson.gaps.filter((g) => g.pauseAt < time - 1).pop()
+    if (behind) return Math.max(0, behind.pauseAt - CONTEXT_LEAD_SEC)
+    return time > 0.5 ? 0 : null
+  }
+  const ahead = lesson.gaps.find((g) => g.pauseAt - CONTEXT_LEAD_SEC > time + 0.3)
+  return ahead ? ahead.pauseAt - CONTEXT_LEAD_SEC : null
+}
+
 /** Індекс першої паузи без результату (наступна, яку треба розв'язати), або довжина списку. */
 function firstUnresolvedIndex(lesson: Lesson, results: GapResult[]): number {
   const idx = lesson.gaps.findIndex((g) => !results.some((r) => r.gapId === g.id))

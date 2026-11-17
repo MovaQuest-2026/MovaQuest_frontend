@@ -75,8 +75,8 @@
     "unmute": "Activar sonido",
     "play": "Reproducir",
     "pause": "Pausa",
-    "back5": "Retroceder 5 segundos",
-    "forward5": "Avanzar 5 segundos",
+    "prevWord": "Palabra anterior",
+    "nextWord": "Palabra siguiente",
     "speed": "Velocidad de reproducción",
     "subtitles": "Subtítulos",
     "progress": "{{done}} de {{total}} pausas hechas",
@@ -112,9 +112,6 @@
     "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta.",
     "voiceSignIn": "Las respuestas por voz requieren una cuenta. Inicia sesión desde tu perfil o escribe la respuesta.",
     "reviewGap": {
-      "title": "Pausa {{n}}",
-      "retry": "Pausa {{n}}: intentarlo otra vez",
-      "listen": "Pausa {{n}}: volver a oír la palabra",
       "retryButton": "Intentar esta palabra otra vez",
       "listenButton": "Repetir esta palabra"
     }

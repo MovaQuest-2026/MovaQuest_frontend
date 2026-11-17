@@ -75,8 +75,8 @@
     "unmute": "Turn on sound",
     "play": "Play",
     "pause": "Pause",
-    "back5": "Back 5 seconds",
-    "forward5": "Forward 5 seconds",
+    "prevWord": "Previous word",
+    "nextWord": "Next word",
     "speed": "Playback speed",
     "subtitles": "Subtitles",
     "progress": "{{done}} of {{total}} pauses done",
@@ -112,9 +112,6 @@
     "micError": "Couldn't record. Try again or type the answer.",
     "voiceSignIn": "Voice answers need an account. Sign in from your profile, or type the answer.",
     "reviewGap": {
-      "title": "Pause {{n}}",
-      "retry": "Pause {{n}}: try again",
-      "listen": "Pause {{n}}: hear the word again",
       "retryButton": "Try this word again",
       "listenButton": "Repeat this word"
     }

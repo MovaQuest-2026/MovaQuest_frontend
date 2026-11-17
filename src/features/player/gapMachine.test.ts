@@ -3,6 +3,7 @@ import type { Lesson } from '../../types/lesson'
 import {
   clampSeek,
   gapAtTime,
+  wordJumpTarget,
   computeOutcome,
   createInitialState,
   restoreState,
@@ -184,6 +185,20 @@ describe('gapAtTime', () => {
     const close = { ...lesson, gaps: [{ ...lesson.gaps[0], pauseAt: 4 }, { ...lesson.gaps[1], pauseAt: 6.2 }] }
     expect(gapAtTime(close, 5.1)?.id).toBe('g1')
     expect(gapAtTime(close, 5.2)?.id).toBe('g2')
+  })
+})
+
+describe('wordJumpTarget', () => {
+  it('jumps to the context of the previous word, or to the start', () => {
+    expect(wordJumpTarget(lesson, 8, 'prev')).toBe(0) // g1 pauseAt 4 → 4 - 4
+    expect(wordJumpTarget(lesson, 3, 'prev')).toBe(0) // перед першою паузою: на початок
+    expect(wordJumpTarget(lesson, 0.2, 'prev')).toBeNull()
+    expect(wordJumpTarget(lesson, 14, 'prev')).toBe(6) // g2 pauseAt 10 → 6
+  })
+
+  it('jumps to the context of the next word, or nowhere after the last one', () => {
+    expect(wordJumpTarget(lesson, 0, 'next')).toBe(6) // g2 pauseAt 10 is the first one whose context start is ahead
+    expect(wordJumpTarget(lesson, 7, 'next')).toBeNull()
   })
 })
 

@@ -7,7 +7,7 @@ import { ActionRail } from '../features/player/ActionRail'
 import { CommentsSheet } from '../features/player/CommentsSheet'
 import { GapPanel } from '../features/player/GapPanel'
 import { SignInPrompt } from '../features/player/SignInPrompt'
-import { clampSeek, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
+import { clampSeek, CONTEXT_LEAD_SEC, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
 import { SubtitleLayer } from '../features/player/SubtitleLayer'
 import { useFeedGestures } from '../features/player/useFeedGestures'
@@ -20,8 +20,6 @@ import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 
 const SEEK_STEP = 5
-/** «Послухати ще раз»: на скільки секунд відмотати від паузи. */
-const REPLAY_SEC = 4
 const FEED_TRANSITION_MS = 260
 /** Якщо під час відповіді відео саме опинилось раніше за паузу більш ніж на стільки секунд, повертаємо його на паузу. */
 const DRIFT_SEC = 1
@@ -171,7 +169,7 @@ export function LessonPlayerPage() {
     const gap = s.lesson && s.machine ? currentGap(s.lesson, s.machine) : null
     if (!gap) return
     dispatch({ type: 'REPLAY' })
-    videoRef.current?.seek(Math.max(0, gap.pauseAt - REPLAY_SEC))
+    videoRef.current?.seek(Math.max(0, gap.pauseAt - CONTEXT_LEAD_SEC))
   }
 
   // Кружечок пройденої паузи: відповісти ще раз (червоний/жовтий) або лише послухати слово (зелений).
@@ -181,13 +179,13 @@ export function LessonPlayerPage() {
     if (!target) return
     dispatch({ type: 'RETRY_GAP', gapId })
     setUserPaused(false)
-    videoRef.current?.seek(Math.max(0, target.pauseAt - REPLAY_SEC))
+    videoRef.current?.seek(Math.max(0, target.pauseAt - CONTEXT_LEAD_SEC))
   }
   const listenGap = (gapId: string) => {
     const target = usePlayerStore.getState().lesson?.gaps.find((g) => g.id === gapId)
     if (!target) return
     setUserPaused(false)
-    seek(Math.max(0, target.pauseAt - REPLAY_SEC))
+    seek(Math.max(0, target.pauseAt - CONTEXT_LEAD_SEC))
   }
 
   // Дотик по відео: ліва третина — назад на 5 с, права — вперед на 5 с, середина — пауза.
