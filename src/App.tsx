@@ -1,5 +1,6 @@
 import { Suspense, lazy, type ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useBackendSession, useGoogleErrorReturn } from './features/account/useBackendSession'
 import { useOnboardingCheck } from './features/account/useOnboardingCheck'
 import { useProfileSync } from './features/account/useProfileSync'
 import { useUserStore } from './store/useUserStore'
@@ -7,6 +8,7 @@ import { useSyncLanguage } from './i18n/useSyncLanguage'
 import { useSyncTheme } from './lib/useSyncTheme'
 import { LandingPage } from './landing/LandingPage'
 import { AuthPage } from './pages/AuthPage'
+import { AuthCallbackPage } from './pages/AuthCallbackPage'
 import { LatestLessonPage } from './pages/LatestLessonPage'
 import { OnboardingPage } from './pages/OnboardingPage'
 import { LessonsPage } from './pages/LessonsPage'
@@ -32,10 +34,14 @@ function App() {
   useSyncTheme()
   useProfileSync()
   useOnboardingCheck()
+  useBackendSession()
+  useGoogleErrorReturn()
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/auth" element={<AuthPage />} />
+      {/* Сюди бекенд повертає після входу через Google. */}
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
       {/* Вхід необов'язковий: відео відкривається одразу. Увійти можна з профілю або з підказки над відео; онбординг іде після реєстрації. */}
       <Route path="/onboarding" element={<OnboardingPage />} />
       {/* /app, /lesson і «Головна» відкривають найновіше відео. */}

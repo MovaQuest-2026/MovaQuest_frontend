@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/((?!clips/).*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "https://backend-hb2j.onrender.com/api/:path*" },
+    { "source": "/((?!clips/|api/).*)", "destination": "/index.html" }
   ]
 }

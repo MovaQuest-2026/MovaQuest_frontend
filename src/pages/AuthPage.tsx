@@ -1,72 +1,72 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp } from '../api/auth'
-import { signInWithGoogle } from '../api/googleAuth'
-import { getProfile } from '../api/profile'
-import { applyProfile } from '../features/account/applyProfile'
+import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp, type AuthErrorCode } from '../api/auth'
+import { startGoogleSignIn } from '../api/googleAuth'
+import { completeSignIn, safeReturnPath } from '../features/account/completeSignIn'
 import { Segmented } from '../components/Segmented'
 import { useUserStore } from '../store/useUserStore'
 import type { Account } from '../types/account'
 
 type Mode = 'signIn' | 'signUp'
 
-/** Куди повернутися після входу: адреса, з якої нас перенаправили, інакше найновіше відео. */
-function returnPath(state: unknown): string {
-  const from = (state as { from?: string } | null)?.from
-  return from && from.startsWith('/') && !from.startsWith('/auth') ? from : '/app'
+interface AuthLocationState {
+  from?: string
+  /** Помилка Google-входу, з якою нас повернула сторінка /auth/callback. */
+  authError?: AuthErrorCode
 }
 
 export function AuthPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const returnTo = returnPath(location.state)
+  const state = location.state as AuthLocationState | null
+  const returnTo = safeReturnPath(state?.from)
   const account = useUserStore((s) => s.account)
   const [mode, setMode] = useState<Mode>('signUp')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const errorText = (code: AuthErrorCode) => t(`auth.errors.${code}`, { min: PASSWORD_MIN_LENGTH })
+  const [error, setError] = useState<string | null>(() => (state?.authError ? errorText(state.authError) : null))
+
+  // «Назад» зі сторінки Google повертає цю сторінку з bfcache із busy=true: розблоковуємо кнопки.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => e.persisted && setBusy(false)
+    window.addEventListener('pageshow', onShow)
+    return () => window.removeEventListener('pageshow', onShow)
+  }, [])
 
   // Уже ввійшли: сюди не повертаємось. Сабміт сам веде далі, тож перевіряємо лише поза ним.
   if (account && !busy) return <Navigate to={returnTo} replace />
 
-  // Спільне для пароля й Google: зберегти сесію, далі онбординг або назад до відео.
+  // Зберегти сесію, далі онбординг або назад до відео.
   const run = async (action: () => Promise<Account>) => {
     if (busy) return
     setBusy(true)
     setError(null)
     try {
-      const acc = await action()
-      const user = useUserStore.getState()
-      user.setAccount(acc)
-      // Онбординг одразу після реєстрації (і після першого входу через Google).
-      // Якщо профіль уже є (вхід на новому пристрої), підтягуємо його й ідемо далі.
-      const profile = await getProfile(acc.id)
-      if (!profile) {
-        // Незавершений онбординг відкриється знову, навіть якщо зараз його закрити (див. App).
-        user.setOnboardingPending(true)
-        navigate('/onboarding', { replace: true, state: { from: returnTo } })
-        return
-      }
-      applyProfile(profile)
-      navigate(returnTo, { replace: true })
+      await completeSignIn(await action(), returnTo, navigate)
     } catch (err) {
       // busy скидаємо лише при помилці: після успіху сторінка вже йде далі, а скинутий busy
       // увімкнув би редирект «уже ввійшли» і перебив би перехід на онбординг.
       setBusy(false)
-      // Закрите вікно Google — не помилка, просто лишаємось на сторінці.
-      if (err instanceof AuthError && err.code === 'googleCancelled') return
-      setError(err instanceof AuthError ? t(`auth.errors.${err.code}`, { min: PASSWORD_MIN_LENGTH }) : t('app.error'))
+      setError(err instanceof AuthError ? errorText(err.code) : t('app.error'))
     }
   }
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
     void run(() => (mode === 'signUp' ? signUp({ name, email, password }) : signIn({ email, password })))
+  }
+
+  // Google: повний перехід на сторінку входу Google, назад повертаємось на /auth/callback.
+  const google = () => {
+    setBusy(true)
+    setError(null)
+    startGoogleSignIn(returnTo)
   }
 
   // Вхід необов'язковий: «Не зараз» повертає туди, звідки прийшли (або до відео).
@@ -92,7 +92,7 @@ export function AuthPage() {
         <p className="page__subtitle">{t(`auth.${mode}.subtitle`)}</p>
       </div>
 
-      <button type="button" className="btn btn--block google-btn" disabled={busy} onClick={() => void run(signInWithGoogle)}>
+      <button type="button" className="btn btn--block google-btn" disabled={busy} onClick={google}>
         <svg className="google-btn__logo" viewBox="0 0 48 48" aria-hidden="true">
           <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
           <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
