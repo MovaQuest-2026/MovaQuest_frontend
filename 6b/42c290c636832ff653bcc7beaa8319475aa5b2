@@ -1,0 +1,70 @@
+CLAUDE.md
+  s_6e1f84499d4fc9::t_3574b0e1e62d7a 22,26,39
+src/api/googleAuth.ts
+  s_6e1f84499d4fc9::t_34b61a5d1a6572 46
+  s_6e1f84499d4fc9::t_2c60922a080069 1-18,21-26,28,31-32,34-38,40,42,44-45,47-48
+src/pages/AuthCallbackPage.tsx
+  s_6e1f84499d4fc9::t_3c964ae2742d30 1-43
+src/App.tsx
+  s_6e1f84499d4fc9::t_4600d0745be819 3,11,37-38,43-44
+src/api/auth.test.ts
+  s_6e1f84499d4fc9::t_c9fdfbaf68ee22 1-2,6-89,92-94,97-100
+docs/backend-requirements.md
+  s_a3fcab2ede44b2::t_b1796fac97de1c 1-404
+.env.example
+  s_6e1f84499d4fc9::t_3574b0e1e62d7a 7-10
+vercel.json
+  s_6e1f84499d4fc9::t_034e965136c70c 3-4
+src/features/account/completeSignIn.ts
+  s_6e1f84499d4fc9::t_fd2609f98bb5c3 1-30
+src/api/auth.ts
+  s_6e1f84499d4fc9::t_d399b542e7e8d7 3,10,21-22,24-25,28,38-42,44,46-52,55-60,62-72,74,77-104,107,109,112-136,143-155,158-165
+src/i18n/locales/es.json
+  s_6e1f84499d4fc9::t_9b0ccfc331f8e7 236,240-246,257-258
+src/i18n/locales/uk.json
+  s_6e1f84499d4fc9::t_9b0ccfc331f8e7 239,243-249,260-261
+docs/backend-plan.md
+  s_6e1f84499d4fc9::t_317979a08c3ef5 17-31
+  s_a3fcab2ede44b2::t_89c349018931fa 5-14,87-89,92-94,96-97,99,101-103,105-108,118,120,126,138,143-144,146,148,150-173,175,177,183,198-199,207-208,213,218,220-222
+  s_a3fcab2ede44b2::t_f1d2217d16f60f 1-4,15-16,32-86,90-91,95,98,100,104,109-117,119,121-125,127-137,139-142,145,147,149,174,176,178-182,184-197,200-206,209-212,214-217,219,223-226
+src/api/http.ts
+  s_6e1f84499d4fc9::t_324682d35ae779 1-81
+src/pages/AuthPage.tsx
+  s_6e1f84499d4fc9::t_5a89f951609d98 4-6,13-16,23-24,32-33,45,51,56,65-71,95
+  s_6e1f84499d4fc9::t_dc8cb6f657dfa9 1,34-40
+vite.config.ts
+  s_6e1f84499d4fc9::t_67592e893e9c87 3,7-17
+src/features/account/useBackendSession.ts
+  s_6e1f84499d4fc9::t_8c177a992223f7 1-68
+src/i18n/locales/en.json
+  s_6e1f84499d4fc9::t_9b0ccfc331f8e7 235,239-245,256-257
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6b42c290c636832ff653bcc7beaa8319475aa5b2",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_6e1f84499d4fc9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da54d273-fb3f-4942-b946-476545028209",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_a3fcab2ede44b2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5ead5251-d4db-410a-86f6-9f5b98384ed3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
