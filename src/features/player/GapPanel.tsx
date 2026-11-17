@@ -36,7 +36,8 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
   const [text, setText] = useState('')
 
   const busy = machine.status === 'listening' || machine.status === 'evaluating'
-  const result = machine.status === 'feedback' ? machine.results[machine.results.length - 1] : null
+  // Результат повтору слова показуємо тут, але до підсумку він не потрапляє (див. practiceResult у gapMachine).
+  const result = machine.status === 'feedback' ? (machine.practiceResult ?? machine.results[machine.results.length - 1]) : null
 
   useEffect(() => {
     if (result?.resolution !== 'correct') return
