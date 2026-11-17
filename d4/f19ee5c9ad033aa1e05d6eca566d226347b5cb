@@ -1,0 +1,71 @@
+CLAUDE.md
+  s_4ae98288f8b5bc::t_295b4756f0a945 27
+  s_4ae98288f8b5bc::t_48ae640a418bcb 17
+src/pages/LessonPlayerPage.tsx
+  s_4ae98288f8b5bc::t_1f7de92be2c529 177-192,268-270,312
+  s_4ae98288f8b5bc::t_0509967a8aa8a7 26-27,123-133
+  s_4ae98288f8b5bc::t_dc43d6489bec01 309
+  s_4ae98288f8b5bc::t_4b56429f7af427 134
+src/i18n/locales/es.json
+  s_4ae98288f8b5bc::t_b73ab0ef4caee7 113-120
+  s_4ae98288f8b5bc::t_79b23f00ecd834 112
+src/i18n/locales/en.json
+  s_4ae98288f8b5bc::t_79b23f00ecd834 112
+  s_4ae98288f8b5bc::t_b73ab0ef4caee7 113-120
+src/features/player/PlayerControls.tsx
+  s_4ae98288f8b5bc::t_872b7ee9b5930e 6,29-31,92-100
+  s_4ae98288f8b5bc::t_1f7de92be2c529 14-19,22,28,32-33,44-66,101-120,155,159,186
+src/features/player/video/FileVideo.tsx
+  s_4ae98288f8b5bc::t_0509967a8aa8a7 110-114
+vite.config.ts
+  s_4ae98288f8b5bc::t_c32861013633a5 12-29
+src/features/player/MicButton.tsx
+  s_4ae98288f8b5bc::t_79b23f00ecd834 5,17-18,22,74-75
+src/api/evaluateAnswer.ts
+  s_4ae98288f8b5bc::t_79b23f00ecd834 3,14-43,46-79
+src/index.css
+  s_4ae98288f8b5bc::t_20018fb620778f 1744-1778
+  s_4ae98288f8b5bc::t_b73ab0ef4caee7 1703-1743,1796
+  s_4ae98288f8b5bc::t_872b7ee9b5930e 1779-1795
+src/features/player/gapMachine.test.ts
+  s_4ae98288f8b5bc::t_5e4ccff53e98a6 177-186
+  s_4ae98288f8b5bc::t_5e6b07a6326693 217-223
+  s_4ae98288f8b5bc::t_e1605935979585 187-188,190-216,224-232
+  s_4ae98288f8b5bc::t_872b7ee9b5930e 5,173-176
+  s_4ae98288f8b5bc::t_a996ea44e01d7d 189
+.env.example
+  s_4ae98288f8b5bc::t_79b23f00ecd834 9
+src/features/player/gapMachine.ts
+  s_4ae98288f8b5bc::t_b271c96ccbe6dd 47-48,92-97,144-148,162,174,177-192,245-246
+  s_4ae98288f8b5bc::t_872b7ee9b5930e 75,77,82,90-91
+  s_4ae98288f8b5bc::t_5e6b07a6326693 175-176
+  s_4ae98288f8b5bc::t_5e4ccff53e98a6 76,78-81,83-89
+src/features/player/GapPanel.tsx
+  s_4ae98288f8b5bc::t_dc43d6489bec01 17-18,24,68-72
+  s_4ae98288f8b5bc::t_79b23f00ecd834 3,31,34-35,110-116,159-161
+  s_4ae98288f8b5bc::t_aca91861a667d1 162
+src/i18n/locales/uk.json
+  s_4ae98288f8b5bc::t_79b23f00ecd834 112
+  s_4ae98288f8b5bc::t_b73ab0ef4caee7 113-120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d4f19ee5c9ad033aa1e05d6eca566d226347b5cb",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4ae98288f8b5bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d0e6645-792f-49bb-96a9-61038c69f4ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
