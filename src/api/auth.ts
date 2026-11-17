@@ -1,14 +1,13 @@
 import { useUserStore } from '../store/useUserStore'
 import type { Account } from '../types/account'
-import { readTable, writeTable } from './mockDb'
+import { ApiError, apiFetch, NetworkError } from './http'
 
 export interface AnonymousUser {
   userId: string
   isAnonymous: true
 }
 
-// Зараз мок: локальний id з useUserStore. Пізніше тут буде anonymous sign-in
-// у Firebase або Supabase, а id прийде від провайдера.
+// Гість: локальний id з useUserStore (distinct id для PostHog). Бекенд гостей не знає.
 export async function getAnonymousUser(): Promise<AnonymousUser> {
   return { userId: useUserStore.getState().userId, isAnonymous: true }
 }
@@ -19,11 +18,14 @@ export type AuthErrorCode =
   | 'nameRequired'
   | 'invalidEmail'
   | 'weakPassword'
-  | 'emailTaken'
+  | 'signUpRejected'
+  | 'signUpLoginFailed'
   | 'wrongCredentials'
-  | 'googleUnavailable'
+  | 'tooManyAttempts'
+  | 'serverUnavailable'
   | 'googleFailed'
   | 'googleCancelled'
+  | 'accountInactive'
 
 export class AuthError extends Error {
   readonly code: AuthErrorCode
@@ -33,59 +35,131 @@ export class AuthError extends Error {
   }
 }
 
-export const PASSWORD_MIN_LENGTH = 6
+/** Мінімум бекенду (PASSWORD_MIN_LENGTH на Render). */
+export const PASSWORD_MIN_LENGTH = 8
+const NAME_MIN = 2
+const NAME_MAX = 30
+const EMAIL_MAX = 50
 
-// ---------- Мок бекенду ----------
-// Пізніше: POST /api/auth/sign-up, /sign-in, /sign-out (або Supabase Auth / Firebase Auth).
-// Мок тримає облікові записи в localStorage цього браузера. Пароль не шифрується по-справжньому:
-// це лише заглушка для прототипу, справжні паролі зберігатиме провайдер.
+// ---------- Бекенд: /api/v1/users, /api/v1/auth ----------
 
-interface StoredAccount extends Account {
-  passwordHash: string
+/** UserRead з бекенду (GET /users/me). */
+interface UserRead {
+  id: number
+  name: string
+  username: string
+  email: string
+  oauth_provider?: string | null
 }
 
-// Таблиця accounts (ключ у localStorage лишився той самий: movaquest-mock-accounts).
-const readAccounts = () => readTable<StoredAccount>('accounts')
-
-/** FNV-1a. Не криптографія: лише щоб пароль не лежав у сховищі відкритим текстом. */
-function mockHash(text: string): string {
-  let h = 0x811c9dc5
-  for (const ch of text) {
-    h ^= ch.codePointAt(0)!
-    h = Math.imul(h, 0x01000193) >>> 0
-  }
-  return h.toString(16)
-}
+export const toAccount = (u: UserRead): Account => ({
+  id: String(u.id),
+  email: u.email,
+  name: u.name || u.username,
+  provider: u.oauth_provider === 'google' ? 'google' : 'password',
+})
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase()
-const isEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-const toAccount = ({ id, email, name }: StoredAccount): Account => ({ id, email, name, provider: 'password' })
+const isEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= EMAIL_MAX
+
+/** Мережеві збої й «сервер прокидається» — окремий код, решту віддаємо як є. */
+function rethrow(err: unknown, map: (e: ApiError) => AuthErrorCode): never {
+  if (err instanceof AuthError) throw err
+  if (err instanceof NetworkError) throw new AuthError('serverUnavailable')
+  if (err instanceof ApiError) {
+    if (err.status === 429) throw new AuthError('tooManyAttempts')
+    if (err.status >= 500) throw new AuthError('serverUnavailable')
+    throw new AuthError(map(err))
+  }
+  throw err
+}
+
+/**
+ * Поточний акаунт за cookie сесії: Account або null (гість, сесія закінчилась).
+ * NetworkError прокидається далі: тоді не знаємо, чи сесія жива, і нічого не міняємо.
+ */
+export async function getCurrentAccount(): Promise<Account | null> {
+  try {
+    return toAccount(await apiFetch<UserRead>('/users/me'))
+  } catch (err) {
+    if (err instanceof ApiError && (err.status === 401 || err.status === 403)) return null
+    throw err
+  }
+}
+
+/**
+ * username бекенд поки вимагає (^[a-z0-9_]+$, 2–32, унікальний). Користувач його не бачить,
+ * тож генеруємо з email: olena.k@… → olena_k_4821. Коли бекенд генеруватиме його сам, поле можна прибрати.
+ */
+export function usernameFromEmail(email: string): string {
+  const base =
+    email
+      .split('@')[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9_]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .slice(0, 24) || 'user'
+  const suffix = Math.floor(1000 + Math.random() * 9000)
+  return `${base}_${suffix}`
+}
 
 export async function signUp(input: { name: string; email: string; password: string }): Promise<Account> {
-  const name = input.name.trim()
+  const name = input.name.trim().slice(0, NAME_MAX)
   const email = normalizeEmail(input.email)
-  if (!name) throw new AuthError('nameRequired')
+  if (name.length < NAME_MIN) throw new AuthError('nameRequired')
   if (!isEmail(email)) throw new AuthError('invalidEmail')
   if (input.password.length < PASSWORD_MIN_LENGTH) throw new AuthError('weakPassword')
-  const accounts = readAccounts()
-  if (accounts.some((a) => a.email === email)) throw new AuthError('emailTaken')
-  const stored: StoredAccount = {
-    id: `acc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
-    email,
-    name,
-    passwordHash: mockHash(`${email}:${input.password}`),
+
+  // 409 — зайнятий username (випадковий суфікс збігся): пробуємо інший.
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await apiFetch('/users/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, username: usernameFromEmail(email), password: input.password }),
+      })
+      break
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409 && attempt < 2) continue
+      // 422 на проді приходить без переліку полів: email і довжину ми вже перевірили,
+      // тож найімовірніше пароль не пройшов політику бекенду (великі/малі літери, цифра, символ).
+      rethrow(err, () => 'signUpRejected')
+    }
   }
-  writeTable('accounts', [...accounts, stored])
-  return toAccount(stored)
+
+  // Реєстрація не входить в акаунт. Бекенд однаково відповідає й на вже зайнятий email,
+  // тож якщо вхід не вдався, найімовірніше акаунт з цим email уже є.
+  try {
+    return await signIn({ email, password: input.password })
+  } catch (err) {
+    if (err instanceof AuthError && err.code === 'wrongCredentials') throw new AuthError('signUpLoginFailed')
+    throw err
+  }
 }
 
 export async function signIn(input: { email: string; password: string }): Promise<Account> {
   const email = normalizeEmail(input.email)
   if (!isEmail(email)) throw new AuthError('invalidEmail')
-  const found = readAccounts().find((a) => a.email === email)
-  // Однакова помилка для «немає такого email» і «неправильний пароль».
-  if (!found || found.passwordHash !== mockHash(`${email}:${input.password}`)) throw new AuthError('wrongCredentials')
-  return toAccount(found)
+  try {
+    await apiFetch('/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ username: email, password: input.password, remember_me: 'true' }).toString(),
+    })
+    const account = await getCurrentAccount()
+    if (!account) throw new AuthError('wrongCredentials')
+    return account
+  } catch (err) {
+    // 401 — неправильні дані (однаково для «немає такого email»), 403 — блокування після невдалих спроб або вимкнений акаунт.
+    rethrow(err, (e) => (e.status === 403 && !/cross-site/i.test(e.detail ?? '') ? 'tooManyAttempts' : 'wrongCredentials'))
+  }
 }
 
-export async function signOut(): Promise<void> {}
+/** Вихід на сервері. Локальну сесію (account у useUserStore) прибирає той, хто викликає. */
+export async function signOut(): Promise<void> {
+  try {
+    await apiFetch('/auth/logout', { method: 'POST' })
+  } catch {
+    // Сесія вже закінчилась або немає зв'язку: локально однаково виходимо.
+  }
+}

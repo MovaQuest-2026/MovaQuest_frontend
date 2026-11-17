@@ -232,13 +232,17 @@
       "switchAction": "Create an account"
     },
     "errors": {
-      "nameRequired": "Enter your name.",
+      "nameRequired": "Enter your name (at least 2 characters).",
       "invalidEmail": "Enter a valid email.",
       "weakPassword": "Password must be at least {{min}} characters.",
-      "emailTaken": "This email is already registered. Sign in instead.",
       "wrongCredentials": "Wrong email or password.",
-      "googleUnavailable": "Google sign-in isn't set up yet. Use email or skip for now.",
-      "googleFailed": "Couldn't sign in with Google. Try again."
+      "googleFailed": "Couldn't sign in with Google. Try again.",
+      "signUpRejected": "Couldn't create the account. Check your email and use a stronger password: upper- and lowercase letters, a digit and a symbol.",
+      "signUpLoginFailed": "This email may already be registered. Try signing in instead.",
+      "tooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
+      "serverUnavailable": "The server is waking up. Try again in a minute.",
+      "googleCancelled": "Google sign-in was cancelled.",
+      "accountInactive": "This account is disabled."
     },
     "google": "Continue with Google",
     "or": "or",
@@ -249,6 +253,7 @@
     "signInCta": "Sign in",
     "prompt": {
       "text": "Sign in to keep your progress and likes."
-    }
+    },
+    "callback": "Signing you in…"
   }
 }
