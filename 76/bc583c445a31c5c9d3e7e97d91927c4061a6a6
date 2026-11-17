@@ -1,0 +1,38 @@
+src/pages/AuthPage.tsx
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 4,32-35,59
+src/api/auth.ts
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 30-32,35-37,40,44-51,144-148
+  s_4ae98288f8b5bc::t_570601d8b459a5 128
+  s_4ae98288f8b5bc::t_3e0f5d77ad9a4d 56
+  s_4ae98288f8b5bc::t_a835890cbd52cc 52-53
+src/i18n/locales/es.json
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 239-244,269
+src/api/auth.test.ts
+  s_4ae98288f8b5bc::t_3e0f5d77ad9a4d 87
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 76-84
+src/i18n/locales/en.json
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 238-243,268
+src/i18n/locales/uk.json
+  s_4ae98288f8b5bc::t_229da6dcafe8b3 244-249,274
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76bc583c445a31c5c9d3e7e97d91927c4061a6a6",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4ae98288f8b5bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d0e6645-792f-49bb-96a9-61038c69f4ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
