@@ -13,13 +13,11 @@ interface PlayerTopBarProps {
   canChangeSpeed: boolean
   /** Кнопка повтору слова показується, лише поки відео грає або стоїть на паузі для відповіді. */
   canReview: boolean
-  /** Відповісти на паузу ще раз (червона або жовта пауза). */
+  /** Відповісти на паузу ще раз: заново (червона або жовта) або для практики (зелена, результат лишається). */
   onRetryGap: (gapId: string) => void
-  /** Ще раз послухати слово правильно пройденої паузи (зелена пауза). */
-  onListenGap: (gapId: string) => void
 }
 
-export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canReview, onRetryGap, onListenGap }: PlayerTopBarProps) {
+export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canReview, onRetryGap }: PlayerTopBarProps) {
   const { t } = useTranslation()
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const playbackRate = useUserStore((s) => s.playbackRate)
@@ -68,7 +66,7 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
         <button
           type="button"
           className="review-chip"
-          onClick={() => (segmentResult.resolution === 'correct' ? onListenGap(segmentGapId) : onRetryGap(segmentGapId))}
+          onClick={() => onRetryGap(segmentGapId)}
         >
           ↺ {segmentResult.resolution === 'correct' ? t('player.reviewGap.listenButton') : t('player.reviewGap.retryButton')}
         </button>

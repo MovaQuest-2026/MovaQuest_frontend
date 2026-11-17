@@ -205,6 +205,45 @@ describe('finishing right after the last word', () => {
   })
 })
 
+describe('practising a correctly answered gap', () => {
+  // g1 правильно, далі нерозв'язана g2 попереду.
+  const afterFirst = run([...toFirstGap, voice('correct', 'leche'), { type: 'CONTINUE' }])
+  const practice = run([{ type: 'RETRY_GAP', gapId: 'g1' }, { type: 'TIME_UPDATE', time: 3.97 }], afterFirst)
+
+  it('reopens the gap but keeps the earlier correct result', () => {
+    expect(practice).toMatchObject({ status: 'awaitingAnswer', gapIndex: 0, practiceGapId: 'g1' })
+    expect(practice.results).toEqual(afterFirst.results)
+  })
+
+  it('does not store a worse result: a failed practice leaves the correct one and the outcome', () => {
+    const failed = run([{ type: 'SKIP' }], practice)
+    expect(failed.status).toBe('feedback')
+    expect(failed.practiceResult).toMatchObject({ gapId: 'g1', resolution: 'skipped' })
+    expect(failed.results).toEqual(afterFirst.results)
+    const back = run([{ type: 'CONTINUE' }], failed)
+    expect(back).toMatchObject({ status: 'playing', gapIndex: 1, practiceGapId: null, practiceResult: null })
+    expect(back.results.map((r) => [r.gapId, r.resolution])).toEqual([['g1', 'correct']])
+  })
+
+  it('shows a correct practice answer without touching the results either', () => {
+    const ok = run([voice('correct', 'leche')], practice)
+    expect(ok.practiceResult).toMatchObject({ resolution: 'correct' })
+    expect(ok.results).toEqual(afterFirst.results)
+  })
+
+  it('can be practised again from its feedback screen', () => {
+    const failed = run([{ type: 'SKIP' }], practice)
+    const again = run([{ type: 'RETRY_GAP', gapId: 'g1' }], failed)
+    expect(again).toMatchObject({ status: 'playing', gapIndex: 0, practiceGapId: 'g1', practiceResult: null })
+  })
+
+  it('is abandoned when the user seeks past the practised word', () => {
+    const s = run([{ type: 'SEEK', time: 6 }], practice)
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 1, practiceGapId: null })
+    expect(s.results).toEqual(afterFirst.results)
+  })
+})
+
 describe('gapAtTime', () => {
   it('maps a time to the gap whose question or answer is playing', () => {
     expect(gapAtTime(lesson, 0)?.id).toBe('g1')
@@ -270,13 +309,12 @@ describe('RETRY_GAP', () => {
     expect(s).toMatchObject({ status: 'playing', gapIndex: 0, attempts: 0, results: [] })
   })
 
-  it('ignores a correct or unknown gap and unsuitable statuses', () => {
-    const correct = run([...toFirstGap, voice('correct', 'leche'), { type: 'CONTINUE' }])
-    expect(run([{ type: 'RETRY_GAP', gapId: 'g1' }], correct)).toBe(correct)
+  it('ignores an unknown gap and unsuitable statuses', () => {
     expect(run([{ type: 'RETRY_GAP', gapId: 'nope' }], passedBoth)).toBe(passedBoth)
     const listening = run([...toFirstGap, { type: 'START_LISTENING' }])
     expect(run([{ type: 'RETRY_GAP', gapId: 'g1' }], listening)).toBe(listening)
   })
+
 })
 
 describe('restoreState', () => {

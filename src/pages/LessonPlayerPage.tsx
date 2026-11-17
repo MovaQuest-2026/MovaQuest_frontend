@@ -226,7 +226,7 @@ export function LessonPlayerPage() {
     videoRef.current?.seek(Math.max(0, gap.pauseAt - CONTEXT_LEAD_SEC))
   }
 
-  // Кружечок пройденої паузи: відповісти ще раз (червоний/жовтий) або лише послухати слово (зелений).
+  // Повтор слова: заново для червоної/жовтої паузи, для практики для зеленої (її результат лишається).
   const retryGap = (gapId: string) => {
     const s = usePlayerStore.getState()
     const target = s.lesson?.gaps.find((g) => g.id === gapId)
@@ -234,12 +234,6 @@ export function LessonPlayerPage() {
     dispatch({ type: 'RETRY_GAP', gapId })
     setUserPaused(false)
     videoRef.current?.seek(Math.max(0, target.pauseAt - CONTEXT_LEAD_SEC))
-  }
-  const listenGap = (gapId: string) => {
-    const target = usePlayerStore.getState().lesson?.gaps.find((g) => g.id === gapId)
-    if (!target) return
-    setUserPaused(false)
-    seek(Math.max(0, target.pauseAt - CONTEXT_LEAD_SEC))
   }
 
   // Дотик по відео: ліва третина — назад на 5 с, права — вперед на 5 с, середина — пауза.
@@ -385,7 +379,6 @@ export function LessonPlayerPage() {
             canChangeSpeed={supportsPlaybackRate(lesson.video)}
             canReview={started && (playing || machine.status === 'awaitingAnswer')}
             onRetryGap={retryGap}
-            onListenGap={listenGap}
           />
           {muted && (
             <button type="button" className="player__unmute" onClick={() => setMuted(false)}>
