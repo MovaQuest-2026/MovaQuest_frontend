@@ -1,0 +1,298 @@
+{
+  "id": "food-quiz",
+  "title": {
+    "es": "La comida en español",
+    "en": "Food in Spanish",
+    "uk": "Їжа іспанською"
+  },
+  "description": {
+    "es": "Carne, fruta, verduras y más. Elige la opción correcta y dila en voz alta.",
+    "en": "Meat, fruit, vegetables and more. Pick the right option and say it out loud.",
+    "uk": "М'ясо, фрукти, овочі та інше. Оберіть правильний варіант і скажіть його вголос."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 75,
+  "cover": "/clips/food-quiz/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/food-quiz/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.85,
+      "end": 5.0,
+      "es": "Meat. ¿Qué es en español?",
+      "tr": {
+        "en": "Meat. What is it in Spanish?",
+        "uk": "Meat (м'ясо). Як це іспанською?"
+      }
+    },
+    {
+      "start": 5.95,
+      "end": 7.5,
+      "es": "Carne.",
+      "tr": {
+        "en": "Meat.",
+        "uk": "М'ясо."
+      }
+    },
+    {
+      "start": 10.15,
+      "end": 14.25,
+      "es": "Rice. ¿Qué es en español?",
+      "tr": {
+        "en": "Rice. What is it in Spanish?",
+        "uk": "Rice (рис). Як це іспанською?"
+      }
+    },
+    {
+      "start": 15.2,
+      "end": 16.75,
+      "es": "Arroz.",
+      "tr": {
+        "en": "Rice.",
+        "uk": "Рис."
+      }
+    },
+    {
+      "start": 19.25,
+      "end": 23.3,
+      "es": "Pasta. ¿Qué es en español?",
+      "tr": {
+        "en": "Pasta. What is it in Spanish?",
+        "uk": "Pasta (паста). Як це іспанською?"
+      }
+    },
+    {
+      "start": 24.25,
+      "end": 25.8,
+      "es": "Pasta.",
+      "tr": {
+        "en": "Pasta.",
+        "uk": "Паста."
+      }
+    },
+    {
+      "start": 27.99,
+      "end": 31.95,
+      "es": "Fruit. ¿Qué es en español?",
+      "tr": {
+        "en": "Fruit. What is it in Spanish?",
+        "uk": "Fruit (фрукти). Як це іспанською?"
+      }
+    },
+    {
+      "start": 32.9,
+      "end": 34.45,
+      "es": "Fruta.",
+      "tr": {
+        "en": "Fruit.",
+        "uk": "Фрукти."
+      }
+    },
+    {
+      "start": 36.34,
+      "end": 40.6,
+      "es": "Vegetables. ¿Qué es en español?",
+      "tr": {
+        "en": "Vegetables. What is it in Spanish?",
+        "uk": "Vegetables (овочі). Як це іспанською?"
+      }
+    },
+    {
+      "start": 41.55,
+      "end": 43.1,
+      "es": "Verduras.",
+      "tr": {
+        "en": "Vegetables.",
+        "uk": "Овочі."
+      }
+    },
+    {
+      "start": 44.99,
+      "end": 49.15,
+      "es": "Apple. ¿Qué es en español?",
+      "tr": {
+        "en": "Apple. What is it in Spanish?",
+        "uk": "Apple (яблуко). Як це іспанською?"
+      }
+    },
+    {
+      "start": 50.1,
+      "end": 51.65,
+      "es": "Manzana.",
+      "tr": {
+        "en": "Apple.",
+        "uk": "Яблуко."
+      }
+    },
+    {
+      "start": 53.65,
+      "end": 57.6,
+      "es": "Orange. ¿Qué es en español?",
+      "tr": {
+        "en": "Orange. What is it in Spanish?",
+        "uk": "Orange (апельсин). Як це іспанською?"
+      }
+    },
+    {
+      "start": 58.55,
+      "end": 60.1,
+      "es": "Naranja.",
+      "tr": {
+        "en": "Orange.",
+        "uk": "Апельсин."
+      }
+    },
+    {
+      "start": 62.35,
+      "end": 66.25,
+      "es": "Banana. ¿Qué es en español?",
+      "tr": {
+        "en": "Banana. What is it in Spanish?",
+        "uk": "Banana (банан). Як це іспанською?"
+      }
+    },
+    {
+      "start": 67.2,
+      "end": 68.75,
+      "es": "Plátano.",
+      "tr": {
+        "en": "Banana.",
+        "uk": "Банан."
+      }
+    },
+    {
+      "start": 70.75,
+      "end": 74.5,
+      "es": "Strawberry. ¿Qué es en español?",
+      "tr": {
+        "en": "Strawberry. What is it in Spanish?",
+        "uk": "Strawberry (полуниця). Як це іспанською?"
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "carne",
+      "kind": "answer",
+      "pauseAt": 5.7,
+      "context": "¿Carne, queso o pan?",
+      "answer": "carne",
+      "translation": {
+        "en": "meat",
+        "uk": "м'ясо"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "arroz",
+      "kind": "answer",
+      "pauseAt": 14.95,
+      "context": "¿Pasta, arroz o carne?",
+      "answer": "arroz",
+      "translation": {
+        "en": "rice",
+        "uk": "рис"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "pasta",
+      "kind": "answer",
+      "pauseAt": 24.0,
+      "context": "¿Arroz, pasta o pollo?",
+      "answer": "pasta",
+      "translation": {
+        "en": "pasta",
+        "uk": "паста"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "fruta",
+      "kind": "answer",
+      "pauseAt": 32.65,
+      "context": "¿Verdura, fruta o carne?",
+      "answer": "fruta",
+      "accept": [
+        "frutas"
+      ],
+      "translation": {
+        "en": "fruit",
+        "uk": "фрукти"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "verduras",
+      "kind": "answer",
+      "pauseAt": 41.3,
+      "context": "¿Verduras, frutas o pescado?",
+      "answer": "verduras",
+      "accept": [
+        "verdura"
+      ],
+      "translation": {
+        "en": "vegetables",
+        "uk": "овочі"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "manzana",
+      "kind": "answer",
+      "pauseAt": 49.85,
+      "context": "¿Manzana, naranja o uva?",
+      "answer": "manzana",
+      "translation": {
+        "en": "apple",
+        "uk": "яблуко"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "naranja",
+      "kind": "answer",
+      "pauseAt": 58.3,
+      "context": "¿Plátano, naranja o melón?",
+      "answer": "naranja",
+      "translation": {
+        "en": "orange",
+        "uk": "апельсин"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "plátano",
+      "kind": "answer",
+      "pauseAt": 66.95,
+      "context": "¿Uva, plátano o fresa?",
+      "answer": "plátano",
+      "accept": [
+        "banana"
+      ],
+      "translation": {
+        "en": "banana",
+        "uk": "банан"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "fresa",
+      "kind": "answer",
+      "pauseAt": 74.75,
+      "context": "¿Cereza, fresa o melocotón?",
+      "answer": "fresa",
+      "accept": [
+        "frutilla"
+      ],
+      "translation": {
+        "en": "strawberry",
+        "uk": "полуниця"
+      },
+      "maxAttempts": 2
+    }
+  ]
+}

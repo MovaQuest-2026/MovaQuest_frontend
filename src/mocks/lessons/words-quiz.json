@@ -1,0 +1,429 @@
+{
+  "id": "words-quiz",
+  "title": {
+    "es": "Quiz: personas y emociones",
+    "en": "Quiz: people and feelings",
+    "uk": "Вікторина: люди й почуття"
+  },
+  "description": {
+    "es": "Doce palabras básicas. Dila en español antes de que aparezca en la lista.",
+    "en": "Twelve basic words. Say each one in Spanish before it shows up on the list.",
+    "uk": "Дванадцять базових слів. Скажіть кожне іспанською, поки воно не з'явилося в списку."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 35,
+  "cover": "/clips/words-quiz/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/words-quiz/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.2,
+      "end": 1.65,
+      "es": "¿Cómo se dice «boy»?",
+      "tr": {
+        "en": "How do you say “boy”?",
+        "uk": "Як іспанською «хлопець»?"
+      }
+    },
+    {
+      "start": 2.35,
+      "end": 3.15,
+      "es": "Chico.",
+      "tr": {
+        "en": "Boy.",
+        "uk": "Хлопець."
+      }
+    },
+    {
+      "start": 3.15,
+      "end": 3.9,
+      "es": "¿Cómo se dice «girl»?",
+      "tr": {
+        "en": "How do you say “girl”?",
+        "uk": "Як іспанською «дівчина»?"
+      }
+    },
+    {
+      "start": 4.6,
+      "end": 5.4,
+      "es": "Chica.",
+      "tr": {
+        "en": "Girl.",
+        "uk": "Дівчина."
+      }
+    },
+    {
+      "start": 5.5,
+      "end": 6.3,
+      "es": "¿Cómo se dice «man»?",
+      "tr": {
+        "en": "How do you say “man”?",
+        "uk": "Як іспанською «чоловік»?"
+      }
+    },
+    {
+      "start": 7.0,
+      "end": 7.8,
+      "es": "Hombre.",
+      "tr": {
+        "en": "Man.",
+        "uk": "Чоловік."
+      }
+    },
+    {
+      "start": 7.81,
+      "end": 10.35,
+      "es": "Dale a like si acertaste las tres primeras palabras.",
+      "tr": {
+        "en": "Like this video if you got the first three words right.",
+        "uk": "Поставте лайк, якщо вгадали перші три слова."
+      }
+    },
+    {
+      "start": 10.37,
+      "end": 11.1,
+      "es": "¿Cómo se dice «woman»?",
+      "tr": {
+        "en": "How do you say “woman”?",
+        "uk": "Як іспанською «жінка»?"
+      }
+    },
+    {
+      "start": 11.8,
+      "end": 12.6,
+      "es": "Mujer.",
+      "tr": {
+        "en": "Woman.",
+        "uk": "Жінка."
+      }
+    },
+    {
+      "start": 12.85,
+      "end": 13.7,
+      "es": "¿Cómo se dice «friend»?",
+      "tr": {
+        "en": "How do you say “friend”?",
+        "uk": "Як іспанською «друг»?"
+      }
+    },
+    {
+      "start": 14.4,
+      "end": 15.2,
+      "es": "Amigo.",
+      "tr": {
+        "en": "Friend.",
+        "uk": "Друг."
+      }
+    },
+    {
+      "start": 15.42,
+      "end": 16.35,
+      "es": "¿Cómo se dice «family»?",
+      "tr": {
+        "en": "How do you say “family”?",
+        "uk": "Як іспанською «сім'я»?"
+      }
+    },
+    {
+      "start": 17.05,
+      "end": 17.85,
+      "es": "Familia.",
+      "tr": {
+        "en": "Family.",
+        "uk": "Сім'я."
+      }
+    },
+    {
+      "start": 17.85,
+      "end": 18.75,
+      "es": "¿Cómo se dice «day»?",
+      "tr": {
+        "en": "How do you say “day”?",
+        "uk": "Як іспанською «день»?"
+      }
+    },
+    {
+      "start": 19.45,
+      "end": 20.25,
+      "es": "Día.",
+      "tr": {
+        "en": "Day.",
+        "uk": "День."
+      }
+    },
+    {
+      "start": 20.25,
+      "end": 20.95,
+      "es": "¿Cómo se dice «night»?",
+      "tr": {
+        "en": "How do you say “night”?",
+        "uk": "Як іспанською «ніч»?"
+      }
+    },
+    {
+      "start": 21.65,
+      "end": 22.45,
+      "es": "Noche.",
+      "tr": {
+        "en": "Night.",
+        "uk": "Ніч."
+      }
+    },
+    {
+      "start": 22.59,
+      "end": 23.4,
+      "es": "¿Cómo se dice «happy»?",
+      "tr": {
+        "en": "How do you say “happy”?",
+        "uk": "Як іспанською «щасливий»?"
+      }
+    },
+    {
+      "start": 24.1,
+      "end": 24.9,
+      "es": "Feliz.",
+      "tr": {
+        "en": "Happy.",
+        "uk": "Щасливий."
+      }
+    },
+    {
+      "start": 25.09,
+      "end": 25.95,
+      "es": "¿Cómo se dice «sad»?",
+      "tr": {
+        "en": "How do you say “sad”?",
+        "uk": "Як іспанською «сумний»?"
+      }
+    },
+    {
+      "start": 26.65,
+      "end": 27.45,
+      "es": "Triste.",
+      "tr": {
+        "en": "Sad.",
+        "uk": "Сумний."
+      }
+    },
+    {
+      "start": 27.45,
+      "end": 28.35,
+      "es": "¿Cómo se dice «welcome»?",
+      "tr": {
+        "en": "How do you say “welcome”?",
+        "uk": "Як іспанською «ласкаво просимо»?"
+      }
+    },
+    {
+      "start": 29.05,
+      "end": 29.85,
+      "es": "Bienvenido.",
+      "tr": {
+        "en": "Welcome.",
+        "uk": "Ласкаво просимо."
+      }
+    },
+    {
+      "start": 30.26,
+      "end": 31.7,
+      "es": "Escribe tu resultado en los comentarios.",
+      "tr": {
+        "en": "Tell me your score in the comments.",
+        "uk": "Напишіть свій результат у коментарях."
+      }
+    },
+    {
+      "start": 31.78,
+      "end": 32.7,
+      "es": "¿Cómo se dice «neighborhood»?",
+      "tr": {
+        "en": "How do you say “neighborhood”?",
+        "uk": "Як іспанською «район»?"
+      }
+    },
+    {
+      "start": 33.4,
+      "end": 34.2,
+      "es": "Barrio.",
+      "tr": {
+        "en": "Neighborhood.",
+        "uk": "Район."
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "chico",
+      "kind": "answer",
+      "pauseAt": 2.35,
+      "context": "",
+      "answer": "chico",
+      "translation": {
+        "en": "boy",
+        "uk": "хлопець"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "chica",
+      "kind": "answer",
+      "pauseAt": 4.6,
+      "context": "",
+      "answer": "chica",
+      "translation": {
+        "en": "girl",
+        "uk": "дівчина"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "hombre",
+      "kind": "answer",
+      "pauseAt": 7.0,
+      "context": "",
+      "answer": "hombre",
+      "translation": {
+        "en": "man",
+        "uk": "чоловік"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "mujer",
+      "kind": "answer",
+      "pauseAt": 11.8,
+      "context": "",
+      "answer": "mujer",
+      "translation": {
+        "en": "woman",
+        "uk": "жінка"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "amigo",
+      "kind": "answer",
+      "pauseAt": 14.4,
+      "context": "",
+      "answer": "amigo",
+      "accept": [
+        "amiga"
+      ],
+      "translation": {
+        "en": "friend",
+        "uk": "друг"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "familia",
+      "kind": "answer",
+      "pauseAt": 17.05,
+      "context": "",
+      "answer": "familia",
+      "translation": {
+        "en": "family",
+        "uk": "сім'я"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "día",
+      "kind": "answer",
+      "pauseAt": 19.45,
+      "context": "",
+      "answer": "día",
+      "translation": {
+        "en": "day",
+        "uk": "день"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "noche",
+      "kind": "answer",
+      "pauseAt": 21.65,
+      "context": "",
+      "answer": "noche",
+      "translation": {
+        "en": "night",
+        "uk": "ніч"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "feliz",
+      "kind": "answer",
+      "pauseAt": 24.1,
+      "context": "",
+      "answer": "feliz",
+      "accept": [
+        "contenta",
+        "contento"
+      ],
+      "translation": {
+        "en": "happy",
+        "uk": "щасливий"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "triste",
+      "kind": "answer",
+      "pauseAt": 26.65,
+      "context": "",
+      "answer": "triste",
+      "translation": {
+        "en": "sad",
+        "uk": "сумний"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "bienvenido",
+      "kind": "answer",
+      "pauseAt": 29.05,
+      "context": "",
+      "answer": "bienvenido",
+      "accept": [
+        "bienvenida",
+        "bienvenidos"
+      ],
+      "translation": {
+        "en": "welcome",
+        "uk": "ласкаво просимо"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "barrio",
+      "kind": "answer",
+      "pauseAt": 33.4,
+      "context": "",
+      "answer": "barrio",
+      "accept": [
+        "vecindario"
+      ],
+      "translation": {
+        "en": "neighborhood",
+        "uk": "район"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    }
+  ]
+}

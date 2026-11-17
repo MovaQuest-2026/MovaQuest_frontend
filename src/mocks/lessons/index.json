@@ -1,5 +1,85 @@
 [
   {
+    "id": "breaking-bad",
+    "title": {
+      "es": "Español con Breaking Bad",
+      "en": "Spanish with Breaking Bad",
+      "uk": "Іспанська з «Пуститися берега»"
+    },
+    "description": {
+      "es": "Palabras básicas en escenas de la serie. Cuando una palabra se repite, dila tú primero.",
+      "en": "Basic words from scenes of the show. When a word comes back, say it first.",
+      "uk": "Базові слова зі сцен серіалу. Коли слово звучить удруге, скажіть його першими."
+    },
+    "level": "A1",
+    "durationSec": 58,
+    "cover": "/clips/breaking-bad/cover.jpg"
+  },
+  {
+    "id": "food-quiz",
+    "title": {
+      "es": "La comida en español",
+      "en": "Food in Spanish",
+      "uk": "Їжа іспанською"
+    },
+    "description": {
+      "es": "Carne, fruta, verduras y más. Elige la opción correcta y dila en voz alta.",
+      "en": "Meat, fruit, vegetables and more. Pick the right option and say it out loud.",
+      "uk": "М'ясо, фрукти, овочі та інше. Оберіть правильний варіант і скажіть його вголос."
+    },
+    "level": "A1",
+    "durationSec": 75,
+    "cover": "/clips/food-quiz/cover.jpg"
+  },
+  {
+    "id": "picture-words",
+    "title": {
+      "es": "¿Qué es esto?",
+      "en": "What is this?",
+      "uk": "Що це?"
+    },
+    "description": {
+      "es": "Mira la imagen y di la palabra antes de que aparezca.",
+      "en": "Look at the picture and say the word before it appears.",
+      "uk": "Подивіться на картинку й скажіть слово, поки воно не з'явилося."
+    },
+    "level": "A1",
+    "durationSec": 37,
+    "cover": "/clips/picture-words/cover.jpg"
+  },
+  {
+    "id": "words-quiz",
+    "title": {
+      "es": "Quiz: personas y emociones",
+      "en": "Quiz: people and feelings",
+      "uk": "Вікторина: люди й почуття"
+    },
+    "description": {
+      "es": "Doce palabras básicas. Dila en español antes de que aparezca en la lista.",
+      "en": "Twelve basic words. Say each one in Spanish before it shows up on the list.",
+      "uk": "Дванадцять базових слів. Скажіть кожне іспанською, поки воно не з'явилося в списку."
+    },
+    "level": "A1",
+    "durationSec": 35,
+    "cover": "/clips/words-quiz/cover.jpg"
+  },
+  {
+    "id": "haz-tu-tarea",
+    "title": {
+      "es": "Haz tu tarea",
+      "en": "Do your homework",
+      "uk": "Зроби домашнє завдання"
+    },
+    "description": {
+      "es": "Una frase útil en doce segundos. Dila en español antes que el muñeco.",
+      "en": "One handy phrase in twelve seconds. Say it in Spanish before the puppet does.",
+      "uk": "Одна корисна фраза за дванадцять секунд. Скажіть її іспанською раніше за ляльку."
+    },
+    "level": "A1",
+    "durationSec": 12,
+    "cover": "/clips/haz-tu-tarea/cover.jpg"
+  },
+  {
     "id": "cafe-madrid",
     "title": {
       "en": "Coffee in Madrid",

@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
 import { TabBar } from '../components/TabBar'
+import { ActionRail } from '../features/player/ActionRail'
+import { CommentsSheet } from '../features/player/CommentsSheet'
 import { GapPanel } from '../features/player/GapPanel'
 import { clampSeek, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
@@ -71,6 +73,12 @@ export function LessonPlayerPage() {
     }, FEED_TRANSITION_MS)
   }
   const gestures = useFeedGestures(goToNeighbour)
+  // Поки відкриті коментарі, відео стоїть (інакше пауза для відповіді сховається під шторкою).
+  // Прив'язано до уроку: після свайпу на інший урок шторка закрита.
+  const [commentsFor, setCommentsFor] = useState<string | null>(null)
+  const commentsOpen = commentsFor === lessonId
+  const closeComments = useCallback(() => setCommentsFor(null), [])
+  const [statsRevision, setStatsRevision] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -135,9 +143,11 @@ export function LessonPlayerPage() {
   const seek = (time: number) => {
     const s = usePlayerStore.getState()
     if (!s.lesson || !s.machine) return
-    if (s.machine.status === 'feedback') return
-    const target = clampSeek(s.lesson, s.machine, time, s.duration)
-    if (s.machine.status === 'awaitingAnswer' && target < s.currentTime - 0.1) dispatch({ type: 'REPLAY' })
+    // Під час запису й на екрані результату паузи перемотка вимкнена.
+    if (s.machine.status !== 'playing' && s.machine.status !== 'awaitingAnswer') return
+    const target = clampSeek(time, s.duration)
+    // Вперед за паузу: вона стає «перемотаною» (окремий колір кружечка), відео грає далі.
+    dispatch({ type: 'SEEK', time: target })
     videoRef.current?.seek(target)
   }
 
@@ -191,7 +201,7 @@ export function LessonPlayerPage() {
   const playing = machine.status === 'playing'
   const gap = currentGap(lesson, machine)
   const answering = isAnswering(machine) || machine.status === 'feedback'
-  const shouldPlay = started && playing && !userPaused
+  const shouldPlay = started && playing && !userPaused && !commentsOpen
   const showControls = started && (playing || machine.status === 'awaitingAnswer')
 
   return (
@@ -231,20 +241,30 @@ export function LessonPlayerPage() {
             </button>
           )}
           <DevSpeechPanel />
-          <button
-            type="button"
-            className="player__tap-area"
-            aria-label={userPaused ? t('player.play') : t('player.pause')}
-            disabled={!showControls}
-            onClick={onStageTap}
-          >
-            {playing && userPaused && <span className="player__paused-icon">▶</span>}
-            {flash && (
-              <span key={flash.id} className={`player__seek-flash player__seek-flash--${flash.side}`} aria-hidden="true">
-                {flash.side === 'back' ? `−${SEEK_STEP}` : `+${SEEK_STEP}`}
-              </span>
+          <div className="player__stage">
+            <button
+              type="button"
+              className="player__tap-area"
+              aria-label={userPaused ? t('player.play') : t('player.pause')}
+              disabled={!showControls}
+              onClick={onStageTap}
+            >
+              {playing && userPaused && <span className="player__paused-icon">▶</span>}
+              {flash && (
+                <span key={flash.id} className={`player__seek-flash player__seek-flash--${flash.side}`} aria-hidden="true">
+                  {flash.side === 'back' ? `−${SEEK_STEP}` : `+${SEEK_STEP}`}
+                </span>
+              )}
+            </button>
+            {/* Під час відповіді колонку ховаємо: увага на паузі. */}
+            {!answering && (
+              <ActionRail
+                lesson={lesson}
+                statsRevision={statsRevision}
+                onOpenComments={() => setCommentsFor(lessonId)}
+              />
             )}
-          </button>
+          </div>
 
           {load === 'clipError' && <p className="notice notice--error player__notice">{t('player.clipError')}</p>}
 
@@ -256,6 +276,10 @@ export function LessonPlayerPage() {
 
           {showControls && !answering && <PlayerControls lesson={lesson} onSeek={seek} />}
         </div>
+
+        {commentsOpen && (
+          <CommentsSheet lessonId={lesson.id} onClose={closeComments} onPosted={() => setStatsRevision((r) => r + 1)} />
+        )}
       </main>
       <TabBar />
     </>

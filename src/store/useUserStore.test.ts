@@ -19,8 +19,21 @@ describe('useUserStore', () => {
       level: 'B1',
       subtitleLangs: ['es'],
       theme: 'system',
+      likedLessons: [],
+      savedLessons: [],
     })
     expect(migrateUserState({ subtitleMode: 'off' }, 2)).toMatchObject({ subtitleLangs: [] })
+  })
+
+  it('toggles liked and saved lessons', () => {
+    useUserStore.setState({ likedLessons: [], savedLessons: [] })
+    const { toggleLiked, toggleSaved } = useUserStore.getState()
+    toggleLiked('a')
+    toggleSaved('a')
+    toggleSaved('b')
+    expect(useUserStore.getState()).toMatchObject({ likedLessons: ['a'], savedLessons: ['a', 'b'] })
+    toggleLiked('a')
+    expect(useUserStore.getState().likedLessons).toEqual([])
   })
 
   it('drops old progress when migrating from v1', () => {

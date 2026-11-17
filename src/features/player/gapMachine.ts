@@ -13,7 +13,8 @@ export type PlayerStatus =
   | 'ended'
 
 export type InputSource = 'voice' | 'text'
-export type GapResolution = 'correct' | 'revealed' | 'skipped'
+/** passed: користувач перемотав відео за паузу, не відповівши. */
+export type GapResolution = 'correct' | 'revealed' | 'skipped' | 'passed'
 
 export interface GapResult {
   gapId: string
@@ -41,6 +42,8 @@ export type MachineEvent =
   | { type: 'TIME_UPDATE'; time: number }
   | { type: 'CLIP_ENDED' }
   | { type: 'REPLAY' }
+  /** Перемотка (повзунок, ±5 с). Вперед за нерозв'язані паузи: вони стають passed. */
+  | { type: 'SEEK'; time: number }
   | { type: 'START_LISTENING' }
   | { type: 'STOP_LISTENING' }
   | { type: 'CANCEL_LISTENING' }
@@ -106,6 +109,38 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
       if (state.status !== 'playing' || !gap) return state
       return event.time >= gap.pauseAt - PAUSE_LEAD ? { ...state, status: 'awaitingAnswer' } : state
 
+    case 'SEEK': {
+      if (state.status !== 'playing' && state.status !== 'awaitingAnswer') return state
+      // Усі паузи, які лишаються позаду нової позиції, зараховуємо як перемотані.
+      let gapIndex = state.gapIndex
+      const passed: GapResult[] = []
+      while (lesson.gaps[gapIndex] && event.time >= lesson.gaps[gapIndex].pauseAt - PAUSE_LEAD) {
+        const current = gapIndex === state.gapIndex
+        passed.push({
+          gapId: lesson.gaps[gapIndex].id,
+          resolution: 'passed',
+          // Спроби й почуте на поточній паузі лишаються в підсумку.
+          attempts: current ? state.attempts : 0,
+          heard: current ? state.heard : [],
+        })
+        gapIndex++
+      }
+      if (passed.length > 0) {
+        return {
+          ...state,
+          status: 'playing',
+          gapIndex,
+          attempts: 0,
+          hintShown: false,
+          lastVerdict: null,
+          heard: [],
+          results: [...state.results, ...passed],
+        }
+      }
+      // Назад з паузи: контекст звучить знову, як «Ще раз».
+      return state.status === 'awaitingAnswer' ? { ...state, status: 'playing' } : state
+    }
+
     case 'REPLAY':
       // Перемотка назад на паузі: контекст звучить знову, спроби зберігаються.
       return state.status === 'awaitingAnswer' ? { ...state, status: 'playing' } : state
@@ -167,12 +202,9 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
   }
 }
 
-/**
- * Користувач може перемотувати назад, але не перескочити нерозв'язану паузу.
- */
-export function clampSeek(lesson: Lesson, state: MachineState, time: number, duration: number): number {
-  const gap = currentGap(lesson, state)
-  const max = gap ? gap.pauseAt - PAUSE_LEAD : duration
+/** Позиція перемотки в межах відео. Перемотувати можна будь-куди, див. подію SEEK. */
+export function clampSeek(time: number, duration: number): number {
+  const max = Number.isFinite(duration) && duration > 0 ? duration : time
   return Math.min(Math.max(0, time), max)
 }
 

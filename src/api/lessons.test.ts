@@ -3,10 +3,19 @@ import { normalize } from '../lib/matchAnswer'
 import { getLesson } from './getLesson'
 import { getLessons } from './getLessons'
 
-const PLAYABLE = ['cafe-madrid', 'metro-tips', 'hola-lucia']
+const PLAYABLE = [
+  'breaking-bad',
+  'food-quiz',
+  'picture-words',
+  'words-quiz',
+  'haz-tu-tarea',
+  'cafe-madrid',
+  'metro-tips',
+  'hola-lucia',
+]
 
 describe('lessons api', () => {
-  it('lists the catalog: three playable videos and one stub', async () => {
+  it('lists the catalog: playable videos and one stub', async () => {
     const list = await getLessons()
     expect(list.map((l) => l.id)).toEqual([...PLAYABLE, 'tiktok-street'])
     expect(list.filter((l) => l.comingSoon).map((l) => l.id)).toEqual(['tiktok-street'])

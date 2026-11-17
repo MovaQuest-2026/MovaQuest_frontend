@@ -40,6 +40,10 @@ interface UserState {
   playbackRate: PlaybackRate
   completedLessons: Record<string, CompletedLesson>
   activeLesson: ActiveLesson | null
+  /** Уподобані уроки (серце в стрічці). */
+  likedLessons: string[]
+  /** Збережені уроки (закладка в стрічці). */
+  savedLessons: string[]
 
   setInterfaceLanguage: (lang: Lang) => void
   setLevel: (level: Level) => void
@@ -52,6 +56,12 @@ interface UserState {
   recordLessonResult: (lessonId: string, outcome: Outcome, correct: number, total: number) => void
   resetProgress: () => void
   setActiveLesson: (active: ActiveLesson | null) => void
+  toggleLiked: (lessonId: string) => void
+  toggleSaved: (lessonId: string) => void
+}
+
+function toggleIn(list: string[], id: string): string[] {
+  return list.includes(id) ? list.filter((x) => x !== id) : [...list, id]
 }
 
 // crypto.randomUUID є лише в secure context, тож для http://192.168.x.x потрібен запасний шлях.
@@ -68,6 +78,7 @@ function createUserId(): string {
  * Міграція збереженого стану.
  * v2: уроки стали відео з паузами, старий прогрес (сцени й гілки) не переноситься.
  * v3: замість «субтитри так/ні» список мов субтитрів; додано тему.
+ * v4: лайки й збереження уроків.
  */
 export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
   let state = { ...(persisted as Record<string, unknown>) }
@@ -77,6 +88,7 @@ export function migrateUserState(persisted: unknown, version: number): Record<st
     const subtitleLangs: SubtitleLang[] = subtitleMode === 'off' ? [] : ['es']
     state = { ...rest, subtitleLangs, theme: 'system' }
   }
+  if (version < 4) state = { ...state, likedLessons: [], savedLessons: [] }
   return state
 }
 
@@ -94,6 +106,8 @@ export const useUserStore = create<UserState>()(
       playbackRate: 1,
       completedLessons: {},
       activeLesson: null,
+      likedLessons: [],
+      savedLessons: [],
 
       setInterfaceLanguage: (interfaceLanguage) => set({ interfaceLanguage }),
       setLevel: (level) => set({ level }),
@@ -117,10 +131,12 @@ export const useUserStore = create<UserState>()(
         })),
       resetProgress: () => set({ completedLessons: {}, activeLesson: null }),
       setActiveLesson: (activeLesson) => set({ activeLesson }),
+      toggleLiked: (lessonId) => set((s) => ({ likedLessons: toggleIn(s.likedLessons, lessonId) })),
+      toggleSaved: (lessonId) => set((s) => ({ savedLessons: toggleIn(s.savedLessons, lessonId) })),
     }),
     {
       name: 'movaquest-user-v1',
-      version: 3,
+      version: 4,
       migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
     },
   ),

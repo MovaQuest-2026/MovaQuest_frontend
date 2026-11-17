@@ -55,7 +55,7 @@ export function trackHintShown(lessonId: string, gapId: string) {
   capture('hint_shown', { lessonId, gapId })
 }
 
-export function trackGapResolved(lessonId: string, gapId: string, resolution: 'correct' | 'revealed' | 'skipped', attempts: number) {
+export function trackGapResolved(lessonId: string, gapId: string, resolution: 'correct' | 'revealed' | 'skipped' | 'passed', attempts: number) {
   capture('gap_resolved', { lessonId, gapId, resolution, attempts })
 }
 
@@ -65,4 +65,24 @@ export function trackMicDenied(lessonId: string, gapId: string) {
 
 export function trackLessonCompleted(lessonId: string, outcome: Outcome, correct: number, total: number) {
   capture('lesson_completed', { lessonId, outcome, correct, total })
+}
+
+export function trackLessonLiked(lessonId: string, liked: boolean) {
+  capture('lesson_liked', { lessonId, liked })
+}
+
+export function trackLessonSaved(lessonId: string, saved: boolean) {
+  capture('lesson_saved', { lessonId, saved })
+}
+
+export function trackCommentsOpened(lessonId: string) {
+  capture('comments_opened', { lessonId })
+}
+
+export function trackCommentPosted(lessonId: string) {
+  capture('comment_posted', { lessonId })
+}
+
+export function trackLessonShared(lessonId: string, method: 'native' | 'copy') {
+  capture('lesson_shared', { lessonId, method })
 }

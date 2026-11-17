@@ -81,7 +81,8 @@
     "progress": "{{done}} de {{total}} pausas hechas",
     "gapKind": {
       "nextWord": "¿Cuál es la siguiente palabra?",
-      "answer": "Responde a la pregunta"
+      "answer": "Responde a la pregunta",
+      "repeat": "Repite la palabra"
     },
     "tryOf": "Intento {{current}} de {{total}}",
     "wrong": "Casi. Inténtalo otra vez.",
@@ -136,7 +137,8 @@
     "afterTries": "En el intento {{count}}",
     "resolution": {
       "revealed": "Mostrada",
-      "skipped": "Saltada"
+      "skipped": "Saltada",
+      "passed": "Pasada"
     },
     "youSaid": "Has dicho: {{heard}}"
   },
@@ -182,5 +184,26 @@
     "es": "Español",
     "en": "English",
     "uk": "Українська"
+  },
+  "social": {
+    "actions": "Acciones del vídeo",
+    "like": "Me gusta",
+    "comments": "Comentarios",
+    "commentsCount_one": "{{count}} comentario",
+    "commentsCount_many": "{{count}} comentarios",
+    "commentsCount_other": "{{count}} comentarios",
+    "save": "Guardar",
+    "saved": "Guardado en tu lista",
+    "unsaved": "Quitado de guardados",
+    "share": "Compartir",
+    "shareText": "Aprende español con este vídeo: {{title}}",
+    "linkCopied": "Enlace copiado",
+    "shareFailed": "No se pudo compartir. Inténtalo de nuevo.",
+    "addComment": "Añade un comentario…",
+    "send": "Enviar",
+    "you": "Tú",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero!",
+    "commentsError": "No se pudieron cargar los comentarios.",
+    "savedBadge": "Guardado"
   }
 }

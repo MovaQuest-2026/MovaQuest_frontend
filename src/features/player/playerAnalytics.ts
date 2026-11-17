@@ -20,10 +20,8 @@ export function trackTransition(lesson: Lesson, prev: MachineState, next: Machin
 
   if (gap && next.hintShown && !prev.hintShown) trackHintShown(lesson.id, gap.id)
 
-  if (next.results.length > prev.results.length) {
-    const r = next.results[next.results.length - 1]
-    trackGapResolved(lesson.id, r.gapId, r.resolution, r.attempts)
-  }
+  // Перемотка може розв'язати кілька пауз за раз.
+  for (const r of next.results.slice(prev.results.length)) trackGapResolved(lesson.id, r.gapId, r.resolution, r.attempts)
 
   if (next.status === 'ended' && prev.status !== 'ended' && next.outcome) {
     const correct = next.results.filter((r) => r.resolution === 'correct').length

@@ -81,7 +81,8 @@
     "progress": "{{done}} of {{total}} pauses done",
     "gapKind": {
       "nextWord": "What's the next word?",
-      "answer": "Answer the question"
+      "answer": "Answer the question",
+      "repeat": "Say the word again"
     },
     "tryOf": "Try {{current}} of {{total}}",
     "wrong": "Not quite. Try again.",
@@ -136,7 +137,8 @@
     "afterTries": "On try {{count}}",
     "resolution": {
       "revealed": "Shown",
-      "skipped": "Skipped"
+      "skipped": "Skipped",
+      "passed": "Passed"
     },
     "youSaid": "You said: {{heard}}"
   },
@@ -182,5 +184,25 @@
     "es": "Español",
     "en": "English",
     "uk": "Українська"
+  },
+  "social": {
+    "actions": "Video actions",
+    "like": "Like",
+    "comments": "Comments",
+    "commentsCount_one": "{{count}} comment",
+    "commentsCount_other": "{{count}} comments",
+    "save": "Save",
+    "saved": "Saved to your list",
+    "unsaved": "Removed from saved",
+    "share": "Share",
+    "shareText": "Learn Spanish with this video: {{title}}",
+    "linkCopied": "Link copied",
+    "shareFailed": "Couldn't share. Try again.",
+    "addComment": "Add a comment…",
+    "send": "Send",
+    "you": "You",
+    "noComments": "No comments yet. Be the first!",
+    "commentsError": "Couldn't load comments.",
+    "savedBadge": "Saved"
   }
 }
