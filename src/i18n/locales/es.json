@@ -53,6 +53,13 @@
     "saveFailed": "No se pudieron guardar tus respuestas. Inténtalo de nuevo."
   },
   "lessons": {
+    "filter": {
+      "label": "Filtro",
+      "all": "Todos",
+      "saved": "Guardados"
+    },
+    "noSaved": "Aún no hay vídeos guardados. Toca el marcador de un vídeo para guardarlo.",
+    "savedSignIn": "Inicia sesión para guardar vídeos y verlos aquí.",
     "title": "Series",
     "subtitle": "Vídeos cortos en español. Cuando uno se pare, di la siguiente palabra o la respuesta.",
     "duration": "{{minutes}} min",
@@ -75,8 +82,8 @@
     "unmute": "Activar sonido",
     "play": "Reproducir",
     "pause": "Pausa",
-    "back5": "Retroceder 5 segundos",
-    "forward5": "Avanzar 5 segundos",
+    "prevWord": "Palabra anterior",
+    "nextWord": "Palabra siguiente",
     "speed": "Velocidad de reproducción",
     "subtitles": "Subtítulos",
     "progress": "{{done}} de {{total}} pausas hechas",
@@ -109,7 +116,12 @@
     "notFound": "No se ha encontrado el vídeo.",
     "seek": "Buscar",
     "clipError": "No se ha podido cargar este vídeo.",
-    "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta."
+    "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta.",
+    "voiceSignIn": "Las respuestas por voz requieren una cuenta. Inicia sesión desde tu perfil o escribe la respuesta.",
+    "reviewGap": {
+      "retryButton": "Intentar esta palabra otra vez",
+      "listenButton": "Repetir esta palabra"
+    }
   },
   "result": {
     "title": "Resultado de la lección",
@@ -205,7 +217,12 @@
     "you": "Tú",
     "noComments": "Aún no hay comentarios. ¡Sé el primero!",
     "commentsError": "No se pudieron cargar los comentarios.",
-    "savedBadge": "Guardado"
+    "savedBadge": "Guardado",
+    "actionFailed": "No se ha podido guardar. Inténtalo otra vez.",
+    "loadMore": "Mostrar más",
+    "deleteComment": "Eliminar",
+    "commentSignIn": "Inicia sesión para comentar.",
+    "commentSendError": "No se ha podido enviar. Inténtalo otra vez."
   },
   "auth": {
     "modeLabel": "Inicia sesión o crea una cuenta",

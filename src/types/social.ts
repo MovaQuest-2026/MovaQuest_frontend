@@ -15,3 +15,15 @@ export interface LessonComment {
   /** Коментар поточного користувача. */
   own?: boolean
 }
+
+/** Сторінка коментарів: нові першими, `nextCursor` для наступної сторінки (null: це кінець). */
+export interface CommentsPage {
+  items: LessonComment[]
+  nextCursor: string | null
+}
+
+/** Лайки й збереження поточного користувача (`lessonId` уроків). */
+export interface MyReactions {
+  liked: string[]
+  saved: string[]
+}

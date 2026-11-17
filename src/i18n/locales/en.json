@@ -53,6 +53,13 @@
     "saveFailed": "Couldn't save your answers. Try again."
   },
   "lessons": {
+    "filter": {
+      "label": "Filter",
+      "all": "All",
+      "saved": "Saved"
+    },
+    "noSaved": "No saved videos yet. Tap the bookmark on a video to save it.",
+    "savedSignIn": "Sign in to save videos and find them here.",
     "title": "Series",
     "subtitle": "Short Spanish videos. When one pauses, say the next word or the answer.",
     "duration": "{{minutes}} min",
@@ -75,8 +82,8 @@
     "unmute": "Turn on sound",
     "play": "Play",
     "pause": "Pause",
-    "back5": "Back 5 seconds",
-    "forward5": "Forward 5 seconds",
+    "prevWord": "Previous word",
+    "nextWord": "Next word",
     "speed": "Playback speed",
     "subtitles": "Subtitles",
     "progress": "{{done}} of {{total}} pauses done",
@@ -109,7 +116,12 @@
     "notFound": "Video not found.",
     "seek": "Seek",
     "clipError": "This video couldn't be loaded.",
-    "micError": "Couldn't record. Try again or type the answer."
+    "micError": "Couldn't record. Try again or type the answer.",
+    "voiceSignIn": "Voice answers need an account. Sign in from your profile, or type the answer.",
+    "reviewGap": {
+      "retryButton": "Try this word again",
+      "listenButton": "Repeat this word"
+    }
   },
   "result": {
     "title": "Lesson result",
@@ -204,7 +216,12 @@
     "you": "You",
     "noComments": "No comments yet. Be the first!",
     "commentsError": "Couldn't load comments.",
-    "savedBadge": "Saved"
+    "savedBadge": "Saved",
+    "actionFailed": "Couldn't save that. Try again.",
+    "loadMore": "Show more",
+    "deleteComment": "Delete",
+    "commentSignIn": "Sign in to leave a comment.",
+    "commentSendError": "Couldn't send. Try again."
   },
   "auth": {
     "modeLabel": "Sign in or create an account",

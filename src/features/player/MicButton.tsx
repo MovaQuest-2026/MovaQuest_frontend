@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { trackMicDenied } from '../../api/analytics'
-import { evaluateAnswer } from '../../api/evaluateAnswer'
+import { evaluateAnswer, SpeechError } from '../../api/evaluateAnswer'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { useUserStore } from '../../store/useUserStore'
 import { useSpeechCapture } from '../speech/useSpeechCapture'
@@ -14,10 +14,12 @@ interface MicButtonProps {
   gapId: string
   disabled?: boolean
   onDenied?: () => void
+  /** Гостю голос недоступний (потрібна сесія): панель переходить на ввід текстом. */
+  onSignInRequired?: () => void
 }
 
 // Дотик починає запис, повторний дотик або 1.5 с тиші зупиняє.
-export function MicButton({ lessonId, gapId, disabled, onDenied }: MicButtonProps) {
+export function MicButton({ lessonId, gapId, disabled, onDenied, onSignInRequired }: MicButtonProps) {
   const { t } = useTranslation()
   const capture = useSpeechCapture()
   const [evaluating, setEvaluating] = useState(false)
@@ -69,7 +71,8 @@ export function MicButton({ lessonId, gapId, disabled, onDenied }: MicButtonProp
     try {
       const result = await evaluateAnswer(lessonId, gapId, blob)
       dispatch({ type: 'RESULT', verdict: result.verdict, heard: result.transcript, source: 'voice' })
-    } catch {
+    } catch (err) {
+      if (err instanceof SpeechError && err.code === 'signInRequired') onSignInRequired?.()
       setFailed(true)
       dispatch({ type: 'CANCEL_LISTENING' })
     } finally {

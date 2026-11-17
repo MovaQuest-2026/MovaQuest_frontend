@@ -14,12 +14,14 @@ interface GapPanelProps {
   gap: Gap
   machine: MachineState
   onReplay: () => void
+  /** Відповісти на цю паузу ще раз (після показаної або пропущеної відповіді). */
+  onRetry: () => void
 }
 
 /** Після правильної відповіді відео продовжується саме. */
 const AUTO_CONTINUE_MS = 1400
 
-export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
+export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanelProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
   const dispatch = usePlayerStore((s) => s.dispatch)
@@ -29,6 +31,8 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
     return permission === 'denied' || permission === 'unsupported'
   })
   const [micDenied, setMicDenied] = useState(false)
+  // Якщо бекенд знову вимагатиме сесію для розпізнавання (401), пропонуємо увійти або писати текстом.
+  const [signInNeeded, setSignInNeeded] = useState(false)
   const [text, setText] = useState('')
 
   const busy = machine.status === 'listening' || machine.status === 'evaluating'
@@ -61,6 +65,11 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
         <button type="button" className="btn btn--primary btn--block" onClick={() => dispatch({ type: 'CONTINUE' })}>
           ▶ {t('player.continue')}
         </button>
+        {!correct && (
+          <button type="button" className="btn btn--ghost btn--block" onClick={onRetry}>
+            ↺ {t('player.reviewGap.retryButton')}
+          </button>
+        )}
       </section>
     )
   }
@@ -98,7 +107,13 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
         </p>
       )}
 
-      {!showTyping && <MicButton lessonId={lessonId} gapId={gap.id} onDenied={() => setMicDenied(true)} />}
+      {!showTyping && <MicButton lessonId={lessonId} gapId={gap.id} onDenied={() => setMicDenied(true)} onSignInRequired={() => setSignInNeeded(true)} />}
+
+      {signInNeeded && (
+        <p className="notice mic__notice" role="status">
+          {t('player.voiceSignIn')}
+        </p>
+      )}
 
       {showTyping && (
         <form className="gap-panel__form" onSubmit={submitText}>

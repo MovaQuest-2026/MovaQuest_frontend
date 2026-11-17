@@ -1700,3 +1700,102 @@ img {
   }
 }
 }
+
+@layer app {
+/* Кольори міток пауз на повзунку відповідають кружечкам зверху. */
+.scrubber__mark--correct {
+  background: var(--success);
+}
+
+.scrubber__mark--revealed,
+.scrubber__mark--skipped {
+  background: var(--warning);
+}
+
+.scrubber__mark--passed {
+  background: var(--danger);
+}
+
+/* Кнопка повтору слова для відрізка, у якому зараз відео (під кружечками). */
+.review-chip {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+}
+
+/* Кнопки «попереднє / наступне слово» біля повзунка. */
+.icon-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+/* Кнопка «Видалити» у власному коментарі. */
+.comment__delete {
+  /* Зона дотику ≥44px без зміни висоти рядка. */
+  padding: 14px 6px;
+  margin: -14px -6px;
+  position: relative;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Фільтр «Усі / Збережені» на сторінці серій. */
+.filter-chips {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-chips__chip {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.filter-chips__chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Гість у шторці коментарів: підказка й кнопка входу під списком, по центру. */
+.comments-sheet__signin {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 16px calc(12px + var(--safe-bottom));
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.comments-sheet__signin-text {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.comments-sheet__send--wide {
+  width: 100%;
+  min-height: var(--tap);
+  cursor: pointer;
+}
+}

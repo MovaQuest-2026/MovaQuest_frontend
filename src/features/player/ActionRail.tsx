@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { trackLessonLiked, trackLessonSaved, trackLessonShared } from '../../api/analytics'
-import { getLessonStats, recordShare, setLessonLiked, setLessonSaved } from '../../api/social'
+import { getLessonStats, peekLessonStats, recordShare, setLessonLiked, setLessonSaved } from '../../api/social'
 import { localize } from '../../i18n/localize'
 import { useUserStore } from '../../store/useUserStore'
 import type { Lesson } from '../../types/lesson'
@@ -56,16 +57,20 @@ interface ActionRailProps {
 export function ActionRail({ lesson, statsRevision, onOpenComments }: ActionRailProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
-  const liked = useUserStore((s) => s.likedLessons.includes(lesson.id))
-  const saved = useUserStore((s) => s.savedLessons.includes(lesson.id))
-  const [stats, setStats] = useState<LessonStats | null>(null)
+  const signedIn = useUserStore((s) => s.account !== null)
+  // Лайк і збереження є лише в акаунта: гість бачить порожні серце й закладку.
+  const liked = useUserStore((s) => s.account !== null && s.likedLessons.includes(lesson.id))
+  const saved = useUserStore((s) => s.account !== null && s.savedLessons.includes(lesson.id))
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const [stats, setStats] = useState<LessonStats | null>(() => peekLessonStats(lesson.id))
   const [toast, setToast] = useState<{ text: string; id: number } | null>(null)
   const toastTimer = useRef(0)
 
   const refreshStats = useCallback(() => {
     getLessonStats(lesson.id)
       .then(setStats)
-      .catch(() => setStats(null))
+      .catch(() => {})
   }, [lesson.id])
   useEffect(refreshStats, [refreshStats, statsRevision])
   useEffect(() => () => window.clearTimeout(toastTimer.current), [])
@@ -76,19 +81,45 @@ export function ActionRail({ lesson, statsRevision, onOpenComments }: ActionRail
     toastTimer.current = window.setTimeout(() => setToast(null), 2000)
   }
 
-  // Базові лічильники приходять без дій поточного користувача: свої додаємо тут.
+  // Лічильники з бекенду вже містять дії самого користувача.
   const base = stats ?? { likes: 0, comments: 0, saves: 0, shares: 0 }
-  const count = (n: number) => formatCount(n, lang)
+  // Поки лічильники не завантажені, показуємо прочерк, а не оманливий нуль.
+  const count = (n: number) => (stats ? formatCount(Math.max(0, n), lang) : '–')
+
+  // Лайк, збереження й коментар потребують акаунта: гостя відправляємо на вхід і повертаємо сюди.
+  const requireAccount = (): boolean => {
+    if (signedIn) return true
+    navigate('/auth', { state: { from: pathname } })
+    return false
+  }
+
+  // Оптимістично: серце й закладка змінюються одразу, для акаунта запит іде на бекенд; при помилці відкочуємо.
+  const react = (
+    kind: 'likes' | 'saves',
+    active: boolean,
+    toggle: () => void,
+    send: (lessonId: string, on: boolean) => Promise<void>,
+  ) => {
+    toggle()
+    setStats((st) => (st ? { ...st, [kind]: Math.max(0, st[kind] + (active ? -1 : 1)) } : st))
+    send(lesson.id, !active)
+      .then(refreshStats)
+      .catch(() => {
+        toggle()
+        refreshStats()
+        showToast(t('social.actionFailed'))
+      })
+  }
 
   const toggleLike = () => {
-    useUserStore.getState().toggleLiked(lesson.id)
-    void setLessonLiked(lesson.id, !liked)
+    if (!requireAccount()) return
+    react('likes', liked, () => useUserStore.getState().toggleLiked(lesson.id), setLessonLiked)
     trackLessonLiked(lesson.id, !liked)
   }
 
   const toggleSave = () => {
-    useUserStore.getState().toggleSaved(lesson.id)
-    void setLessonSaved(lesson.id, !saved)
+    if (!requireAccount()) return
+    react('saves', saved, () => useUserStore.getState().toggleSaved(lesson.id), setLessonSaved)
     trackLessonSaved(lesson.id, !saved)
     showToast(t(saved ? 'social.unsaved' : 'social.saved'))
   }
@@ -113,7 +144,7 @@ export function ActionRail({ lesson, statsRevision, onOpenComments }: ActionRail
       return
     }
     trackLessonShared(lesson.id, method)
-    await recordShare(lesson.id)
+    await recordShare(lesson.id, method)
     refreshStats()
   }
 
@@ -123,7 +154,7 @@ export function ActionRail({ lesson, statsRevision, onOpenComments }: ActionRail
         <RailButton
           icon="like"
           label={t('social.like')}
-          count={count(base.likes + (liked ? 1 : 0))}
+          count={count(base.likes)}
           active={liked}
           pressed={liked}
           onClick={toggleLike}
@@ -137,7 +168,7 @@ export function ActionRail({ lesson, statsRevision, onOpenComments }: ActionRail
         <RailButton
           icon="save"
           label={t('social.save')}
-          count={count(base.saves + (saved ? 1 : 0))}
+          count={count(base.saves)}
           active={saved}
           pressed={saved}
           onClick={toggleSave}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLessons } from '../api/getLessons'
 import { TabBar } from '../components/TabBar'
@@ -13,6 +13,10 @@ export function LessonsPage() {
   const { t } = useTranslation()
   const [load, setLoad] = useState<LoadState>({ status: 'loading' })
   const completed = useUserStore((s) => s.completedLessons)
+  const savedIds = useUserStore((s) => s.savedLessons)
+  const signedIn = useUserStore((s) => s.account !== null)
+  const { pathname } = useLocation()
+  const [filter, setFilter] = useState<'all' | 'saved'>('all')
 
   useEffect(() => {
     let cancelled = false
@@ -36,8 +40,33 @@ export function LessonsPage() {
         {load.status === 'error' && <p className="notice notice--error">{t('app.error')}</p>}
         {load.status === 'ready' && load.lessons.length === 0 && <p className="muted">{t('lessons.empty')}</p>}
         {load.status === 'ready' && load.lessons.length > 0 && (
+          <div className="filter-chips" role="group" aria-label={t('lessons.filter.label')}>
+            {(['all', 'saved'] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                className={`filter-chips__chip${filter === f ? ' is-active' : ''}`}
+                aria-pressed={filter === f}
+                onClick={() => setFilter(f)}
+              >
+                {t(`lessons.filter.${f}`)}
+              </button>
+            ))}
+          </div>
+        )}
+        {load.status === 'ready' && filter === 'saved' && visibleLessons(load.lessons, savedIds, signedIn).length === 0 && (
+          <div className="stack">
+            <p className="muted">{t(signedIn ? 'lessons.noSaved' : 'lessons.savedSignIn')}</p>
+            {!signedIn && (
+              <Link className="btn btn--primary" to="/auth" state={{ from: pathname }}>
+                {t('auth.signInCta')}
+              </Link>
+            )}
+          </div>
+        )}
+        {load.status === 'ready' && load.lessons.length > 0 && (
           <ul className="lesson-list">
-            {load.lessons.map((lesson) => (
+            {(filter === 'saved' ? visibleLessons(load.lessons, savedIds, signedIn) : load.lessons).map((lesson) => (
               <li key={lesson.id}>
                 <LessonCard lesson={lesson} result={completed[lesson.id]} />
               </li>
@@ -50,6 +79,11 @@ export function LessonsPage() {
   )
 }
 
+/** Збережені уроки (їх є лише в акаунта). */
+function visibleLessons(lessons: LessonSummary[], savedIds: string[], signedIn: boolean): LessonSummary[] {
+  return signedIn ? lessons.filter((l) => savedIds.includes(l.id)) : []
+}
+
 interface LessonCardProps {
   lesson: LessonSummary
   result?: CompletedLesson
@@ -58,7 +92,7 @@ interface LessonCardProps {
 function LessonCard({ lesson, result }: LessonCardProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
-  const saved = useUserStore((s) => s.savedLessons.includes(lesson.id))
+  const saved = useUserStore((s) => s.account !== null && s.savedLessons.includes(lesson.id))
   const [coverFailed, setCoverFailed] = useState(false)
 
   const body = (

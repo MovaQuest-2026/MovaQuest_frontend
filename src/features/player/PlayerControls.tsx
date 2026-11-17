@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { SUBTITLE_LANGS, useUserStore } from '../../store/useUserStore'
 import type { Lesson } from '../../types/lesson'
-import type { GapResult } from './gapMachine'
+import { gapAtTime, wordJumpTarget, type GapResult } from './gapMachine'
 
 interface PlayerTopBarProps {
   lesson: Lesson
@@ -11,14 +11,23 @@ interface PlayerTopBarProps {
   gapIndex: number
   /** Плеєр TikTok не вміє змінювати швидкість. */
   canChangeSpeed: boolean
+  /** Кнопка повтору слова показується, лише поки відео грає або стоїть на паузі для відповіді. */
+  canReview: boolean
+  /** Відповісти на паузу ще раз (червона або жовта пауза). */
+  onRetryGap: (gapId: string) => void
+  /** Ще раз послухати слово правильно пройденої паузи (зелена пауза). */
+  onListenGap: (gapId: string) => void
 }
 
-export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: PlayerTopBarProps) {
+export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canReview, onRetryGap, onListenGap }: PlayerTopBarProps) {
   const { t } = useTranslation()
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const playbackRate = useUserStore((s) => s.playbackRate)
   const { toggleSubtitleLang, setPlaybackRate } = useUserStore.getState()
   const [ccOpen, setCcOpen] = useState(false)
+  // Відрізок, у якому зараз відео: якщо цю паузу вже пройдено, зверху з'являється кнопка повтору слова.
+  const segmentGapId = usePlayerStore((s) => (s.lesson ? (gapAtTime(s.lesson, s.currentTime)?.id ?? null) : null))
+  const segmentResult = segmentGapId ? results.find((r) => r.gapId === segmentGapId) : undefined
 
   const ccState =
     subtitleLangs.length > 0 ? subtitleLangs.map((l) => t(`subtitleLangs.${l}`)).join(', ') : t('profile.subtitlesOff')
@@ -55,6 +64,16 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
         )}
       </div>
 
+      {canReview && segmentGapId && segmentResult && (
+        <button
+          type="button"
+          className="review-chip"
+          onClick={() => (segmentResult.resolution === 'correct' ? onListenGap(segmentGapId) : onRetryGap(segmentGapId))}
+        >
+          ↺ {segmentResult.resolution === 'correct' ? t('player.reviewGap.listenButton') : t('player.reviewGap.retryButton')}
+        </button>
+      )}
+
       {ccOpen && (
         <>
           <button
@@ -89,19 +108,30 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
 
 interface PlayerControlsProps {
   lesson: Lesson
+  results: GapResult[]
   onSeek: (time: number) => void
 }
 
-export function PlayerControls({ lesson, onSeek }: PlayerControlsProps) {
+export function PlayerControls({ lesson, results, onSeek }: PlayerControlsProps) {
   const { t } = useTranslation()
   const currentTime = usePlayerStore((s) => s.currentTime)
   const duration = usePlayerStore((s) => s.duration)
   const known = Number.isFinite(duration) && duration > 0
+  const prevTarget = wordJumpTarget(lesson, currentTime, 'prev')
+  const nextTarget = wordJumpTarget(lesson, currentTime, 'next')
 
   return (
     <div className="player-controls">
-      <button type="button" className="icon-btn icon-btn--text" aria-label={t('player.back5')} onClick={() => onSeek(currentTime - 5)}>
-        −5
+      <button
+        type="button"
+        className="icon-btn"
+        aria-label={t('player.prevWord')}
+        disabled={prevTarget === null}
+        onClick={() => prevTarget !== null && onSeek(prevTarget)}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+        </svg>
       </button>
       <div className="scrubber-wrap">
         <input
@@ -119,14 +149,22 @@ export function PlayerControls({ lesson, onSeek }: PlayerControlsProps) {
           lesson.gaps.map((g) => (
             <span
               key={g.id}
-              className="scrubber__mark"
+              className={`scrubber__mark scrubber__mark--${results.find((r) => r.gapId === g.id)?.resolution ?? 'pending'}`}
               style={{ left: `${(g.pauseAt / duration) * 100}%` }}
               aria-hidden="true"
             />
           ))}
       </div>
-      <button type="button" className="icon-btn icon-btn--text" aria-label={t('player.forward5')} onClick={() => onSeek(currentTime + 5)}>
-        +5
+      <button
+        type="button"
+        className="icon-btn"
+        aria-label={t('player.nextWord')}
+        disabled={nextTarget === null}
+        onClick={() => nextTarget !== null && onSeek(nextTarget)}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m6 18 8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+        </svg>
       </button>
     </div>
   )
