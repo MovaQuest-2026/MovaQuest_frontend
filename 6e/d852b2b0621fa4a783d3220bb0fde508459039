@@ -1,0 +1,30 @@
+.env.example
+  s_4ae98288f8b5bc::t_d8ef95d998bdc8 1,3-5,8-19
+CLAUDE.md
+  s_4ae98288f8b5bc::t_470fa9fe5cb266 27
+src/api/evaluateAnswer.ts
+  s_4ae98288f8b5bc::t_394f04cfe23fbf 27,41-42
+src/features/player/GapPanel.tsx
+  s_4ae98288f8b5bc::t_240cda3e542b37 3,31,34-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6ed852b2b0621fa4a783d3220bb0fde508459039",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4ae98288f8b5bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d0e6645-792f-49bb-96a9-61038c69f4ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
