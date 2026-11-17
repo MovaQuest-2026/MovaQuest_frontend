@@ -66,6 +66,9 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
   }
 
   const lastHeard = machine.heard[machine.heard.length - 1]
+  // repeat: слово вже прозвучало, тож підказка відкрита одразу.
+  const hintShown = machine.hintShown || gap.kind === 'repeat'
+  const promptTranslation = gap.kind === 'repeat' || gap.showTranslation ? translation : null
   const showTyping = typing || micDenied
 
   return (
@@ -80,8 +83,9 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
 
       <p className="gap-panel__context" lang="es">
         {gap.context}{' '}
-        <span className="gap-panel__blank">{machine.hintShown ? answerHint(gap.answer) : '_____'}</span>
+        <span className="gap-panel__blank">{hintShown ? answerHint(gap.answer) : '_____'}</span>
       </p>
+      {promptTranslation && <p className="gap-panel__prompt">{promptTranslation}</p>}
 
       {machine.lastVerdict === 'wrong' && (
         <p className="gap-panel__feedback gap-panel__feedback--wrong" role="status">
@@ -118,7 +122,7 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
       )}
 
       <div className="gap-panel__actions">
-        <button type="button" className="btn btn--ghost" disabled={busy || machine.hintShown} onClick={() => dispatch({ type: 'SHOW_HINT' })}>
+        <button type="button" className="btn btn--ghost" disabled={busy || hintShown} onClick={() => dispatch({ type: 'SHOW_HINT' })}>
           {t('player.hint')}
         </button>
         <button type="button" className="btn btn--ghost" disabled={busy} onClick={onReplay}>

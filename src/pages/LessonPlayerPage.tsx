@@ -143,9 +143,11 @@ export function LessonPlayerPage() {
   const seek = (time: number) => {
     const s = usePlayerStore.getState()
     if (!s.lesson || !s.machine) return
-    if (s.machine.status === 'feedback') return
-    const target = clampSeek(s.lesson, s.machine, time, s.duration)
-    if (s.machine.status === 'awaitingAnswer' && target < s.currentTime - 0.1) dispatch({ type: 'REPLAY' })
+    // Під час запису й на екрані результату паузи перемотка вимкнена.
+    if (s.machine.status !== 'playing' && s.machine.status !== 'awaitingAnswer') return
+    const target = clampSeek(time, s.duration)
+    // Вперед за паузу: вона стає «перемотаною» (окремий колір кружечка), відео грає далі.
+    dispatch({ type: 'SEEK', time: target })
     videoRef.current?.seek(target)
   }
 

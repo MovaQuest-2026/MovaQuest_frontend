@@ -81,7 +81,8 @@
     "progress": "Пройдено пауз: {{done}} з {{total}}",
     "gapKind": {
       "nextWord": "Яке слово далі?",
-      "answer": "Дайте відповідь"
+      "answer": "Дайте відповідь",
+      "repeat": "Повторіть слово"
     },
     "tryOf": "Спроба {{current}} з {{total}}",
     "wrong": "Не зовсім. Спробуйте ще.",
@@ -136,7 +137,8 @@
     "afterTries": "Зі спроби {{count}}",
     "resolution": {
       "revealed": "Показано",
-      "skipped": "Пропущено"
+      "skipped": "Пропущено",
+      "passed": "Перемотано"
     },
     "youSaid": "Ви сказали: {{heard}}"
   },

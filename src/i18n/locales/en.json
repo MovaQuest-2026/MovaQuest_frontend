@@ -81,7 +81,8 @@
     "progress": "{{done}} of {{total}} pauses done",
     "gapKind": {
       "nextWord": "What's the next word?",
-      "answer": "Answer the question"
+      "answer": "Answer the question",
+      "repeat": "Say the word again"
     },
     "tryOf": "Try {{current}} of {{total}}",
     "wrong": "Not quite. Try again.",
@@ -136,7 +137,8 @@
     "afterTries": "On try {{count}}",
     "resolution": {
       "revealed": "Shown",
-      "skipped": "Skipped"
+      "skipped": "Skipped",
+      "passed": "Passed"
     },
     "youSaid": "You said: {{heard}}"
   },

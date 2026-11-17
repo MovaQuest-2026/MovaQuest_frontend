@@ -813,6 +813,12 @@ img {
   line-height: 1.35;
 }
 
+.gap-panel__prompt {
+  margin-top: -4px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
 .gap-panel__blank {
   display: inline-block;
   padding: 0 6px;
@@ -918,6 +924,11 @@ img {
 .gap-dots__dot--revealed,
 .gap-dots__dot--skipped {
   background: var(--warning);
+}
+
+/* Перемотано без відповіді: пауза не виконана. */
+.gap-dots__dot--passed {
+  background: var(--danger);
 }
 
 .scrubber-wrap {

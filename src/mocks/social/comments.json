@@ -1,16 +1,158 @@
 {
   "cafe-madrid": [
-    { "id": "c1", "author": "marta.viaja", "text": "«Un café con leche» — lo dije antes que él 😄", "createdAt": "2026-11-12T09:14:00Z", "likes": 214 },
-    { "id": "c2", "author": "oleh_in_madrid", "text": "Finally I understand what the barista says every morning", "createdAt": "2026-11-13T18:02:00Z", "likes": 88 },
-    { "id": "c3", "author": "lena.es", "text": "¿Alguien más pidió «para llevar» y le dieron una taza? 😅", "createdAt": "2026-11-15T07:40:00Z", "likes": 41 }
+    {
+      "id": "c1",
+      "author": "marta.viaja",
+      "text": "«Un café con leche» — lo dije antes que él 😄",
+      "createdAt": "2026-11-12T09:14:00Z",
+      "likes": 214
+    },
+    {
+      "id": "c2",
+      "author": "oleh_in_madrid",
+      "text": "Finally I understand what the barista says every morning",
+      "createdAt": "2026-11-13T18:02:00Z",
+      "likes": 88
+    },
+    {
+      "id": "c3",
+      "author": "lena.es",
+      "text": "¿Alguien más pidió «para llevar» y le dieron una taza? 😅",
+      "createdAt": "2026-11-15T07:40:00Z",
+      "likes": 41
+    }
   ],
   "metro-tips": [
-    { "id": "m1", "author": "nacho_metro", "text": "La tarjeta transporte público es lo mejor, de verdad", "createdAt": "2026-11-10T11:20:00Z", "likes": 132 },
-    { "id": "m2", "author": "sofiia.travels", "text": "Saved this before my Erasmus 🙏", "createdAt": "2026-11-14T16:05:00Z", "likes": 57 },
-    { "id": "m3", "author": "pablo.mad", "text": "La línea 6 es circular, ¡ojo!", "createdAt": "2026-11-16T08:31:00Z", "likes": 23 }
+    {
+      "id": "m1",
+      "author": "nacho_metro",
+      "text": "La tarjeta transporte público es lo mejor, de verdad",
+      "createdAt": "2026-11-10T11:20:00Z",
+      "likes": 132
+    },
+    {
+      "id": "m2",
+      "author": "sofiia.travels",
+      "text": "Saved this before my Erasmus 🙏",
+      "createdAt": "2026-11-14T16:05:00Z",
+      "likes": 57
+    },
+    {
+      "id": "m3",
+      "author": "pablo.mad",
+      "text": "La línea 6 es circular, ¡ojo!",
+      "createdAt": "2026-11-16T08:31:00Z",
+      "likes": 23
+    }
   ],
   "hola-lucia": [
-    { "id": "h1", "author": "anna_k", "text": "¡Hola Lucía! Muy buen ritmo para empezar", "createdAt": "2026-11-11T19:45:00Z", "likes": 302 },
-    { "id": "h2", "author": "dmytro.learns", "text": "Got all the pauses on the first try 💪", "createdAt": "2026-11-15T21:10:00Z", "likes": 64 }
+    {
+      "id": "h1",
+      "author": "anna_k",
+      "text": "¡Hola Lucía! Muy buen ritmo para empezar",
+      "createdAt": "2026-11-11T19:45:00Z",
+      "likes": 302
+    },
+    {
+      "id": "h2",
+      "author": "dmytro.learns",
+      "text": "Got all the pauses on the first try 💪",
+      "createdAt": "2026-11-15T21:10:00Z",
+      "likes": 64
+    }
+  ],
+  "breaking-bad": [
+    {
+      "id": "b1",
+      "author": "heisenberg_fan",
+      "text": "«Abogado» ya no se me olvida 😂",
+      "createdAt": "2026-11-14T20:11:00Z",
+      "likes": 812
+    },
+    {
+      "id": "b2",
+      "author": "kate.learns",
+      "text": "Learning Spanish with Saul is the only way",
+      "createdAt": "2026-11-15T09:30:00Z",
+      "likes": 356
+    },
+    {
+      "id": "b3",
+      "author": "taras.k",
+      "text": "«Por favor» з інтонацією Волтера 🔥",
+      "createdAt": "2026-11-16T12:02:00Z",
+      "likes": 97
+    }
+  ],
+  "food-quiz": [
+    {
+      "id": "f1",
+      "author": "lucia.cocina",
+      "text": "¡Fresa! 🍓",
+      "createdAt": "2026-11-13T13:45:00Z",
+      "likes": 401
+    },
+    {
+      "id": "f2",
+      "author": "max_abroad",
+      "text": "2. Fresa — easy one",
+      "createdAt": "2026-11-15T17:20:00Z",
+      "likes": 122
+    },
+    {
+      "id": "f3",
+      "author": "iryna.m",
+      "text": "Плутаю «verdura» і «fruta» щоразу 🙈",
+      "createdAt": "2026-11-16T08:05:00Z",
+      "likes": 38
+    }
+  ],
+  "picture-words": [
+    {
+      "id": "p1",
+      "author": "diego.profe",
+      "text": "La última es «fuego» 🔥",
+      "createdAt": "2026-11-12T10:10:00Z",
+      "likes": 233
+    },
+    {
+      "id": "p2",
+      "author": "nina_travels",
+      "text": "Got all 8, the fire one tricked me at first",
+      "createdAt": "2026-11-16T19:40:00Z",
+      "likes": 45
+    }
+  ],
+  "words-quiz": [
+    {
+      "id": "w1",
+      "author": "alex.es",
+      "text": "12/12 💪 «barrio» was the hardest",
+      "createdAt": "2026-11-14T15:00:00Z",
+      "likes": 290
+    },
+    {
+      "id": "w2",
+      "author": "oksana.v",
+      "text": "10 з 12, «bienvenido» не згадала",
+      "createdAt": "2026-11-16T21:15:00Z",
+      "likes": 64
+    }
+  ],
+  "haz-tu-tarea": [
+    {
+      "id": "h3",
+      "author": "senor.fan",
+      "text": "Este muñeco es mi profesor favorito",
+      "createdAt": "2026-11-11T18:30:00Z",
+      "likes": 1204
+    },
+    {
+      "id": "h4",
+      "author": "tom.b",
+      "text": "The scream at the end 😂",
+      "createdAt": "2026-11-15T22:05:00Z",
+      "likes": 530
+    }
   ]
 }

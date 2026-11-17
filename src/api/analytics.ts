@@ -55,7 +55,7 @@ export function trackHintShown(lessonId: string, gapId: string) {
   capture('hint_shown', { lessonId, gapId })
 }
 
-export function trackGapResolved(lessonId: string, gapId: string, resolution: 'correct' | 'revealed' | 'skipped', attempts: number) {
+export function trackGapResolved(lessonId: string, gapId: string, resolution: 'correct' | 'revealed' | 'skipped' | 'passed', attempts: number) {
   capture('gap_resolved', { lessonId, gapId, resolution, attempts })
 }
 

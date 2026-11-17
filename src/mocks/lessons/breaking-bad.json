@@ -1,0 +1,223 @@
+{
+  "id": "breaking-bad",
+  "title": {
+    "es": "Español con Breaking Bad",
+    "en": "Spanish with Breaking Bad",
+    "uk": "Іспанська з «Пуститися берега»"
+  },
+  "description": {
+    "es": "Palabras básicas en escenas de la serie. Cuando una palabra se repite, dila tú primero.",
+    "en": "Basic words from scenes of the show. When a word comes back, say it first.",
+    "uk": "Базові слова зі сцен серіалу. Коли слово звучить удруге, скажіть його першими."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 58,
+  "cover": "/clips/breaking-bad/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/breaking-bad/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 3.4,
+      "end": 4.88,
+      "es": "¿Ayuda? ¡Ayuda!",
+      "tr": {
+        "en": "Help? Help!",
+        "uk": "Допомога? Допоможіть!"
+      }
+    },
+    {
+      "start": 4.95,
+      "end": 6.0,
+      "es": "¡Ayuda!",
+      "tr": {
+        "en": "Help!",
+        "uk": "Допоможіть!"
+      }
+    },
+    {
+      "start": 8.1,
+      "end": 9.8,
+      "es": "Hola.",
+      "tr": {
+        "en": "Hi.",
+        "uk": "Привіт."
+      }
+    },
+    {
+      "start": 9.9,
+      "end": 11.7,
+      "es": "Hola, ¿cómo estás?",
+      "tr": {
+        "en": "Hi, how are you?",
+        "uk": "Привіт, як справи?"
+      }
+    },
+    {
+      "start": 12.0,
+      "end": 16.3,
+      "es": "Yo soy abogado.",
+      "tr": {
+        "en": "I'm a lawyer.",
+        "uk": "Я адвокат."
+      }
+    },
+    {
+      "start": 17.05,
+      "end": 18.5,
+      "es": "Abogado.",
+      "tr": {
+        "en": "Lawyer.",
+        "uk": "Адвокат."
+      }
+    },
+    {
+      "start": 22.6,
+      "end": 23.9,
+      "es": "Muy bien.",
+      "tr": {
+        "en": "Very good.",
+        "uk": "Дуже добре."
+      }
+    },
+    {
+      "start": 26.4,
+      "end": 27.6,
+      "es": "Gracias.",
+      "tr": {
+        "en": "Thank you.",
+        "uk": "Дякую."
+      }
+    },
+    {
+      "start": 29.5,
+      "end": 31.0,
+      "es": "Sí.",
+      "tr": {
+        "en": "Yes.",
+        "uk": "Так."
+      }
+    },
+    {
+      "start": 33.1,
+      "end": 34.6,
+      "es": "Sí.",
+      "tr": {
+        "en": "Yes.",
+        "uk": "Так."
+      }
+    },
+    {
+      "start": 36.7,
+      "end": 39.2,
+      "es": "Nacho, ¿dónde estás?",
+      "tr": {
+        "en": "Nacho, where are you?",
+        "uk": "Начо, де ти?"
+      }
+    },
+    {
+      "start": 42.0,
+      "end": 43.6,
+      "es": "Hasta luego.",
+      "tr": {
+        "en": "See you later.",
+        "uk": "До зустрічі."
+      }
+    },
+    {
+      "start": 47.0,
+      "end": 47.9,
+      "es": "¿Mijo?",
+      "tr": {
+        "en": "Son?",
+        "uk": "Синку?"
+      }
+    },
+    {
+      "start": 50.0,
+      "end": 51.68,
+      "es": "Por favor.",
+      "tr": {
+        "en": "Please.",
+        "uk": "Будь ласка."
+      }
+    },
+    {
+      "start": 51.72,
+      "end": 53.0,
+      "es": "Por favor.",
+      "tr": {
+        "en": "Please.",
+        "uk": "Будь ласка."
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "ayuda",
+      "kind": "repeat",
+      "pauseAt": 4.95,
+      "context": "",
+      "answer": "ayuda",
+      "translation": {
+        "en": "help",
+        "uk": "допомога"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "hola",
+      "kind": "repeat",
+      "pauseAt": 9.9,
+      "context": "",
+      "answer": "hola",
+      "translation": {
+        "en": "hi",
+        "uk": "привіт"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "abogado",
+      "kind": "repeat",
+      "pauseAt": 17.05,
+      "context": "Yo soy",
+      "answer": "abogado",
+      "translation": {
+        "en": "lawyer",
+        "uk": "адвокат"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "si",
+      "kind": "repeat",
+      "pauseAt": 33.1,
+      "context": "",
+      "answer": "sí",
+      "translation": {
+        "en": "yes",
+        "uk": "так"
+      },
+      "maxAttempts": 3
+    },
+    {
+      "id": "por-favor",
+      "kind": "repeat",
+      "pauseAt": 51.72,
+      "context": "",
+      "answer": "por favor",
+      "accept": [
+        "porfa"
+      ],
+      "translation": {
+        "en": "please",
+        "uk": "будь ласка"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

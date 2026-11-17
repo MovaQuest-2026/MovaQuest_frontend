@@ -134,12 +134,38 @@ describe('gapMachine', () => {
     expect(computeOutcome(lesson, [r('skipped'), r('skipped')])).toBe('missed')
   })
 
-  it('does not let the user seek past an unresolved gap', () => {
-    const s = run([{ type: 'CLIP_READY' }])
-    expect(clampSeek(lesson, s, 9, 20)).toBeCloseTo(3.95)
-    expect(clampSeek(lesson, s, -2, 20)).toBe(0)
-    const done = { ...s, gapIndex: 2 }
-    expect(clampSeek(lesson, done, 19, 20)).toBe(19)
+  it('clamps the seek position to the video', () => {
+    expect(clampSeek(9, 20)).toBe(9)
+    expect(clampSeek(-2, 20)).toBe(0)
+    expect(clampSeek(25, 20)).toBe(20)
+  })
+
+  it('seeking forward past unresolved gaps marks them as passed', () => {
+    const s = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 12 }])
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 2 })
+    expect(s.results.map((r) => [r.gapId, r.resolution])).toEqual([
+      ['g1', 'passed'],
+      ['g2', 'passed'],
+    ])
+    expect(run([{ type: 'CLIP_ENDED' }], s).outcome).toBe('missed')
+  })
+
+  it('seeking forward from a pause passes only that gap and keeps its attempts', () => {
+    const s = run([...toFirstGap, voice('wrong', 'agua'), { type: 'SEEK', time: 6 }])
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 1, attempts: 0, hintShown: false })
+    expect(s.results).toEqual([{ gapId: 'g1', resolution: 'passed', attempts: 1, heard: ['agua'] }])
+  })
+
+  it('seeking backward from a pause replays the context without resolving', () => {
+    const s = run([...toFirstGap, { type: 'SEEK', time: 1 }])
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 0, results: [] })
+  })
+
+  it('ignores seeking while listening or on the feedback screen', () => {
+    const listening = run([...toFirstGap, { type: 'START_LISTENING' }])
+    expect(run([{ type: 'SEEK', time: 12 }], listening)).toBe(listening)
+    const feedback = run([...toFirstGap, { type: 'SKIP' }])
+    expect(run([{ type: 'SEEK', time: 12 }], feedback)).toBe(feedback)
   })
 })
 

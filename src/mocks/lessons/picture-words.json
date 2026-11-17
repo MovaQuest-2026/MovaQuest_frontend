@@ -1,0 +1,275 @@
+{
+  "id": "picture-words",
+  "title": {
+    "es": "¿Qué es esto?",
+    "en": "What is this?",
+    "uk": "Що це?"
+  },
+  "description": {
+    "es": "Mira la imagen y di la palabra antes de que aparezca.",
+    "en": "Look at the picture and say the word before it appears.",
+    "uk": "Подивіться на картинку й скажіть слово, поки воно не з'явилося."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 37,
+  "cover": "/clips/picture-words/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/picture-words/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 1.15,
+      "es": "¿Qué es esto en español?",
+      "tr": {
+        "en": "What is this in Spanish?",
+        "uk": "Що це іспанською?"
+      }
+    },
+    {
+      "start": 1.85,
+      "end": 3.15,
+      "es": "Libro.",
+      "tr": {
+        "en": "Book.",
+        "uk": "Книга."
+      }
+    },
+    {
+      "start": 4.25,
+      "end": 5.25,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 5.95,
+      "end": 7.25,
+      "es": "Cama.",
+      "tr": {
+        "en": "Bed.",
+        "uk": "Ліжко."
+      }
+    },
+    {
+      "start": 8.55,
+      "end": 9.55,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 10.25,
+      "end": 11.55,
+      "es": "Leche.",
+      "tr": {
+        "en": "Milk.",
+        "uk": "Молоко."
+      }
+    },
+    {
+      "start": 12.9,
+      "end": 13.9,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 14.6,
+      "end": 15.9,
+      "es": "Sol.",
+      "tr": {
+        "en": "Sun.",
+        "uk": "Сонце."
+      }
+    },
+    {
+      "start": 17.35,
+      "end": 18.35,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 19.05,
+      "end": 20.35,
+      "es": "Luna.",
+      "tr": {
+        "en": "Moon.",
+        "uk": "Місяць."
+      }
+    },
+    {
+      "start": 21.7,
+      "end": 22.7,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 23.4,
+      "end": 24.7,
+      "es": "Perro.",
+      "tr": {
+        "en": "Dog.",
+        "uk": "Собака."
+      }
+    },
+    {
+      "start": 26.05,
+      "end": 27.05,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 27.75,
+      "end": 29.05,
+      "es": "Gato.",
+      "tr": {
+        "en": "Cat.",
+        "uk": "Кіт."
+      }
+    },
+    {
+      "start": 30.45,
+      "end": 31.45,
+      "es": "¿Y esto?",
+      "tr": {
+        "en": "And this one?",
+        "uk": "А це?"
+      }
+    },
+    {
+      "start": 32.25,
+      "end": 34.35,
+      "es": "¿Qué es esto?",
+      "tr": {
+        "en": "What is this?",
+        "uk": "Що це?"
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "libro",
+      "kind": "answer",
+      "pauseAt": 1.85,
+      "context": "¿Qué es?",
+      "answer": "libro",
+      "translation": {
+        "en": "book",
+        "uk": "книга"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "cama",
+      "kind": "answer",
+      "pauseAt": 5.95,
+      "context": "¿Qué es?",
+      "answer": "cama",
+      "translation": {
+        "en": "bed",
+        "uk": "ліжко"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "leche",
+      "kind": "answer",
+      "pauseAt": 10.25,
+      "context": "¿Qué es?",
+      "answer": "leche",
+      "translation": {
+        "en": "milk",
+        "uk": "молоко"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "sol",
+      "kind": "answer",
+      "pauseAt": 14.6,
+      "context": "¿Qué es?",
+      "answer": "sol",
+      "translation": {
+        "en": "sun",
+        "uk": "сонце"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "luna",
+      "kind": "answer",
+      "pauseAt": 19.05,
+      "context": "¿Qué es?",
+      "answer": "luna",
+      "translation": {
+        "en": "moon",
+        "uk": "місяць"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "perro",
+      "kind": "answer",
+      "pauseAt": 23.4,
+      "context": "¿Qué es?",
+      "answer": "perro",
+      "accept": [
+        "perrito"
+      ],
+      "translation": {
+        "en": "dog",
+        "uk": "собака"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "gato",
+      "kind": "answer",
+      "pauseAt": 27.75,
+      "context": "¿Qué es?",
+      "answer": "gato",
+      "accept": [
+        "gatito"
+      ],
+      "translation": {
+        "en": "cat",
+        "uk": "кіт"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "fuego",
+      "kind": "answer",
+      "pauseAt": 32.15,
+      "context": "¿Qué es?",
+      "answer": "fuego",
+      "accept": [
+        "incendio",
+        "llamas"
+      ],
+      "translation": {
+        "en": "fire",
+        "uk": "вогонь"
+      },
+      "maxAttempts": 2
+    }
+  ]
+}

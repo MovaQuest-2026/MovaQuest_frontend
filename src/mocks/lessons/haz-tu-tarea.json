@@ -1,0 +1,79 @@
+{
+  "id": "haz-tu-tarea",
+  "title": {
+    "es": "Haz tu tarea",
+    "en": "Do your homework",
+    "uk": "Зроби домашнє завдання"
+  },
+  "description": {
+    "es": "Una frase útil en doce segundos. Dila en español antes que el muñeco.",
+    "en": "One handy phrase in twelve seconds. Say it in Spanish before the puppet does.",
+    "uk": "Одна корисна фраза за дванадцять секунд. Скажіть її іспанською раніше за ляльку."
+  },
+  "targetLanguage": "es",
+  "level": "A1",
+  "durationSec": 12,
+  "cover": "/clips/haz-tu-tarea/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/haz-tu-tarea/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 2.4,
+      "es": "Do your homework.",
+      "tr": {
+        "en": "Do your homework.",
+        "uk": "Зроби домашнє завдання."
+      }
+    },
+    {
+      "start": 2.55,
+      "end": 4.6,
+      "es": "¡Haz tu tarea!",
+      "tr": {
+        "en": "Do your homework!",
+        "uk": "Зроби домашнє завдання!"
+      }
+    },
+    {
+      "start": 5.5,
+      "end": 9.6,
+      "es": "Do your homework…",
+      "tr": {
+        "en": "Do your homework…",
+        "uk": "Зроби домашнє завдання…"
+      }
+    },
+    {
+      "start": 10.7,
+      "end": 11.7,
+      "es": "Do your homework!",
+      "tr": {
+        "en": "Do your homework!",
+        "uk": "Зроби домашнє завдання!"
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "haz-tu-tarea",
+      "kind": "answer",
+      "pauseAt": 2.5,
+      "context": "",
+      "answer": "haz tu tarea",
+      "accept": [
+        "haz la tarea",
+        "haz los deberes",
+        "haz tus deberes"
+      ],
+      "translation": {
+        "en": "do your homework",
+        "uk": "зроби домашнє завдання"
+      },
+      "showTranslation": true,
+      "maxAttempts": 3
+    }
+  ]
+}
