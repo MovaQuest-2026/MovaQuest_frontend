@@ -92,7 +92,6 @@ function Phone({ src, children, className = "" }: { src: string; children?: Reac
         <img src={src} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
         {children}
       </div>
-      <span aria-hidden className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-ink" />
     </div>
   );
 }
