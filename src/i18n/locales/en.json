@@ -109,7 +109,15 @@
     "notFound": "Video not found.",
     "seek": "Seek",
     "clipError": "This video couldn't be loaded.",
-    "micError": "Couldn't record. Try again or type the answer."
+    "micError": "Couldn't record. Try again or type the answer.",
+    "voiceSignIn": "Voice answers need an account. Sign in from your profile, or type the answer.",
+    "reviewGap": {
+      "title": "Pause {{n}}",
+      "retry": "Pause {{n}}: try again",
+      "listen": "Pause {{n}}: hear the word again",
+      "retryButton": "Try this word again",
+      "listenButton": "Repeat this word"
+    }
   },
   "result": {
     "title": "Lesson result",

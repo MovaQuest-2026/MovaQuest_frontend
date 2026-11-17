@@ -107,6 +107,11 @@ export const FileVideo = forwardRef<VideoHandle, FileVideoProps>(function FileVi
         preload="auto"
         disablePictureInPicture
         disableRemotePlayback
+        // Після будь-якої перемотки (і нашої, і самого браузера) повідомляємо актуальний час, навіть на паузі.
+        onSeeked={() => {
+          const v = videoRef.current!
+          if (Number.isFinite(v.duration)) callbacks.current.onTime(v.currentTime, v.duration)
+        }}
         onEnded={() => {
           const v = videoRef.current!
           callbacks.current.onTime(v.duration, v.duration)

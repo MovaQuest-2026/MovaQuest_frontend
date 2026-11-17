@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { Lesson } from '../../types/lesson'
 import {
   clampSeek,
+  gapAtTime,
   computeOutcome,
   createInitialState,
   restoreState,
@@ -166,6 +167,66 @@ describe('gapMachine', () => {
     expect(run([{ type: 'SEEK', time: 12 }], listening)).toBe(listening)
     const feedback = run([...toFirstGap, { type: 'SKIP' }])
     expect(run([{ type: 'SEEK', time: 12 }], feedback)).toBe(feedback)
+  })
+})
+
+describe('gapAtTime', () => {
+  it('maps a time to the gap whose question or answer is playing', () => {
+    expect(gapAtTime(lesson, 0)?.id).toBe('g1')
+    expect(gapAtTime(lesson, 5)?.id).toBe('g1')
+    expect(gapAtTime(lesson, 5.5)?.id).toBe('g1')
+    expect(gapAtTime(lesson, 5.6)?.id).toBe('g2')
+    expect(gapAtTime(lesson, 11.5)?.id).toBe('g2')
+    expect(gapAtTime(lesson, 12)).toBeNull()
+  })
+
+  it('shortens the answer tail for gaps that are close together', () => {
+    const close = { ...lesson, gaps: [{ ...lesson.gaps[0], pauseAt: 4 }, { ...lesson.gaps[1], pauseAt: 6.2 }] }
+    expect(gapAtTime(close, 5.1)?.id).toBe('g1')
+    expect(gapAtTime(close, 5.2)?.id).toBe('g2')
+  })
+})
+
+describe('RETRY_GAP', () => {
+  const passedBoth = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 12 }])
+
+  it('reopens a passed gap and removes its result', () => {
+    const s = run([{ type: 'RETRY_GAP', gapId: 'g1' }], passedBoth)
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 0, attempts: 0 })
+    expect(s.results.map((r) => r.gapId)).toEqual(['g2'])
+  })
+
+  it('after the retry continues with the first unresolved gap, not a resolved neighbour', () => {
+    const retry = run([{ type: 'RETRY_GAP', gapId: 'g1' }, { type: 'TIME_UPDATE', time: 3.97 }], passedBoth)
+    expect(retry.status).toBe('awaitingAnswer')
+    const done = run([voice('correct', 'leche'), { type: 'CONTINUE' }], retry)
+    expect(done).toMatchObject({ status: 'playing', gapIndex: 2 })
+    expect(done.results.map((r) => [r.gapId, r.resolution])).toEqual([
+      ['g2', 'passed'],
+      ['g1', 'correct'],
+    ])
+  })
+
+  it('does not count an already resolved gap twice when seeking forward', () => {
+    const retry = run([{ type: 'RETRY_GAP', gapId: 'g1' }], passedBoth)
+    const s = run([{ type: 'SEEK', time: 12 }], retry)
+    expect(s.results.filter((r) => r.gapId === 'g2')).toHaveLength(1)
+    expect(s.results.filter((r) => r.gapId === 'g1')).toHaveLength(1)
+  })
+
+  it('can retry a revealed gap right from its feedback screen', () => {
+    const feedback = run([...toFirstGap, { type: 'SKIP' }])
+    expect(feedback.status).toBe('feedback')
+    const s = run([{ type: 'RETRY_GAP', gapId: 'g1' }], feedback)
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 0, attempts: 0, results: [] })
+  })
+
+  it('ignores a correct or unknown gap and unsuitable statuses', () => {
+    const correct = run([...toFirstGap, voice('correct', 'leche'), { type: 'CONTINUE' }])
+    expect(run([{ type: 'RETRY_GAP', gapId: 'g1' }], correct)).toBe(correct)
+    expect(run([{ type: 'RETRY_GAP', gapId: 'nope' }], passedBoth)).toBe(passedBoth)
+    const listening = run([...toFirstGap, { type: 'START_LISTENING' }])
+    expect(run([{ type: 'RETRY_GAP', gapId: 'g1' }], listening)).toBe(listening)
   })
 })
 

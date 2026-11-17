@@ -1700,3 +1700,97 @@ img {
   }
 }
 }
+
+@layer app {
+/* Кружечок паузи: кнопка з великою зоною дотику (≥44px заввишки), сам кружечок лишається 10px. */
+.gap-dots__hit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+button.gap-dots__hit:not(:disabled) {
+  cursor: pointer;
+}
+
+.review-menu {
+  right: auto;
+  left: 12px;
+  min-width: 220px;
+}
+
+.scrubber__mark--correct {
+  background: var(--success);
+}
+
+.scrubber__mark--revealed,
+.scrubber__mark--skipped {
+  background: var(--warning);
+}
+
+.scrubber__mark--passed {
+  background: var(--danger);
+}
+
+.gap-dots {
+  gap: 0;
+}
+
+/* Кружечки пауз: окремий ряд під CC і швидкістю, великі зони дотику, темна підкладка, щоб було видно на будь-якому відео. */
+.player-topbar .gap-dots {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  padding: 0 6px;
+  border-radius: 22px;
+  background: rgb(0 0 0 / 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.player-topbar__actions {
+  grid-row: 1;
+}
+
+.gap-dots__hit {
+  width: 36px;
+}
+
+.gap-dots .gap-dots__dot {
+  width: 14px;
+  height: 14px;
+}
+
+/* Дотикні (пройдені) кружечки обведені, щоб було зрозуміло, що їх можна натиснути. */
+button.gap-dots__hit:not(:disabled) .gap-dots__dot {
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.6);
+}
+
+.review-menu {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+/* Кнопка повтору слова для відрізка, у якому зараз відео. */
+.review-chip {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+}
+}

@@ -44,6 +44,8 @@ export type MachineEvent =
   | { type: 'REPLAY' }
   /** Перемотка (повзунок, ±5 с). Вперед за нерозв'язані паузи: вони стають passed. */
   | { type: 'SEEK'; time: number }
+  /** Повернутися до вже пройденої паузи, яку не розв'язано правильно (кружечок зверху), і відповісти ще раз. */
+  | { type: 'RETRY_GAP'; gapId: string }
   | { type: 'START_LISTENING' }
   | { type: 'STOP_LISTENING' }
   | { type: 'CANCEL_LISTENING' }
@@ -68,6 +70,29 @@ export function createInitialState(): MachineState {
     results: [],
     outcome: null,
   }
+}
+
+/** Скільки секунд після паузи ще звучить відповідь: до цього моменту відрізок належить цій паузі. */
+export const ANSWER_TAIL_SEC = 1.5
+
+/**
+ * Пауза, до відрізка якої належить час `time`: питання перед нею і звучання відповіді після неї.
+ * Для близьких пауз хвіст не більший за половину відстані до наступної, щоб відрізки не заходили один на одного.
+ */
+export function gapAtTime(lesson: Lesson, time: number): Gap | null {
+  return (
+    lesson.gaps.find((g, i) => {
+      const next = lesson.gaps[i + 1]
+      const tail = next ? Math.min(ANSWER_TAIL_SEC, (next.pauseAt - g.pauseAt) / 2) : ANSWER_TAIL_SEC
+      return time <= g.pauseAt + tail
+    }) ?? null
+  )
+}
+
+/** Індекс першої паузи без результату (наступна, яку треба розв'язати), або довжина списку. */
+function firstUnresolvedIndex(lesson: Lesson, results: GapResult[]): number {
+  const idx = lesson.gaps.findIndex((g) => !results.some((r) => r.gapId === g.id))
+  return idx === -1 ? lesson.gaps.length : idx
 }
 
 export function currentGap(lesson: Lesson, state: MachineState): Gap | null {
@@ -116,6 +141,11 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
       const passed: GapResult[] = []
       while (lesson.gaps[gapIndex] && event.time >= lesson.gaps[gapIndex].pauseAt - PAUSE_LEAD) {
         const current = gapIndex === state.gapIndex
+        // Паузи, які вже мають результат (після RETRY_GAP), другий раз не зараховуємо.
+        if (state.results.some((r) => r.gapId === lesson.gaps[gapIndex].id)) {
+          gapIndex++
+          continue
+        }
         passed.push({
           gapId: lesson.gaps[gapIndex].id,
           resolution: 'passed',
@@ -129,7 +159,7 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         return {
           ...state,
           status: 'playing',
-          gapIndex,
+          gapIndex: Math.max(gapIndex, firstUnresolvedIndex(lesson, [...state.results, ...passed])),
           attempts: 0,
           hintShown: false,
           lastVerdict: null,
@@ -139,6 +169,25 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
       }
       // Назад з паузи: контекст звучить знову, як «Ще раз».
       return state.status === 'awaitingAnswer' ? { ...state, status: 'playing' } : state
+    }
+
+    case 'RETRY_GAP': {
+      // Зі «зворотного зв'язку» теж можна: кнопка «Спробувати ще раз» біля «Далі».
+      if (state.status !== 'playing' && state.status !== 'awaitingAnswer' && state.status !== 'feedback') return state
+      const idx = lesson.gaps.findIndex((g) => g.id === event.gapId)
+      const old = state.results.find((r) => r.gapId === event.gapId)
+      // Повторити можна лише пройдену паузу, яку не розв'язано правильно.
+      if (idx === -1 || !old || old.resolution === 'correct') return state
+      return {
+        ...state,
+        status: 'playing',
+        gapIndex: idx,
+        attempts: 0,
+        hintShown: false,
+        lastVerdict: null,
+        heard: [],
+        results: state.results.filter((r) => r.gapId !== event.gapId),
+      }
     }
 
     case 'REPLAY':
@@ -193,7 +242,8 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
       return {
         ...state,
         status: 'playing',
-        gapIndex: state.gapIndex + 1,
+        // Після повтору старої паузи наступною буде перша ще не розв'язана, а не просто сусідня.
+        gapIndex: firstUnresolvedIndex(lesson, state.results),
         attempts: 0,
         hintShown: false,
         lastVerdict: null,

@@ -23,6 +23,8 @@ const SEEK_STEP = 5
 /** «Послухати ще раз»: на скільки секунд відмотати від паузи. */
 const REPLAY_SEC = 4
 const FEED_TRANSITION_MS = 260
+/** Якщо під час відповіді відео саме опинилось раніше за паузу більш ніж на стільки секунд, повертаємо його на паузу. */
+const DRIFT_SEC = 1
 
 // Без жесту користувача браузер дозволяє автозапуск лише без звуку.
 function hasUserActivation(): boolean {
@@ -118,6 +120,18 @@ export function LessonPlayerPage() {
     if (gap && s.currentTime > gap.pauseAt) videoRef.current?.seek(gap.pauseAt - PAUSE_LEAD)
   }, [status])
 
+  // Захист: поки користувач думає над відповіддю, відео стоїть на межі паузи. Навмисна перемотка (повзунок, ±5,
+  // «Ще раз», кружечки) спершу виводить автомат зі стану відповіді, тож сюди потрапляє лише мимовільний зсув назад.
+  useEffect(
+    () =>
+      usePlayerStore.subscribe((s, prev) => {
+        if (s.currentTime === prev.currentTime || !s.lesson || !s.machine || !isAnswering(s.machine)) return
+        const gap = currentGap(s.lesson, s.machine)
+        if (gap && s.currentTime < gap.pauseAt - DRIFT_SEC) videoRef.current?.seek(gap.pauseAt - PAUSE_LEAD)
+      }),
+    [],
+  )
+
   const onReady = useCallback(() => dispatch({ type: 'CLIP_READY' }), [dispatch])
   const onEnded = useCallback(() => dispatch({ type: 'CLIP_ENDED' }), [dispatch])
   const onAutoplayMuted = useCallback(() => usePlayerStore.getState().setMuted(true), [])
@@ -158,6 +172,22 @@ export function LessonPlayerPage() {
     if (!gap) return
     dispatch({ type: 'REPLAY' })
     videoRef.current?.seek(Math.max(0, gap.pauseAt - REPLAY_SEC))
+  }
+
+  // Кружечок пройденої паузи: відповісти ще раз (червоний/жовтий) або лише послухати слово (зелений).
+  const retryGap = (gapId: string) => {
+    const s = usePlayerStore.getState()
+    const target = s.lesson?.gaps.find((g) => g.id === gapId)
+    if (!target) return
+    dispatch({ type: 'RETRY_GAP', gapId })
+    setUserPaused(false)
+    videoRef.current?.seek(Math.max(0, target.pauseAt - REPLAY_SEC))
+  }
+  const listenGap = (gapId: string) => {
+    const target = usePlayerStore.getState().lesson?.gaps.find((g) => g.id === gapId)
+    if (!target) return
+    setUserPaused(false)
+    seek(Math.max(0, target.pauseAt - REPLAY_SEC))
   }
 
   // Дотик по відео: ліва третина — назад на 5 с, права — вперед на 5 с, середина — пауза.
@@ -235,6 +265,9 @@ export function LessonPlayerPage() {
             results={machine.results}
             gapIndex={machine.gapIndex}
             canChangeSpeed={supportsPlaybackRate(lesson.video)}
+            canReview={started && (playing || machine.status === 'awaitingAnswer')}
+            onRetryGap={retryGap}
+            onListenGap={listenGap}
           />
           {muted && (
             <button type="button" className="player__unmute" onClick={() => setMuted(false)}>
@@ -273,10 +306,10 @@ export function LessonPlayerPage() {
           {!answering && <SubtitleLayer cues={lesson.cues} />}
 
           {gap && answering && (
-            <GapPanel key={gap.id} lessonId={lesson.id} gap={gap} machine={machine} onReplay={replay} />
+            <GapPanel key={gap.id} lessonId={lesson.id} gap={gap} machine={machine} onReplay={replay} onRetry={() => retryGap(gap.id)} />
           )}
 
-          {showControls && !answering && <PlayerControls lesson={lesson} onSeek={seek} />}
+          {showControls && !answering && <PlayerControls lesson={lesson} results={machine.results} onSeek={seek} />}
         </div>
 
         {commentsOpen && (

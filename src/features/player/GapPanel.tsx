@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { evaluateTypedAnswer } from '../../api/evaluateAnswer'
+import { evaluateTypedAnswer, MOCK_SPEECH } from '../../api/evaluateAnswer'
 import { translate } from '../../i18n/localize'
 import { answerHint } from '../../lib/matchAnswer'
 import { usePlayerStore } from '../../store/usePlayerStore'
@@ -14,21 +14,25 @@ interface GapPanelProps {
   gap: Gap
   machine: MachineState
   onReplay: () => void
+  /** Відповісти на цю паузу ще раз (після показаної або пропущеної відповіді). */
+  onRetry: () => void
 }
 
 /** Після правильної відповіді відео продовжується саме. */
 const AUTO_CONTINUE_MS = 1400
 
-export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
+export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanelProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
   const dispatch = usePlayerStore((s) => s.dispatch)
   // Якщо мікрофон уже заборонений, одразу пропонуємо ввести відповідь текстом.
   const [typing, setTyping] = useState(() => {
     const permission = useUserStore.getState().micPermission
-    return permission === 'denied' || permission === 'unsupported'
+    return permission === 'denied' || permission === 'unsupported' || guestVoiceBlocked()
   })
   const [micDenied, setMicDenied] = useState(false)
+  // Розпізнавання голосу на бекенді вимагає сесії; гостю пропонуємо увійти або писати текстом.
+  const [signInNeeded, setSignInNeeded] = useState(guestVoiceBlocked)
   const [text, setText] = useState('')
 
   const busy = machine.status === 'listening' || machine.status === 'evaluating'
@@ -61,6 +65,11 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
         <button type="button" className="btn btn--primary btn--block" onClick={() => dispatch({ type: 'CONTINUE' })}>
           ▶ {t('player.continue')}
         </button>
+        {!correct && (
+          <button type="button" className="btn btn--ghost btn--block" onClick={onRetry}>
+            ↺ {t('player.reviewGap.retryButton')}
+          </button>
+        )}
       </section>
     )
   }
@@ -98,7 +107,13 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
         </p>
       )}
 
-      {!showTyping && <MicButton lessonId={lessonId} gapId={gap.id} onDenied={() => setMicDenied(true)} />}
+      {!showTyping && <MicButton lessonId={lessonId} gapId={gap.id} onDenied={() => setMicDenied(true)} onSignInRequired={() => setSignInNeeded(true)} />}
+
+      {signInNeeded && (
+        <p className="notice mic__notice" role="status">
+          {t('player.voiceSignIn')}
+        </p>
+      )}
 
       {showTyping && (
         <form className="gap-panel__form" onSubmit={submitText}>
@@ -140,4 +155,8 @@ export function GapPanel({ lessonId, gap, machine, onReplay }: GapPanelProps) {
       )}
     </section>
   )
+}
+
+function guestVoiceBlocked(): boolean {
+  return !MOCK_SPEECH && !useUserStore.getState().account
 }

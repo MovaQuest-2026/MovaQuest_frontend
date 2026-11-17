@@ -1,5 +1,6 @@
 import { matchAnswer, type Verdict } from '../lib/matchAnswer'
 import type { Gap } from '../types/lesson'
+import { ApiError, apiFetch } from './http'
 import { getForcedVerdict } from './devOverrides'
 import { getLesson } from './getLesson'
 
@@ -10,18 +11,72 @@ export interface EvaluateResult {
   confidence: number
 }
 
-/*
- * Майбутній контракт (бекенд):
- *   POST {API_URL}/api/speech/evaluate
- *   Content-Type: multipart/form-data; поля lessonId, gapId, audio (Blob з MediaRecorder)
- *   Відповідь 200: EvaluateResult
- *
- * На сервері: STT з мовою es-ES, потім matchAnswer(transcript, [gap.answer, ...gap.accept]).
- * Confidence STT нижче 0.5 дає 'unclear'.
- *
- * Зараз це мок: аудіо нікуди не надсилається, не зберігається і не логується.
+/** Відповідь `POST /api/v1/transcription` (Deepgram Nova-3, мова es на бекенді). */
+interface TranscriptionResponse {
+  transcript: string
+  confidence: number | null
+  is_silent: boolean
+  duration_seconds: number | null
+  model: string
+  language: string
+}
+
+/** STT із впевненістю нижче цього порога не вважаємо відповіддю. */
+const MIN_CONFIDENCE = 0.5
+
+/** Голос недоступний: гість без сесії (бекенд повертає 401) або сервіс розпізнавання не працює. */
+export class SpeechError extends Error {
+  readonly code: 'signInRequired' | 'unavailable'
+  constructor(code: 'signInRequired' | 'unavailable') {
+    super(code)
+    this.code = code
+  }
+}
+
+/** VITE_MOCK_SPEECH=true: розпізнавання-мок без бекенду (для розробки без акаунта). */
+export const MOCK_SPEECH = import.meta.env.VITE_MOCK_SPEECH === 'true'
+
+/**
+ * Розпізнавання голосу: POST /api/v1/transcription (multipart: `audio`, повторюване поле `hint`).
+ * Бекенд віддає лише транскрипт, а вердикт рахуємо тут через matchAnswer. Ендпоінт вимагає сесію:
+ * для гостя кидаємо SpeechError('signInRequired'), щоб інтерфейс запропонував увійти або ввести текстом.
+ * Аудіо ніде не зберігаємо й не логуємо.
  */
 export async function evaluateAnswer(lessonId: string, gapId: string, audio: Blob): Promise<EvaluateResult> {
+  if (MOCK_SPEECH) return evaluateMock(lessonId, gapId, audio)
+
+  const gap = await findGap(lessonId, gapId)
+  const expected = expectedAnswers(gap)
+  const body = new FormData()
+  body.append('audio', audio, `answer.${audioExtension(audio.type)}`)
+  for (const hint of expected) body.append('hint', hint)
+
+  let res: TranscriptionResponse
+  try {
+    res = await apiFetch<TranscriptionResponse>('/transcription', { method: 'POST', body })
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 401) throw new SpeechError('signInRequired')
+    throw err
+  }
+
+  const transcript = res.transcript.trim()
+  const confidence = res.confidence ?? (transcript ? 1 : 0)
+  if (res.is_silent || !transcript) return { verdict: 'unclear', transcript: '', confidence }
+  const verdict = matchAnswer(transcript, expected)
+  // Невпевнене розпізнавання не рахуємо за помилку користувача.
+  return { verdict: verdict === 'wrong' && confidence < MIN_CONFIDENCE ? 'unclear' : verdict, transcript, confidence }
+}
+
+function audioExtension(mime: string): string {
+  if (mime.includes('webm')) return 'webm'
+  if (mime.includes('ogg')) return 'ogg'
+  if (mime.includes('mp4') || mime.includes('aac')) return 'mp4'
+  if (mime.includes('wav')) return 'wav'
+  return 'webm'
+}
+
+/** Мок для розробки: аудіо нікуди не надсилається. */
+async function evaluateMock(lessonId: string, gapId: string, audio: Blob): Promise<EvaluateResult> {
   await delay(700 + Math.random() * 600)
   const gap = await findGap(lessonId, gapId)
   const forced = getForcedVerdict()

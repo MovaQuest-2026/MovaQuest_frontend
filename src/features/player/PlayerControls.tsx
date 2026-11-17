@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { usePlayerStore } from '../../store/usePlayerStore'
 import { SUBTITLE_LANGS, useUserStore } from '../../store/useUserStore'
 import type { Lesson } from '../../types/lesson'
-import type { GapResult } from './gapMachine'
+import { gapAtTime, type GapResult } from './gapMachine'
 
 interface PlayerTopBarProps {
   lesson: Lesson
@@ -11,14 +11,26 @@ interface PlayerTopBarProps {
   gapIndex: number
   /** Плеєр TikTok не вміє змінювати швидкість. */
   canChangeSpeed: boolean
+  /** Кружечки пройдених пауз натискні, лише поки відео грає або стоїть на паузі для відповіді. */
+  canReview: boolean
+  /** Відповісти на паузу ще раз (червоні й жовті кружечки). */
+  onRetryGap: (gapId: string) => void
+  /** Ще раз послухати слово правильно пройденої паузи (зелений кружечок). */
+  onListenGap: (gapId: string) => void
 }
 
-export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: PlayerTopBarProps) {
+export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canReview, onRetryGap, onListenGap }: PlayerTopBarProps) {
   const { t } = useTranslation()
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const playbackRate = useUserStore((s) => s.playbackRate)
   const { toggleSubtitleLang, setPlaybackRate } = useUserStore.getState()
   const [ccOpen, setCcOpen] = useState(false)
+  const [reviewGapId, setReviewGapId] = useState<string | null>(null)
+  // Відрізок, у якому зараз відео: якщо цю паузу вже пройдено, зверху з'являється кнопка повтору слова.
+  const segmentGapId = usePlayerStore((s) => (s.lesson ? (gapAtTime(s.lesson, s.currentTime)?.id ?? null) : null))
+  const segmentResult = segmentGapId ? results.find((r) => r.gapId === segmentGapId) : undefined
+  const reviewGap = reviewGapId ? lesson.gaps.find((g) => g.id === reviewGapId) : undefined
+  const reviewResult = reviewGapId ? results.find((r) => r.gapId === reviewGapId) : undefined
 
   const ccState =
     subtitleLangs.length > 0 ? subtitleLangs.map((l) => t(`subtitleLangs.${l}`)).join(', ') : t('profile.subtitlesOff')
@@ -29,7 +41,29 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
         {lesson.gaps.map((g, i) => {
           const r = results.find((x) => x.gapId === g.id)
           const state = r ? r.resolution : i === gapIndex ? 'current' : 'pending'
-          return <li key={g.id} className={`gap-dots__dot gap-dots__dot--${state}`} />
+          return (
+            <li key={g.id}>
+              {r ? (
+                <button
+                  type="button"
+                  className="gap-dots__hit"
+                  disabled={!canReview}
+                  aria-label={t(`player.reviewGap.${r.resolution === 'correct' ? 'listen' : 'retry'}`, { n: i + 1 })}
+                  aria-expanded={reviewGapId === g.id}
+                  onClick={() => {
+                    setCcOpen(false)
+                    setReviewGapId(reviewGapId === g.id ? null : g.id)
+                  }}
+                >
+                  <span className={`gap-dots__dot gap-dots__dot--${state}`} />
+                </button>
+              ) : (
+                <span className="gap-dots__hit">
+                  <span className={`gap-dots__dot gap-dots__dot--${state}`} />
+                </span>
+              )}
+            </li>
+          )
         })}
       </ol>
       <div className="player-topbar__actions">
@@ -54,6 +88,35 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
           </button>
         )}
       </div>
+
+      {canReview && segmentGapId && segmentResult && (
+        <button
+          type="button"
+          className="review-chip"
+          onClick={() => (segmentResult.resolution === 'correct' ? onListenGap(segmentGapId) : onRetryGap(segmentGapId))}
+        >
+          ↺ {segmentResult.resolution === 'correct' ? t('player.reviewGap.listenButton') : t('player.reviewGap.retryButton')}
+        </button>
+      )}
+
+      {reviewGap && reviewResult && canReview && (
+        <>
+          <button type="button" className="cc-menu__backdrop" aria-label={t('app.close')} onClick={() => setReviewGapId(null)} />
+          <div className="cc-menu review-menu" role="group" aria-label={t('player.reviewGap.title', { n: lesson.gaps.indexOf(reviewGap) + 1 })}>
+            <button
+              type="button"
+              className="btn btn--primary btn--block"
+              onClick={() => {
+                setReviewGapId(null)
+                if (reviewResult.resolution === 'correct') onListenGap(reviewGap.id)
+                else onRetryGap(reviewGap.id)
+              }}
+            >
+              ↺ {reviewResult.resolution === 'correct' ? t('player.reviewGap.listenButton') : t('player.reviewGap.retryButton')}
+            </button>
+          </div>
+        </>
+      )}
 
       {ccOpen && (
         <>
@@ -89,10 +152,11 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed }: Play
 
 interface PlayerControlsProps {
   lesson: Lesson
+  results: GapResult[]
   onSeek: (time: number) => void
 }
 
-export function PlayerControls({ lesson, onSeek }: PlayerControlsProps) {
+export function PlayerControls({ lesson, results, onSeek }: PlayerControlsProps) {
   const { t } = useTranslation()
   const currentTime = usePlayerStore((s) => s.currentTime)
   const duration = usePlayerStore((s) => s.duration)
@@ -119,7 +183,7 @@ export function PlayerControls({ lesson, onSeek }: PlayerControlsProps) {
           lesson.gaps.map((g) => (
             <span
               key={g.id}
-              className="scrubber__mark"
+              className={`scrubber__mark scrubber__mark--${results.find((r) => r.gapId === g.id)?.resolution ?? 'pending'}`}
               style={{ left: `${(g.pauseAt / duration) * 100}%` }}
               aria-hidden="true"
             />

@@ -109,7 +109,15 @@
     "notFound": "No se ha encontrado el vídeo.",
     "seek": "Buscar",
     "clipError": "No se ha podido cargar este vídeo.",
-    "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta."
+    "micError": "No se ha podido grabar. Inténtalo otra vez o escribe la respuesta.",
+    "voiceSignIn": "Las respuestas por voz requieren una cuenta. Inicia sesión desde tu perfil o escribe la respuesta.",
+    "reviewGap": {
+      "title": "Pausa {{n}}",
+      "retry": "Pausa {{n}}: intentarlo otra vez",
+      "listen": "Pausa {{n}}: volver a oír la palabra",
+      "retryButton": "Intentar esta palabra otra vez",
+      "listenButton": "Repetir esta palabra"
+    }
   },
   "result": {
     "title": "Resultado de la lección",
