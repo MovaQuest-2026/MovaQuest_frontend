@@ -184,7 +184,11 @@
     "progress": {
       "title": "Progress",
       "completed_one": "{{count}} lesson completed",
-      "completed_other": "{{count}} lessons completed"
+      "completed_other": "{{count}} lessons completed",
+      "words_one": "{{count}} word learned",
+      "words_other": "{{count}} words learned",
+      "accuracy": "{{percent}}% correct answers",
+      "guest": "Sign in to track your progress and the words you've learned."
     },
     "reset": {
       "button": "Reset progress",

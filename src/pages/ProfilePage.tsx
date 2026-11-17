@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '../api/auth'
 import { Segmented } from '../components/Segmented'
@@ -31,7 +31,15 @@ export function ProfilePage() {
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const theme = useUserStore((s) => s.theme)
   const playbackRate = useUserStore((s) => s.playbackRate)
+  const signedIn = useUserStore((s) => s.account !== null)
   const completedCount = useUserStore((s) => Object.keys(s.completedLessons).length)
+  const wordsLearned = useUserStore((s) => Object.values(s.learnedWords).reduce((n, ids) => n + ids.length, 0))
+  // Точність: правильні відповіді з усіх пауз у пройдених уроках.
+  const accuracy = useUserStore((s) => {
+    const all = Object.values(s.completedLessons)
+    const total = all.reduce((n, l) => n + l.total, 0)
+    return total === 0 ? null : Math.round((all.reduce((n, l) => n + l.correct, 0) / total) * 100)
+  })
   const { setInterfaceLanguage, setTheme, setLevel, setGoal, toggleSubtitleLang, setPlaybackRate, resetProgress } =
     useUserStore.getState()
 
@@ -105,26 +113,31 @@ export function ProfilePage() {
           />
         </section>
 
-        <section className="field">
-          <span className="field__label">{t('profile.level')}</span>
-          <Segmented
-            label={t('profile.level')}
-            value={level}
-            options={LEVELS.map((l) => ({ value: l, label: l }))}
-            onChange={setLevel}
-          />
-        </section>
+        {/* Рівень і мета поїздки є частиною профілю акаунта; гостю їх не показуємо. */}
+        {signedIn && (
+          <>
+          <section className="field">
+            <span className="field__label">{t('profile.level')}</span>
+            <Segmented
+              label={t('profile.level')}
+              value={level}
+              options={LEVELS.map((l) => ({ value: l, label: l }))}
+              onChange={setLevel}
+            />
+          </section>
 
-        <label className="field">
-          <span className="field__label">{t('profile.goal')}</span>
-          <input
-            className="input"
-            value={goal}
-            maxLength={120}
-            placeholder={t('profile.goalPlaceholder')}
-            onChange={(e) => setGoal(e.target.value)}
-          />
-        </label>
+          <label className="field">
+            <span className="field__label">{t('profile.goal')}</span>
+            <input
+              className="input"
+              value={goal}
+              maxLength={120}
+              placeholder={t('profile.goalPlaceholder')}
+              onChange={(e) => setGoal(e.target.value)}
+            />
+          </label>
+          </>
+        )}
 
         <section className="field">
           <span className="field__label">{t('profile.subtitles')}</span>
@@ -175,16 +188,29 @@ export function ProfilePage() {
 
         <section className="card stack">
           <h2 className="section-title">{t('profile.progress.title')}</h2>
-          <p className="stat">{completedCount}</p>
-          <p className="muted">{t('profile.progress.completed', { count: completedCount })}</p>
-          <button
-            type="button"
-            className="btn btn--danger btn--block"
-            disabled={completedCount === 0}
-            onClick={() => setConfirmReset(true)}
-          >
-            {t('profile.reset.button')}
-          </button>
+          {signedIn ? (
+            <>
+              <p className="stat">{wordsLearned}</p>
+              <p className="muted">{t('profile.progress.words', { count: wordsLearned })}</p>
+              <p className="muted">{t('profile.progress.completed', { count: completedCount })}</p>
+              {accuracy !== null && <p className="muted">{t('profile.progress.accuracy', { percent: accuracy })}</p>}
+              <button
+                type="button"
+                className="btn btn--danger btn--block"
+                disabled={completedCount === 0 && wordsLearned === 0}
+                onClick={() => setConfirmReset(true)}
+              >
+                {t('profile.reset.button')}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="muted">{t('profile.progress.guest')}</p>
+              <Link className="btn btn--primary btn--block" to="/auth" state={{ from: '/profile' }}>
+                {t('auth.signInCta')}
+              </Link>
+            </>
+          )}
         </section>
       </main>
       <TabBar />

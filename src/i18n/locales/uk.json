@@ -186,7 +186,13 @@
       "completed_one": "{{count}} урок пройдено",
       "completed_few": "{{count}} уроки пройдено",
       "completed_many": "{{count}} уроків пройдено",
-      "completed_other": "{{count}} уроку пройдено"
+      "completed_other": "{{count}} уроку пройдено",
+      "words_one": "{{count}} слово вивчено",
+      "words_few": "{{count}} слова вивчено",
+      "words_many": "{{count}} слів вивчено",
+      "words_other": "{{count}} слова вивчено",
+      "accuracy": "{{percent}}% правильних відповідей",
+      "guest": "Увійдіть, щоб зберігати прогрес і вивчені слова."
     },
     "reset": {
       "button": "Скинути прогрес",

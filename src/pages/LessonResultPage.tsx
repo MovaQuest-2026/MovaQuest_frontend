@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
-import type { GapResult } from '../features/player/gapMachine'
+import { ResultWordList } from '../features/player/ResultWordList'
 import { useLessonFeed } from '../features/player/useLessonFeed'
-import { localize, translate } from '../i18n/localize'
+import { localize } from '../i18n/localize'
 import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 import type { Lesson } from '../types/lesson'
@@ -63,31 +63,7 @@ export function LessonResultPage() {
 
       <section className="stack">
         <h2 className="section-title">{t('result.words')}</h2>
-        <ul className="result-list">
-          {lesson.gaps.map((gap) => {
-            const r = results?.find((x) => x.gapId === gap.id)
-            return (
-              <li key={gap.id} className="card stack">
-                <p className="result-list__quote" lang="es">
-                  {gap.context} <strong className="result-list__answer">{gap.answer}</strong>
-                </p>
-                {translate(gap.translation, lang) && (
-                  <p className="phrase-card__tr">{translate(gap.translation, lang)}</p>
-                )}
-                {r && (
-                  <div className="row">
-                    <span className={`badge badge--${badgeTone(r)}`}>{resolutionLabel(r, t)}</span>
-                    {r.heard.length > 0 && r.resolution !== 'correct' && (
-                      <span className="muted" lang="es">
-                        {t('result.youSaid', { heard: r.heard.join(', ') })}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </li>
-            )
-          })}
-        </ul>
+        <ResultWordList lesson={lesson} results={results} />
       </section>
 
       <div className="stack">
@@ -113,16 +89,4 @@ export function LessonResultPage() {
       </div>
     </main>
   )
-}
-
-function badgeTone(r: GapResult): 'perfect' | 'partial' | 'missed' {
-  if (r.resolution === 'correct') return r.attempts === 0 ? 'perfect' : 'partial'
-  return 'missed'
-}
-
-function resolutionLabel(r: GapResult, t: (key: string, opts?: Record<string, unknown>) => string): string {
-  if (r.resolution === 'correct') {
-    return r.attempts === 0 ? t('result.firstTry') : t('result.afterTries', { count: r.attempts + 1 })
-  }
-  return t(`result.resolution.${r.resolution}`)
 }

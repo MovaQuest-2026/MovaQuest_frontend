@@ -184,7 +184,11 @@
     "progress": {
       "title": "Progreso",
       "completed_one": "{{count}} lección completada",
-      "completed_other": "{{count}} lecciones completadas"
+      "completed_other": "{{count}} lecciones completadas",
+      "words_one": "{{count}} palabra aprendida",
+      "words_other": "{{count}} palabras aprendidas",
+      "accuracy": "{{percent}}% de respuestas correctas",
+      "guest": "Inicia sesión para guardar tu progreso y las palabras que has aprendido."
     },
     "reset": {
       "button": "Borrar el progreso",

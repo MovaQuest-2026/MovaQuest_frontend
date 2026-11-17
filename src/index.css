@@ -1175,12 +1175,12 @@ img {
 
 .player--enter-next .video-stage,
 .player--enter-next .player__overlay {
-  animation: feed-enter-next 0.3s ease-out;
+  animation: feed-enter-next 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .player--enter-prev .video-stage,
 .player--enter-prev .player__overlay {
-  animation: feed-enter-prev 0.3s ease-out;
+  animation: feed-enter-prev 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .player--bounce-next .video-stage,
@@ -1797,5 +1797,117 @@ img {
   width: 100%;
   min-height: var(--tap);
   cursor: pointer;
+}
+
+/* Серце від подвійного дотику по відео. */
+.player__like-burst {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  fill: #ff2d55;
+  filter: drop-shadow(0 4px 12px rgb(0 0 0 / 0.4));
+  animation: like-burst 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes like-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) translateY(-40px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player__like-burst {
+    animation-duration: 0.01s;
+  }
+}
+
+/* Плавна стрічка: шари рухаються окремо від решти сторінки, поки відео не готове, видно обкладинку. */
+.player .video-stage,
+.player .player__overlay {
+  will-change: transform;
+}
+
+.player .video-stage {
+  background: var(--cover, #000) center / cover no-repeat;
+}
+
+/* Текст «Завантаження» показуємо, лише якщо воно триває довше за мить (без миготіння між уроками). */
+.player__loading-text {
+  opacity: 0;
+  animation: loading-text-in 0.2s ease 0.5s forwards;
+}
+
+@keyframes loading-text-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Підсумок уроку: модальне вікно поверх відео (у межах колонки плеєра). */
+.result-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(0 0 0 / 0.6);
+  backdrop-filter: blur(4px);
+  animation: loading-text-in 0.2s ease both;
+}
+
+.result-modal {
+  width: 100%;
+  max-width: 420px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.5);
+}
+
+.result-modal__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.result-modal__emoji {
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.result-modal__words {
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 }

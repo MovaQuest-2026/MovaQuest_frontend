@@ -171,6 +171,40 @@ describe('gapMachine', () => {
   })
 })
 
+describe('finishing right after the last word', () => {
+  const answerBoth: MachineEvent[] = [
+    ...toFirstGap,
+    voice('correct', 'leche'),
+    { type: 'CONTINUE' },
+    { type: 'TIME_UPDATE', time: 9.97 },
+    voice('correct', 'de Ucrania'),
+    { type: 'CONTINUE' },
+  ]
+
+  it('plays the last answer for a moment, then ends without waiting for the clip to finish', () => {
+    const s = run(answerBoth)
+    expect(s).toMatchObject({ status: 'playing', gapIndex: 2, endAt: 12 })
+    expect(run([{ type: 'TIME_UPDATE', time: 11.5 }], s).status).toBe('playing')
+    const ended = run([{ type: 'TIME_UPDATE', time: 12 }], s)
+    expect(ended).toMatchObject({ status: 'ended', outcome: 'perfect' })
+  })
+
+  it('does not end while a pause is still unresolved', () => {
+    const s = run([...toFirstGap, voice('correct', 'leche'), { type: 'CONTINUE' }, { type: 'TIME_UPDATE', time: 30 }])
+    expect(s.status).toBe('awaitingAnswer')
+  })
+
+  it('ends after retrying an earlier pause, counted from that pause, not from the end of the clip', () => {
+    const passed = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 12 }])
+    expect(passed.endAt).toBe(12)
+    const retried = run([{ type: 'RETRY_GAP', gapId: 'g1' }, { type: 'TIME_UPDATE', time: 3.97 }], passed)
+    expect(retried.endAt).toBeNull()
+    const done = run([voice('correct', 'leche'), { type: 'CONTINUE' }], retried)
+    expect(done.endAt).toBe(6) // pauseAt 4 + 2
+    expect(run([{ type: 'TIME_UPDATE', time: 6 }], done).status).toBe('ended')
+  })
+})
+
 describe('gapAtTime', () => {
   it('maps a time to the gap whose question or answer is playing', () => {
     expect(gapAtTime(lesson, 0)?.id).toBe('g1')
