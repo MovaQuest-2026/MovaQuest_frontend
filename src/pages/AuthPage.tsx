@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp, type AuthErrorCode } from '../api/auth'
+import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp, type AuthErrorCode, type PasswordRule } from '../api/auth'
 import { startGoogleSignIn } from '../api/googleAuth'
 import { completeSignIn, safeReturnPath } from '../features/account/completeSignIn'
 import { Segmented } from '../components/Segmented'
@@ -29,7 +29,10 @@ export function AuthPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [busy, setBusy] = useState(false)
-  const errorText = (code: AuthErrorCode) => t(`auth.errors.${code}`, { min: PASSWORD_MIN_LENGTH })
+  const errorText = (code: AuthErrorCode, missing: PasswordRule[] = []) =>
+    missing.length > 0
+      ? t('auth.errors.passwordMissing', { list: missing.map((rule) => t(`auth.passwordRules.${rule}`)).join(', ') })
+      : t(`auth.errors.${code}`, { min: PASSWORD_MIN_LENGTH })
   const [error, setError] = useState<string | null>(() => (state?.authError ? errorText(state.authError) : null))
 
   // «Назад» зі сторінки Google повертає цю сторінку з bfcache із busy=true: розблоковуємо кнопки.
@@ -53,7 +56,7 @@ export function AuthPage() {
       // busy скидаємо лише при помилці: після успіху сторінка вже йде далі, а скинутий busy
       // увімкнув би редирект «уже ввійшли» і перебив би перехід на онбординг.
       setBusy(false)
-      setError(err instanceof AuthError ? errorText(err.code) : t('app.error'))
+      setError(err instanceof AuthError ? errorText(err.code, err.missing) : t('app.error'))
     }
   }
 

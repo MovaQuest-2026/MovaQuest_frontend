@@ -235,6 +235,12 @@
     "showPassword": "Show",
     "hidePassword": "Hide",
     "passwordHint": "At least {{min}} characters.",
+    "passwordRules": {
+      "upper": "an uppercase letter",
+      "lower": "a lowercase letter",
+      "digit": "a digit",
+      "symbol": "a symbol (for example !, ? or #)"
+    },
     "signOut": "Sign out",
     "signUp": {
       "tab": "Sign up",
@@ -259,6 +265,7 @@
       "wrongCredentials": "Wrong email or password.",
       "googleFailed": "Couldn't sign in with Google. Try again.",
       "signUpRejected": "Couldn't create the account. Check your email and use a stronger password: upper- and lowercase letters, a digit and a symbol.",
+      "passwordMissing": "Password is missing: {{list}}.",
       "signUpLoginFailed": "This email may already be registered. Try signing in instead.",
       "tooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
       "serverUnavailable": "The server is waking up. Try again in a minute.",

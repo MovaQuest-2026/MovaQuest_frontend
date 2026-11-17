@@ -73,9 +73,18 @@ describe('auth api', () => {
     expect(sent[1].username).toMatch(/^olena_\d{4}$/)
   })
 
+  it('tells which password requirements are missing when the server rejects the sign-up', async () => {
+    on('POST /users/', () => json(422, { detail: 'Invalid request.' }))
+    // M9JCJ8pPQGxvJKA: є великі, малі й цифри, але немає символу.
+    const err = await signUp({ name: 'Ana', email: 'ana@example.com', password: 'M9JCJ8pPQGxvJKA' }).catch((e: unknown) => e)
+    expect(err).toMatchObject({ code: 'signUpRejected', missing: ['symbol'] })
+    const none = await signUp({ name: 'Ana', email: 'ana@example.com', password: 'abcdefgh' }).catch((e: unknown) => e)
+    expect((none as { missing: string[] }).missing).toEqual(['upper', 'digit', 'symbol'])
+  })
+
   it('reports a rejected sign-up and a taken email', async () => {
     on('POST /users/', () => json(422, { detail: 'Invalid request.' }))
-    expect(await code(signUp({ name: 'Ana', email: 'ana@example.com', password: 'secret123' }))).toBe('signUpRejected')
+    expect(await code(signUp({ name: 'Ana', email: 'ana@example.com', password: 'Secret12!' }))).toBe('signUpRejected')
     // Бекенд не каже, що email зайнятий: 201, але вхід із новим паролем не проходить.
     on('POST /users/', () => json(201, {}))
     on('POST /auth/login', () => json(401, { detail: 'Incorrect username or password' }))

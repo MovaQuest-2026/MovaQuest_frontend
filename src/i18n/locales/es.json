@@ -236,6 +236,12 @@
     "showPassword": "Mostrar",
     "hidePassword": "Ocultar",
     "passwordHint": "Al menos {{min}} caracteres.",
+    "passwordRules": {
+      "upper": "una mayúscula",
+      "lower": "una minúscula",
+      "digit": "un número",
+      "symbol": "un símbolo (por ejemplo !, ? o #)"
+    },
     "signOut": "Cerrar sesión",
     "signUp": {
       "tab": "Registrarse",
@@ -260,6 +266,7 @@
       "wrongCredentials": "Correo o contraseña incorrectos.",
       "googleFailed": "No se pudo iniciar sesión con Google. Inténtalo de nuevo.",
       "signUpRejected": "No se pudo crear la cuenta. Revisa el email y usa una contraseña más segura: mayúsculas y minúsculas, un número y un símbolo.",
+      "passwordMissing": "A la contraseña le falta: {{list}}.",
       "signUpLoginFailed": "Puede que este email ya esté registrado. Prueba a iniciar sesión.",
       "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
       "serverUnavailable": "El servidor se está despertando. Vuelve a intentarlo en un minuto.",

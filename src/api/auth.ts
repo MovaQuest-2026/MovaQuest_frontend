@@ -27,16 +27,33 @@ export type AuthErrorCode =
   | 'googleCancelled'
   | 'accountInactive'
 
+/** Вимоги бекенду до пароля понад довжину (UserCreate у Swagger). */
+export type PasswordRule = 'upper' | 'lower' | 'digit' | 'symbol'
+
 export class AuthError extends Error {
   readonly code: AuthErrorCode
-  constructor(code: AuthErrorCode) {
+  /** Яких вимог до пароля бракує (для signUpRejected), щоб показати це користувачу. */
+  readonly missing: PasswordRule[]
+  constructor(code: AuthErrorCode, missing: PasswordRule[] = []) {
     super(code)
     this.code = code
+    this.missing = missing
   }
+}
+
+/** Чого бракує паролю за політикою бекенду: велика й мала літери, цифра, спецсимвол. */
+export function missingPasswordRules(password: string): PasswordRule[] {
+  const missing: PasswordRule[] = []
+  if (!/\p{Lu}/u.test(password)) missing.push('upper')
+  if (!/\p{Ll}/u.test(password)) missing.push('lower')
+  if (!/\d/.test(password)) missing.push('digit')
+  if (!/[^\p{L}\d]/u.test(password)) missing.push('symbol')
+  return missing
 }
 
 /** Мінімум бекенду (PASSWORD_MIN_LENGTH на Render). */
 export const PASSWORD_MIN_LENGTH = 8
+
 const NAME_MIN = 2
 const NAME_MAX = 30
 const EMAIL_MAX = 50
@@ -108,6 +125,7 @@ export async function signUp(input: { name: string; email: string; password: str
   const email = normalizeEmail(input.email)
   if (name.length < NAME_MIN) throw new AuthError('nameRequired')
   if (!isEmail(email)) throw new AuthError('invalidEmail')
+  // Лише довжина: решту політики (регістри, цифра, символ) перевіряє бекенд, а ми показуємо його відмову (signUpRejected).
   if (input.password.length < PASSWORD_MIN_LENGTH) throw new AuthError('weakPassword')
 
   // 409 — зайнятий username (випадковий суфікс збігся): пробуємо інший.
@@ -123,6 +141,11 @@ export async function signUp(input: { name: string; email: string; password: str
       if (err instanceof ApiError && err.status === 409 && attempt < 2) continue
       // 422 на проді приходить без переліку полів: email і довжину ми вже перевірили,
       // тож найімовірніше пароль не пройшов політику бекенду (великі/малі літери, цифра, символ).
+      // Бекенд не каже, що саме не так із паролем, тож показуємо, чого йому бракує за відомою політикою.
+      if (err instanceof ApiError && err.status === 422) {
+        const missing = missingPasswordRules(input.password)
+        if (missing.length > 0) throw new AuthError('signUpRejected', missing)
+      }
       rethrow(err, () => 'signUpRejected')
     }
   }
