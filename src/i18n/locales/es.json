@@ -49,7 +49,8 @@
       "granted": "El micrófono está listo.",
       "denied": "El acceso al micrófono está bloqueado. Puedes escribir tus respuestas.",
       "unsupported": "Este navegador no puede usar el micrófono aquí. Abre la app con HTTPS."
-    }
+    },
+    "saveFailed": "No se pudieron guardar tus respuestas. Inténtalo de nuevo."
   },
   "lessons": {
     "title": "Series",
@@ -205,5 +206,50 @@
     "noComments": "Aún no hay comentarios. ¡Sé el primero!",
     "commentsError": "No se pudieron cargar los comentarios.",
     "savedBadge": "Guardado"
+  },
+  "auth": {
+    "modeLabel": "Inicia sesión o crea una cuenta",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "showPassword": "Mostrar",
+    "hidePassword": "Ocultar",
+    "passwordHint": "Al menos {{min}} caracteres.",
+    "signOut": "Cerrar sesión",
+    "signUp": {
+      "tab": "Registrarse",
+      "title": "Crea una cuenta",
+      "subtitle": "Guarda tu progreso y sigue practicando español con vídeos cortos.",
+      "submit": "Crear cuenta",
+      "switchPrompt": "¿Ya tienes cuenta?",
+      "switchAction": "Inicia sesión"
+    },
+    "signIn": {
+      "tab": "Entrar",
+      "title": "Hola de nuevo",
+      "subtitle": "Inicia sesión para seguir donde lo dejaste.",
+      "submit": "Entrar",
+      "switchPrompt": "¿Eres nuevo?",
+      "switchAction": "Crea una cuenta"
+    },
+    "errors": {
+      "nameRequired": "Escribe tu nombre.",
+      "invalidEmail": "Escribe un correo válido.",
+      "weakPassword": "La contraseña debe tener al menos {{min}} caracteres.",
+      "emailTaken": "Este correo ya está registrado. Inicia sesión.",
+      "wrongCredentials": "Correo o contraseña incorrectos.",
+      "googleUnavailable": "El inicio de sesión con Google aún no está configurado. Usa tu correo u omítelo por ahora.",
+      "googleFailed": "No se pudo iniciar sesión con Google. Inténtalo de nuevo."
+    },
+    "google": "Continuar con Google",
+    "or": "o",
+    "skip": "Ahora no",
+    "skipHint": "Puedes usar la app sin cuenta e iniciar sesión más tarde en tu perfil.",
+    "guestTitle": "No has iniciado sesión",
+    "guestBody": "Inicia sesión para guardar tu progreso.",
+    "signInCta": "Entrar",
+    "prompt": {
+      "text": "Inicia sesión para guardar tu progreso y tus me gusta."
+    }
   }
 }

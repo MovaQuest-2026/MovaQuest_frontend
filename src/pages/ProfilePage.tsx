@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { signOut } from '../api/auth'
 import { Segmented } from '../components/Segmented'
 import { TabBar } from '../components/TabBar'
 import { useMicTest } from '../features/speech/useMicTest'
@@ -20,6 +22,8 @@ export function ProfilePage() {
   const { t } = useTranslation()
   const [confirmReset, setConfirmReset] = useState(false)
   const mic = useMicTest()
+  const navigate = useNavigate()
+  const account = useUserStore((s) => s.account)
 
   const lang = useUserStore((s) => s.interfaceLanguage)
   const level = useUserStore((s) => s.level)
@@ -37,6 +41,47 @@ export function ProfilePage() {
     <>
       <main className="page page--with-tabbar">
         <h1 className="page__title">{t('profile.title')}</h1>
+
+        {account && (
+          <section className="card account-card">
+            <span className="account-card__avatar" aria-hidden="true">
+              {account.name.charAt(0).toUpperCase()}
+            </span>
+            <div className="account-card__body">
+              <p className="account-card__name">{account.name}</p>
+              <p className="muted account-card__email">{account.email}</p>
+            </div>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => {
+                // Після виходу застосунок працює далі без акаунта; увійти можна з цієї ж картки.
+                void signOut()
+                const user = useUserStore.getState()
+                user.setAccount(null)
+                user.setOnboardingPending(false)
+              }}
+            >
+              {t('auth.signOut')}
+            </button>
+          </section>
+        )}
+
+        {!account && (
+          <section className="card account-card">
+            <div className="account-card__body">
+              <p className="account-card__name">{t('auth.guestTitle')}</p>
+              <p className="muted">{t('auth.guestBody')}</p>
+            </div>
+            <button
+              type="button"
+              className="btn btn--primary"
+              onClick={() => navigate('/auth', { state: { from: '/profile' } })}
+            >
+              {t('auth.signInCta')}
+            </button>
+          </section>
+        )}
 
         <section className="field">
           <span className="field__label">{t('profile.language')}</span>

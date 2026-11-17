@@ -1,10 +1,13 @@
 import { Suspense, lazy, type ReactNode } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useOnboardingCheck } from './features/account/useOnboardingCheck'
+import { useProfileSync } from './features/account/useProfileSync'
 import { useUserStore } from './store/useUserStore'
 import { useSyncLanguage } from './i18n/useSyncLanguage'
 import { useSyncTheme } from './lib/useSyncTheme'
 import { LandingPage } from './landing/LandingPage'
-import { HomePage } from './pages/HomePage'
+import { AuthPage } from './pages/AuthPage'
+import { LatestLessonPage } from './pages/LatestLessonPage'
 import { OnboardingPage } from './pages/OnboardingPage'
 import { LessonsPage } from './pages/LessonsPage'
 import { LessonPlayerPage } from './pages/LessonPlayerPage'
@@ -14,24 +17,35 @@ import { ProfilePage } from './pages/ProfilePage'
 // Клікабельний прототип напрямків продукту: окремий лінивий чанк зі своїми стилями й стором.
 const PrototypeApp = lazy(() => import('./prototype/PrototypeApp'))
 
-// Сторінки застосунку доступні після онбордингу; до того ведемо на /onboarding.
-function RequireOnboarding({ children }: { children: ReactNode }) {
-  const onboardingDone = useUserStore((s) => s.onboardingDone)
-  return onboardingDone ? children : <Navigate to="/onboarding" replace />
+// Хто зареєструвався, але не завершив онбординг, бачить його знову на будь-якій сторінці застосунку.
+// Гостей це не стосується: вхід необов'язковий.
+function FinishOnboarding({ children }: { children: ReactNode }) {
+  const pending = useUserStore((s) => s.account !== null && s.onboardingPending)
+  const { pathname, search } = useLocation()
+  return pending ? <Navigate to="/onboarding" replace state={{ from: pathname + search }} /> : children
 }
+
+const app = (page: ReactNode) => <FinishOnboarding>{page}</FinishOnboarding>
 
 function App() {
   useSyncLanguage()
   useSyncTheme()
+  useProfileSync()
+  useOnboardingCheck()
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/auth" element={<AuthPage />} />
+      {/* Вхід необов'язковий: відео відкривається одразу. Увійти можна з профілю або з підказки над відео; онбординг іде після реєстрації. */}
       <Route path="/onboarding" element={<OnboardingPage />} />
-      <Route path="/home" element={<RequireOnboarding><HomePage /></RequireOnboarding>} />
-      <Route path="/lessons" element={<RequireOnboarding><LessonsPage /></RequireOnboarding>} />
-      <Route path="/lesson/:lessonId" element={<RequireOnboarding><LessonPlayerPage /></RequireOnboarding>} />
-      <Route path="/lesson/:lessonId/result" element={<RequireOnboarding><LessonResultPage /></RequireOnboarding>} />
-      <Route path="/profile" element={<RequireOnboarding><ProfilePage /></RequireOnboarding>} />
+      {/* /app, /lesson і «Головна» відкривають найновіше відео. */}
+      <Route path="/app" element={app(<LatestLessonPage />)} />
+      <Route path="/home" element={app(<LatestLessonPage />)} />
+      <Route path="/lesson" element={app(<LatestLessonPage />)} />
+      <Route path="/lessons" element={app(<LessonsPage />)} />
+      <Route path="/lesson/:lessonId" element={app(<LessonPlayerPage />)} />
+      <Route path="/lesson/:lessonId/result" element={app(<LessonResultPage />)} />
+      <Route path="/profile" element={app(<ProfilePage />)} />
       <Route
         path="/prototype/*"
         element={

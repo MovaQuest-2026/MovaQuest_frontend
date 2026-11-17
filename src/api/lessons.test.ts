@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { normalize } from '../lib/matchAnswer'
 import { getLesson } from './getLesson'
-import { getLessons } from './getLessons'
+import { getLatestLessonId, getLessons, sortByAddedAt } from './getLessons'
 
 const PLAYABLE = [
   'breaking-bad',
@@ -55,6 +55,12 @@ describe('lessons api', () => {
       const visible = lesson.cues.filter((c) => c.start < gap.pauseAt && c.end >= gap.pauseAt - 0.01)
       for (const cue of visible) expect(` ${normalize(cue.es)} `).not.toContain(` ${answer} `)
     }
+  })
+
+  it('puts the newest lessons first and opens the newest one', async () => {
+    const card = (id: string, addedAt?: string) => ({ id, addedAt }) as never
+    expect(sortByAddedAt([card('old', '2026-01-01'), card('none'), card('a', '2026-02-01'), card('b', '2026-02-01')]).map((l: { id: string }) => l.id)).toEqual(['a', 'b', 'old', 'none'])
+    expect(await getLatestLessonId()).toBe('breaking-bad')
   })
 
   it('rejects an unknown lesson id', async () => {

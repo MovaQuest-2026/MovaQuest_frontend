@@ -6,6 +6,7 @@ import { TabBar } from '../components/TabBar'
 import { ActionRail } from '../features/player/ActionRail'
 import { CommentsSheet } from '../features/player/CommentsSheet'
 import { GapPanel } from '../features/player/GapPanel'
+import { SignInPrompt } from '../features/player/SignInPrompt'
 import { clampSeek, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
 import { SubtitleLayer } from '../features/player/SubtitleLayer'
@@ -240,6 +241,7 @@ export function LessonPlayerPage() {
               <span aria-hidden="true">🔇</span> {t('player.unmute')}
             </button>
           )}
+          <SignInPrompt allowed={started && !muted && !answering && !commentsOpen} />
           <DevSpeechPanel />
           <div className="player__stage">
             <button

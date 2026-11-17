@@ -70,6 +70,8 @@ scripts/make-placeholder-clips.sh --debug     # з id уроку й таймер
 
 Див. [.env.example](.env.example). Без `VITE_POSTHOG_KEY` аналітика вимкнена, і `posthog-js` не потрапляє в бандл (вантажиться окремим чанком лише за наявності ключа).
 
+`VITE_GOOGLE_CLIENT_ID` вмикає «Увійти через Google». Створи OAuth client ID типу «Web application» у Google Cloud Console (APIs & Services → Credentials) і додай в «Authorized JavaScript origins» адреси застосунку: `http://localhost:5173` і домен Vercel. Без ключа кнопка в `npm run dev` входить у тестовий акаунт, а в продакшен-білді показує, що вхід через Google ще не налаштовано.
+
 ### Dev-режим розпізнавання
 
 Розпізнавання мови поки мок ([src/api/evaluateAnswer.ts](src/api/evaluateAnswer.ts)). Якщо додати `?dev=1` до адреси (`/lesson/cafe-madrid?dev=1`), угорі з'являється панель `correct / wrong / unclear`: мок повертає вибраний результат. Без вибору: запис менший за 4 КБ дає `unclear`, інакше випадково correct 60%, wrong 30%, unclear 10%. Відповідь текстом перевіряється локально справжнім `matchAnswer()`, без моку.

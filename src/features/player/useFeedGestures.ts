@@ -5,7 +5,7 @@ const SWIPE_MIN_PX = 60
 const WHEEL_MIN = 60
 const WHEEL_COOLDOWN_MS = 900
 /** Зони, де вертикальний жест належить самому елементу (скрол фраз, повзунок, кнопки). */
-const IGNORE = '.gap-panel, .player-controls, .player-topbar, .dev-panel, .action-rail, .comments-sheet'
+const IGNORE = '.gap-panel, .player-controls, .player-topbar, .dev-panel, .action-rail, .comments-sheet, .signin-prompt'
 
 /**
  * Жести стрічки: свайп угору — наступний урок, вниз — попередній.

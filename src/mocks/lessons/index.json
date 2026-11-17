@@ -13,7 +13,8 @@
     },
     "level": "A1",
     "durationSec": 58,
-    "cover": "/clips/breaking-bad/cover.jpg"
+    "cover": "/clips/breaking-bad/cover.jpg",
+    "addedAt": "2026-11-17"
   },
   {
     "id": "food-quiz",
@@ -29,7 +30,8 @@
     },
     "level": "A1",
     "durationSec": 75,
-    "cover": "/clips/food-quiz/cover.jpg"
+    "cover": "/clips/food-quiz/cover.jpg",
+    "addedAt": "2026-11-17"
   },
   {
     "id": "picture-words",
@@ -45,7 +47,8 @@
     },
     "level": "A1",
     "durationSec": 37,
-    "cover": "/clips/picture-words/cover.jpg"
+    "cover": "/clips/picture-words/cover.jpg",
+    "addedAt": "2026-11-17"
   },
   {
     "id": "words-quiz",
@@ -61,7 +64,8 @@
     },
     "level": "A1",
     "durationSec": 35,
-    "cover": "/clips/words-quiz/cover.jpg"
+    "cover": "/clips/words-quiz/cover.jpg",
+    "addedAt": "2026-11-17"
   },
   {
     "id": "haz-tu-tarea",
@@ -77,7 +81,8 @@
     },
     "level": "A1",
     "durationSec": 12,
-    "cover": "/clips/haz-tu-tarea/cover.jpg"
+    "cover": "/clips/haz-tu-tarea/cover.jpg",
+    "addedAt": "2026-11-17"
   },
   {
     "id": "cafe-madrid",
@@ -93,7 +98,8 @@
     },
     "level": "A2",
     "durationSec": 22,
-    "cover": "/clips/cafe-madrid/cover.jpg"
+    "cover": "/clips/cafe-madrid/cover.jpg",
+    "addedAt": "2026-11-15"
   },
   {
     "id": "metro-tips",
@@ -109,7 +115,8 @@
     },
     "level": "A2",
     "durationSec": 23,
-    "cover": "/clips/metro-tips/cover.jpg"
+    "cover": "/clips/metro-tips/cover.jpg",
+    "addedAt": "2026-11-15"
   },
   {
     "id": "hola-lucia",
@@ -125,7 +132,8 @@
     },
     "level": "A1",
     "durationSec": 21,
-    "cover": "/clips/hola-lucia/cover.jpg"
+    "cover": "/clips/hola-lucia/cover.jpg",
+    "addedAt": "2026-11-15"
   },
   {
     "id": "tiktok-street",

@@ -49,7 +49,8 @@
       "granted": "Microphone is ready.",
       "denied": "Microphone access was blocked. You can still type your answers.",
       "unsupported": "This browser can't access the microphone here. Open the app over HTTPS."
-    }
+    },
+    "saveFailed": "Couldn't save your answers. Try again."
   },
   "lessons": {
     "title": "Series",
@@ -204,5 +205,50 @@
     "noComments": "No comments yet. Be the first!",
     "commentsError": "Couldn't load comments.",
     "savedBadge": "Saved"
+  },
+  "auth": {
+    "modeLabel": "Sign in or create an account",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "passwordHint": "At least {{min}} characters.",
+    "signOut": "Sign out",
+    "signUp": {
+      "tab": "Sign up",
+      "title": "Create an account",
+      "subtitle": "Save your progress and keep learning Spanish with short videos.",
+      "submit": "Create account",
+      "switchPrompt": "Already have an account?",
+      "switchAction": "Sign in"
+    },
+    "signIn": {
+      "tab": "Sign in",
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue where you left off.",
+      "submit": "Sign in",
+      "switchPrompt": "New here?",
+      "switchAction": "Create an account"
+    },
+    "errors": {
+      "nameRequired": "Enter your name.",
+      "invalidEmail": "Enter a valid email.",
+      "weakPassword": "Password must be at least {{min}} characters.",
+      "emailTaken": "This email is already registered. Sign in instead.",
+      "wrongCredentials": "Wrong email or password.",
+      "googleUnavailable": "Google sign-in isn't set up yet. Use email or skip for now.",
+      "googleFailed": "Couldn't sign in with Google. Try again."
+    },
+    "google": "Continue with Google",
+    "or": "or",
+    "skip": "Not now",
+    "skipHint": "You can use the app without an account and sign in later in your profile.",
+    "guestTitle": "You're not signed in",
+    "guestBody": "Sign in to keep your progress safe.",
+    "signInCta": "Sign in",
+    "prompt": {
+      "text": "Sign in to keep your progress and likes."
+    }
   }
 }
