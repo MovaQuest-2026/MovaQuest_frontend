@@ -63,8 +63,8 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
 
   // Незавершений урок продовжується з останньої паузи, інакше починається спочатку.
   load: (lesson) => {
-    const { activeLesson } = useUserStore.getState()
-    const restored = activeLesson?.lessonId === lesson.id ? restoreState(lesson, activeLesson.machine) : null
+    const saved = useUserStore.getState().activeLessons[lesson.id]
+    const restored = saved ? restoreState(lesson, saved) : null
     set({
       ...emptySession,
       lesson,
@@ -87,9 +87,15 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     if (ended) {
       const correct = next.results.filter((r) => r.resolution === 'correct').length
       user.recordLessonResult(lesson.id, next.outcome!, correct, lesson.gaps.length)
-      user.setActiveLesson(null)
+      user.setActiveLesson(lesson.id, null)
     } else if (started) {
-      user.setActiveLesson({ lessonId: lesson.id, machine: next })
+      user.setActiveLesson(lesson.id, next)
+    }
+    // Слово вивчене, щойно на паузу відповіли правильно (зокрема повторно через кружечок); лише для акаунта.
+    for (const r of next.results) {
+      if (r.resolution === 'correct' && !machine.results.some((p) => p.gapId === r.gapId && p.resolution === 'correct')) {
+        user.recordWordLearned(lesson.id, r.gapId)
+      }
     }
     trackTransition(lesson, machine, next, event)
   },
@@ -98,7 +104,7 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     const { lesson, machine, startTracked } = get()
     set({ started: true, startTracked: true, userPaused: false })
     if (!lesson || !machine) return
-    useUserStore.getState().setActiveLesson({ lessonId: lesson.id, machine })
+    useUserStore.getState().setActiveLesson(lesson.id, machine)
     if (!startTracked) trackLessonStarted(lesson.id)
   },
   setMuted: (muted) => set({ muted }),

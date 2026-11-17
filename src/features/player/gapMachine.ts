@@ -35,6 +35,11 @@ export interface MachineState {
   heard: string[]
   results: GapResult[]
   outcome: Outcome | null
+  /**
+   * Усі паузи розв'язано: коли відео дійде до цієї секунди (після останнього слова звучить відповідь),
+   * урок завершується й показується підсумок. null: до кінця ще є що розв'язувати.
+   */
+  endAt?: number | null
 }
 
 export type MachineEvent =
@@ -56,6 +61,8 @@ export type MachineEvent =
 
 /** Пауза спрацьовує трохи раніше, щоб не «з'їсти» початок слова. */
 export const PAUSE_LEAD = 0.05
+/** Скільки секунд після останньої паузи ще звучить відповідь, перш ніж показати підсумок. */
+export const FINISH_TAIL_SEC = 2
 /** При відновленні уроку на паузі відео починається трохи раніше, щоб знову почути контекст. */
 export const RESUME_CONTEXT_SEC = 4
 
@@ -69,6 +76,7 @@ export function createInitialState(): MachineState {
     heard: [],
     results: [],
     outcome: null,
+    endAt: null,
   }
 }
 
@@ -105,6 +113,13 @@ export function wordJumpTarget(lesson: Lesson, time: number, dir: 'prev' | 'next
   }
   const ahead = lesson.gaps.find((g) => g.pauseAt - CONTEXT_LEAD_SEC > time + 0.3)
   return ahead ? ahead.pauseAt - CONTEXT_LEAD_SEC : null
+}
+
+/** Коли завершити урок, якщо наступної нерозв'язаної паузи вже немає: після звучання останньої відповіді. */
+function finishTime(lesson: Lesson, nextIndex: number): number | null {
+  if (nextIndex < lesson.gaps.length) return null
+  const last = lesson.gaps[lesson.gaps.length - 1]
+  return last ? last.pauseAt + FINISH_TAIL_SEC : null
 }
 
 /** Індекс першої паузи без результату (наступна, яку треба розв'язати), або довжина списку. */
@@ -149,7 +164,12 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
       return state.status === 'loading' ? { ...state, status: 'playing' } : state
 
     case 'TIME_UPDATE':
-      if (state.status !== 'playing' || !gap) return state
+      if (state.status !== 'playing') return state
+      // Усі слова пройдено: підсумок одразу після відповіді, не чекаючи кінця відео.
+      if (state.endAt != null && event.time >= state.endAt) {
+        return { ...state, status: 'ended', outcome: computeOutcome(lesson, state.results) }
+      }
+      if (!gap) return state
       return event.time >= gap.pauseAt - PAUSE_LEAD ? { ...state, status: 'awaitingAnswer' } : state
 
     case 'SEEK': {
@@ -174,15 +194,18 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         gapIndex++
       }
       if (passed.length > 0) {
+        const results = [...state.results, ...passed]
+        const next = Math.max(gapIndex, firstUnresolvedIndex(lesson, results))
         return {
           ...state,
           status: 'playing',
-          gapIndex: Math.max(gapIndex, firstUnresolvedIndex(lesson, [...state.results, ...passed])),
+          endAt: finishTime(lesson, next),
+          gapIndex: next,
           attempts: 0,
           hintShown: false,
           lastVerdict: null,
           heard: [],
-          results: [...state.results, ...passed],
+          results,
         }
       }
       // Назад з паузи: контекст звучить знову, як «Ще раз».
@@ -204,6 +227,7 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         hintShown: false,
         lastVerdict: null,
         heard: [],
+        endAt: null,
         results: state.results.filter((r) => r.gapId !== event.gapId),
       }
     }
@@ -262,6 +286,7 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         status: 'playing',
         // Після повтору старої паузи наступною буде перша ще не розв'язана, а не просто сусідня.
         gapIndex: firstUnresolvedIndex(lesson, state.results),
+        endAt: gap && firstUnresolvedIndex(lesson, state.results) >= lesson.gaps.length ? gap.pauseAt + FINISH_TAIL_SEC : null,
         attempts: 0,
         hintShown: false,
         lastVerdict: null,

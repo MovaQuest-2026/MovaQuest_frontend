@@ -14,10 +14,11 @@ export type ThemePreference = 'system' | 'light' | 'dark'
 export type PlaybackRate = 0.75 | 1
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
 
-/** Незавершений урок, який відкриває вкладка «Головна». */
-export interface ActiveLesson {
-  lessonId: string
-  machine: MachineState
+/** Прогрес одного акаунта; лежить у localStorage, поки його немає на бекенді. */
+export interface AccountProgress {
+  completedLessons: Record<string, CompletedLesson>
+  /** Вивчені слова: lessonId → id пауз, на які відповіли правильно. */
+  learnedWords: Record<string, string[]>
 }
 
 export interface CompletedLesson {
@@ -45,8 +46,13 @@ interface UserState {
   subtitleLangs: SubtitleLang[]
   theme: ThemePreference
   playbackRate: PlaybackRate
+  /** Прогрес поточного акаунта. Гість прогресу не має: він порожній і не оновлюється. */
   completedLessons: Record<string, CompletedLesson>
-  activeLesson: ActiveLesson | null
+  learnedWords: Record<string, string[]>
+  /** Збережений прогрес акаунтів, з яких вийшли (повертається після входу). */
+  progressByAccount: Record<string, AccountProgress>
+  /** Незавершені уроки: стан проходження кожного (повернувшись до відео, продовжуємо з того ж місця). */
+  activeLessons: Record<string, MachineState>
   /** Уподобані уроки (серце в стрічці). */
   likedLessons: string[]
   /** Збережені уроки (закладка в стрічці). */
@@ -64,8 +70,11 @@ interface UserState {
   setPlaybackRate: (rate: PlaybackRate) => void
   completeOnboarding: () => void
   recordLessonResult: (lessonId: string, outcome: Outcome, correct: number, total: number) => void
+  /** Слово (пауза) вивчене: на нього відповіли правильно. Лише для акаунта. */
+  recordWordLearned: (lessonId: string, gapId: string) => void
   resetProgress: () => void
-  setActiveLesson: (active: ActiveLesson | null) => void
+  /** Зберігає стан незавершеного уроку; null видаляє (урок завершено або скинуто). */
+  setActiveLesson: (lessonId: string, machine: MachineState | null) => void
   toggleLiked: (lessonId: string) => void
   toggleSaved: (lessonId: string) => void
   /** Замінює списки лайків і збережених (синхронізація з бекендом після входу). */
@@ -95,6 +104,8 @@ function createUserId(): string {
  * v6: вхід необов'язковий, його можна пропустити (authSkipped).
  * v7: замість authSkipped підказка над відео, яку можна закрити (signInPromptDismissed).
  * v8: onboardingPending (уточнюється з профілю акаунта під час запуску, див. useOnboardingCheck).
+ * v10: activeLessons — незавершений стан кожного уроку, а не лише останнього (activeLesson).
+ * v9: прогрес лише в акаунта (learnedWords, progressByAccount); гостьовий прогрес відкидається.
  */
 export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
   let state = { ...(persisted as Record<string, unknown>) }
@@ -112,6 +123,15 @@ export function migrateUserState(persisted: unknown, version: number): Record<st
     state = { ...rest, signInPromptDismissed: false }
   }
   if (version < 8) state = { ...state, onboardingPending: false }
+  if (version < 9) {
+    state = { ...state, learnedWords: {}, progressByAccount: {} }
+    if (!state.account) state = { ...state, completedLessons: {} }
+  }
+  if (version < 10) {
+    const { activeLesson, ...rest } = state as { activeLesson?: { lessonId?: string; machine?: unknown } | null }
+    const old = activeLesson?.lessonId && activeLesson.machine ? { [activeLesson.lessonId]: activeLesson.machine } : {}
+    state = { ...rest, activeLessons: old }
+  }
   return state
 }
 
@@ -131,11 +151,29 @@ export const useUserStore = create<UserState>()(
       theme: 'system',
       playbackRate: 1,
       completedLessons: {},
-      activeLesson: null,
+      learnedWords: {},
+      progressByAccount: {},
+      activeLessons: {},
       likedLessons: [],
       savedLessons: [],
 
-      setAccount: (account) => set({ account }),
+      // Прогрес належить акаунту: при виході зберігаємо його, при вході повертаємо; гість починає з порожнього.
+      setAccount: (account) =>
+        set((s) => {
+          const prevId = s.account?.id ?? null
+          const nextId = account?.id ?? null
+          if (prevId === nextId) return { account }
+          const progressByAccount = prevId
+            ? { ...s.progressByAccount, [prevId]: { completedLessons: s.completedLessons, learnedWords: s.learnedWords } }
+            : s.progressByAccount
+          const restored = nextId ? progressByAccount[nextId] : undefined
+          return {
+            account,
+            progressByAccount,
+            completedLessons: restored?.completedLessons ?? {},
+            learnedWords: restored?.learnedWords ?? {},
+          }
+        }),
       dismissSignInPrompt: () => set({ signInPromptDismissed: true }),
       setOnboardingPending: (onboardingPending) => set({ onboardingPending }),
       setInterfaceLanguage: (interfaceLanguage) => set({ interfaceLanguage }),
@@ -152,21 +190,39 @@ export const useUserStore = create<UserState>()(
       setPlaybackRate: (playbackRate) => set({ playbackRate }),
       completeOnboarding: () => set({ onboardingDone: true }),
       recordLessonResult: (lessonId, outcome, correct, total) =>
-        set((s) => ({
-          completedLessons: {
-            ...s.completedLessons,
-            [lessonId]: { outcome, correct, total, completedAt: new Date().toISOString() },
-          },
-        })),
-      resetProgress: () => set({ completedLessons: {}, activeLesson: null }),
-      setActiveLesson: (activeLesson) => set({ activeLesson }),
+        set((s) =>
+          // Гість прогресу не має; гірше повторне проходження не затирає кращий результат.
+          s.account === null || (s.completedLessons[lessonId] && s.completedLessons[lessonId].correct > correct)
+            ? s
+            : {
+                completedLessons: {
+                  ...s.completedLessons,
+                  [lessonId]: { outcome, correct, total, completedAt: new Date().toISOString() },
+                },
+              },
+        ),
+      recordWordLearned: (lessonId, gapId) =>
+        set((s) => {
+          if (s.account === null || s.learnedWords[lessonId]?.includes(gapId)) return s
+          return { learnedWords: { ...s.learnedWords, [lessonId]: [...(s.learnedWords[lessonId] ?? []), gapId] } }
+        }),
+      resetProgress: () => set({ completedLessons: {}, learnedWords: {}, activeLessons: {} }),
+      setActiveLesson: (lessonId, machine) =>
+        set((s) => {
+          if (machine === null) {
+            if (!(lessonId in s.activeLessons)) return s
+            const { [lessonId]: _removed, ...rest } = s.activeLessons
+            return { activeLessons: rest }
+          }
+          return { activeLessons: { ...s.activeLessons, [lessonId]: machine } }
+        }),
       toggleLiked: (lessonId) => set((s) => ({ likedLessons: toggleIn(s.likedLessons, lessonId) })),
       toggleSaved: (lessonId) => set((s) => ({ savedLessons: toggleIn(s.savedLessons, lessonId) })),
       setReactions: (likedLessons, savedLessons) => set({ likedLessons, savedLessons }),
     }),
     {
       name: 'movaquest-user-v1',
-      version: 8,
+      version: 10,
       migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
     },
   ),
