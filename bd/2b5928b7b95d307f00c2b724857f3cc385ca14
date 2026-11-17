@@ -1,0 +1,44 @@
+src/features/player/PlayerControls.tsx
+  s_4ae98288f8b5bc::t_3175558b71e761 41
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 6,14,16,18,120-121,125-134,158-167
+src/features/player/gapMachine.ts
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 92-109
+src/index.css
+  s_4ae98288f8b5bc::t_3175558b71e761 1705,1719,1722,1735-1740
+  s_4ae98288f8b5bc::t_92db2a466f3a34 1741
+src/features/player/gapMachine.test.ts
+  s_4ae98288f8b5bc::t_16eb8d27b301e7 193-194
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 6,191-192,195-202
+  s_4ae98288f8b5bc::t_80a5d428a2910e 203-204
+src/i18n/locales/en.json
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 78-79
+src/i18n/locales/uk.json
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 78-79
+src/i18n/locales/es.json
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 78-79
+src/pages/LessonPlayerPage.tsx
+  s_4ae98288f8b5bc::t_cfb38c5602d6af 10,172,182,188
+CLAUDE.md
+  s_4ae98288f8b5bc::t_16eb8d27b301e7 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bd2b5928b7b95d307f00c2b724857f3cc385ca14",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4ae98288f8b5bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d0e6645-792f-49bb-96a9-61038c69f4ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
