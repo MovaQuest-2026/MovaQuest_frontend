@@ -1,0 +1,80 @@
+src/i18n/locales/es.json
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 187-191
+src/store/usePlayerStore.ts
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 94-98
+  s_4ae98288f8b5bc::t_e597c0f5b6a803 66-67,90,92,107
+  s_4ae98288f8b5bc::t_3e7e7c421efd53 93
+CLAUDE.md
+  s_4ae98288f8b5bc::t_8040f6ff98c750 35
+  s_4ae98288f8b5bc::t_b2946a0b5dd2a4 43
+  s_4ae98288f8b5bc::t_093c4d7834a487 42
+  s_4ae98288f8b5bc::t_8ea6bec59061a9 17,62-64
+  s_4ae98288f8b5bc::t_8d62b7279df3eb 37
+src/i18n/locales/en.json
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 187-191
+src/features/player/gapMachine.test.ts
+  s_4ae98288f8b5bc::t_8127085fff5dca 174-207
+src/features/player/likeLesson.ts
+  s_4ae98288f8b5bc::t_8bba4025b8548d 1-20
+src/features/player/ResultModal.tsx
+  s_4ae98288f8b5bc::t_4bfa934c53296d 1-66
+src/pages/ProfilePage.tsx
+  s_4ae98288f8b5bc::t_370f6a02023f27 116-127,129-140
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 2,34,36-42,191-213
+src/store/useUserStore.test.ts
+  s_4ae98288f8b5bc::t_b2946a0b5dd2a4 78-87
+  s_4ae98288f8b5bc::t_dcfd55fc4cc5d8 2,5-7,31-33,53-77,88-102
+  s_4ae98288f8b5bc::t_9a00d8756c9b71 34
+  s_4ae98288f8b5bc::t_e597c0f5b6a803 52
+  s_4ae98288f8b5bc::t_8040f6ff98c750 103-122
+src/index.css
+  s_4ae98288f8b5bc::t_8bba4025b8548d 1801-1831,1854-1855
+  s_4ae98288f8b5bc::t_80c46d39d54487 1178,1183,1832-1853
+  s_4ae98288f8b5bc::t_4bfa934c53296d 1856-1912
+src/pages/LessonPlayerPage.tsx
+  s_4ae98288f8b5bc::t_2c6ae792bc7e21 248-262,268,303,309-313,317
+  s_4ae98288f8b5bc::t_e597c0f5b6a803 144
+  s_4ae98288f8b5bc::t_4bfa934c53296d 15,208-218,444-453
+  s_4ae98288f8b5bc::t_80c46d39d54487 1,27,68-77,88-90,96-98,100-104,106-111,117-120,334-338,341-343,358-359
+  s_4ae98288f8b5bc::t_8d62b7279df3eb 99,105
+  s_4ae98288f8b5bc::t_8bba4025b8548d 5,11,28-30,219,263-267,269-292,295-302,304-307,314-316,318-319,406-416
+  s_4ae98288f8b5bc::t_58042abedd3d97 220,454
+src/store/useUserStore.ts
+  s_4ae98288f8b5bc::t_fbe2efdfae225f 17-21,49,51-53,73-74,108,126-129,154-155,160-176,193,196-197
+  s_4ae98288f8b5bc::t_e597c0f5b6a803 54-55,76-77,107,130-134,156,208-217,225
+  s_4ae98288f8b5bc::t_4bfa934c53296d 194-195
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 198-207,218
+src/features/player/gapMachine.ts
+  s_4ae98288f8b5bc::t_b9002366af3a5e 38-42,64-65,79,118-124,167-172,197-198,202-203,208,230,289
+src/features/player/ResultWordList.tsx
+  s_4ae98288f8b5bc::t_4bfa934c53296d 1-54
+src/i18n/locales/uk.json
+  s_4ae98288f8b5bc::t_50e8ab1e1bfaf4 189-195
+src/features/player/useFeedGestures.ts
+  s_4ae98288f8b5bc::t_80c46d39d54487 4-14,20-36,39-40,42-43,46,48,55-56,64-65,68,70-89,92-105,108-110,112,129
+  s_4ae98288f8b5bc::t_4bfa934c53296d 18
+  s_4ae98288f8b5bc::t_44a9f18d026b0c 19
+src/pages/LessonResultPage.tsx
+  s_4ae98288f8b5bc::t_4bfa934c53296d 5,7,66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb9862f47a94371c526124db7dfc67c1e121d9d3",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4ae98288f8b5bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d0e6645-792f-49bb-96a9-61038c69f4ba",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
