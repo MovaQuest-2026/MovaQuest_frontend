@@ -1,26 +1,34 @@
 import { describe, expect, it } from 'vitest'
-import { getComments, getLessonStats, postComment, recordShare } from './social'
+import {
+  mockDeleteComment,
+  mockGetComments,
+  mockGetLessonStats,
+  mockPostComment,
+  mockRecordShare,
+} from './socialMock'
 
-describe('social api (mock)', () => {
+describe('social mock', () => {
   it('returns zero stats for an unknown lesson', async () => {
-    expect(await getLessonStats('nope')).toEqual({ likes: 0, comments: 0, saves: 0, shares: 0 })
+    expect(await mockGetLessonStats('nope')).toEqual({ likes: 0, comments: 0, saves: 0, shares: 0 })
   })
 
-  it('puts a posted comment first and counts it', async () => {
-    const before = await getLessonStats('cafe-madrid')
-    const c = await postComment('cafe-madrid', 'me', '  ¡Hola!  ')
+  it('puts a posted comment first, counts it and can delete it', async () => {
+    const before = await mockGetLessonStats('cafe-madrid')
+    const c = await mockPostComment('cafe-madrid', '  ¡Hola!  ')
     expect(c).toMatchObject({ text: '¡Hola!', own: true })
-    expect((await getComments('cafe-madrid'))[0].id).toBe(c.id)
-    expect((await getLessonStats('cafe-madrid')).comments).toBe(before.comments + 1)
+    expect((await mockGetComments('cafe-madrid')).items[0].id).toBe(c.id)
+    expect((await mockGetLessonStats('cafe-madrid')).comments).toBe(before.comments + 1)
+    await mockDeleteComment('cafe-madrid', c.id)
+    expect((await mockGetLessonStats('cafe-madrid')).comments).toBe(before.comments)
   })
 
   it('rejects an empty comment', async () => {
-    await expect(postComment('cafe-madrid', 'me', '   ')).rejects.toThrow()
+    await expect(mockPostComment('cafe-madrid', '   ')).rejects.toThrow()
   })
 
   it('counts shares', async () => {
-    const before = await getLessonStats('metro-tips')
-    await recordShare('metro-tips')
-    expect((await getLessonStats('metro-tips')).shares).toBe(before.shares + 1)
+    const before = await mockGetLessonStats('metro-tips')
+    await mockRecordShare('metro-tips')
+    expect((await mockGetLessonStats('metro-tips')).shares).toBe(before.shares + 1)
   })
 })

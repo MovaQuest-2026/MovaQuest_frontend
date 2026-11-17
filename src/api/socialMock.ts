@@ -1,9 +1,6 @@
-import type { LessonComment, LessonStats } from '../types/social'
+import type { CommentsPage, LessonComment, LessonStats } from '../types/social'
 
-// Зараз читає моки. Пізніше:
-//   GET  /api/lessons/:id/stats
-//   GET  /api/lessons/:id/comments, POST /api/lessons/:id/comments
-//   PUT/DELETE /api/lessons/:id/like, /save; POST /api/lessons/:id/share
+// Мок соціальних функцій без бекенду (VITE_MOCK_SPEECH-подібний прапорець VITE_MOCK_SOCIAL=true, див. social.ts).
 const statsMock = import.meta.glob<Record<string, LessonStats>>('../mocks/social/stats.json', { import: 'default' })
 const commentsMock = import.meta.glob<Record<string, LessonComment[]>>('../mocks/social/comments.json', {
   import: 'default',
@@ -15,7 +12,7 @@ const EMPTY_STATS: LessonStats = { likes: 0, comments: 0, saves: 0, shares: 0 }
 const postedComments = new Map<string, LessonComment[]>()
 const sessionShares = new Map<string, number>()
 
-export async function getLessonStats(lessonId: string): Promise<LessonStats> {
+export async function mockGetLessonStats(lessonId: string): Promise<LessonStats> {
   const all = (await statsMock['../mocks/social/stats.json']?.()) ?? {}
   const base = all[lessonId] ?? EMPTY_STATS
   return {
@@ -25,21 +22,20 @@ export async function getLessonStats(lessonId: string): Promise<LessonStats> {
   }
 }
 
-/** Нові коментарі першими. */
-export async function getComments(lessonId: string): Promise<LessonComment[]> {
+/** Нові коментарі першими. Мок віддає все однією сторінкою. */
+export async function mockGetComments(lessonId: string): Promise<CommentsPage> {
   const all = (await commentsMock['../mocks/social/comments.json']?.()) ?? {}
   const own = postedComments.get(lessonId) ?? []
-  return [...own, ...[...(all[lessonId] ?? [])].sort((a, b) => b.createdAt.localeCompare(a.createdAt))]
+  const items = [...own, ...[...(all[lessonId] ?? [])].sort((a, b) => b.createdAt.localeCompare(a.createdAt))]
+  return { items, nextCursor: null }
 }
 
-export const COMMENT_MAX_LENGTH = 150
-
-export async function postComment(lessonId: string, author: string, text: string): Promise<LessonComment> {
-  const trimmed = text.trim().slice(0, COMMENT_MAX_LENGTH)
+export async function mockPostComment(lessonId: string, text: string): Promise<LessonComment> {
+  const trimmed = text.trim().slice(0, 150)
   if (!trimmed) throw new Error('Empty comment')
   const comment: LessonComment = {
     id: `own-${Date.now()}`,
-    author,
+    author: 'You',
     text: trimmed,
     createdAt: new Date().toISOString(),
     likes: 0,
@@ -49,10 +45,25 @@ export async function postComment(lessonId: string, author: string, text: string
   return comment
 }
 
-/** Лайк і збереження живуть у useUserStore; тут лише синхронізація з бекендом (зараз нічого не робить). */
-export async function setLessonLiked(_lessonId: string, _liked: boolean): Promise<void> {}
-export async function setLessonSaved(_lessonId: string, _saved: boolean): Promise<void> {}
+export async function mockDeleteComment(lessonId: string, commentId: string): Promise<void> {
+  postedComments.set(
+    lessonId,
+    (postedComments.get(lessonId) ?? []).filter((c) => c.id !== commentId),
+  )
+}
 
-export async function recordShare(lessonId: string): Promise<void> {
+export async function mockRecordShare(lessonId: string): Promise<void> {
   sessionShares.set(lessonId, (sessionShares.get(lessonId) ?? 0) + 1)
+}
+
+/** Базові «накручені» лічильники з мок-даних (без дій цієї сесії). */
+export async function seedStats(lessonId: string): Promise<LessonStats> {
+  const all = (await statsMock['../mocks/social/stats.json']?.()) ?? {}
+  return all[lessonId] ?? EMPTY_STATS
+}
+
+/** Мок-коментарі уроку, нові першими. */
+export async function seedComments(lessonId: string): Promise<LessonComment[]> {
+  const all = (await commentsMock['../mocks/social/comments.json']?.()) ?? {}
+  return [...(all[lessonId] ?? [])].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }

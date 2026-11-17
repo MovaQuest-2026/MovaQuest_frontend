@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
+import { prefetchLessonStats } from '../api/social'
 import { TabBar } from '../components/TabBar'
 import { ActionRail } from '../features/player/ActionRail'
 import { CommentsSheet } from '../features/player/CommentsSheet'
@@ -73,6 +74,12 @@ export function LessonPlayerPage() {
       navigate(`/lesson/${target}`, { state: { enter: dir } })
     }, FEED_TRANSITION_MS)
   }
+  // Лічильники лайків і коментарів сусідніх відео завантажуємо наперед, щоб після свайпу там не було нулів.
+  useEffect(() => {
+    prefetchLessonStats(lessonId)
+    prefetchLessonStats(feed.next)
+    prefetchLessonStats(feed.prev)
+  }, [lessonId, feed.next, feed.prev])
   const gestures = useFeedGestures(goToNeighbour)
   // Поки відкриті коментарі, відео стоїть (інакше пауза для відповіді сховається під шторкою).
   // Прив'язано до уроку: після свайпу на інший урок шторка закрита.

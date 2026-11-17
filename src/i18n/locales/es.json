@@ -53,6 +53,13 @@
     "saveFailed": "No se pudieron guardar tus respuestas. Inténtalo de nuevo."
   },
   "lessons": {
+    "filter": {
+      "label": "Filtro",
+      "all": "Todos",
+      "saved": "Guardados"
+    },
+    "noSaved": "Aún no hay vídeos guardados. Toca el marcador de un vídeo para guardarlo.",
+    "savedSignIn": "Inicia sesión para guardar vídeos y verlos aquí.",
     "title": "Series",
     "subtitle": "Vídeos cortos en español. Cuando uno se pare, di la siguiente palabra o la respuesta.",
     "duration": "{{minutes}} min",
@@ -210,7 +217,12 @@
     "you": "Tú",
     "noComments": "Aún no hay comentarios. ¡Sé el primero!",
     "commentsError": "No se pudieron cargar los comentarios.",
-    "savedBadge": "Guardado"
+    "savedBadge": "Guardado",
+    "actionFailed": "No se ha podido guardar. Inténtalo otra vez.",
+    "loadMore": "Mostrar más",
+    "deleteComment": "Eliminar",
+    "commentSignIn": "Inicia sesión para comentar.",
+    "commentSendError": "No se ha podido enviar. Inténtalo otra vez."
   },
   "auth": {
     "modeLabel": "Inicia sesión o crea una cuenta",

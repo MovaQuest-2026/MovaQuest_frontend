@@ -68,6 +68,8 @@ interface UserState {
   setActiveLesson: (active: ActiveLesson | null) => void
   toggleLiked: (lessonId: string) => void
   toggleSaved: (lessonId: string) => void
+  /** Замінює списки лайків і збережених (синхронізація з бекендом після входу). */
+  setReactions: (liked: string[], saved: string[]) => void
 }
 
 function toggleIn(list: string[], id: string): string[] {
@@ -160,6 +162,7 @@ export const useUserStore = create<UserState>()(
       setActiveLesson: (activeLesson) => set({ activeLesson }),
       toggleLiked: (lessonId) => set((s) => ({ likedLessons: toggleIn(s.likedLessons, lessonId) })),
       toggleSaved: (lessonId) => set((s) => ({ savedLessons: toggleIn(s.savedLessons, lessonId) })),
+      setReactions: (likedLessons, savedLessons) => set({ likedLessons, savedLessons }),
     }),
     {
       name: 'movaquest-user-v1',
