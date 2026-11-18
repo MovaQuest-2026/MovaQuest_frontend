@@ -1,0 +1,86 @@
+src/features/account/completeSignIn.test.ts
+  s_348faeaddbd78c::t_8112bd061690b1 1-19
+src/features/account/completeSignIn.ts
+  s_348faeaddbd78c::t_91504d4d0f856d 16-23
+  s_348faeaddbd78c::t_63541175222d6d 34,38-48
+  s_348faeaddbd78c::t_0cef076338033c 49
+src/i18n/locales/uk.json
+  s_348faeaddbd78c::t_c50980b38931c1 90-93
+  s_348faeaddbd78c::t_73537835aca71e 205-207
+src/api/profileMock.ts
+  s_348faeaddbd78c::t_10df1dd4985885 4-5,7,9,13,18,27
+src/i18n/locales/es.json
+  s_348faeaddbd78c::t_73537835aca71e 199-201
+  s_348faeaddbd78c::t_c50980b38931c1 90-91
+src/store/usePlayerStore.ts
+  s_348faeaddbd78c::t_ebe93eee606b3d 66
+src/features/account/useProgressSync.test.ts
+  s_348faeaddbd78c::t_c52152a35d5630 1-116
+src/features/player/PlayerControls.tsx
+  s_348faeaddbd78c::t_c50980b38931c1 8-20,42-44,51-54,58-63,144,172-182
+src/features/account/useProgressSync.ts
+  s_348faeaddbd78c::t_d1d2c53d644242 1-192
+src/i18n/locales/en.json
+  s_348faeaddbd78c::t_c50980b38931c1 90-91
+  s_348faeaddbd78c::t_73537835aca71e 199-201
+src/store/useUserStore.test.ts
+  s_348faeaddbd78c::t_36a2c5d08e05b4 111-114,122,126-162
+.env.example
+  s_348faeaddbd78c::t_91504d4d0f856d 20-23
+  s_348faeaddbd78c::t_73537835aca71e 24-27
+src/App.tsx
+  s_348faeaddbd78c::t_73537835aca71e 6,39
+src/api/progress.test.ts
+  s_348faeaddbd78c::t_fb864623d5f852 1-115
+src/store/useUserStore.ts
+  s_348faeaddbd78c::t_ebe93eee606b3d 6,11,19-23,47-51,72-73,107,134-145,172,179-182,185,191,227,235,243
+src/pages/ProfilePage.tsx
+  s_348faeaddbd78c::t_4ca679efd5cff8 240
+  s_348faeaddbd78c::t_1f8686fd4465ad 5,25,50-68,252-256,258,264-265,267
+src/types/progress.ts
+  s_348faeaddbd78c::t_b0a05fbc08887f 1-63
+src/pages/AuthPage.tsx
+  s_348faeaddbd78c::t_63541175222d6d 6,24,26,48,56,74
+src/index.css
+  s_348faeaddbd78c::t_c50980b38931c1 1759-1768
+  s_348faeaddbd78c::t_3782d23666999b 931-932
+  s_348faeaddbd78c::t_481c701be2af3c 1769
+src/api/profile.test.ts
+  s_348faeaddbd78c::t_fe6494c04b46a3 1-5,7-60,62,64-65,69,71,73,75
+CLAUDE.md
+  s_348faeaddbd78c::t_b260087255ce80 39
+  s_348faeaddbd78c::t_2efbf22efc7366 22,40
+  s_348faeaddbd78c::t_c60df594b0a962 64
+  s_348faeaddbd78c::t_3782d23666999b 17
+src/features/account/useProfileSync.ts
+  s_348faeaddbd78c::t_91504d4d0f856d 23-24
+src/api/progress.ts
+  s_348faeaddbd78c::t_3419cfdda48e2d 1-89
+src/api/progressMock.ts
+  s_348faeaddbd78c::t_96f5c1899a1d77 1-91
+docs/backend-requirements.md
+  s_348faeaddbd78c::t_c60df594b0a962 338-339
+src/api/profile.ts
+  s_348faeaddbd78c::t_5523d948668bfb 1-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77efe72bab9de2fa47e48f1200d7b22f7905cf16",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_348faeaddbd78c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2f87bbf0-30a6-42a3-bd05-a84e63d87f91",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
