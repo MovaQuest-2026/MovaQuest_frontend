@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getCurrentAccount } from '../../api/auth'
 import { googleErrorFromQuery, takePendingGoogleSignIn } from '../../api/googleAuth'
+import { wakeBackend } from '../../api/http'
 import { useUserStore } from '../../store/useUserStore'
 
 /** Безкоштовний Render засинає після ~15 хв тиші: поки вкладка видима, торкаємось його частіше. */
@@ -29,8 +30,9 @@ async function syncSession() {
 }
 
 /**
- * Під час запуску: перевірити сесію (GET /users/me) і заодно розбудити Render, поки людина дивиться перші секунди.
- * Далі той самий запит кожні ~10 хв, поки вкладка видима (docs/backend-plan.md §2.4).
+ * Під час запуску (на будь-якій сторінці, зокрема на лендінгу): розбудити Render через GET /health
+ * і перевірити сесію (GET /users/me), поки людина дивиться перші секунди.
+ * Далі ті самі запити кожні ~10 хв, поки вкладка видима (docs/backend-plan.md §2.4).
  */
 export function useBackendSession() {
   useEffect(() => {
@@ -38,6 +40,7 @@ export function useBackendSession() {
     const tick = () => {
       if (document.visibilityState !== 'visible' || Date.now() - last < KEEP_AWAKE_MS - 5_000) return
       last = Date.now()
+      wakeBackend()
       void syncSession()
     }
     tick()

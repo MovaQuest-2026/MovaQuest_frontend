@@ -1,0 +1,335 @@
+{
+  "id": "el-cliente",
+  "title": {
+    "es": "El cliente siempre tiene la razón",
+    "en": "The customer is always right",
+    "uk": "Клієнт завжди має рацію"
+  },
+  "description": {
+    "es": "Cada frase suena en español y en inglés. Contesta antes que los personajes.",
+    "en": "Every line plays in Spanish and in English. Answer before the characters do.",
+    "uk": "Кожна репліка звучить іспанською та англійською. Відповідайте раніше за персонажів."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 53,
+  "cover": "/clips/el-cliente/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/el-cliente/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 1.7,
+      "es": "Un momento, estoy confundido.",
+      "tr": {
+        "en": "Wait a minute, I'm confused.",
+        "uk": "Хвилинку, я заплутався."
+      }
+    },
+    {
+      "start": 1.75,
+      "end": 3.0,
+      "es": "Yo soy el cliente, ¿no?",
+      "tr": {
+        "en": "I'm the customer, right?",
+        "uk": "Я ж клієнт, так?"
+      }
+    },
+    {
+      "start": 3.2,
+      "end": 4.3,
+      "es": "Pues sí.",
+      "tr": {
+        "en": "Well, yes.",
+        "uk": "Ну так."
+      }
+    },
+    {
+      "start": 4.5,
+      "end": 6.0,
+      "es": "Espera, estoy confundido.",
+      "tr": {
+        "en": "Hold on, I'm confused.",
+        "uk": "Стривайте, я заплутався."
+      }
+    },
+    {
+      "start": 6.1,
+      "end": 7.45,
+      "es": "Soy el cliente, ¿verdad?",
+      "tr": {
+        "en": "I'm the customer, right?",
+        "uk": "Я ж клієнт, правда?"
+      }
+    },
+    {
+      "start": 7.5,
+      "end": 8.5,
+      "es": "Bueno, sí.",
+      "tr": {
+        "en": "Well, yes.",
+        "uk": "Ну, так."
+      }
+    },
+    {
+      "start": 8.55,
+      "end": 10.2,
+      "es": "¿Qué dice el letrero que está por allá?",
+      "tr": {
+        "en": "What does the sign over there say?",
+        "uk": "Що написано на тій вивісці?"
+      }
+    },
+    {
+      "start": 10.3,
+      "end": 11.8,
+      "es": "¿Qué dice ese letrero de allá?",
+      "tr": {
+        "en": "What does that sign over there say?",
+        "uk": "Що написано на тій вивісці?"
+      }
+    },
+    {
+      "start": 12.0,
+      "end": 14.95,
+      "es": "Ah, el cliente siempre tiene la razón.",
+      "tr": {
+        "en": "Ah, the customer is always right.",
+        "uk": "А, клієнт завжди має рацію."
+      }
+    },
+    {
+      "start": 15.3,
+      "end": 17.2,
+      "es": "El cliente siempre tiene la razón.",
+      "tr": {
+        "en": "The customer is always right.",
+        "uk": "Клієнт завжди має рацію."
+      }
+    },
+    {
+      "start": 17.4,
+      "end": 18.7,
+      "es": "¿Y yo qué soy?",
+      "tr": {
+        "en": "And what am I?",
+        "uk": "А я хто?"
+      }
+    },
+    {
+      "start": 18.75,
+      "end": 19.6,
+      "es": "El cliente.",
+      "tr": {
+        "en": "The customer.",
+        "uk": "Клієнт."
+      }
+    },
+    {
+      "start": 19.7,
+      "end": 20.5,
+      "es": "¿Y yo qué soy?",
+      "tr": {
+        "en": "And what am I?",
+        "uk": "А я хто?"
+      }
+    },
+    {
+      "start": 20.8,
+      "end": 21.55,
+      "es": "El cliente.",
+      "tr": {
+        "en": "The customer.",
+        "uk": "Клієнт."
+      }
+    },
+    {
+      "start": 21.6,
+      "end": 22.8,
+      "es": "¿Y el letrero?",
+      "tr": {
+        "en": "And the sign?",
+        "uk": "А вивіска?"
+      }
+    },
+    {
+      "start": 22.82,
+      "end": 24.1,
+      "es": "Señor, basta.",
+      "tr": {
+        "en": "Sir, stop it.",
+        "uk": "Пане, годі."
+      }
+    },
+    {
+      "start": 24.2,
+      "end": 25.4,
+      "es": "¿Y el letrero?",
+      "tr": {
+        "en": "And the sign?",
+        "uk": "А вивіска?"
+      }
+    },
+    {
+      "start": 25.45,
+      "end": 26.7,
+      "es": "Señor, por favor.",
+      "tr": {
+        "en": "Sir, please.",
+        "uk": "Пане, будь ласка."
+      }
+    },
+    {
+      "start": 26.9,
+      "end": 27.9,
+      "es": "¡Dilo!",
+      "tr": {
+        "en": "Say it!",
+        "uk": "Скажіть це!"
+      }
+    },
+    {
+      "start": 27.95,
+      "end": 28.8,
+      "es": "¡Dilo!",
+      "tr": {
+        "en": "Say it!",
+        "uk": "Скажіть це!"
+      }
+    },
+    {
+      "start": 28.85,
+      "end": 31.45,
+      "es": "El cliente siempre tiene la razón.",
+      "tr": {
+        "en": "The customer is always right.",
+        "uk": "Клієнт завжди має рацію."
+      }
+    },
+    {
+      "start": 31.5,
+      "end": 33.9,
+      "es": "El cliente siempre tiene la razón.",
+      "tr": {
+        "en": "The customer is always right.",
+        "uk": "Клієнт завжди має рацію."
+      }
+    },
+    {
+      "start": 34.5,
+      "end": 36.5,
+      "es": "¿Qué quiere que le traiga, señor?",
+      "tr": {
+        "en": "What would you like, sir?",
+        "uk": "Що вам принести, пане?"
+      }
+    },
+    {
+      "start": 36.6,
+      "end": 37.9,
+      "es": "¿Qué quiere, señor?",
+      "tr": {
+        "en": "What would you like, sir?",
+        "uk": "Що бажаєте, пане?"
+      }
+    },
+    {
+      "start": 38.1,
+      "end": 39.6,
+      "es": "Tráigame el omelet.",
+      "tr": {
+        "en": "Bring me the omelette.",
+        "uk": "Принесіть мені омлет."
+      }
+    },
+    {
+      "start": 39.9,
+      "end": 41.0,
+      "es": "Tráigame el omelet.",
+      "tr": {
+        "en": "Bring me the omelette.",
+        "uk": "Принесіть мені омлет."
+      }
+    },
+    {
+      "start": 42.9,
+      "end": 44.5,
+      "es": "¿Cómo que eres alérgico al huevo?",
+      "tr": {
+        "en": "What do you mean you're allergic to eggs?",
+        "uk": "Тобто в тебе алергія на яйця?"
+      }
+    },
+    {
+      "start": 44.6,
+      "end": 47.6,
+      "es": "Pensé que si comía muy rápido, no pasaría nada.",
+      "tr": {
+        "en": "I thought if I ate really fast, nothing would happen.",
+        "uk": "Я думав, що як їсти дуже швидко, нічого не станеться."
+      }
+    },
+    {
+      "start": 47.8,
+      "end": 48.9,
+      "es": "¿Eres alérgico al huevo?",
+      "tr": {
+        "en": "You're allergic to eggs?",
+        "uk": "У тебе алергія на яйця?"
+      }
+    },
+    {
+      "start": 49.1,
+      "end": 52.2,
+      "es": "Pensé que si comía muy rápido, no lo notaría.",
+      "tr": {
+        "en": "I thought if I ate really fast, maybe I wouldn't notice.",
+        "uk": "Я думав, що як їсти дуже швидко, то не помічу."
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "cliente",
+      "kind": "answer",
+      "pauseAt": 18.75,
+      "context": "¿Y yo qué soy? El",
+      "answer": "cliente",
+      "translation": {
+        "en": "customer",
+        "uk": "клієнт"
+      },
+      "maxAttempts": 2
+    },
+    {
+      "id": "letrero",
+      "kind": "answer",
+      "pauseAt": 21.6,
+      "context": "¿Y el",
+      "answer": "letrero",
+      "accept": [
+        "signo"
+      ],
+      "translation": {
+        "en": "sign",
+        "uk": "вивіска"
+      },
+      "showTranslation": true,
+      "maxAttempts": 3
+    },
+    {
+      "id": "razon",
+      "kind": "answer",
+      "pauseAt": 28.85,
+      "context": "El cliente siempre tiene la",
+      "answer": "razón",
+      "translation": {
+        "en": "right (to be right)",
+        "uk": "рація"
+      },
+      "maxAttempts": 3
+    }
+  ]
+}

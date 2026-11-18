@@ -5,6 +5,21 @@ export function isMicSupported(): boolean {
   return window.isSecureContext && typeof navigator.mediaDevices?.getUserMedia === 'function'
 }
 
+/**
+ * Чи можна відкрити мікрофон без діалогу браузера: дозвіл уже дано (Permissions API у Chrome)
+ * або ми самі отримали його раніше. Якщо браузер ще спитає, повертає false: дозвіл просимо лише після пояснення.
+ */
+export async function isMicAlreadyAllowed(knownGranted: boolean): Promise<boolean> {
+  if (!isMicSupported()) return false
+  try {
+    const status = await navigator.permissions?.query({ name: 'microphone' as PermissionName })
+    if (status) return status.state === 'granted'
+  } catch {
+    // Firefox і старі браузери не знають 'microphone': покладаємося на збережений стан.
+  }
+  return knownGranted
+}
+
 export function stopStream(stream: MediaStream) {
   for (const track of stream.getTracks()) track.stop()
 }

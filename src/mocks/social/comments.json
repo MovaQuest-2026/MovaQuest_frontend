@@ -154,5 +154,90 @@
       "createdAt": "2026-11-15T22:05:00Z",
       "likes": 530
     }
+  ],
+  "shrek-burro": [
+    {
+      "id": "s1",
+      "author": "burro.fan",
+      "text": "Waffles → tamales 😂 el doblaje latino es otro nivel",
+      "createdAt": "2026-11-17T18:22:00Z",
+      "likes": 534
+    },
+    {
+      "id": "s2",
+      "author": "mia.goes.abroad",
+      "text": "Hearing English first and then Spanish really helps",
+      "createdAt": "2026-11-18T08:10:00Z",
+      "likes": 147
+    },
+    {
+      "id": "s3",
+      "author": "yulia_es",
+      "text": "«Porfis, porfis» тепер моє улюблене слово",
+      "createdAt": "2026-11-18T12:40:00Z",
+      "likes": 61
+    }
+  ],
+  "office-espanol": [
+    {
+      "id": "o1",
+      "author": "dundie.winner",
+      "text": "«La telefona» 💀 Michael nunca cambia",
+      "createdAt": "2026-11-17T20:05:00Z",
+      "likes": 688
+    },
+    {
+      "id": "o2",
+      "author": "sam.in.sevilla",
+      "text": "Finally a greeting I won't forget: buenos días!",
+      "createdAt": "2026-11-18T07:55:00Z",
+      "likes": 173
+    },
+    {
+      "id": "o3",
+      "author": "andrii.k",
+      "text": "Виправив Майкла раніше за Джима 😎",
+      "createdAt": "2026-11-18T13:20:00Z",
+      "likes": 49
+    }
+  ],
+  "trabalenguas": [
+    {
+      "id": "t1",
+      "author": "profe.lola",
+      "text": "Mañana por la mañana… ¡a ver quién lo dice sin parar! 🕷️",
+      "createdAt": "2026-11-17T16:30:00Z",
+      "likes": 402
+    },
+    {
+      "id": "t2",
+      "author": "ben.travels",
+      "text": "Didn't know «araña» also means scratches",
+      "createdAt": "2026-11-18T09:45:00Z",
+      "likes": 118
+    },
+    {
+      "id": "t3",
+      "author": "olena.m",
+      "text": "Скоромовку з третьої спроби подужала 🙈",
+      "createdAt": "2026-11-18T15:05:00Z",
+      "likes": 37
+    }
+  ],
+  "el-cliente": [
+    {
+      "id": "e1",
+      "author": "rigby.stan",
+      "text": "El cliente siempre tiene la razón… excepto con el omelet 🥚",
+      "createdAt": "2026-11-17T21:40:00Z",
+      "likes": 296
+    },
+    {
+      "id": "e2",
+      "author": "nadia.learns",
+      "text": "Spanish line, then English — perfect for checking myself",
+      "createdAt": "2026-11-18T10:25:00Z",
+      "likes": 84
+    }
   ]
 }

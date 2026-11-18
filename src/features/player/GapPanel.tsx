@@ -35,7 +35,8 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
   const [signInNeeded, setSignInNeeded] = useState(false)
   const [text, setText] = useState('')
 
-  const busy = machine.status === 'listening' || machine.status === 'evaluating'
+  // Поки запис іде, усе лишається доступним: «Ще раз», «Пропустити» чи текст просто скасовують запис.
+  const evaluating = machine.status === 'evaluating'
   // Результат повтору слова показуємо тут, але до підсумку він не потрапляє (див. practiceResult у gapMachine).
   const result = machine.status === 'feedback' ? (machine.practiceResult ?? machine.results[machine.results.length - 1]) : null
 
@@ -63,6 +64,9 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
           {gap.answer}
         </p>
         {translation && <p className="gap-panel__translation">{translation}</p>}
+        {!correct && result.heard.length > 0 && (
+          <p className="gap-panel__heard">{t('result.youSaid', { heard: result.heard.join(', ') })}</p>
+        )}
         <button type="button" className="btn btn--primary btn--block" onClick={() => dispatch({ type: 'CONTINUE' })}>
           ▶ {t('player.continue')}
         </button>
@@ -80,6 +84,41 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
   const hintShown = machine.hintShown || gap.kind === 'repeat'
   const promptTranslation = gap.kind === 'repeat' || gap.showTranslation ? translation : null
   const showTyping = typing || micDenied
+
+  const replayButton = (
+    <button
+      type="button"
+      className="icon-btn gap-panel__side-btn"
+      disabled={evaluating}
+      onClick={() => {
+        // REPLAY працює лише з очікування відповіді: спершу зупиняємо запис, панель зникне й обірве його.
+        dispatch({ type: 'CANCEL_LISTENING' })
+        onReplay()
+      }}
+      aria-label={t('player.replay')}
+      title={t('player.replay')}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8Z"
+        />
+      </svg>
+    </button>
+  )
+  const skipButton = (
+    <button
+      type="button"
+      className="icon-btn gap-panel__side-btn"
+      onClick={() => dispatch({ type: 'SKIP' })}
+      aria-label={t('player.skip')}
+      title={t('player.skip')}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M6 5.5v13a.75.75 0 0 0 1.14.64l10-6.5a.75.75 0 0 0 0-1.28l-10-6.5A.75.75 0 0 0 6 5.5ZM17 5h2v14h-2z" />
+      </svg>
+    </button>
+  )
 
   return (
     <section className="gap-panel" aria-label={t(`player.gapKind.${gap.kind}`)}>
@@ -108,14 +147,6 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
         </p>
       )}
 
-      {!showTyping && <MicButton lessonId={lessonId} gapId={gap.id} onDenied={() => setMicDenied(true)} onSignInRequired={() => setSignInNeeded(true)} />}
-
-      {signInNeeded && (
-        <p className="notice mic__notice" role="status">
-          {t('player.voiceSignIn')}
-        </p>
-      )}
-
       {showTyping && (
         <form className="gap-panel__form" onSubmit={submitText}>
           <input
@@ -137,23 +168,68 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
         </form>
       )}
 
-      <div className="gap-panel__actions">
-        <button type="button" className="btn btn--ghost" disabled={busy || hintShown} onClick={() => dispatch({ type: 'SHOW_HINT' })}>
-          {t('player.hint')}
-        </button>
-        <button type="button" className="btn btn--ghost" disabled={busy} onClick={onReplay}>
-          ↺ {t('player.replay')}
-        </button>
-        <button type="button" className="btn btn--ghost" disabled={busy} onClick={() => dispatch({ type: 'SKIP' })}>
-          {t('player.skip')}
-        </button>
-      </div>
-
-      {!micDenied && (
-        <button type="button" className="link-btn" disabled={busy} onClick={() => setTyping((v) => !v)}>
-          {typing ? t('player.speakInstead') : t('player.typeInstead')}
-        </button>
+      {showTyping ? (
+        <div className="mic__row">
+          <div className="mic__side mic__side--start">{replayButton}</div>
+          <span className="mic__gap" aria-hidden="true" />
+          <div className="mic__side mic__side--end">{skipButton}</div>
+        </div>
+      ) : (
+        <MicButton
+          lessonId={lessonId}
+          gapId={gap.id}
+          autoStart
+          start={replayButton}
+          end={skipButton}
+          onDenied={() => setMicDenied(true)}
+          onSignInRequired={() => setSignInNeeded(true)}
+        />
       )}
+
+      {signInNeeded && (
+        <p className="notice mic__notice" role="status">
+          {t('player.voiceSignIn')}
+        </p>
+      )}
+
+      <div className="gap-panel__actions">
+        <button
+          type="button"
+          className="icon-btn gap-panel__side-btn gap-panel__hint-btn"
+          disabled={evaluating || hintShown}
+          onClick={() => dispatch({ type: 'SHOW_HINT' })}
+          aria-label={t('player.hint')}
+          title={t('player.hint')}
+        >
+          ?
+        </button>
+        {!micDenied && (
+          <button
+            type="button"
+            className="icon-btn gap-panel__side-btn"
+            disabled={evaluating}
+            onClick={() => setTyping((v) => !v)}
+            aria-label={typing ? t('player.speakInstead') : t('player.typeInstead')}
+            title={typing ? t('player.speakInstead') : t('player.typeInstead')}
+          >
+            {typing ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z"
+                />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 2v10h16V7H4Zm2 2h2v2H6V9Zm3 0h2v2H9V9Zm3 0h2v2h-2V9Zm3 0h3v2h-3V9ZM6 12h2v2H6v-2Zm3 0h6v2H9v-2Zm7 0h2v2h-2v-2Z"
+                />
+              </svg>
+            )}
+          </button>
+        )}
+      </div>
     </section>
   )
 }

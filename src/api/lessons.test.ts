@@ -5,6 +5,10 @@ import { getLatestLessonId, getLessons, sortByAddedAt } from './getLessons'
 
 const PLAYABLE = [
   'breaking-bad',
+  'shrek-burro',
+  'office-espanol',
+  'trabalenguas',
+  'el-cliente',
   'food-quiz',
   'picture-words',
   'words-quiz',
@@ -57,9 +61,10 @@ describe('lessons api', () => {
     }
   })
 
-  it('puts the newest lessons first and opens the newest one', async () => {
-    const card = (id: string, addedAt?: string) => ({ id, addedAt }) as never
+  it('puts pinned and then the newest lessons first and opens the pinned one', async () => {
+    const card = (id: string, addedAt?: string, pinned?: boolean) => ({ id, addedAt, pinned }) as never
     expect(sortByAddedAt([card('old', '2026-01-01'), card('none'), card('a', '2026-02-01'), card('b', '2026-02-01')]).map((l: { id: string }) => l.id)).toEqual(['a', 'b', 'old', 'none'])
+    expect(sortByAddedAt([card('new', '2026-03-01'), card('pin', '2026-01-01', true), card('a', '2026-02-01')]).map((l: { id: string }) => l.id)).toEqual(['pin', 'new', 'a'])
     expect(await getLatestLessonId()).toBe('breaking-bad')
   })
 

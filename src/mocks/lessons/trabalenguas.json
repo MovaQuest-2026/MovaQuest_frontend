@@ -1,0 +1,308 @@
+{
+  "id": "trabalenguas",
+  "title": {
+    "es": "Mañana, araña, montaña",
+    "en": "Mañana, araña, montaña",
+    "uk": "Mañana, araña, montaña"
+  },
+  "description": {
+    "es": "Siete palabras con «ña» y un trabalenguas para terminar.",
+    "en": "Seven words with “ña” and a tongue twister at the end.",
+    "uk": "Сім слів із «ña» і скоромовка наприкінці."
+  },
+  "targetLanguage": "es",
+  "level": "A2",
+  "durationSec": 36,
+  "cover": "/clips/trabalenguas/cover.jpg",
+  "video": {
+    "type": "file",
+    "src": "/clips/trabalenguas/video.mp4"
+  },
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 1.7,
+      "es": "El español es fácil… ¿verdad?",
+      "tr": {
+        "en": "Spanish is easy… right?",
+        "uk": "Іспанська — це легко… правда?"
+      }
+    },
+    {
+      "start": 3.5,
+      "end": 5.3,
+      "es": "¿Cómo se dice «tomorrow» en español?",
+      "tr": {
+        "en": "How do you say “tomorrow” in Spanish?",
+        "uk": "Як іспанською «завтра»?"
+      }
+    },
+    {
+      "start": 6.6,
+      "end": 7.6,
+      "es": "Mañana.",
+      "tr": {
+        "en": "Tomorrow.",
+        "uk": "Завтра."
+      }
+    },
+    {
+      "start": 7.95,
+      "end": 9.7,
+      "es": "¿«Morning»? Mañana.",
+      "tr": {
+        "en": "Morning? Also “mañana”.",
+        "uk": "Ранок? Теж «mañana»."
+      }
+    },
+    {
+      "start": 9.8,
+      "end": 10.35,
+      "es": "¿«Spider»?",
+      "tr": {
+        "en": "Spider?",
+        "uk": "Павук?"
+      }
+    },
+    {
+      "start": 10.38,
+      "end": 11.4,
+      "es": "Araña.",
+      "tr": {
+        "en": "Spider.",
+        "uk": "Павук."
+      }
+    },
+    {
+      "start": 11.45,
+      "end": 12.1,
+      "es": "¿«Scratches»?",
+      "tr": {
+        "en": "Scratches?",
+        "uk": "Дряпає?"
+      }
+    },
+    {
+      "start": 12.15,
+      "end": 13.05,
+      "es": "Araña.",
+      "tr": {
+        "en": "Scratches.",
+        "uk": "Дряпає."
+      }
+    },
+    {
+      "start": 13.1,
+      "end": 13.72,
+      "es": "¿«Skill»?",
+      "tr": {
+        "en": "Skill?",
+        "uk": "Вправність?"
+      }
+    },
+    {
+      "start": 13.78,
+      "end": 14.6,
+      "es": "Maña.",
+      "tr": {
+        "en": "Skill.",
+        "uk": "Вправність."
+      }
+    },
+    {
+      "start": 14.65,
+      "end": 15.2,
+      "es": "¿«Spider web»?",
+      "tr": {
+        "en": "Spider web?",
+        "uk": "Павутина?"
+      }
+    },
+    {
+      "start": 15.25,
+      "end": 16.1,
+      "es": "Telaraña.",
+      "tr": {
+        "en": "Spider web.",
+        "uk": "Павутина."
+      }
+    },
+    {
+      "start": 16.15,
+      "end": 16.9,
+      "es": "¿«Strange»?",
+      "tr": {
+        "en": "Strange?",
+        "uk": "Дивний?"
+      }
+    },
+    {
+      "start": 16.95,
+      "end": 17.65,
+      "es": "Extraña.",
+      "tr": {
+        "en": "Strange.",
+        "uk": "Дивна."
+      }
+    },
+    {
+      "start": 17.7,
+      "end": 18.4,
+      "es": "¿«Spain»?",
+      "tr": {
+        "en": "Spain?",
+        "uk": "Іспанія?"
+      }
+    },
+    {
+      "start": 18.45,
+      "end": 19.25,
+      "es": "España.",
+      "tr": {
+        "en": "Spain.",
+        "uk": "Іспанія."
+      }
+    },
+    {
+      "start": 19.3,
+      "end": 19.9,
+      "es": "¿«Mountain»?",
+      "tr": {
+        "en": "Mountain?",
+        "uk": "Гора?"
+      }
+    },
+    {
+      "start": 19.95,
+      "end": 20.9,
+      "es": "Montaña.",
+      "tr": {
+        "en": "Mountain.",
+        "uk": "Гора."
+      }
+    },
+    {
+      "start": 21.0,
+      "end": 22.4,
+      "es": "Prueba esto…",
+      "tr": {
+        "en": "Try this…",
+        "uk": "Спробуйте це…"
+      }
+    },
+    {
+      "start": 22.6,
+      "end": 28.5,
+      "es": "Mañana por la mañana, la extraña araña de España araña con maña la telaraña de la montaña.",
+      "tr": {
+        "en": "Tomorrow morning, the strange spider from Spain skilfully scratches the spider web on the mountain.",
+        "uk": "Завтра вранці дивний павук з Іспанії вправно дряпає павутину на горі."
+      }
+    },
+    {
+      "start": 29.2,
+      "end": 35.75,
+      "es": "Mañana por la mañana, la extraña araña de España araña con maña la telaraña de la montaña.",
+      "tr": {
+        "en": "Tomorrow morning, the strange spider from Spain skilfully scratches the spider web on the mountain.",
+        "uk": "Завтра вранці дивний павук з Іспанії вправно дряпає павутину на горі."
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "manana",
+      "kind": "answer",
+      "pauseAt": 5.6,
+      "context": "",
+      "answer": "mañana",
+      "translation": {
+        "en": "tomorrow",
+        "uk": "завтра"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "arana",
+      "kind": "answer",
+      "pauseAt": 10.38,
+      "context": "",
+      "answer": "araña",
+      "translation": {
+        "en": "spider",
+        "uk": "павук"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "mana",
+      "kind": "answer",
+      "pauseAt": 13.78,
+      "context": "",
+      "answer": "maña",
+      "translation": {
+        "en": "skill",
+        "uk": "вправність"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "telarana",
+      "kind": "answer",
+      "pauseAt": 15.25,
+      "context": "",
+      "answer": "telaraña",
+      "translation": {
+        "en": "spider web",
+        "uk": "павутина"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "extrana",
+      "kind": "answer",
+      "pauseAt": 16.95,
+      "context": "",
+      "answer": "extraña",
+      "accept": [
+        "extrano"
+      ],
+      "translation": {
+        "en": "strange",
+        "uk": "дивна"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "espana",
+      "kind": "answer",
+      "pauseAt": 18.45,
+      "context": "",
+      "answer": "España",
+      "translation": {
+        "en": "Spain",
+        "uk": "Іспанія"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    },
+    {
+      "id": "montana",
+      "kind": "answer",
+      "pauseAt": 19.95,
+      "context": "",
+      "answer": "montaña",
+      "translation": {
+        "en": "mountain",
+        "uk": "гора"
+      },
+      "showTranslation": true,
+      "maxAttempts": 2
+    }
+  ]
+}

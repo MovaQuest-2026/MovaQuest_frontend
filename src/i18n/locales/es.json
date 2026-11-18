@@ -102,8 +102,8 @@
     "continue": "Seguir",
     "resolution": {
       "correct": "¡Muy bien!",
-      "revealed": "La respuesta era",
-      "skipped": "Saltado. La respuesta:"
+      "revealed": "✗ No la has dicho. La respuesta:",
+      "skipped": "✗ Saltada, no la has dicho. La respuesta:"
     },
     "typeInstead": "Escribir",
     "speakInstead": "Responder con la voz",
