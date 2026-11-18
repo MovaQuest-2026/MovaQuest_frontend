@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp, type AuthErrorCode, type PasswordRule } from '../api/auth'
 import { startGoogleSignIn } from '../api/googleAuth'
-import { completeSignIn, safeReturnPath } from '../features/account/completeSignIn'
+import { completeSignIn, safeReturnPath, signInReturnPath } from '../features/account/completeSignIn'
 import { Segmented } from '../components/Segmented'
 import { useUserStore } from '../store/useUserStore'
 import type { Account } from '../types/account'
@@ -21,7 +21,9 @@ export function AuthPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as AuthLocationState | null
+  // «Не зараз» повертає туди, звідки прийшли; після входу — одразу до відео.
   const returnTo = safeReturnPath(state?.from)
+  const afterSignIn = signInReturnPath(state?.from)
   const account = useUserStore((s) => s.account)
   const [mode, setMode] = useState<Mode>('signUp')
   const [name, setName] = useState('')
@@ -43,7 +45,7 @@ export function AuthPage() {
   }, [])
 
   // Уже ввійшли: сюди не повертаємось. Сабміт сам веде далі, тож перевіряємо лише поза ним.
-  if (account && !busy) return <Navigate to={returnTo} replace />
+  if (account && !busy) return <Navigate to={afterSignIn} replace />
 
   // Зберегти сесію, далі онбординг або назад до відео.
   const run = async (action: () => Promise<Account>) => {
@@ -51,7 +53,7 @@ export function AuthPage() {
     setBusy(true)
     setError(null)
     try {
-      await completeSignIn(await action(), returnTo, navigate)
+      await completeSignIn(await action(), afterSignIn, navigate)
     } catch (err) {
       // busy скидаємо лише при помилці: після успіху сторінка вже йде далі, а скинутий busy
       // увімкнув би редирект «уже ввійшли» і перебив би перехід на онбординг.
@@ -69,7 +71,7 @@ export function AuthPage() {
   const google = () => {
     setBusy(true)
     setError(null)
-    startGoogleSignIn(returnTo)
+    startGoogleSignIn(afterSignIn)
   }
 
   // Вхід необов'язковий: «Не зараз» повертає туди, звідки прийшли (або до відео).

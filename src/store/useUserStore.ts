@@ -3,10 +3,12 @@ import { persist } from 'zustand/middleware'
 import type { Account } from '../types/account'
 import type { MachineState } from '../features/player/gapMachine'
 import type { Lang, Lesson, Outcome, SubtitleLang } from '../types/lesson'
+import type { ActiveLesson, CompletedLesson, Progress } from '../types/progress'
 
 export type Level = Lesson['level']
 export type { Outcome }
 export type { SubtitleLang }
+export type { ActiveLesson, CompletedLesson, Progress }
 /** Порядок рядків субтитрів: спершу оригінал, далі переклади. */
 export const SUBTITLE_LANGS: SubtitleLang[] = ['es', 'en', 'uk']
 /** system: як у налаштуваннях пристрою (prefers-color-scheme). */
@@ -14,20 +16,11 @@ export type ThemePreference = 'system' | 'light' | 'dark'
 export type PlaybackRate = 0.75 | 1
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
 
-/** Прогрес одного акаунта; лежить у localStorage, поки його немає на бекенді. */
-export interface AccountProgress {
-  completedLessons: Record<string, CompletedLesson>
-  /** Вивчені слова: lessonId → id пауз, на які відповіли правильно. */
-  learnedWords: Record<string, string[]>
-}
-
-export interface CompletedLesson {
-  outcome: Outcome
-  /** Скільки пауз розв'язано правильно з усіх. */
-  correct: number
-  total: number
-  completedAt: string // ISO
-}
+/**
+ * Прогрес одного акаунта на цьому пристрої: офлайн-кеш серверного (/me/progress), щоб після входу
+ * профіль одразу показував числа, а useProgressSync їх уточнював.
+ */
+export type AccountProgress = Progress
 
 interface UserState {
   userId: string
@@ -51,8 +44,11 @@ interface UserState {
   learnedWords: Record<string, string[]>
   /** Збережений прогрес акаунтів, з яких вийшли (повертається після входу). */
   progressByAccount: Record<string, AccountProgress>
-  /** Незавершені уроки: стан проходження кожного (повернувшись до відео, продовжуємо з того ж місця). */
-  activeLessons: Record<string, MachineState>
+  /**
+   * Незавершені уроки поточного акаунта (або гостя): стан проходження кожного, щоб повернувшись до відео,
+   * продовжити з того ж місця. Належать акаунту, як і решта прогресу; гостьові переходять в акаунт після входу.
+   */
+  activeLessons: Record<string, ActiveLesson>
   /** Уподобані уроки (серце в стрічці). */
   likedLessons: string[]
   /** Збережені уроки (закладка в стрічці). */
@@ -73,6 +69,8 @@ interface UserState {
   /** Слово (пауза) вивчене: на нього відповіли правильно. Лише для акаунта. */
   recordWordLearned: (lessonId: string, gapId: string) => void
   resetProgress: () => void
+  /** Замінює прогрес акаунта (результат синхронізації з бекендом). */
+  setProgress: (progress: Progress) => void
   /** Зберігає стан незавершеного уроку; null видаляє (урок завершено або скинуто). */
   setActiveLesson: (lessonId: string, machine: MachineState | null) => void
   toggleLiked: (lessonId: string) => void
@@ -106,6 +104,7 @@ function createUserId(): string {
  * v8: onboardingPending (уточнюється з профілю акаунта під час запуску, див. useOnboardingCheck).
  * v10: activeLessons — незавершений стан кожного уроку, а не лише останнього (activeLesson).
  * v9: прогрес лише в акаунта (learnedWords, progressByAccount); гостьовий прогрес відкидається.
+ * v11: знімок незавершеного уроку має час (`{ machine, updatedAt }`), activeLessons стали частиною прогресу акаунта.
  */
 export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
   let state = { ...(persisted as Record<string, unknown>) }
@@ -131,6 +130,18 @@ export function migrateUserState(persisted: unknown, version: number): Record<st
     const { activeLesson, ...rest } = state as { activeLesson?: { lessonId?: string; machine?: unknown } | null }
     const old = activeLesson?.lessonId && activeLesson.machine ? { [activeLesson.lessonId]: activeLesson.machine } : {}
     state = { ...rest, activeLessons: old }
+  }
+  if (version < 11) {
+    const updatedAt = new Date().toISOString()
+    const active = (state.activeLessons ?? {}) as Record<string, unknown>
+    const byAccount = (state.progressByAccount ?? {}) as Record<string, Record<string, unknown>>
+    state = {
+      ...state,
+      activeLessons: Object.fromEntries(Object.entries(active).map(([id, machine]) => [id, { machine, updatedAt }])),
+      progressByAccount: Object.fromEntries(
+        Object.entries(byAccount).map(([id, p]) => [id, { ...p, activeLessons: {} }]),
+      ),
+    }
   }
   return state
 }
@@ -158,20 +169,26 @@ export const useUserStore = create<UserState>()(
       savedLessons: [],
 
       // Прогрес належить акаунту: при виході зберігаємо його, при вході повертаємо; гість починає з порожнього.
+      // Незавершені уроки гостя після входу переходять в акаунт (якщо в нього цього уроку ще немає).
       setAccount: (account) =>
         set((s) => {
           const prevId = s.account?.id ?? null
           const nextId = account?.id ?? null
           if (prevId === nextId) return { account }
           const progressByAccount = prevId
-            ? { ...s.progressByAccount, [prevId]: { completedLessons: s.completedLessons, learnedWords: s.learnedWords } }
+            ? {
+                ...s.progressByAccount,
+                [prevId]: { completedLessons: s.completedLessons, learnedWords: s.learnedWords, activeLessons: s.activeLessons },
+              }
             : s.progressByAccount
           const restored = nextId ? progressByAccount[nextId] : undefined
+          const guestActive = prevId === null ? s.activeLessons : {}
           return {
             account,
             progressByAccount,
             completedLessons: restored?.completedLessons ?? {},
             learnedWords: restored?.learnedWords ?? {},
+            activeLessons: nextId ? { ...guestActive, ...(restored?.activeLessons ?? {}) } : {},
           }
         }),
       dismissSignInPrompt: () => set({ signInPromptDismissed: true }),
@@ -207,6 +224,7 @@ export const useUserStore = create<UserState>()(
           return { learnedWords: { ...s.learnedWords, [lessonId]: [...(s.learnedWords[lessonId] ?? []), gapId] } }
         }),
       resetProgress: () => set({ completedLessons: {}, learnedWords: {}, activeLessons: {} }),
+      setProgress: ({ completedLessons, learnedWords, activeLessons }) => set({ completedLessons, learnedWords, activeLessons }),
       setActiveLesson: (lessonId, machine) =>
         set((s) => {
           if (machine === null) {
@@ -214,7 +232,7 @@ export const useUserStore = create<UserState>()(
             const { [lessonId]: _removed, ...rest } = s.activeLessons
             return { activeLessons: rest }
           }
-          return { activeLessons: { ...s.activeLessons, [lessonId]: machine } }
+          return { activeLessons: { ...s.activeLessons, [lessonId]: { machine, updatedAt: new Date().toISOString() } } }
         }),
       toggleLiked: (lessonId) => set((s) => ({ likedLessons: toggleIn(s.likedLessons, lessonId) })),
       toggleSaved: (lessonId) => set((s) => ({ savedLessons: toggleIn(s.savedLessons, lessonId) })),
@@ -222,7 +240,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'movaquest-user-v1',
-      version: 10,
+      version: 11,
       migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
     },
   ),

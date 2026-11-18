@@ -20,7 +20,8 @@ export function useProfileSync() {
       const accountId = s.account.id
       timer = window.setTimeout(() => {
         const { interfaceLanguage, level, goal, account } = useUserStore.getState()
-        if (account?.id === accountId) void updateProfile(accountId, { interfaceLanguage, level, goal })
+        // Збій мережі: зміна лишається локально, наступна зміна надішле всі три поля.
+        if (account?.id === accountId) updateProfile(accountId, { interfaceLanguage, level, goal }).catch(() => {})
       }, DEBOUNCE_MS)
     })
     return () => {
