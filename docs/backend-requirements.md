@@ -335,6 +335,8 @@ interface Progress {
 
 ### 6.4 Що зробити на фронті
 
+> Зроблено на фронті 18.11.2026: src/api/progress.ts (+ progressMock.ts), src/types/progress.ts (`mergeProgress`), `useUserStore` v11, src/features/account/useProgressSync.ts, скидання в ProfilePage. §6.1 описує стан до цього.
+
 Компоненти й `gapMachine` не змінюються. Дії сховища лишаються синхронними (оптимістично), мережа йде фоном.
 
 1. **`src/api/progress.ts`**: `getProgress`, `saveLessonResult`, `markWordsLearned`, `saveActiveLesson`, `clearActiveLesson`, `importProgress`, `resetProgressRemote` через `apiFetch`. Мок у `mockDb` (таблиці `lesson_results`, `learned_words`, `active_lessons`) за прапорцем `VITE_MOCK_PROGRESS=true`, як `VITE_MOCK_SOCIAL`.

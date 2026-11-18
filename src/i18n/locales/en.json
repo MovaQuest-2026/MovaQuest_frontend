@@ -87,6 +87,8 @@
     "speed": "Playback speed",
     "subtitles": "Subtitles",
     "progress": "{{done}} of {{total}} pauses done",
+    "learnedWords_one": "{{count}} word already learned",
+    "learnedWords_other": "{{count}} words already learned",
     "gapKind": {
       "nextWord": "What's the next word?",
       "answer": "Answer the question",
@@ -194,7 +196,9 @@
       "button": "Reset progress",
       "title": "Reset progress?",
       "body": "All completed lessons will be cleared. Your settings stay.",
-      "confirm": "Reset"
+      "confirm": "Reset",
+      "busy": "Resetting…",
+      "error": "Couldn't reset progress. Check your connection and try again."
     }
   },
   "subtitleLangs": {

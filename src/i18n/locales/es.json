@@ -87,6 +87,8 @@
     "speed": "Velocidad de reproducción",
     "subtitles": "Subtítulos",
     "progress": "{{done}} de {{total}} pausas hechas",
+    "learnedWords_one": "{{count}} palabra ya aprendida",
+    "learnedWords_other": "{{count}} palabras ya aprendidas",
     "gapKind": {
       "nextWord": "¿Cuál es la siguiente palabra?",
       "answer": "Responde a la pregunta",
@@ -194,7 +196,9 @@
       "button": "Borrar el progreso",
       "title": "¿Borrar el progreso?",
       "body": "Se borrarán todas las lecciones completadas. Tus ajustes se quedan.",
-      "confirm": "Borrar"
+      "confirm": "Borrar",
+      "busy": "Borrando…",
+      "error": "No se pudo borrar el progreso. Revisa la conexión e inténtalo de nuevo."
     }
   },
   "subtitleLangs": {

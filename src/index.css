@@ -928,7 +928,8 @@ img {
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 6px;
+  /* Місце для контуру вивчених слів (--learned). */
+  gap: 9px;
 }
 
 .gap-dots__dot {
@@ -1753,6 +1754,17 @@ img {
 /* Кольори міток пауз на повзунку відповідають кружечкам зверху. */
 .scrubber__mark--correct {
   background: var(--success);
+}
+
+/* Слово вже вивчене раніше (профіль), але в цьому проходженні ще не сказане правильно: зелений контур. */
+.gap-dots__dot--learned {
+  outline: 2px solid var(--success);
+  outline-offset: 1px;
+}
+
+.scrubber__mark--learned {
+  outline: 1.5px solid var(--success);
+  outline-offset: 1px;
 }
 
 .scrubber__mark--revealed,

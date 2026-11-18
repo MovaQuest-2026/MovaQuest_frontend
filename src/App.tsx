@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useBackendSession, useGoogleErrorReturn } from './features/account/useBackendSession'
 import { useOnboardingCheck } from './features/account/useOnboardingCheck'
 import { useProfileSync } from './features/account/useProfileSync'
+import { useProgressSync } from './features/account/useProgressSync'
 import { useReactionsSync } from './features/account/useReactionsSync'
 import { useUserStore } from './store/useUserStore'
 import { useSyncLanguage } from './i18n/useSyncLanguage'
@@ -35,6 +36,7 @@ function App() {
   useSyncTheme()
   useProfileSync()
   useReactionsSync()
+  useProgressSync()
   useOnboardingCheck()
   useBackendSession()
   useGoogleErrorReturn()

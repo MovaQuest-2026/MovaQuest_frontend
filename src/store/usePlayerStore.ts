@@ -63,7 +63,7 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
 
   // Незавершений урок продовжується з останньої паузи, інакше починається спочатку.
   load: (lesson) => {
-    const saved = useUserStore.getState().activeLessons[lesson.id]
+    const saved = useUserStore.getState().activeLessons[lesson.id]?.machine
     const restored = saved ? restoreState(lesson, saved) : null
     set({
       ...emptySession,

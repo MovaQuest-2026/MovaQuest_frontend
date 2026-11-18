@@ -108,7 +108,10 @@ describe('useUserStore', () => {
       const b = { status: 'loading', gapIndex: 0 } as never
       useUserStore.getState().setActiveLesson('breaking-bad', a)
       useUserStore.getState().setActiveLesson('food-quiz', b)
-      expect(useUserStore.getState().activeLessons).toEqual({ 'breaking-bad': a, 'food-quiz': b })
+      const { activeLessons } = useUserStore.getState()
+      expect(activeLessons['breaking-bad'].machine).toBe(a)
+      expect(activeLessons['food-quiz'].machine).toBe(b)
+      expect(Date.parse(activeLessons['food-quiz'].updatedAt)).not.toBeNaN()
       useUserStore.getState().setActiveLesson('breaking-bad', null)
       expect(Object.keys(useUserStore.getState().activeLessons)).toEqual(['food-quiz'])
     })
@@ -116,9 +119,46 @@ describe('useUserStore', () => {
     it('migrates the old single activeLesson into the per-lesson map', () => {
       const machine = { status: 'playing', gapIndex: 1 }
       expect(migrateUserState({ activeLesson: { lessonId: 'cafe-madrid', machine } }, 9)).toMatchObject({
-        activeLessons: { 'cafe-madrid': machine },
+        activeLessons: { 'cafe-madrid': { machine } },
       })
       expect(migrateUserState({ activeLesson: null }, 9)).toMatchObject({ activeLessons: {} })
+    })
+
+    it('v11: stamps snapshots with a time and gives saved accounts their own unfinished lessons', () => {
+      const machine = { status: 'playing', gapIndex: 1 }
+      const state = migrateUserState(
+        { activeLessons: { l1: machine }, progressByAccount: { a1: { completedLessons: {}, learnedWords: {} } } },
+        10,
+      ) as { activeLessons: Record<string, { machine: unknown; updatedAt: string }>; progressByAccount: unknown }
+      expect(state.activeLessons.l1.machine).toEqual(machine)
+      expect(Date.parse(state.activeLessons.l1.updatedAt)).not.toBeNaN()
+      expect(state.progressByAccount).toEqual({ a1: { completedLessons: {}, learnedWords: {}, activeLessons: {} } })
+    })
+
+    it('keeps unfinished lessons per account and moves the guest ones into the account on sign-in', () => {
+      const user = () => useUserStore.getState()
+      useUserStore.setState({ account: null, activeLessons: {}, progressByAccount: {} })
+      const m = (gapIndex: number) => ({ status: 'playing', gapIndex }) as never
+      user().setActiveLesson('guest-lesson', m(1))
+      user().setAccount(ana)
+      expect(Object.keys(user().activeLessons)).toEqual(['guest-lesson'])
+      user().setActiveLesson('ana-lesson', m(2))
+      user().setAccount(null)
+      expect(user().activeLessons).toEqual({})
+      user().setActiveLesson('shared', m(3))
+      user().setAccount(bob)
+      expect(Object.keys(user().activeLessons)).toEqual(['shared'])
+      user().setAccount(ana)
+      expect(Object.keys(user().activeLessons).sort()).toEqual(['ana-lesson', 'guest-lesson'])
+    })
+
+    it('replaces the whole progress with the synced one', () => {
+      useUserStore.getState().setProgress({
+        completedLessons: { l1: { outcome: 'perfect', correct: 2, total: 2, completedAt: '2026-11-18T10:00:00Z' } },
+        learnedWords: { l1: ['g1', 'g2'] },
+        activeLessons: {},
+      })
+      expect(useUserStore.getState()).toMatchObject({ learnedWords: { l1: ['g1', 'g2'] }, activeLessons: {} })
     })
   })
 })

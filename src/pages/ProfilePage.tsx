@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '../api/auth'
+import { resetProgressRemote } from '../api/progress'
 import { Segmented } from '../components/Segmented'
 import { TabBar } from '../components/TabBar'
 import { useMicTest } from '../features/speech/useMicTest'
@@ -21,6 +22,7 @@ const RATES: PlaybackRate[] = [0.75, 1]
 export function ProfilePage() {
   const { t } = useTranslation()
   const [confirmReset, setConfirmReset] = useState(false)
+  const [resetState, setResetState] = useState<'idle' | 'busy' | 'error'>('idle')
   const mic = useMicTest()
   const navigate = useNavigate()
   const account = useUserStore((s) => s.account)
@@ -44,6 +46,25 @@ export function ProfilePage() {
     useUserStore.getState()
 
   const micBusy = mic.state === 'recording' || mic.state === 'playing'
+
+  // Спершу сервер, і лише після успіху локально: інакше синхронізація поверне прогрес із сервера.
+  const confirmResetProgress = async () => {
+    const accountId = useUserStore.getState().account?.id
+    setResetState('busy')
+    try {
+      if (accountId) await resetProgressRemote(accountId)
+    } catch {
+      setResetState('error')
+      return
+    }
+    if (useUserStore.getState().account?.id === accountId) resetProgress()
+    setResetState('idle')
+    setConfirmReset(false)
+  }
+  const closeReset = () => {
+    setResetState('idle')
+    setConfirmReset(false)
+  }
 
   return (
     <>
@@ -216,7 +237,7 @@ export function ProfilePage() {
       <TabBar />
 
       {confirmReset && (
-        <div className="dialog-backdrop" onClick={() => setConfirmReset(false)}>
+        <div className="dialog-backdrop" onClick={closeReset}>
           <div
             className="dialog"
             role="alertdialog"
@@ -228,19 +249,22 @@ export function ProfilePage() {
               {t('profile.reset.title')}
             </h2>
             <p className="muted">{t('profile.reset.body')}</p>
+            {resetState === 'error' && (
+              <p className="notice notice--error" role="alert">
+                {t('profile.reset.error')}
+              </p>
+            )}
             <div className="row">
-              <button type="button" className="btn spacer" onClick={() => setConfirmReset(false)}>
+              <button type="button" className="btn spacer" onClick={closeReset}>
                 {t('app.cancel')}
               </button>
               <button
                 type="button"
                 className="btn btn--primary spacer"
-                onClick={() => {
-                  resetProgress()
-                  setConfirmReset(false)
-                }}
+                disabled={resetState === 'busy'}
+                onClick={() => void confirmResetProgress()}
               >
-                {t('profile.reset.confirm')}
+                {resetState === 'busy' ? t('profile.reset.busy') : t('profile.reset.confirm')}
               </button>
             </div>
           </div>
