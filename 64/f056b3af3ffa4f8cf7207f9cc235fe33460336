@@ -1,0 +1,102 @@
+src/index.css
+  s_04b78d2ae8d0b2::t_611549886f001a 950,952,1759
+  s_04b78d2ae8d0b2::t_22b5e10fbe2791 880-882,885-887
+  s_04b78d2ae8d0b2::t_1ec04f070ce4f2 858,888,890-904,987-1010
+  s_04b78d2ae8d0b2::t_acf9dc4d5104ff 796,850-857
+  s_04b78d2ae8d0b2::t_e865ee8854d655 859,889,1011
+src/mocks/social/comments.json
+  s_04b78d2ae8d0b2::t_355ef8bb7bff6d 157-241
+src/mocks/lessons/trabalenguas.json
+  s_04b78d2ae8d0b2::t_b94574ee95389b 1-308
+src/i18n/locales/es.json
+  s_04b78d2ae8d0b2::t_acf9dc4d5104ff 105-106
+src/mocks/lessons/el-cliente.json
+  s_04b78d2ae8d0b2::t_b94574ee95389b 1-297,299-309,311-325,327-335
+  s_04b78d2ae8d0b2::t_bebed96ee4f946 298,310,326
+src/mocks/lessons/office-espanol.json
+  s_04b78d2ae8d0b2::t_b94574ee95389b 1-180,182-193,195-206,208-217
+  s_04b78d2ae8d0b2::t_bebed96ee4f946 181,194,207
+src/types/catalog.ts
+  s_04b78d2ae8d0b2::t_bb7aae705d9e1a 9-10
+src/mocks/lessons/shrek-burro.json
+  s_04b78d2ae8d0b2::t_b94574ee95389b 1-153,155-166,168-179,181-192,194-203
+  s_04b78d2ae8d0b2::t_bebed96ee4f946 154,167,180,193
+docs/backend-requirements.md
+  s_b7e79f9cb36287::t_cdbc2496b4933a 29-30,212-214,216,219,223-224,227-234,237,246,248-255,257-281,283-286,288-356,443,445-446,456-458,490,498
+src/api/http.ts
+  s_04b78d2ae8d0b2::t_d82a6b30b73623 56-65
+src/features/player/MicButton.tsx
+  s_04b78d2ae8d0b2::t_fc998cc08de462 2,8,13-15,20-27,34,68,90-100,104-116,128-148,152
+  s_04b78d2ae8d0b2::t_1edda179fbd400 101-103
+src/i18n/locales/en.json
+  s_04b78d2ae8d0b2::t_acf9dc4d5104ff 105-106
+vite.config.ts
+  s_04b78d2ae8d0b2::t_502862450ae709 15-16
+src/i18n/locales/uk.json
+  s_04b78d2ae8d0b2::t_acf9dc4d5104ff 105-106
+src/api/lessons.test.ts
+  s_04b78d2ae8d0b2::t_bb7aae705d9e1a 8-11,64-65,67
+src/features/player/gapMachine.test.ts
+  s_04b78d2ae8d0b2::t_eb1e2d5ccb24d0 288,291-292
+  s_04b78d2ae8d0b2::t_f5e2209540b621 175-186,194-195,197-202,205
+src/mocks/social/stats.json
+  s_04b78d2ae8d0b2::t_355ef8bb7bff6d 49-72
+src/features/player/gapMachine.ts
+  s_04b78d2ae8d0b2::t_611549886f001a 71-74,153-158,160-166,291,306,311,315-316,324
+vercel.json
+  s_04b78d2ae8d0b2::t_9a6df878a59db0 3
+src/mocks/lessons/index.json
+  s_04b78d2ae8d0b2::t_a16ba3d26ce96f 17-86
+CLAUDE.md
+  s_04b78d2ae8d0b2::t_eb1e2d5ccb24d0 17,42
+  s_04b78d2ae8d0b2::t_09318f9e847492 18
+  s_04b78d2ae8d0b2::t_76f72d9fb3321b 38-39
+src/features/speech/microphone.ts
+  s_04b78d2ae8d0b2::t_9408f812e5811a 8-22
+src/features/account/useBackendSession.ts
+  s_04b78d2ae8d0b2::t_b0bd25b43b6052 43
+  s_04b78d2ae8d0b2::t_eb9427af446017 33-35
+  s_04b78d2ae8d0b2::t_6ef9f48a99d624 5
+src/features/player/GapPanel.tsx
+  s_04b78d2ae8d0b2::t_22b5e10fbe2791 196-204,207-229
+  s_04b78d2ae8d0b2::t_acf9dc4d5104ff 67-69
+  s_04b78d2ae8d0b2::t_956a2c1c43b87a 38-39,88-122,171-193,206,230-231
+  s_04b78d2ae8d0b2::t_da8d1941d9dd1c 194
+src/api/getLessons.ts
+  s_04b78d2ae8d0b2::t_bb7aae705d9e1a 8-10,14-19,29
+docs/adding-videos.md
+  s_04b78d2ae8d0b2::t_46e6cc1868d8f8 154
+docs/backend-plan.md
+  s_04b78d2ae8d0b2::t_1f3a6908946cae 28,101,199
+scripts/build-real-clips.sh
+  s_04b78d2ae8d0b2::t_28cc47f7e9f9e7 14-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "64f056b3af3ffa4f8cf7207f9cc235fe33460336",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_04b78d2ae8d0b2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a5b091e-2f70-4f90-99a9-7e6b3764538f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_b7e79f9cb36287": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5a6c1aa-ba71-4674-ba1e-2795f56cfeae",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
