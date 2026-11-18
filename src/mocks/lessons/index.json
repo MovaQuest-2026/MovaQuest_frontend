@@ -14,7 +14,76 @@
     "level": "A1",
     "durationSec": 58,
     "cover": "/clips/breaking-bad/cover.jpg",
-    "addedAt": "2026-11-17"
+    "addedAt": "2026-11-17",
+    "pinned": true
+  },
+  {
+    "id": "shrek-burro",
+    "title": {
+      "es": "Burro se queda a dormir",
+      "en": "Donkey wants to stay",
+      "uk": "Віслюк проситься на ніч"
+    },
+    "description": {
+      "es": "Primero la escena en inglés, luego en español. Di las palabras antes que Shrek y Burro.",
+      "en": "First the scene in English, then in Spanish. Say the words before Shrek and Donkey do.",
+      "uk": "Спершу сцена англійською, потім іспанською. Скажіть слова раніше за Шрека й Віслюка."
+    },
+    "level": "A1",
+    "durationSec": 28,
+    "cover": "/clips/shrek-burro/cover.jpg",
+    "addedAt": "2026-11-18"
+  },
+  {
+    "id": "office-espanol",
+    "title": {
+      "es": "Español en la oficina",
+      "en": "Spanish at the office",
+      "uk": "Іспанська в офісі"
+    },
+    "description": {
+      "es": "Un jefe que solo quiere hablar español. Saluda, corrígele y termina sus frases.",
+      "en": "A boss who only wants to speak Spanish. Greet him back, correct him and finish his lines.",
+      "uk": "Бос, який хоче говорити лише іспанською. Привітайтеся, виправте його й закінчіть його фрази."
+    },
+    "level": "A1",
+    "durationSec": 32,
+    "cover": "/clips/office-espanol/cover.jpg",
+    "addedAt": "2026-11-18"
+  },
+  {
+    "id": "trabalenguas",
+    "title": {
+      "es": "Mañana, araña, montaña",
+      "en": "Mañana, araña, montaña",
+      "uk": "Mañana, araña, montaña"
+    },
+    "description": {
+      "es": "Siete palabras con «ña» y un trabalenguas para terminar.",
+      "en": "Seven words with “ña” and a tongue twister at the end.",
+      "uk": "Сім слів із «ña» і скоромовка наприкінці."
+    },
+    "level": "A2",
+    "durationSec": 36,
+    "cover": "/clips/trabalenguas/cover.jpg",
+    "addedAt": "2026-11-18"
+  },
+  {
+    "id": "el-cliente",
+    "title": {
+      "es": "El cliente siempre tiene la razón",
+      "en": "The customer is always right",
+      "uk": "Клієнт завжди має рацію"
+    },
+    "description": {
+      "es": "Cada frase suena en español y en inglés. Contesta antes que los personajes.",
+      "en": "Every line plays in Spanish and in English. Answer before the characters do.",
+      "uk": "Кожна репліка звучить іспанською та англійською. Відповідайте раніше за персонажів."
+    },
+    "level": "A2",
+    "durationSec": 53,
+    "cover": "/clips/el-cliente/cover.jpg",
+    "addedAt": "2026-11-18"
   },
   {
     "id": "food-quiz",

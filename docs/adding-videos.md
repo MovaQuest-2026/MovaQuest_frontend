@@ -151,7 +151,7 @@ node scripts/shift-times.mjs --cut 2.05-3.9 --cut 6.15-7.95 4.2 8.25 0.2 1.65
 
 Далі:
 
-- Додай картку в `src/mocks/lessons/index.json`: `id`, `title`, `description`, `level`, `durationSec`, `cover`. Порядок у файлі задає порядок стрічки.
+- Додай картку в `src/mocks/lessons/index.json`: `id`, `title`, `description`, `level`, `durationSec`, `cover`, `addedAt` (дата додавання). Стрічка йде від найновіших, з однаковою датою — у порядку файлу. Картка з `"pinned": true` завжди перша.
 - Додай урок у список `PLAYABLE` у [src/api/lessons.test.ts](../src/api/lessons.test.ts).
 - Необов'язково: лічильники й коментарі для колонки дій у `src/mocks/social/stats.json` і `comments.json`. Без них показуються нулі.
 

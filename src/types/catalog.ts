@@ -6,4 +6,6 @@ export type LessonSummary = Pick<Lesson, 'id' | 'title' | 'description' | 'level
   comingSoon?: boolean
   /** Коли урок додано (ISO-дата). Стрічка й /app починаються з найновіших. */
   addedAt?: string
+  /** Закріплений урок іде першим у стрічці й відкривається на /app, хай які дати в нових уроків. */
+  pinned?: boolean
 }

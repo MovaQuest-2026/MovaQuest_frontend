@@ -68,7 +68,10 @@ export type MachineEvent =
 
 /** Пауза спрацьовує трохи раніше, щоб не «з'їсти» початок слова. */
 export const PAUSE_LEAD = 0.05
-/** Скільки секунд після останньої паузи ще звучить відповідь, перш ніж показати підсумок. */
+/**
+ * Скільки секунд після останньої паузи ще звучить відповідь, перш ніж показати підсумок,
+ * якщо останні паузи перемотали (SEEK). Після відповіді на останню паузу підсумок одразу.
+ */
 export const FINISH_TAIL_SEC = 2
 /** При відновленні уроку на паузі відео починається трохи раніше, щоб знову почути контекст. */
 export const RESUME_CONTEXT_SEC = 4
@@ -147,22 +150,20 @@ export function isAnswering(state: MachineState): boolean {
   return ANSWERABLE.includes(state.status)
 }
 
-function resolve(state: MachineState, gap: Gap, resolution: GapResolution, heard = state.heard): MachineState {
+/** Підсумок уроку: усі паузи розв'язано. */
+function finish(lesson: Lesson, state: MachineState): MachineState {
+  return { ...state, status: 'ended', outcome: computeOutcome(lesson, state.results), endAt: null, practiceGapId: null, practiceResult: null }
+}
+
+function resolve(lesson: Lesson, state: MachineState, gap: Gap, resolution: GapResolution, heard = state.heard): MachineState {
   // Повтор уже правильної паузи: показуємо його результат, але в підсумок він не йде (кращий результат лишається).
-  if (state.practiceGapId === gap.id) {
-    return {
-      ...state,
-      status: 'feedback',
-      heard,
-      practiceResult: { gapId: gap.id, resolution, attempts: state.attempts, heard },
-    }
-  }
-  return {
-    ...state,
-    status: 'feedback',
-    heard,
-    results: [...state.results, { gapId: gap.id, resolution, attempts: state.attempts, heard }],
-  }
+  const next: MachineState =
+    state.practiceGapId === gap.id
+      ? { ...state, status: 'feedback', heard, practiceResult: { gapId: gap.id, resolution, attempts: state.attempts, heard } }
+      : { ...state, status: 'feedback', heard, results: [...state.results, { gapId: gap.id, resolution, attempts: state.attempts, heard }] }
+  // Останнє слово сказане правильно: підсумок одразу, без «¡Muy bien!» і без хвоста відео.
+  if (resolution === 'correct' && firstUnresolvedIndex(lesson, next.results) >= lesson.gaps.length) return finish(lesson, next)
+  return next
 }
 
 export function computeOutcome(lesson: Lesson, results: GapResult[]): Outcome {
@@ -287,7 +288,7 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
     case 'RESULT': {
       if (!gap || !isAnswering(state)) return state
       const heard = event.heard.trim() ? [...state.heard, event.heard.trim()] : state.heard
-      if (event.verdict === 'correct') return resolve({ ...state, lastVerdict: 'correct' }, gap, 'correct', heard)
+      if (event.verdict === 'correct') return resolve(lesson, { ...state, lastVerdict: 'correct' }, gap, 'correct', heard)
       if (event.verdict === 'unclear') {
         // Нерозбірливо: спроба не зараховується, просто просимо повторити.
         return { ...state, status: 'awaitingAnswer', lastVerdict: 'unclear', heard }
@@ -302,15 +303,17 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         hintShown: true,
         heard,
       }
-      return attempts >= gap.maxAttempts ? resolve(next, gap, 'revealed') : next
+      return attempts >= gap.maxAttempts ? resolve(lesson, next, gap, 'revealed') : next
     }
 
     case 'SKIP':
       if (!gap || !isAnswering(state)) return state
-      return resolve({ ...state, lastVerdict: null }, gap, 'skipped')
+      return resolve(lesson, { ...state, lastVerdict: null }, gap, 'skipped')
 
     case 'CONTINUE':
       if (state.status !== 'feedback') return state
+      // Остання пауза (показана чи пропущена): «Далі» відкриває підсумок одразу.
+      if (firstUnresolvedIndex(lesson, state.results) >= lesson.gaps.length) return finish(lesson, state)
       return {
         ...state,
         status: 'playing',
@@ -318,7 +321,7 @@ export function transition(lesson: Lesson, state: MachineState, event: MachineEv
         gapIndex: firstUnresolvedIndex(lesson, state.results),
         practiceGapId: null,
         practiceResult: null,
-        endAt: gap && firstUnresolvedIndex(lesson, state.results) >= lesson.gaps.length ? gap.pauseAt + FINISH_TAIL_SEC : null,
+        endAt: null,
         attempts: 0,
         hintShown: false,
         lastVerdict: null,

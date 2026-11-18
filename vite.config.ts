@@ -12,6 +12,8 @@ export default defineConfig(({ mode }) => {
   // changeOrigin підміняє Host на хост бекенду, тож справжній origin фронту передаємо в X-Forwarded-Host/Proto:
   // за ним бекенд (OAUTH_ALLOWED_BASE_URLS, TRUSTED_PROXY_HOPS ≥ 1) вибирає callback-адресу Google-входу.
   const proxy: Record<string, ProxyOptions> = {
+    // «Будильник» Render: бекенд віддає /health поза /api/v1 (як rewrite у vercel.json). Має йти перед '/api'.
+    '/api/health': { target, changeOrigin: true, secure: true, rewrite: () => '/health' },
     '/api': {
       target,
       changeOrigin: true,

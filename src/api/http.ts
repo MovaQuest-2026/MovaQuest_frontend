@@ -53,7 +53,16 @@ async function send(path: string, init: RequestInit): Promise<Response> {
   }
 }
 
-const isCsrfFailure = (status: number, detail: string | null) => status === 403 && !!detail && /csrf/i.test(detail)
+/**
+ * Будить безкоштовний Render: GET /health (на бекенді він поза /api/v1, тому окремий проксі /api/health
+ * у vercel.json і vite.config.ts). Відповідь не чекаємо й не читаємо, помилки ігноруємо.
+ */
+export function wakeBackend(): void {
+  if (typeof fetch === 'undefined') return
+  fetch('/api/health', { cache: 'no-store', credentials: 'omit' }).catch(() => {})
+}
+
+const isCsrfFailure =(status: number, detail: string | null) => status === 403 && !!detail && /csrf/i.test(detail)
 
 /**
  * Запит до бекенду. Повертає розібраний JSON (або null для порожньої відповіді).

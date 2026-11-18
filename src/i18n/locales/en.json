@@ -102,8 +102,8 @@
     "continue": "Continue",
     "resolution": {
       "correct": "¡Muy bien!",
-      "revealed": "The answer was",
-      "skipped": "Skipped. The answer:"
+      "revealed": "✗ Not said. The answer:",
+      "skipped": "✗ Skipped, not said. The answer:"
     },
     "typeInstead": "Type instead",
     "speakInstead": "Answer by voice",

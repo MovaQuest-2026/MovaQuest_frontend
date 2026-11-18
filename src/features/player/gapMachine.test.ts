@@ -172,21 +172,18 @@ describe('gapMachine', () => {
 })
 
 describe('finishing right after the last word', () => {
-  const answerBoth: MachineEvent[] = [
-    ...toFirstGap,
-    voice('correct', 'leche'),
-    { type: 'CONTINUE' },
-    { type: 'TIME_UPDATE', time: 9.97 },
-    voice('correct', 'de Ucrania'),
-    { type: 'CONTINUE' },
-  ]
+  const toLastGap: MachineEvent[] = [...toFirstGap, voice('correct', 'leche'), { type: 'CONTINUE' }, { type: 'TIME_UPDATE', time: 9.97 }]
 
-  it('plays the last answer for a moment, then ends without waiting for the clip to finish', () => {
-    const s = run(answerBoth)
-    expect(s).toMatchObject({ status: 'playing', gapIndex: 2, endAt: 12 })
-    expect(run([{ type: 'TIME_UPDATE', time: 11.5 }], s).status).toBe('playing')
-    const ended = run([{ type: 'TIME_UPDATE', time: 12 }], s)
-    expect(ended).toMatchObject({ status: 'ended', outcome: 'perfect' })
+  it('shows the result as soon as the last word is said, without the tail of the clip', () => {
+    const s = run([...toLastGap, voice('correct', 'de Ucrania')])
+    expect(s).toMatchObject({ status: 'ended', outcome: 'perfect' })
+    expect(s.results.map((r) => r.resolution)).toEqual(['correct', 'correct'])
+  })
+
+  it('shows the answer for a skipped last word, and the result right after «Continue»', () => {
+    const feedback = run([...toLastGap, { type: 'SKIP' }])
+    expect(feedback.status).toBe('feedback')
+    expect(run([{ type: 'CONTINUE' }], feedback)).toMatchObject({ status: 'ended', outcome: 'partial' })
   })
 
   it('does not end while a pause is still unresolved', () => {
@@ -194,14 +191,18 @@ describe('finishing right after the last word', () => {
     expect(s.status).toBe('awaitingAnswer')
   })
 
-  it('ends after retrying an earlier pause, counted from that pause, not from the end of the clip', () => {
-    const passed = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 12 }])
+  it('after seeking past the last pauses, ends once the last answer has played', () => {
+    const passed = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 11 }])
     expect(passed.endAt).toBe(12)
+    expect(run([{ type: 'TIME_UPDATE', time: 11.5 }], passed).status).toBe('playing')
+    expect(run([{ type: 'TIME_UPDATE', time: 12 }], passed)).toMatchObject({ status: 'ended', outcome: 'missed' })
+  })
+
+  it('ends right after retrying an earlier pause correctly', () => {
+    const passed = run([{ type: 'CLIP_READY' }, { type: 'SEEK', time: 12 }])
     const retried = run([{ type: 'RETRY_GAP', gapId: 'g1' }, { type: 'TIME_UPDATE', time: 3.97 }], passed)
     expect(retried.endAt).toBeNull()
-    const done = run([voice('correct', 'leche'), { type: 'CONTINUE' }], retried)
-    expect(done.endAt).toBe(6) // pauseAt 4 + 2
-    expect(run([{ type: 'TIME_UPDATE', time: 6 }], done).status).toBe('ended')
+    expect(run([voice('correct', 'leche')], retried)).toMatchObject({ status: 'ended', outcome: 'partial' })
   })
 })
 
@@ -284,11 +285,11 @@ describe('RETRY_GAP', () => {
     expect(s.results.map((r) => r.gapId)).toEqual(['g2'])
   })
 
-  it('after the retry continues with the first unresolved gap, not a resolved neighbour', () => {
+  it('after the retry nothing is left unresolved, so the lesson ends without replaying a resolved neighbour', () => {
     const retry = run([{ type: 'RETRY_GAP', gapId: 'g1' }, { type: 'TIME_UPDATE', time: 3.97 }], passedBoth)
     expect(retry.status).toBe('awaitingAnswer')
-    const done = run([voice('correct', 'leche'), { type: 'CONTINUE' }], retry)
-    expect(done).toMatchObject({ status: 'playing', gapIndex: 2 })
+    const done = run([voice('correct', 'leche')], retry)
+    expect(done).toMatchObject({ status: 'ended', outcome: 'partial' })
     expect(done.results.map((r) => [r.gapId, r.resolution])).toEqual([
       ['g2', 'passed'],
       ['g1', 'correct'],
