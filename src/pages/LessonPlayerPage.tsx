@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getLesson } from '../api/getLesson'
@@ -10,7 +10,7 @@ import { CommentsSheet } from '../features/player/CommentsSheet'
 import { GapPanel } from '../features/player/GapPanel'
 import { likeLesson } from '../features/player/likeLesson'
 import { SignInPrompt } from '../features/player/SignInPrompt'
-import { clampSeek, CONTEXT_LEAD_SEC, currentGap, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
+import { clampSeek, CONTEXT_LEAD_SEC, currentGap, holdSeekTarget, isAnswering, PAUSE_LEAD } from '../features/player/gapMachine'
 import { PlayerControls, PlayerTopBar } from '../features/player/PlayerControls'
 import { ResultModal } from '../features/player/ResultModal'
 import { SubtitleLayer } from '../features/player/SubtitleLayer'
@@ -23,11 +23,18 @@ import { DevSpeechPanel } from '../features/speech/DevSpeechPanel'
 import { usePlayerStore } from '../store/usePlayerStore'
 import { useUserStore } from '../store/useUserStore'
 
-const SEEK_STEP = 5
 const FEED_TRANSITION_MS = 220
-/** Два дотики по відео швидше за цей час і ближче за DOUBLE_TAP_DIST: лайк. Одинарний дотик виконується після цього вікна. */
+/** Два дотики по відео швидше за цей час і ближче за DOUBLE_TAP_DIST: лайк (перший дотик уже поставив паузу, її знімаємо). */
 const DOUBLE_TAP_MS = 250
 const DOUBLE_TAP_DIST = 48
+/** Затиснутий край відео (ліва чи права чверть) довше за HOLD_MS перемотує, поки палець не відпустять. */
+const HOLD_MS = 350
+const HOLD_EDGE = 0.25
+/** Крок і частота перемотки: 0.5 с кожні 100 мс, тобто 5 с відео за секунду. */
+const HOLD_STEP_SEC = 0.5
+const HOLD_TICK_MS = 100
+/** Палець зрушив далі за це: це свайп стрічки, а не затискання. */
+const HOLD_SLOP_PX = 12
 /** Якщо під час відповіді відео саме опинилось раніше за паузу більш ніж на стільки секунд, повертаємо його на паузу. */
 const DRIFT_SEC = 1
 
@@ -159,7 +166,7 @@ export function LessonPlayerPage() {
     if (gap && s.currentTime > gap.pauseAt) videoRef.current?.seek(gap.pauseAt - PAUSE_LEAD)
   }, [status])
 
-  // Захист: поки користувач думає над відповіддю, відео стоїть на межі паузи. Навмисна перемотка (повзунок, ±5,
+  // Захист: поки користувач думає над відповіддю, відео стоїть на межі паузи. Навмисна перемотка (повзунок, стрілки слів,
   // «Ще раз», кружечки) спершу виводить автомат зі стану відповіді, тож сюди потрапляє лише мимовільний зсув назад.
   useEffect(
     () =>
@@ -236,19 +243,7 @@ export function LessonPlayerPage() {
     videoRef.current?.seek(Math.max(0, target.pauseAt - CONTEXT_LEAD_SEC))
   }
 
-  // Дотик по відео: ліва третина — назад на 5 с, права — вперед на 5 с, середина — пауза.
-  const [flash, setFlash] = useState<{ side: 'back' | 'forward'; id: number } | null>(null)
-  const flashTimer = useRef(0)
-  // Середина відео: пауза спрацьовує одразу (без чекання на другий дотик); «undo» повертає її, якщо це був подвійний дотик.
-  // Краї (±5 с) чекають DOUBLE_TAP_MS, бо перемотку вперед не скасуєш.
-  const seekTap = (x: number) => {
-    const { currentTime } = usePlayerStore.getState()
-    const side = x < 1 / 3 ? 'back' : 'forward'
-    seek(currentTime + (side === 'back' ? -SEEK_STEP : SEEK_STEP))
-    setFlash({ side, id: Date.now() })
-    window.clearTimeout(flashTimer.current)
-    flashTimer.current = window.setTimeout(() => setFlash(null), 600)
-  }
+  // Дотик будь-де по відео: пауза одразу (без чекання на другий дотик); «undo» повертає її, якщо це був подвійний дотик.
   const togglePause = (): (() => void) | null => {
     const { machine: m, userPaused: was } = usePlayerStore.getState()
     if (m?.status !== 'playing') return null
@@ -259,7 +254,7 @@ export function LessonPlayerPage() {
   // Подвійний дотик по відео ставить лайк (гостя відправляє на вхід), з серцем у місці дотику.
   const [burst, setBurst] = useState<{ x: number; y: number; id: number } | null>(null)
   const burstTimer = useRef(0)
-  const pendingTap = useRef<{ at: number; x: number; y: number; timer: number; run: () => void; undo?: () => void } | null>(null)
+  const pendingTap = useRef<{ at: number; x: number; y: number; timer: number; undo?: () => void } | null>(null)
   useEffect(
     () => () => {
       window.clearTimeout(burstTimer.current)
@@ -284,7 +279,65 @@ export function LessonPlayerPage() {
       .catch(() => {})
   }
 
+  // Затискання краю відео: перемотка назад (ліва чверть) або вперед (права), поки палець на екрані.
+  // Вперед зупиняється перед словом, на яке ще не відповіли (holdSeekTarget), щоб пауза не проскочила.
+  const [holdDir, setHoldDir] = useState<'back' | 'forward' | null>(null)
+  const hold = useRef<{ x: number; y: number; timer: number; interval: number; active: boolean; pos: number } | null>(null)
+  const suppressTap = useRef(false)
+  const stopHold = () => {
+    const h = hold.current
+    if (!h) return
+    window.clearTimeout(h.timer)
+    window.clearInterval(h.interval)
+    if (h.active) suppressTap.current = true // click після відпускання не має ставити паузу
+    hold.current = null
+    setHoldDir(null)
+  }
+  useEffect(
+    () => () => {
+      window.clearTimeout(hold.current?.timer)
+      window.clearInterval(hold.current?.interval)
+    },
+    [],
+  )
+  const onStagePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    stopHold()
+    suppressTap.current = false
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width
+    const dir = x < HOLD_EDGE ? 'back' : x > 1 - HOLD_EDGE ? 'forward' : null
+    if (!dir) return
+    const h = { x: e.clientX, y: e.clientY, timer: 0, interval: 0, active: false, pos: 0 }
+    const tick = () => {
+      const s = usePlayerStore.getState()
+      const target = s.lesson && s.machine ? holdSeekTarget(s.lesson, s.machine, h.pos, dir, HOLD_STEP_SEC) : null
+      if (target === null) {
+        window.clearInterval(h.interval)
+        setHoldDir(null)
+        return
+      }
+      h.pos = target
+      seek(target)
+    }
+    h.timer = window.setTimeout(() => {
+      h.active = true
+      h.pos = usePlayerStore.getState().currentTime
+      setHoldDir(dir)
+      tick()
+      h.interval = window.setInterval(tick, HOLD_TICK_MS)
+    }, HOLD_MS)
+    hold.current = h
+  }
+  const onStagePointerMove = (e: PointerEvent<HTMLButtonElement>) => {
+    const h = hold.current
+    if (h && !h.active && Math.hypot(e.clientX - h.x, e.clientY - h.y) > HOLD_SLOP_PX) stopHold()
+  }
+
   const onStageTap = (e: MouseEvent<HTMLButtonElement>) => {
+    if (suppressTap.current) {
+      suppressTap.current = false
+      return
+    }
     const rect = e.currentTarget.getBoundingClientRect()
     const px = e.clientX - rect.left
     const py = e.clientY - rect.top
@@ -298,19 +351,9 @@ export function LessonPlayerPage() {
         doubleTapLike(px, py)
         return
       }
-      prev.run() // перший дотик був окремим: виконуємо його зараз
     }
-    const x = px / rect.width
-    if (x >= 1 / 3 && x <= 2 / 3) {
-      const undo = togglePause() ?? undefined
-      pendingTap.current = { at: now, x: px, y: py, timer: window.setTimeout(() => (pendingTap.current = null), DOUBLE_TAP_MS), run: () => {}, undo }
-      return
-    }
-    const run = () => {
-      pendingTap.current = null
-      seekTap(x)
-    }
-    pendingTap.current = { at: now, x: px, y: py, timer: window.setTimeout(run, DOUBLE_TAP_MS), run }
+    const undo = togglePause() ?? undefined
+    pendingTap.current = { at: now, x: px, y: py, timer: window.setTimeout(() => (pendingTap.current = null), DOUBLE_TAP_MS), undo }
   }
 
   if (load === 'notFound') {
@@ -394,7 +437,20 @@ export function LessonPlayerPage() {
               aria-label={userPaused ? t('player.play') : t('player.pause')}
               disabled={!showControls}
               onClick={onStageTap}
+              onPointerDown={onStagePointerDown}
+              onPointerMove={onStagePointerMove}
+              onPointerUp={stopHold}
+              onPointerCancel={stopHold}
+              onPointerLeave={stopHold}
+              onContextMenu={(e) => e.preventDefault()}
             >
+              {holdDir && (
+                <span className={`player__hold player__hold--${holdDir}`} aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d={holdDir === 'back' ? 'M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z' : 'M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z'} />
+                  </svg>
+                </span>
+              )}
               {playing && userPaused && <span className="player__paused-icon">▶</span>}
               {burst && (
                 <svg
@@ -406,11 +462,6 @@ export function LessonPlayerPage() {
                 >
                   <path d="M12 21.2 10.6 20C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.2Z" />
                 </svg>
-              )}
-              {flash && (
-                <span key={flash.id} className={`player__seek-flash player__seek-flash--${flash.side}`} aria-hidden="true">
-                  {flash.side === 'back' ? `−${SEEK_STEP}` : `+${SEEK_STEP}`}
-                </span>
               )}
             </button>
             {/* Під час відповіді колонку ховаємо: увага на паузі. */}

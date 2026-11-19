@@ -1,7 +1,9 @@
 import { useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePlayerStore } from '../../store/usePlayerStore'
-import { SUBTITLE_LANGS, useUserStore } from '../../store/useUserStore'
+import { StepSlider } from '../../components/StepSlider'
+import { formatRate } from '../../lib/formatRate'
+import { PLAYBACK_RATES, SUBTITLE_LANGS, useUserStore } from '../../store/useUserStore'
 import type { Lesson } from '../../types/lesson'
 import { gapAtTime, wordJumpTarget, type GapResult } from './gapMachine'
 
@@ -35,7 +37,8 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const playbackRate = useUserStore((s) => s.playbackRate)
   const { toggleSubtitleLang, setPlaybackRate } = useUserStore.getState()
-  const [ccOpen, setCcOpen] = useState(false)
+  const [menu, setMenu] = useState<'cc' | 'speed' | null>(null)
+  const toggleMenu = (m: 'cc' | 'speed') => setMenu((v) => (v === m ? null : m))
   // Відрізок, у якому зараз відео: якщо цю паузу вже пройдено, зверху з'являється кнопка повтору слова.
   const segmentGapId = usePlayerStore((s) => (s.lesson ? (gapAtTime(s.lesson, s.currentTime)?.id ?? null) : null))
   const segmentResult = segmentGapId ? results.find((r) => r.gapId === segmentGapId) : undefined
@@ -68,9 +71,9 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
           type="button"
           className="icon-btn icon-btn--text"
           aria-label={`${t('player.subtitles')}: ${ccState}`}
-          aria-expanded={ccOpen}
+          aria-expanded={menu === 'cc'}
           aria-haspopup="true"
-          onClick={() => setCcOpen((v) => !v)}
+          onClick={() => toggleMenu('cc')}
         >
           <span className={subtitleLangs.length === 0 ? 'strike' : undefined}>CC</span>
         </button>
@@ -78,10 +81,12 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
           <button
             type="button"
             className="icon-btn icon-btn--text"
-            aria-label={t('player.speed')}
-            onClick={() => setPlaybackRate(playbackRate === 1 ? 0.75 : 1)}
+            aria-label={`${t('player.speed')}: ${formatRate(playbackRate)}`}
+            aria-expanded={menu === 'speed'}
+            aria-haspopup="true"
+            onClick={() => toggleMenu('speed')}
           >
-            {playbackRate}×
+            {formatRate(playbackRate)}
           </button>
         )}
       </div>
@@ -96,14 +101,22 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
         </button>
       )}
 
-      {ccOpen && (
-        <>
-          <button
-            type="button"
-            className="cc-menu__backdrop"
-            aria-label={t('app.close')}
-            onClick={() => setCcOpen(false)}
+      {menu && (
+        <button type="button" className="cc-menu__backdrop" aria-label={t('app.close')} onClick={() => setMenu(null)} />
+      )}
+      {menu === 'speed' && (
+        <div className="cc-menu cc-menu--speed" role="group" aria-label={t('player.speed')}>
+          <p className="cc-menu__title">{t('player.speed')}</p>
+          <StepSlider
+            label={t('player.speed')}
+            value={playbackRate}
+            steps={PLAYBACK_RATES}
+            format={formatRate}
+            onChange={setPlaybackRate}
           />
+        </div>
+      )}
+      {menu === 'cc' && (
           <div className="cc-menu" role="group" aria-label={t('player.subtitles')}>
             <p className="cc-menu__title">{t('player.subtitles')}</p>
             {SUBTITLE_LANGS.map((l) => (
@@ -122,7 +135,6 @@ export function PlayerTopBar({ lesson, results, gapIndex, canChangeSpeed, canRev
               </button>
             ))}
           </div>
-        </>
       )}
     </div>
   )
@@ -175,7 +187,7 @@ export function PlayerControls({ lesson, results, onSeek }: PlayerControlsProps)
               <span
                 key={g.id}
                 className={`scrubber__mark scrubber__mark--${r?.resolution ?? 'pending'}${learnedClass('scrubber__mark', learned, g.id, r)}`}
-                style={{ left: `${(g.pauseAt / duration) * 100}%` }}
+                style={{ '--at': g.pauseAt / duration } as CSSProperties}
                 aria-hidden="true"
               />
             )

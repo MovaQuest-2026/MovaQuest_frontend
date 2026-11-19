@@ -13,7 +13,9 @@ export type { ActiveLesson, CompletedLesson, Progress }
 export const SUBTITLE_LANGS: SubtitleLang[] = ['es', 'en', 'uk']
 /** system: як у налаштуваннях пристрою (prefers-color-scheme). */
 export type ThemePreference = 'system' | 'light' | 'dark'
-export type PlaybackRate = 0.75 | 1
+/** Швидкість відео: поділки повзунка в профілі й у плеєрі. */
+export const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25, 1.5] as const
+export type PlaybackRate = (typeof PLAYBACK_RATES)[number]
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
 
 /**

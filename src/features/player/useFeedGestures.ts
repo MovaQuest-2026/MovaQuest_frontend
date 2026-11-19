@@ -2,7 +2,7 @@ import { useEffect, useRef, type MouseEvent, type PointerEvent, type WheelEvent 
 import type { FeedDirection } from './useLessonFeed'
 
 /** Скільки пікселів руху потрібно, щоб жест вважався перетягуванням, а не дотиком. */
-const DRAG_START_PX = 10
+const DRAG_START_PX = 16
 /** Відпускання далі ніж ця частка висоти екрана гортає сторінку. */
 const COMMIT_FRACTION = 0.2
 /** Або швидкий помах (px/мс) на відстань не менше COMMIT_FLICK_MIN_PX. */

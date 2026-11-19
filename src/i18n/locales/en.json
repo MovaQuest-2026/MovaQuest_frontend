@@ -189,8 +189,7 @@
       "completed_other": "{{count}} lessons completed",
       "words_one": "{{count}} word learned",
       "words_other": "{{count}} words learned",
-      "accuracy": "{{percent}}% correct answers",
-      "guest": "Sign in to track your progress and the words you've learned."
+      "accuracy": "{{percent}}% correct answers"
     },
     "reset": {
       "button": "Reset progress",
@@ -199,6 +198,11 @@
       "confirm": "Reset",
       "busy": "Resetting…",
       "error": "Couldn't reset progress. Check your connection and try again."
+    },
+    "sections": {
+      "learning": "Learning",
+      "video": "Video",
+      "appearance": "Appearance"
     }
   },
   "subtitleLangs": {
@@ -280,7 +284,6 @@
     "or": "or",
     "skip": "Not now",
     "skipHint": "You can use the app without an account and sign in later in your profile.",
-    "guestTitle": "You're not signed in",
     "guestBody": "Sign in to keep your progress safe.",
     "signInCta": "Sign in",
     "prompt": {

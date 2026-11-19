@@ -18,22 +18,24 @@ export function ResultWordList({ lesson, results }: ResultWordListProps) {
     <ul className="result-list">
       {lesson.gaps.map((gap) => {
         const r = results?.find((x) => x.gapId === gap.id)
+        const tr = translate(gap.translation, lang)
         return (
-          <li key={gap.id} className="card stack">
-            <p className="result-list__quote" lang="es">
-              {gap.context} <strong className="result-list__answer">{gap.answer}</strong>
-            </p>
-            {translate(gap.translation, lang) && <p className="phrase-card__tr">{translate(gap.translation, lang)}</p>}
-            {r && (
-              <div className="row">
-                <span className={`badge badge--${badgeTone(r)}`}>{resolutionLabel(r, t)}</span>
-                {r.heard.length > 0 && r.resolution !== 'correct' && (
-                  <span className="muted" lang="es">
-                    {t('result.youSaid', { heard: r.heard.join(', ') })}
-                  </span>
-                )}
-              </div>
-            )}
+          <li key={gap.id} className="result-list__row">
+            <div className="result-list__text">
+              <p className="result-list__line">
+                <span className="result-list__quote" lang="es">
+                  {gap.context && `${gap.context} `}
+                  <strong className="result-list__answer">{gap.answer}</strong>
+                </span>
+                {tr && <span className="result-list__tr"> · {tr}</span>}
+              </p>
+              {r && r.heard.length > 0 && r.resolution !== 'correct' && (
+                <p className="result-list__heard" lang="es">
+                  {t('result.youSaid', { heard: r.heard.join(', ') })}
+                </p>
+              )}
+            </div>
+            {r && <span className={`badge badge--${badgeTone(r)}`}>{resolutionLabel(r, t)}</span>}
           </li>
         )
       })}

@@ -3,6 +3,7 @@ import type { Lesson } from '../../types/lesson'
 import {
   clampSeek,
   gapAtTime,
+  holdSeekTarget,
   wordJumpTarget,
   computeOutcome,
   createInitialState,
@@ -263,16 +264,53 @@ describe('gapAtTime', () => {
 })
 
 describe('wordJumpTarget', () => {
-  it('jumps to the context of the previous word, or to the start', () => {
-    expect(wordJumpTarget(lesson, 8, 'prev')).toBe(0) // g1 pauseAt 4 → 4 - 4
+  it('jumps to the previous word, or to the start', () => {
+    expect(wordJumpTarget(lesson, 8, 'prev')).toBe(2) // g1 pauseAt 4 → 4 - 2
     expect(wordJumpTarget(lesson, 3, 'prev')).toBe(0) // перед першою паузою: на початок
     expect(wordJumpTarget(lesson, 0.2, 'prev')).toBeNull()
-    expect(wordJumpTarget(lesson, 14, 'prev')).toBe(6) // g2 pauseAt 10 → 6
+    expect(wordJumpTarget(lesson, 14, 'prev')).toBe(8) // g2 pauseAt 10 → 8
   })
 
-  it('jumps to the context of the next word, or nowhere after the last one', () => {
-    expect(wordJumpTarget(lesson, 0, 'next')).toBe(6) // g2 pauseAt 10 is the first one whose context start is ahead
-    expect(wordJumpTarget(lesson, 7, 'next')).toBeNull()
+  it('jumps to the next word, or nowhere after the last one', () => {
+    expect(wordJumpTarget(lesson, 0, 'next')).toBe(2) // g1 pauseAt 4 → 2
+    expect(wordJumpTarget(lesson, 3.95, 'next')).toBe(8) // стоїмо на паузі g1: до g2
+    expect(wordJumpTarget(lesson, 9, 'next')).toBeNull() // відрізок g2 (останнього) уже почався
+    expect(wordJumpTarget(lesson, 11, 'next')).toBeNull()
+  })
+
+  it('does not skip a word that is close to the previous one', () => {
+    const close: Lesson = {
+      ...lesson,
+      gaps: [
+        { ...lesson.gaps[0], id: 'a', pauseAt: 19.93 },
+        { ...lesson.gaps[0], id: 'b', pauseAt: 21.15 },
+        { ...lesson.gaps[0], id: 'c', pauseAt: 22.96 },
+      ],
+    }
+    expect(wordJumpTarget(close, 19.88, 'next')).toBeCloseTo(20.03) // b одразу після паузи a, а не c
+    expect(wordJumpTarget(close, 21.1, 'next')).toBeCloseTo(21.25) // c: не раніше за паузу b
+    expect(wordJumpTarget(close, 22.91, 'prev')).toBeCloseTo(20.03) // b: не раніше за паузу a
+  })
+})
+
+describe('holdSeekTarget', () => {
+  const fresh = run([{ type: 'CLIP_READY' }])
+
+  it('rewinds by the step, not before the start', () => {
+    expect(holdSeekTarget(lesson, fresh, 5, 'back', 1)).toBe(4)
+    expect(holdSeekTarget(lesson, fresh, 0.5, 'back', 1)).toBe(0)
+    expect(holdSeekTarget(lesson, fresh, 0, 'back', 1)).toBeNull()
+  })
+
+  it('fast-forwards but stops right before an unanswered pause', () => {
+    expect(holdSeekTarget(lesson, fresh, 1, 'forward', 1)).toBe(2)
+    expect(holdSeekTarget(lesson, fresh, 3.2, 'forward', 1)).toBeCloseTo(3.7) // g1 pauseAt 4
+    expect(holdSeekTarget(lesson, fresh, 3.7, 'forward', 1)).toBeNull()
+  })
+
+  it('runs past pauses that already have a result', () => {
+    const passed = run([{ type: 'SEEK', time: 5 }], fresh) // g1 перемотано
+    expect(holdSeekTarget(lesson, passed, 3.5, 'forward', 1)).toBe(4.5)
   })
 })
 

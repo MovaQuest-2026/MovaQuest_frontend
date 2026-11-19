@@ -1,23 +1,20 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '../api/auth'
 import { resetProgressRemote } from '../api/progress'
+import { MultiSelect } from '../components/MultiSelect'
 import { Segmented } from '../components/Segmented'
+import { StepSlider } from '../components/StepSlider'
 import { TabBar } from '../components/TabBar'
+import { ThemePicker } from '../components/ThemePicker'
 import { useMicTest } from '../features/speech/useMicTest'
 import { SUPPORTED_LANGUAGES } from '../i18n'
-import {
-  SUBTITLE_LANGS,
-  useUserStore,
-  type Level,
-  type PlaybackRate,
-  type ThemePreference,
-} from '../store/useUserStore'
+import { formatRate } from '../lib/formatRate'
+import { PLAYBACK_RATES, SUBTITLE_LANGS, useUserStore, type Level, type ThemePreference } from '../store/useUserStore'
 
 const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']
 const THEMES: ThemePreference[] = ['system', 'light', 'dark']
-const RATES: PlaybackRate[] = [0.75, 1]
 
 export function ProfilePage() {
   const { t } = useTranslation()
@@ -96,12 +93,10 @@ export function ProfilePage() {
           </section>
         )}
 
+        {/* Гість: одна картка входу (без окремої кнопки в «Прогресі»). */}
         {!account && (
           <section className="card account-card">
-            <div className="account-card__body">
-              <p className="account-card__name">{t('auth.guestTitle')}</p>
-              <p className="muted">{t('auth.guestBody')}</p>
-            </div>
+            <p className="account-card__body account-card__name">{t('auth.guestBody')}</p>
             <button
               type="button"
               className="btn btn--primary"
@@ -112,126 +107,119 @@ export function ProfilePage() {
           </section>
         )}
 
-        <section className="field">
-          <span className="field__label">{t('profile.language')}</span>
-          <Segmented
-            label={t('profile.language')}
-            compact
-            value={lang}
-            options={SUPPORTED_LANGUAGES.map((l) => ({ value: l, label: t(`languages.${l}`) }))}
-            onChange={setInterfaceLanguage}
-          />
-        </section>
-
-        <section className="field">
-          <span className="field__label">{t('profile.theme')}</span>
-          <Segmented
-            label={t('profile.theme')}
-            compact
-            value={theme}
-            options={THEMES.map((m) => ({ value: m, label: t(`profile.themes.${m}`) }))}
-            onChange={setTheme}
-          />
-        </section>
+        {signedIn && (
+          <section className="card stack">
+            <h2 className="section-title">{t('profile.progress.title')}</h2>
+            <p className="stat">{wordsLearned}</p>
+            <p className="muted">{t('profile.progress.words', { count: wordsLearned })}</p>
+            <p className="muted">{t('profile.progress.completed', { count: completedCount })}</p>
+            {accuracy !== null && <p className="muted">{t('profile.progress.accuracy', { percent: accuracy })}</p>}
+            <button
+              type="button"
+              className="btn btn--danger btn--block"
+              disabled={completedCount === 0 && wordsLearned === 0}
+              onClick={() => setConfirmReset(true)}
+            >
+              {t('profile.reset.button')}
+            </button>
+          </section>
+        )}
 
         {/* Рівень і мета поїздки є частиною профілю акаунта; гостю їх не показуємо. */}
         {signedIn && (
-          <>
-          <section className="field">
-            <span className="field__label">{t('profile.level')}</span>
-            <Segmented
-              label={t('profile.level')}
-              value={level}
-              options={LEVELS.map((l) => ({ value: l, label: l }))}
-              onChange={setLevel}
-            />
+          <section className="settings-group">
+            <h2 className="settings-group__title">{t('profile.sections.learning')}</h2>
+            <div className="settings-group__body">
+              <div className="field">
+                <span className="field__label">{t('profile.level')}</span>
+                <Segmented
+                  label={t('profile.level')}
+                  value={level}
+                  options={LEVELS.map((l) => ({ value: l, label: l }))}
+                  onChange={setLevel}
+                />
+              </div>
+              <label className="field">
+                <span className="field__label">{t('profile.goal')}</span>
+                <input
+                  className="input"
+                  value={goal}
+                  maxLength={120}
+                  placeholder={t('profile.goalPlaceholder')}
+                  onChange={(e) => setGoal(e.target.value)}
+                />
+              </label>
+            </div>
           </section>
-
-          <label className="field">
-            <span className="field__label">{t('profile.goal')}</span>
-            <input
-              className="input"
-              value={goal}
-              maxLength={120}
-              placeholder={t('profile.goalPlaceholder')}
-              onChange={(e) => setGoal(e.target.value)}
-            />
-          </label>
-          </>
         )}
 
-        <section className="field">
-          <span className="field__label">{t('profile.subtitles')}</span>
-          {/* Кілька мов одночасно, тому перемикачі, а не Segmented. */}
-          <div className="segmented segmented--compact" role="group" aria-label={t('profile.subtitles')}>
-            {SUBTITLE_LANGS.map((l) => (
-              <button
-                key={l}
-                type="button"
-                className="segmented__item"
-                lang={l}
-                aria-pressed={subtitleLangs.includes(l)}
-                onClick={() => toggleSubtitleLang(l)}
-              >
-                {t(`subtitleLangs.${l}`)}
-              </button>
-            ))}
+        <section className="settings-group">
+          <h2 className="settings-group__title">{t('profile.sections.video')}</h2>
+          <div className="settings-group__body">
+            <div className="field">
+              <span className="field__label">{t('profile.subtitles')}</span>
+              <MultiSelect
+                label={t('profile.subtitles')}
+                values={subtitleLangs}
+                placeholder={t('profile.subtitlesOff')}
+                options={SUBTITLE_LANGS.map((l) => ({ value: l, label: t(`subtitleLangs.${l}`), lang: l }))}
+                onToggle={toggleSubtitleLang}
+              />
+              <span className="field__hint">{t('profile.subtitlesHint')}</span>
+            </div>
+            <div className="field">
+              <span className="field__label">{t('profile.speed')}</span>
+              <StepSlider
+                label={t('profile.speed')}
+                value={playbackRate}
+                steps={PLAYBACK_RATES}
+                format={formatRate}
+                onChange={setPlaybackRate}
+              />
+            </div>
           </div>
-          <span className="muted">
-            {subtitleLangs.length === 0 ? t('profile.subtitlesOff') : t('profile.subtitlesHint')}
-          </span>
         </section>
 
-        <section className="field">
-          <span className="field__label">{t('profile.speed')}</span>
-          <Segmented
-            label={t('profile.speed')}
-            value={playbackRate}
-            options={RATES.map((r) => ({ value: r, label: `${r}×` }))}
-            onChange={setPlaybackRate}
-          />
+        <section className="settings-group">
+          <h2 className="settings-group__title">{t('profile.sections.appearance')}</h2>
+          <div className="settings-group__body">
+            <div className="field">
+              <span className="field__label">{t('profile.language')}</span>
+              <Segmented
+                label={t('profile.language')}
+                compact
+                value={lang}
+                options={SUPPORTED_LANGUAGES.map((l) => ({ value: l, label: t(`languages.${l}`) }))}
+                onChange={setInterfaceLanguage}
+              />
+            </div>
+            <div className="field">
+              <span className="field__label">{t('profile.theme')}</span>
+              <ThemePicker
+                label={t('profile.theme')}
+                value={theme}
+                options={THEMES.map((m) => ({ value: m, label: t(`profile.themes.${m}`) }))}
+                onChange={setTheme}
+              />
+            </div>
+          </div>
         </section>
 
-        <section className="card stack">
-          <h2 className="section-title">{t('profile.mic.title')}</h2>
-          <p className="muted">{t('profile.mic.hint')}</p>
-          <button type="button" className="btn btn--block" disabled={micBusy} onClick={mic.start}>
-            {mic.state === 'recording'
-              ? t('profile.mic.recording', { seconds: mic.secondsLeft })
-              : mic.state === 'playing'
-                ? t('profile.mic.playing')
-                : t('profile.mic.test')}
-          </button>
-          {mic.state === 'denied' && <p className="notice notice--error">{t('profile.mic.denied')}</p>}
-          {mic.state === 'unsupported' && <p className="notice notice--error">{t('profile.mic.unsupported')}</p>}
-          {mic.state === 'error' && <p className="notice notice--error">{t('profile.mic.error')}</p>}
-        </section>
-
-        <section className="card stack">
-          <h2 className="section-title">{t('profile.progress.title')}</h2>
-          {signedIn ? (
-            <>
-              <p className="stat">{wordsLearned}</p>
-              <p className="muted">{t('profile.progress.words', { count: wordsLearned })}</p>
-              <p className="muted">{t('profile.progress.completed', { count: completedCount })}</p>
-              {accuracy !== null && <p className="muted">{t('profile.progress.accuracy', { percent: accuracy })}</p>}
-              <button
-                type="button"
-                className="btn btn--danger btn--block"
-                disabled={completedCount === 0 && wordsLearned === 0}
-                onClick={() => setConfirmReset(true)}
-              >
-                {t('profile.reset.button')}
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="muted">{t('profile.progress.guest')}</p>
-              <Link className="btn btn--primary btn--block" to="/auth" state={{ from: '/profile' }}>
-                {t('auth.signInCta')}
-              </Link>
-            </>
-          )}
+        <section className="settings-group">
+          <h2 className="settings-group__title">{t('profile.mic.title')}</h2>
+          <div className="settings-group__body">
+            <p className="field__hint">{t('profile.mic.hint')}</p>
+            <button type="button" className="btn btn--block" disabled={micBusy} onClick={mic.start}>
+              {mic.state === 'recording'
+                ? t('profile.mic.recording', { seconds: mic.secondsLeft })
+                : mic.state === 'playing'
+                  ? t('profile.mic.playing')
+                  : t('profile.mic.test')}
+            </button>
+            {mic.state === 'denied' && <p className="notice notice--error">{t('profile.mic.denied')}</p>}
+            {mic.state === 'unsupported' && <p className="notice notice--error">{t('profile.mic.unsupported')}</p>}
+            {mic.state === 'error' && <p className="notice notice--error">{t('profile.mic.error')}</p>}
+          </div>
         </section>
       </main>
       <TabBar />
