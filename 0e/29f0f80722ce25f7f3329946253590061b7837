@@ -1,0 +1,89 @@
+scripts/make-placeholder-clips.sh
+  s_9164f759127e68::t_468cd22d9b2a47 4,15,73-80,83-84
+src/i18n/locales/uk.json
+  s_9164f759127e68::t_1d0cd889bd49a6 198,207-211
+src/mocks/lessons/shrek-burro.json
+  s_9164f759127e68::t_16cdf77188f3c8 9-11,96,104-105,114,132,152-153,160,164-165,172,176-178,184,188-189,196
+  s_9164f759127e68::t_edad6b48ae3269 166
+src/mocks/lessons/index.json
+  s_9164f759127e68::t_16cdf77188f3c8 28-30
+src/features/player/ResultWordList.tsx
+  s_9164f759127e68::t_0aa106e9ec4557 21,23-38
+src/components/StepSlider.tsx
+  s_9164f759127e68::t_79f7773da1962a 12,36,38,40
+  s_9164f759127e68::t_4b939ecbefc07b 16,19
+  s_9164f759127e68::t_c2105e60661f84 1-11,13-15,17-18,20-35,37,39,41-45
+src/lib/formatRate.ts
+  s_9164f759127e68::t_401ada6b817212 1-4
+src/features/player/PlayerControls.tsx
+  s_9164f759127e68::t_4c6164daf8e36d 4-6,40-41,74,76,84-87,89,104-115,117-119
+  s_9164f759127e68::t_970d3f63c64beb 190
+src/pages/LessonPlayerPage.tsx
+  s_9164f759127e68::t_e0acb9d81f8f23 1,13,30-37,282-295,303-335,337-340,440-445,447-453
+  s_9164f759127e68::t_1812ba2a2a4e11 296-302
+  s_9164f759127e68::t_2bc97da9ed9861 27,169,246,257,355-356
+src/index.css
+  s_9164f759127e68::t_3105edc935d302 983-984
+  s_9164f759127e68::t_0f5b86f68e2d32 948
+  s_9164f759127e68::t_4b939ecbefc07b 2330
+  s_9164f759127e68::t_13053ab5926e09 1206-1209
+  s_9164f759127e68::t_2689b713c20eab 560,564,579-581,942,945,949-950
+  s_9164f759127e68::t_4e0bebf8600dea 653
+  s_9164f759127e68::t_0aa106e9ec4557 1159,1163-1169,1171,1173,1176-1203
+  s_9164f759127e68::t_79f7773da1962a 23-25,654-655,690-691,952,955,977,2323,2379,2381-2386,2391-2396,2399-2400,2403-2405
+  s_9164f759127e68::t_1b4f5c4fa8c058 1347-1350
+  s_9164f759127e68::t_8f2688fe7ada3f 1204,2072-2322,2324-2329,2331-2378,2380,2387-2390,2397-2398,2401-2402,2406-2413
+  s_9164f759127e68::t_1812ba2a2a4e11 1223-1225,1228-1229,1236-1237,1243-1249,1252-1253,1256-1257,1260,1262,1265
+  s_9164f759127e68::t_8159ac93605336 1205
+media/music/CREDITS.md
+  s_9164f759127e68::t_caf22aa0f28df8 1-6
+src/features/player/useFeedGestures.ts
+  s_9164f759127e68::t_10f3a5504d959f 5
+src/features/player/gapMachine.test.ts
+  s_9164f759127e68::t_bf730e96626f7d 6,293-313
+  s_9164f759127e68::t_15a75299fcac95 267-268,271,274-276,278-289,291-292
+  s_9164f759127e68::t_40ef63f16ddce0 277,290
+src/features/player/gapMachine.ts
+  s_9164f759127e68::t_bf730e96626f7d 141-156
+  s_9164f759127e68::t_15a75299fcac95 112,115-124,133-134,139
+  s_9164f759127e68::t_40ef63f16ddce0 126-128,137-138
+  s_9164f759127e68::t_ae40a7766779cd 140
+src/features/player/useLessonFeed.ts
+  s_9164f759127e68::t_10f3a5504d959f 6,21,23-24
+src/components/ThemePicker.tsx
+  s_9164f759127e68::t_b88a43ed83111e 1-38
+src/store/useUserStore.ts
+  s_9164f759127e68::t_401ada6b817212 16-18
+src/i18n/locales/en.json
+  s_9164f759127e68::t_1d0cd889bd49a6 192,201-205
+CLAUDE.md
+  s_9164f759127e68::t_b2f79f5412baff 17
+  s_9164f759127e68::t_92a29666b7c577 19,31,37,44
+src/components/MultiSelect.tsx
+  s_9164f759127e68::t_9a95a1b2bddc0c 1-67
+src/pages/ProfilePage.tsx
+  s_9164f759127e68::t_401ada6b817212 2,6,8,10,13-14,96,99,110-126,130-152,156-179,183-205,208-222
+src/i18n/locales/es.json
+  s_9164f759127e68::t_1d0cd889bd49a6 192,201-205
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0e29f0f80722ce25f7f3329946253590061b7837",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_9164f759127e68": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5d02af81-d4aa-4689-9a7f-8f180defa5bd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
