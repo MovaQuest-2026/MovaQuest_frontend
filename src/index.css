@@ -1899,6 +1899,38 @@ img {
   background: var(--cover, #000) center / cover no-repeat;
 }
 
+/* Широкий екран: по боках від кадру 9:16 розмита обкладинка, сам кадр до готовності відео — чітка обкладинка. */
+@media (min-aspect-ratio: 3 / 4) {
+  .player .video-stage {
+    background: #000;
+  }
+
+  .player .video-stage::before,
+  .player .video-stage::after {
+    content: '';
+    position: absolute;
+    background: var(--cover, #000) center / cover no-repeat;
+    pointer-events: none;
+  }
+
+  .player .video-stage::before {
+    inset: -60px;
+    filter: blur(40px) brightness(0.55);
+  }
+
+  .player .video-stage::after {
+    inset: 0 auto;
+    left: 50%;
+    height: 100%;
+    aspect-ratio: 9 / 16;
+    transform: translateX(-50%);
+  }
+
+  .player .video-stage__video {
+    z-index: 1;
+  }
+}
+
 /* Текст «Завантаження» показуємо, лише якщо воно триває довше за мить (без миготіння між уроками). */
 .player__loading-text {
   opacity: 0;
