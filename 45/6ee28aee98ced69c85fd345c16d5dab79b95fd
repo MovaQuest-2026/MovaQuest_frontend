@@ -1,0 +1,24 @@
+src/index.css
+  s_cc38b67924f9b0::t_9c4abec98f6a76 1902-1933
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "456ee28aee98ced69c85fd345c16d5dab79b95fd",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_cc38b67924f9b0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4d0b676-0f14-45ad-99b9-591345438140",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
