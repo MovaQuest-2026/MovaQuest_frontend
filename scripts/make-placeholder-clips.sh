@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Генерує плейсхолдер-відео для уроку: public/clips/<lessonId>/video.mp4 і cover.jpg.
 # 720x1280, тривалість = durationSec. На кадрі рядки cues у свій час (як вшиті субтитри в TikTok).
-# Звук: тихий тон, вищий під час кожного рядка («мовлення»).
+# Звук: тиха фонова музика з media/music/ (див. CREDITS.md там), без неї тиша. Ніякого тону: він ріже вухо.
 #
 # Використання: scripts/make-placeholder-clips.sh [--debug] [lessonId ...]   (без id: усі уроки з type=file)
 #   --debug  вшити в кадр id уроку й таймер, щоб звіряти, на якій секунді спрацьовує пауза.
@@ -12,6 +12,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LESSONS_DIR="$ROOT/src/mocks/lessons"
 FONT="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 FONT_BOLD="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+MUSIC="$ROOT/media/music/and-so-it-begins.m4a"
 
 missing=0
 command -v ffmpeg >/dev/null || { echo "ffmpeg не знайдено. Встанови: sudo apt install ffmpeg" >&2; missing=1; }
@@ -54,7 +55,6 @@ for i in "${!ids[@]}"; do
     vf+=",drawtext=fontfile=$FONT:text='$id':fontcolor=white@0.6:fontsize=36:x=(w-text_w)/2:y=120"
     vf+=",drawtext=fontfile=$FONT:text='%{pts\\:hms}':fontcolor=white@0.6:fontsize=32:x=(w-text_w)/2:y=180"
   fi
-  af_expr="0.02*sin(2*PI*220*t)"
   n=0
   while IFS=$'\t' read -r start end text; do
     # Перенос по ~20 символів: на вузькому екрані (9:20) кадр обрізається з боків.
@@ -66,15 +66,22 @@ for i in "${!ids[@]}"; do
       vf+=":box=1:boxcolor=black@0.5:boxborderw=12:x=(w-text_w)/2:y=h*0.62+$k*64:enable='between(t,$start,$end)'"
       k=$((k + 1))
     done < <(printf '%s' "$text" | fold -s -w 20 | sed 's/ *$//')
-    af_expr+="+0.04*between(t,$start,$end-0.15)*sin(2*PI*(330+40*$n)*t)"
     n=$((n + 1))
   done < <(jq -r '.cues[] | [.start, .end, .es] | @tsv' "$json")
 
   echo "→ $id ($dur с, $n рядків)"
+  if [[ -f "$MUSIC" ]]; then
+    fade_out="$(awk -v d="$dur" 'BEGIN { print (d > 2 ? d - 1.5 : 0) }')"
+    audio=(-i "$MUSIC")
+    af=(-af "volume=0.35,afade=t=in:d=1,afade=t=out:st=$fade_out:d=1.5")
+  else
+    audio=(-f lavfi -i "anullsrc=r=44100:cl=stereo")
+    af=()
+  fi
   ffmpeg -hide_banner -loglevel error -y \
     -f lavfi -i "color=c=$color:s=720x1280:d=$dur:r=30" \
-    -f lavfi -i "aevalsrc='$af_expr':s=44100:d=$dur" \
-    -vf "$vf" \
+    "${audio[@]}" -t "$dur" \
+    -vf "$vf" "${af[@]}" \
     -c:v libx264 -pix_fmt yuv420p -preset veryfast -crf 28 -c:a aac -b:a 64k -shortest -movflags +faststart \
     "$out/video.mp4"
   ffmpeg -hide_banner -loglevel error -y -ss 1 -i "$out/video.mp4" -frames:v 1 -q:v 3 "$out/cover.jpg"

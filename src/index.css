@@ -20,6 +20,9 @@
   --tabbar-fg-active: #fff;
   --tabbar-border: rgb(255 255 255 / 0.12);
   --radius: 14px;
+  /* Контроли поверх відео (кнопки, точки прогресу, повзунок): темні в обох темах, видно на світлому кадрі. */
+  --control-bg: rgb(18 18 24 / 0.85);
+  --control-ring: inset 0 0 0 1px rgb(255 255 255 / 0.16);
   --tap: 44px;
   /* Низька панель, як у стрічках коротких відео. */
   --tabbar-h: 48px;
@@ -554,10 +557,11 @@ img {
   background: linear-gradient(to bottom, rgb(0 0 0 / 0.45), transparent 18%, transparent 55%, rgb(0 0 0 / 0.65));
 }
 
+/* Точки по центру, кнопки праворуч. Кнопкам місце гарантоване (max-content), точки стискаються, якщо слів багато. */
 .player-topbar {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto) minmax(max-content, 1fr);
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
@@ -572,6 +576,9 @@ img {
 
 .player-topbar .gap-dots {
   grid-column: 2;
+  justify-self: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Вибір мов субтитрів просто з плеєра. */
@@ -643,7 +650,9 @@ img {
   min-height: var(--tap);
   border-radius: 999px;
   border: 0;
-  background: rgb(0 0 0 / 0.35);
+  /* Майже непрозора підкладка з тонким контуром: кнопку видно на будь-якому кадрі (світлому теж). */
+  background: var(--control-bg);
+  box-shadow: var(--control-ring);
   color: #fff;
   display: inline-flex;
   align-items: center;
@@ -678,7 +687,8 @@ img {
   width: 72px;
   height: 72px;
   border-radius: 999px;
-  background: rgb(0 0 0 / 0.45);
+  background: var(--control-bg);
+  box-shadow: var(--control-ring);
   color: #fff;
   font-size: 1.8rem;
   display: flex;
@@ -929,15 +939,19 @@ img {
   padding: 0;
   display: flex;
   /* Місце для контуру вивчених слів (--learned). */
-  gap: 9px;
+  gap: 7px;
 }
 
+/* Багато слів на вузькому екрані: точки стискаються до 6px. */
 .gap-dots__dot {
   width: 10px;
-  height: 10px;
+  flex: 0 1 auto;
+  min-width: 6px;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.3);
+  background: rgb(255 255 255 / 0.35);
 }
+
 
 .gap-dots__dot--current {
   background: transparent;
@@ -960,11 +974,14 @@ img {
   flex: 1;
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .scrubber__mark {
   position: absolute;
   top: 50%;
+  /* Частка тривалості (--at) від ширини доріжки. */
+  left: calc(100% * var(--at));
   width: 4px;
   height: 9px;
   margin: -4.5px 0 0 -2px;
@@ -1139,17 +1156,57 @@ img {
   border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
 }
 
+/* Слова в підсумку: одна картка, рядок на слово (фраза · переклад, бейдж праворуч). */
 .result-list {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
-.result-list__quote {
-  font-weight: 700;
+.result-list__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.result-list__row + .result-list__row {
+  border-top: 1px solid var(--border);
+}
+
+.result-list__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-list__line {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.result-list__tr {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.result-list__heard {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.result-list__row .badge {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* У модальному вікні фон уже surface: список трохи світліший. */
+.result-modal .result-list {
+  background: var(--surface-2);
+  border-color: transparent;
 }
 
 /* Плеєр із нижньою таб-панеллю: відео закінчується над нею. */
@@ -1163,41 +1220,49 @@ img {
 
 .player__tap-area {
   position: relative;
+  /* Затискання краю перемотує: без системного меню довгого дотику й виділення. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
-.player__seek-flash {
+/* Індикатор затиснутої перемотки біля краю, з яким працює палець. */
+.player__hold {
   position: absolute;
   top: 50%;
   width: 64px;
   height: 64px;
   margin-top: -32px;
   border-radius: 50%;
-  background: rgb(0 0 0 / 0.45);
+  background: var(--control-bg);
+  box-shadow: var(--control-ring);
   color: #fff;
-  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: seek-flash 0.6s ease-out forwards;
   pointer-events: none;
+  animation: hold-pulse 0.8s ease-in-out infinite alternate;
 }
 
-.player__seek-flash--back {
-  left: 12%;
+.player__hold svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
 }
 
-.player__seek-flash--forward {
-  right: 12%;
+.player__hold--back {
+  left: 10%;
 }
 
-@keyframes seek-flash {
+.player__hold--forward {
+  right: 10%;
+}
+
+@keyframes hold-pulse {
   from {
-    opacity: 1;
-    transform: scale(0.85);
+    transform: scale(0.92);
   }
   to {
-    opacity: 0;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 }
@@ -1279,6 +1344,10 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .player__hold {
+    animation: none;
+  }
+
   .player .video-stage,
   .player .player__overlay {
     animation-duration: 0.01s !important;
@@ -1999,4 +2068,346 @@ img {
   flex-direction: column;
   gap: 10px;
 }
+}
+
+@layer app {
+  /* ---------- Профіль: групи налаштувань ---------- */
+
+  /* Мініатюри тем завжди показують саму тему, незалежно від поточної. */
+  :root {
+    --preview-light-bg: #f6f6f8;
+    --preview-light-line: #d9d9e1;
+    --preview-dark-bg: #17171f;
+    --preview-dark-line: #3a3a48;
+    --preview-button: #3ecf8e;
+  }
+
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .settings-group__title {
+    margin: 0;
+    padding-inline: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+  }
+
+  .settings-group__body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .settings-group__body .field__label {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .field__hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .account-card > .account-card__name {
+    margin: 0;
+  }
+
+  /* ---------- Мультиселект ---------- */
+
+  .multi-select {
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+  }
+
+  .multi-select--open {
+    border-color: var(--border);
+  }
+
+  .multi-select__head {
+    width: 100%;
+    min-height: var(--tap);
+    padding: 6px 8px 6px 10px;
+    border: 0;
+    border-radius: var(--radius);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+  }
+
+  .multi-select__chips {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .multi-select__chip {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .multi-select__placeholder {
+    color: var(--text-dim);
+  }
+
+  .multi-select__chevron {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    fill: none;
+    stroke: var(--text-dim);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.15s ease-out;
+  }
+
+  .multi-select--open .multi-select__chevron {
+    transform: rotate(180deg);
+  }
+
+  .multi-select__list {
+    display: flex;
+    flex-direction: column;
+    padding: 0 6px 6px;
+    animation: panel-in 0.15s ease-out;
+  }
+
+  .multi-select__option {
+    min-height: var(--tap);
+    padding: 0 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .multi-select__checkbox {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex: none;
+    accent-color: var(--accent);
+  }
+
+  /* ---------- Вибір теми ---------- */
+
+  .theme-picker {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .theme-picker__option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .theme-picker__radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .theme-preview {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-height: 110px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.15s ease-out;
+  }
+
+  .theme-preview--light {
+    background: var(--preview-light-bg);
+    --line: var(--preview-light-line);
+  }
+
+  .theme-preview--dark {
+    background: var(--preview-dark-bg);
+    --line: var(--preview-dark-line);
+  }
+
+  .theme-preview--system {
+    background: linear-gradient(135deg, var(--preview-light-bg) 50%, var(--preview-dark-bg) 50%);
+    --line: color-mix(in srgb, var(--preview-light-line) 50%, var(--preview-dark-line));
+  }
+
+  .theme-preview__line {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--line);
+  }
+
+  .theme-preview__line--short {
+    width: 60%;
+  }
+
+  .theme-preview__button {
+    height: 10px;
+    margin-top: auto;
+    border-radius: 5px;
+    background: var(--preview-button);
+  }
+
+  .theme-picker__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .theme-picker__dot {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+  }
+
+  .theme-picker__radio:checked ~ .theme-preview {
+    border-color: var(--accent);
+  }
+
+  .theme-picker__radio:checked ~ .theme-picker__label {
+    color: var(--text);
+  }
+
+  .theme-picker__radio:checked ~ .theme-picker__label .theme-picker__dot {
+    border-color: var(--accent);
+    background: radial-gradient(circle, var(--accent) 0 4px, transparent 5px);
+  }
+
+  .theme-picker__radio:focus-visible ~ .theme-preview {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Повзунок з поділками ---------- */
+
+  .step-slider {
+    --thumb: 22px;
+    position: relative;
+    padding: 26px calc(var(--thumb) / 2) 0;
+  }
+
+  /* Підпис рухається разом із повзунком: thumb їде від var(--thumb)/2 до 100% - var(--thumb)/2. */
+  .step-slider__value {
+    position: absolute;
+    top: 0;
+    left: calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--frac));
+    transform: translateX(-50%);
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .step-slider__input {
+    width: calc(100% + var(--thumb));
+    margin: 0 calc(var(--thumb) / -2);
+    height: var(--tap);
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+  }
+
+  .step-slider__input::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--accent) var(--pos), var(--surface-2) var(--pos));
+  }
+
+  .step-slider__input::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--accent) var(--pos), var(--surface-2) var(--pos));
+  }
+
+  .step-slider__input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: var(--thumb);
+    height: var(--thumb);
+    margin-top: calc((4px - var(--thumb)) / 2);
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--surface);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  }
+
+  .step-slider__input::-moz-range-thumb {
+    width: var(--thumb);
+    height: var(--thumb);
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--surface);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  }
+
+  /* Поділки лежать на доріжці (по центру висоти input), під повзунком. */
+  .step-slider__ticks {
+    position: absolute;
+    left: calc(var(--thumb) / 2);
+    right: calc(var(--thumb) / 2);
+    bottom: calc(var(--tap) / 2);
+    height: 0;
+    pointer-events: none;
+  }
+
+  .step-slider__tick {
+    position: absolute;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .step-slider__tick--filled {
+    background: var(--accent);
+  }
+
+  .step-slider__input {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Вибір швидкості в плеєрі: та сама панель, що й субтитри. */
+  .cc-menu--speed {
+    min-width: 260px;
+    padding: 6px 16px 10px;
+  }
 }

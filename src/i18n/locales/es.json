@@ -189,8 +189,7 @@
       "completed_other": "{{count}} lecciones completadas",
       "words_one": "{{count}} palabra aprendida",
       "words_other": "{{count}} palabras aprendidas",
-      "accuracy": "{{percent}}% de respuestas correctas",
-      "guest": "Inicia sesión para guardar tu progreso y las palabras que has aprendido."
+      "accuracy": "{{percent}}% de respuestas correctas"
     },
     "reset": {
       "button": "Borrar el progreso",
@@ -199,6 +198,11 @@
       "confirm": "Borrar",
       "busy": "Borrando…",
       "error": "No se pudo borrar el progreso. Revisa la conexión e inténtalo de nuevo."
+    },
+    "sections": {
+      "learning": "Aprendizaje",
+      "video": "Vídeo",
+      "appearance": "Apariencia"
     }
   },
   "subtitleLangs": {
@@ -281,7 +285,6 @@
     "or": "o",
     "skip": "Ahora no",
     "skipHint": "Puedes usar la app sin cuenta e iniciar sesión más tarde en tu perfil.",
-    "guestTitle": "No has iniciado sesión",
     "guestBody": "Inicia sesión para guardar tu progreso.",
     "signInCta": "Entrar",
     "prompt": {

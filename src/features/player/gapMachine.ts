@@ -109,22 +109,51 @@ export function gapAtTime(lesson: Lesson, time: number): Gap | null {
   )
 }
 
-/** На скільки секунд відмотуємо до паузи, щоб знову почути контекст («Ще раз», повтор слова, стрілки слів). */
+/** На скільки секунд відмотуємо до паузи, щоб знову почути контекст («Ще раз», повтор слова). */
 export const CONTEXT_LEAD_SEC = 4
 
+/** Стрілки «попереднє / наступне слово» ставлять відео на стільки секунд до паузи: коротко, щоб перехід відчувався як перехід до слова. */
+export const WORD_JUMP_LEAD_SEC = 2
+
+/** Початок відрізка слова для стрілок: трохи контексту, але не раніше за попередню паузу (близькі слова не зливаються). */
+function wordStart(lesson: Lesson, index: number): number {
+  const gap = lesson.gaps[index]
+  const prev = lesson.gaps[index - 1]
+  return Math.max(0, prev ? prev.pauseAt + 0.1 : 0, gap.pauseAt - WORD_JUMP_LEAD_SEC)
+}
+
 /**
- * Куди перемотати стрілками «попереднє / наступне слово». Попереднє: початок контексту останньої паузи,
- * що лишилась позаду (або початок відео). Наступне: початок контексту першої паузи попереду.
+ * Куди перемотати стрілками «попереднє / наступне слово», як треки в плеєрі. Наступне: початок відрізка першого
+ * слова, чий відрізок ще попереду (близьке слово не перескакуємо; якщо відрізок уже почався, це «поточне» слово,
+ * і стрілка веде до наступного). Попереднє: початок відрізка останньої паузи позаду (або початок відео).
  * null, якщо в цей бік перемотувати нікуди.
  */
 export function wordJumpTarget(lesson: Lesson, time: number, dir: 'prev' | 'next'): number | null {
   if (dir === 'prev') {
-    const behind = lesson.gaps.filter((g) => g.pauseAt < time - 1).pop()
-    if (behind) return Math.max(0, behind.pauseAt - CONTEXT_LEAD_SEC)
+    const behind = lesson.gaps.findLastIndex((g) => g.pauseAt < time - 1)
+    if (behind >= 0) return wordStart(lesson, behind)
     return time > 0.5 ? 0 : null
   }
-  const ahead = lesson.gaps.find((g) => g.pauseAt - CONTEXT_LEAD_SEC > time + 0.3)
-  return ahead ? ahead.pauseAt - CONTEXT_LEAD_SEC : null
+  const ahead = lesson.gaps.findIndex((_, i) => wordStart(lesson, i) > time + 0.05)
+  return ahead < 0 ? null : wordStart(lesson, ahead)
+}
+
+/** Затиснута перемотка вперед зупиняється за стільки секунд до нерозв'язаної паузи: далі відео саме доходить до неї. */
+export const HOLD_STOP_LEAD_SEC = 0.3
+
+/**
+ * Один крок перемотки, поки палець затиснутий на краю відео. Назад: на step секунд, не раніше за 0.
+ * Вперед: на step, але не далі ніж трохи до найближчої паузи, на яку ще не відповіли (її не перескакуємо).
+ * null: далі в цей бік не можна.
+ */
+export function holdSeekTarget(lesson: Lesson, state: MachineState, time: number, dir: 'back' | 'forward', step: number): number | null {
+  if (dir === 'back') return time > 0.05 ? Math.max(0, time - step) : null
+  const open = lesson.gaps.find(
+    (g) => g.pauseAt > time && (g.id === state.practiceGapId || !state.results.some((r) => r.gapId === g.id)),
+  )
+  const limit = open ? open.pauseAt - HOLD_STOP_LEAD_SEC : Infinity
+  if (limit <= time + 0.05) return null
+  return Math.min(time + step, limit)
 }
 
 /** Коли завершити урок, якщо наступної нерозв'язаної паузи вже немає: після звучання останньої відповіді. */
