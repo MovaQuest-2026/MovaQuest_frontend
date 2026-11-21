@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './i18n'
 import './index.css'
 import App from './App.tsx'
+import { initAnalytics } from './api/analytics'
 
 // Збереження старої Phaser-гри більше не потрібні.
 try {
@@ -12,6 +13,8 @@ try {
 } catch {
   // localStorage може бути недоступний (приватний режим) — це не критично.
 }
+
+initAnalytics()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
