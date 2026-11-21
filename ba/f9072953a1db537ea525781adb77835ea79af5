@@ -1,0 +1,44 @@
+docs/project-context.md
+  s_9164f759127e68::t_29810bd2bb7c35 1-162
+src/api/analytics.ts
+  s_19ab0285ba7a26::t_cc1b9deb657678 7-8,36-73,76,79-80
+CLAUDE.md
+  s_19ab0285ba7a26::t_fd97633aa0c82b 22
+README.md
+  s_9164f759127e68::t_2bdb842c69fd90 88,106
+  s_9164f759127e68::t_2256fd325a4886 3,5-18,24-28,31,33,35,37-40,42-48,54,71,76,78,89-100,102,104,108,128-147
+.env.example
+  s_19ab0285ba7a26::t_cc1b9deb657678 28-32
+src/main.tsx
+  s_19ab0285ba7a26::t_5089f81546d82f 7,17
+  s_19ab0285ba7a26::t_d33af99966b46e 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "baf9072953a1db537ea525781adb77835ea79af5",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_19ab0285ba7a26": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ea7352a0-f5fa-4bfc-a8f1-5ec476dbbd71",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_9164f759127e68": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5d02af81-d4aa-4689-9a7f-8f180defa5bd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
