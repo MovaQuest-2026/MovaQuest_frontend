@@ -2,6 +2,6 @@
   "rewrites": [
     { "source": "/api/health", "destination": "https://backend-hb2j.onrender.com/health" },
     { "source": "/api/:path*", "destination": "https://backend-hb2j.onrender.com/api/:path*" },
-    { "source": "/((?!clips/|api/).*)", "destination": "/index.html" }
+    { "source": "/((?!clips/|lessons/|api/).*)", "destination": "/index.html" }
   ]
 }

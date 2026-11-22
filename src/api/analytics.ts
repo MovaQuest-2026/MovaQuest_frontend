@@ -4,6 +4,8 @@ import type { Verdict } from '../lib/matchAnswer'
 import type { Outcome } from '../types/lesson'
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
+// Google Analytics 4: Measurement ID виду G-XXXXXXXXXX. Без нього gtag.js не вантажиться.
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined
 const POSTHOG_HOST =
   (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ??
   'https://us.i.posthog.com'
@@ -31,12 +33,51 @@ function getClient(): Promise<PostHog | null> {
   return client
 }
 
+type Gtag = (...args: unknown[]) => void
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[]
+    gtag?: Gtag
+  }
+}
+
+// gtag.js вставляється скриптом лише коли є Measurement ID. До завантаження події лежать у dataLayer.
+// Перегляди сторінок SPA рахує сам GA4 (Enhanced measurement → «Page changes based on browser history events»).
+let gtagReady = false
+
+function getGtag(): Gtag | null {
+  if (!GA_MEASUREMENT_ID || typeof window === 'undefined') return null
+  if (!gtagReady) {
+    gtagReady = true
+    window.dataLayer = window.dataLayer ?? []
+    window.gtag = function gtag() {
+      // gtag.js чекає саме об'єкт arguments, а не масив.
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer!.push(arguments)
+    }
+    window.gtag('js', new Date())
+    window.gtag('config', GA_MEASUREMENT_ID)
+    const script = document.createElement('script')
+    script.async = true
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`
+    document.head.appendChild(script)
+  }
+  return window.gtag ?? null
+}
+
+// Вмикає GA4 під час запуску, щоб перегляди сторінок рахувались і без подій уроку.
+export function initAnalytics() {
+  getGtag()
+}
+
 // Усі події йдуть тільки через функції нижче: ідентифікатори, без текстів і аудіо.
 function capture(event: string, properties: EventProps = {}) {
-  if (!POSTHOG_KEY) return
+  if (!POSTHOG_KEY && !GA_MEASUREMENT_ID) return
   const { interfaceLanguage, level } = useUserStore.getState()
   const props = { interfaceLanguage, userLevel: level, ...properties }
-  void getClient().then((posthog) => posthog?.capture(event, props))
+  getGtag()?.('event', event, props)
+  if (POSTHOG_KEY) void getClient().then((posthog) => posthog?.capture(event, props))
 }
 
 export function trackLessonStarted(lessonId: string) {

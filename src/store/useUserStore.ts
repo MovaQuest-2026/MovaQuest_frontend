@@ -85,10 +85,15 @@ function toggleIn(list: string[], id: string): string[] {
   return list.includes(id) ? list.filter((x) => x !== id) : [...list, id]
 }
 
-// crypto.randomUUID є лише в secure context, тож для http://192.168.x.x потрібен запасний шлях.
-function createUserId(): string {
-  if (typeof crypto.randomUUID === 'function') return crypto.randomUUID()
-  const bytes = crypto.getRandomValues(new Uint8Array(16))
+// crypto.randomUUID є лише в secure context (http://192.168.x.x його не має), а в Hermes (React Native)
+// глобального crypto немає зовсім. Тому йдемо від найкращого джерела до запасного.
+// Це анонімний ідентифікатор гостя, не секрет, тож Math.random як останній варіант прийнятний.
+export function createUserId(): string {
+  const c = (globalThis as { crypto?: Partial<Crypto> }).crypto
+  if (typeof c?.randomUUID === 'function') return c.randomUUID()
+  const bytes = new Uint8Array(16)
+  if (typeof c?.getRandomValues === 'function') c.getRandomValues(bytes)
+  else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256)
   bytes[6] = (bytes[6] & 0x0f) | 0x40
   bytes[8] = (bytes[8] & 0x3f) | 0x80
   const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
