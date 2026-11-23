@@ -123,6 +123,23 @@
     "reviewGap": {
       "retryButton": "Try this word again",
       "listenButton": "Repeat this word"
+    },
+    "holdToSpeak": "Hold to speak",
+    "releaseToCheck": "Release to check",
+    "holdLonger": "Keep holding while you speak"
+  },
+  "speakMode": {
+    "title": "How do you want to answer?",
+    "body": "The video pauses right before a word. Choose how the microphone works for you.",
+    "setting": "Voice answers",
+    "changeLater": "You can change this anytime in Profile → Microphone.",
+    "tap": {
+      "label": "Tap to speak",
+      "body": "The mic turns on by itself when the video pauses and stops when you go quiet. Tap the mic to speak again."
+    },
+    "hold": {
+      "label": "Hold to talk",
+      "body": "Press and hold the mic while you speak, then release to check. Nothing is recorded until you press."
     }
   },
   "result": {

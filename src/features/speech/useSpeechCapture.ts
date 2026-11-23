@@ -9,6 +9,16 @@ const SILENCE_STOP_MS = 1500
 /** Якщо користувач так і не заговорив. */
 const NO_SPEECH_STOP_MS = 5000
 const SPEECH_LEVEL = 0.12
+/** Режим «затримати й говорити»: запис іде, поки кнопку тримають, але не довше за це. */
+const MAX_HOLD_MS = 15000
+
+export interface CaptureOptions {
+  /**
+   * true (за замовчуванням): запис зупиняється сам після тиші або якщо користувач так і не заговорив.
+   * false: лише stop() / cancel() (кнопку відпустили) або MAX_HOLD_MS.
+   */
+  autoStop?: boolean
+}
 
 interface Session {
   stop: () => void
@@ -19,19 +29,39 @@ interface Session {
  * Запис голосу через MediaRecorder. start() резолвиться Blob-ом, коли запис
  * закінчився (stop(), тиша або 8 с), або null, якщо запис не відбувся.
  * Аудіо лишається тільки в пам'яті; треки мікрофона зупиняються після запису.
+ * stop() / cancel(), викликані ще до початку запису (чекаємо дозволу чи мікрофона), скасовують його: start() поверне null.
  */
 export function useSpeechCapture() {
   const [state, setState] = useState<CaptureState>('idle')
   const [error, setError] = useState<string | null>(null)
   const [level, setLevel] = useState(0)
   const session = useRef<Session | null>(null)
+  /** Запис скасували, поки мікрофон ще відкривався. */
+  const dropPending = useRef(false)
 
-  useEffect(() => () => session.current?.abort(), [])
+  useEffect(
+    () => () => {
+      dropPending.current = true
+      session.current?.abort()
+    },
+    [],
+  )
 
-  const stop = useCallback(() => session.current?.stop(), [])
+  /** Завершити запис і віддати те, що записано. */
+  const stop = useCallback(() => {
+    if (session.current) session.current.stop()
+    else dropPending.current = true
+  }, [])
 
-  const start = useCallback(async (): Promise<Blob | null> => {
+  /** Обірвати запис без результату (start() поверне null). */
+  const cancel = useCallback(() => {
+    if (session.current) session.current.abort()
+    else dropPending.current = true
+  }, [])
+
+  const start = useCallback(async ({ autoStop = true }: CaptureOptions = {}): Promise<Blob | null> => {
     if (session.current) return null
+    dropPending.current = false
     if (!isMicSupported() || typeof MediaRecorder === 'undefined') {
       setState('unsupported')
       return null
@@ -45,6 +75,11 @@ export function useSpeechCapture() {
       const kind = classifyMicError(err)
       setState(kind === 'denied' || kind === 'unsupported' ? kind : 'error')
       setError(err instanceof Error ? err.name : String(err))
+      return null
+    }
+    if (dropPending.current) {
+      stopStream(stream)
+      setState('idle')
       return null
     }
 
@@ -114,7 +149,7 @@ export function useSpeechCapture() {
 
       recorder.start()
       setState('recording')
-      timers.push(window.setTimeout(finish, MAX_RECORD_MS))
+      timers.push(window.setTimeout(finish, autoStop ? MAX_RECORD_MS : MAX_HOLD_MS))
 
       if (analyser) {
         const buf = new Uint8Array(analyser.fftSize)
@@ -133,8 +168,8 @@ export function useSpeechCapture() {
             heardSpeech = true
             lastLoud = now
           }
-          if (heardSpeech && now - lastLoud > SILENCE_STOP_MS) return finish()
-          if (!heardSpeech && now - startedAt > NO_SPEECH_STOP_MS) return finish()
+          if (autoStop && heardSpeech && now - lastLoud > SILENCE_STOP_MS) return finish()
+          if (autoStop && !heardSpeech && now - startedAt > NO_SPEECH_STOP_MS) return finish()
           raf = requestAnimationFrame(tick)
         }
         raf = requestAnimationFrame(tick)
@@ -142,5 +177,5 @@ export function useSpeechCapture() {
     })
   }, [])
 
-  return { start, stop, level, state, error }
+  return { start, stop, cancel, level, state, error }
 }

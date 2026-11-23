@@ -32,8 +32,17 @@ describe('useUserStore', () => {
       progressByAccount: {},
       completedLessons: {},
       activeLessons: {},
+      speakMode: null,
     })
     expect(migrateUserState({ subtitleMode: 'off' }, 2)).toMatchObject({ subtitleLangs: [] })
+  })
+
+  it('asks existing users how they want to speak (v12)', () => {
+    expect(migrateUserState({ level: 'B1', micPermission: 'granted' }, 11)).toEqual({
+      level: 'B1',
+      micPermission: 'granted',
+      speakMode: null,
+    })
   })
 
   it('toggles liked and saved lessons', () => {

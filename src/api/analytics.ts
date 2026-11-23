@@ -104,6 +104,10 @@ export function trackMicDenied(lessonId: string, gapId: string) {
   capture('mic_denied', { lessonId, gapId })
 }
 
+export function trackSpeakModeChosen(mode: 'tap' | 'hold', source: 'dialog' | 'profile') {
+  capture('speak_mode_chosen', { mode, source })
+}
+
 export function trackLessonCompleted(lessonId: string, outcome: Outcome, correct: number, total: number) {
   capture('lesson_completed', { lessonId, outcome, correct, total })
 }

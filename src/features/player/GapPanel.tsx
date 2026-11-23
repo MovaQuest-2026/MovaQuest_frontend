@@ -8,6 +8,7 @@ import { useUserStore } from '../../store/useUserStore'
 import type { Gap } from '../../types/lesson'
 import type { MachineState } from './gapMachine'
 import { MicButton } from './MicButton'
+import { SpeakModeDialog } from './SpeakModeDialog'
 
 interface GapPanelProps {
   lessonId: string
@@ -24,6 +25,8 @@ const AUTO_CONTINUE_MS = 1400
 export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanelProps) {
   const { t } = useTranslation()
   const lang = useUserStore((s) => s.interfaceLanguage)
+  // null: ще не питали, як відповідати голосом; поки не виберуть, запис сам не вмикається.
+  const speakMode = useUserStore((s) => s.speakMode)
   const dispatch = usePlayerStore((s) => s.dispatch)
   // Якщо мікрофон уже заборонений, одразу пропонуємо ввести відповідь текстом.
   const [typing, setTyping] = useState(() => {
@@ -178,13 +181,16 @@ export function GapPanel({ lessonId, gap, machine, onReplay, onRetry }: GapPanel
         <MicButton
           lessonId={lessonId}
           gapId={gap.id}
-          autoStart
+          mode={speakMode ?? 'tap'}
+          autoStart={speakMode === 'tap'}
           start={replayButton}
           end={skipButton}
           onDenied={() => setMicDenied(true)}
           onSignInRequired={() => setSignInNeeded(true)}
         />
       )}
+
+      {!showTyping && speakMode === null && <SpeakModeDialog />}
 
       {signInNeeded && (
         <p className="notice mic__notice" role="status">
