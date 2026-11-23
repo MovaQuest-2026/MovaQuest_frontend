@@ -17,6 +17,12 @@ export type ThemePreference = 'system' | 'light' | 'dark'
 export const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25, 1.5] as const
 export type PlaybackRate = (typeof PLAYBACK_RATES)[number]
 export type MicPermission = 'unknown' | 'granted' | 'denied' | 'skipped' | 'unsupported'
+/**
+ * Як відповідати голосом. tap: запис вмикається сам на паузі (якщо дозвіл уже є), дотик починає й зупиняє,
+ * тиша зупиняє сама. hold: запис іде, лише поки кнопку затиснуто.
+ */
+export type SpeakMode = 'tap' | 'hold'
+export const SPEAK_MODES: SpeakMode[] = ['tap', 'hold']
 
 /**
  * Прогрес одного акаунта на цьому пристрої: офлайн-кеш серверного (/me/progress), щоб після входу
@@ -37,6 +43,8 @@ interface UserState {
   goal: string
   onboardingDone: boolean
   micPermission: MicPermission
+  /** Спосіб голосової відповіді. null: ще не питали, перша пауза покаже вибір (SpeakModeDialog). */
+  speakMode: SpeakMode | null
   /** Які мови субтитрів показувати. Порожній список: субтитри вимкнено. */
   subtitleLangs: SubtitleLang[]
   theme: ThemePreference
@@ -63,6 +71,7 @@ interface UserState {
   setLevel: (level: Level) => void
   setGoal: (goal: string) => void
   setMicPermission: (permission: MicPermission) => void
+  setSpeakMode: (mode: SpeakMode) => void
   toggleSubtitleLang: (lang: SubtitleLang) => void
   setTheme: (theme: ThemePreference) => void
   setPlaybackRate: (rate: PlaybackRate) => void
@@ -112,6 +121,7 @@ export function createUserId(): string {
  * v10: activeLessons — незавершений стан кожного уроку, а не лише останнього (activeLesson).
  * v9: прогрес лише в акаунта (learnedWords, progressByAccount); гостьовий прогрес відкидається.
  * v11: знімок незавершеного уроку має час (`{ machine, updatedAt }`), activeLessons стали частиною прогресу акаунта.
+ * v12: спосіб голосової відповіді (speakMode); null, тож і наявних користувачів спитаємо на першій паузі.
  */
 export function migrateUserState(persisted: unknown, version: number): Record<string, unknown> {
   let state = { ...(persisted as Record<string, unknown>) }
@@ -150,6 +160,7 @@ export function migrateUserState(persisted: unknown, version: number): Record<st
       ),
     }
   }
+  if (version < 12) state = { ...state, speakMode: null }
   return state
 }
 
@@ -165,6 +176,7 @@ export const useUserStore = create<UserState>()(
       goal: '',
       onboardingDone: false,
       micPermission: 'unknown',
+      speakMode: null,
       subtitleLangs: ['es'],
       theme: 'system',
       playbackRate: 1,
@@ -204,6 +216,7 @@ export const useUserStore = create<UserState>()(
       setLevel: (level) => set({ level }),
       setGoal: (goal) => set({ goal }),
       setMicPermission: (micPermission) => set({ micPermission }),
+      setSpeakMode: (speakMode) => set({ speakMode }),
       toggleSubtitleLang: (lang) =>
         set((s) => ({
           subtitleLangs: s.subtitleLangs.includes(lang)
@@ -247,7 +260,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'movaquest-user-v1',
-      version: 11,
+      version: 12,
       migrate: (persisted, version) => migrateUserState(persisted, version) as unknown as UserState,
     },
   ),

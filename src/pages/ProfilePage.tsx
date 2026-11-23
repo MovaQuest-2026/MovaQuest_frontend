@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { trackSpeakModeChosen } from '../api/analytics'
 import { signOut } from '../api/auth'
 import { resetProgressRemote } from '../api/progress'
 import { MultiSelect } from '../components/MultiSelect'
@@ -11,7 +12,15 @@ import { ThemePicker } from '../components/ThemePicker'
 import { useMicTest } from '../features/speech/useMicTest'
 import { SUPPORTED_LANGUAGES } from '../i18n'
 import { formatRate } from '../lib/formatRate'
-import { PLAYBACK_RATES, SUBTITLE_LANGS, useUserStore, type Level, type ThemePreference } from '../store/useUserStore'
+import {
+  PLAYBACK_RATES,
+  SPEAK_MODES,
+  SUBTITLE_LANGS,
+  useUserStore,
+  type Level,
+  type SpeakMode,
+  type ThemePreference,
+} from '../store/useUserStore'
 
 const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']
 const THEMES: ThemePreference[] = ['system', 'light', 'dark']
@@ -30,6 +39,8 @@ export function ProfilePage() {
   const subtitleLangs = useUserStore((s) => s.subtitleLangs)
   const theme = useUserStore((s) => s.theme)
   const playbackRate = useUserStore((s) => s.playbackRate)
+  // Ще не вибрано: показуємо tap (так поводиться плеєр), а вибір тут знімає питання на першій паузі.
+  const speakMode = useUserStore((s) => s.speakMode) ?? 'tap'
   const signedIn = useUserStore((s) => s.account !== null)
   const completedCount = useUserStore((s) => Object.keys(s.completedLessons).length)
   const wordsLearned = useUserStore((s) => Object.values(s.learnedWords).reduce((n, ids) => n + ids.length, 0))
@@ -43,6 +54,11 @@ export function ProfilePage() {
     useUserStore.getState()
 
   const micBusy = mic.state === 'recording' || mic.state === 'playing'
+
+  const changeSpeakMode = (mode: SpeakMode) => {
+    useUserStore.getState().setSpeakMode(mode)
+    trackSpeakModeChosen(mode, 'profile')
+  }
 
   // Спершу сервер, і лише після успіху локально: інакше синхронізація поверне прогрес із сервера.
   const confirmResetProgress = async () => {
@@ -208,6 +224,16 @@ export function ProfilePage() {
         <section className="settings-group">
           <h2 className="settings-group__title">{t('profile.mic.title')}</h2>
           <div className="settings-group__body">
+            <div className="field">
+              <span className="field__label">{t('speakMode.setting')}</span>
+              <Segmented
+                label={t('speakMode.setting')}
+                value={speakMode}
+                options={SPEAK_MODES.map((m) => ({ value: m, label: t(`speakMode.${m}.label`) }))}
+                onChange={changeSpeakMode}
+              />
+              <span className="field__hint">{t(`speakMode.${speakMode}.body`)}</span>
+            </div>
             <p className="field__hint">{t('profile.mic.hint')}</p>
             <button type="button" className="btn btn--block" disabled={micBusy} onClick={mic.start}>
               {mic.state === 'recording'

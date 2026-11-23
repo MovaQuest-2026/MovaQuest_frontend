@@ -123,6 +123,23 @@
     "reviewGap": {
       "retryButton": "Intentar esta palabra otra vez",
       "listenButton": "Repetir esta palabra"
+    },
+    "holdToSpeak": "Mantén pulsado para hablar",
+    "releaseToCheck": "Suelta para comprobar",
+    "holdLonger": "Mantén pulsado mientras hablas"
+  },
+  "speakMode": {
+    "title": "¿Cómo prefieres responder?",
+    "body": "El vídeo se detiene justo antes de una palabra. Elige cómo funciona el micrófono.",
+    "setting": "Respuestas por voz",
+    "changeLater": "Puedes cambiarlo cuando quieras en Perfil → Micrófono.",
+    "tap": {
+      "label": "Toca para hablar",
+      "body": "El micrófono se activa solo cuando el vídeo se detiene y se apaga cuando dejas de hablar. Tócalo para hablar otra vez."
+    },
+    "hold": {
+      "label": "Mantén pulsado",
+      "body": "Mantén pulsado el micrófono mientras hablas y suéltalo para comprobar. No se graba nada hasta que lo pulses."
     }
   },
   "result": {
