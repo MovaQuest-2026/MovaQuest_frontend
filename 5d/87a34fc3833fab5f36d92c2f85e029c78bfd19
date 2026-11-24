@@ -1,0 +1,68 @@
+src/i18n/locales/uk.json
+  s_f1913be2f5998e::t_42f5af5f407865 321
+  s_f1913be2f5998e::t_8e7e7b1b4d2136 318-320
+src/i18n/locales/privacy/privacy.test.ts
+  s_f1913be2f5998e::t_9a98b478b7cc2b 1,3-7,10,12-17,21-28,30-32,36-37
+  s_f1913be2f5998e::t_8cf35fd25990e7 29,33-35
+  s_f1913be2f5998e::t_4f81817fd98a7c 2,8-9,11,18-20
+src/i18n/locales/en.json
+  s_f1913be2f5998e::t_8e7e7b1b4d2136 310-312
+  s_f1913be2f5998e::t_42f5af5f407865 313
+src/index.css
+  s_f1913be2f5998e::t_0f99ec36f3853b 2521
+  s_f1913be2f5998e::t_426a218c2960d9 2567-2612
+  s_f1913be2f5998e::t_e3663aebe33d28 2494-2520,2522-2566,2613-2630
+src/App.tsx
+  s_f1913be2f5998e::t_5ca60d1dab9e00 23-24,53-61
+src/landing/LandingPage.tsx
+  s_f1913be2f5998e::t_ca6310fbdbb050 535
+src/pages/AuthPage.tsx
+  s_f1913be2f5998e::t_9a9fdfbf236620 2-3
+  s_f1913be2f5998e::t_e1f548e0c7e60a 197-199
+src/i18n/locales/es.json
+  s_f1913be2f5998e::t_42f5af5f407865 314
+  s_f1913be2f5998e::t_8e7e7b1b4d2136 311-313
+CLAUDE.md
+  s_f1913be2f5998e::t_2a00466faccfe0 43
+src/i18n/locales/privacy/uk.json
+  s_f1913be2f5998e::t_caf7532db41bac 1-201
+docs/privacy-policy.md
+  s_f1913be2f5998e::t_8363aff651ce0f 1-4,6-151
+  s_f1913be2f5998e::t_2a00466faccfe0 5
+src/i18n/locales/privacy/en.json
+  s_f1913be2f5998e::t_b9614063296890 1-201
+src/pages/PrivacyPage.tsx
+  s_f1913be2f5998e::t_426a218c2960d9 61-72
+  s_f1913be2f5998e::t_a924af6d6b9733 109-110,112,114
+  s_f1913be2f5998e::t_0f99ec36f3853b 93-94,102-103,107,123,134
+  s_f1913be2f5998e::t_b6da7d0927c473 1-60,73-92,95-101,104-106,108,111,113,115-122,124-133,135-152
+src/lib/legal.ts
+  s_f1913be2f5998e::t_4e65badb3d9a95 1-11
+src/pages/ProfilePage.tsx
+  s_f1913be2f5998e::t_b63d838cfd506a 2
+  s_f1913be2f5998e::t_69debbb1088838 250-252
+src/i18n/locales/privacy/es.json
+  s_f1913be2f5998e::t_8e7e7b1b4d2136 161
+  s_f1913be2f5998e::t_f9c3d9c573d4bb 1-160,162-201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d87a34fc3833fab5f36d92c2f85e029c78bfd19",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f1913be2f5998e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "350a1acc-e878-4535-8a28-2f2e5acdc44f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
