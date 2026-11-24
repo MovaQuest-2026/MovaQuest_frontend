@@ -220,6 +220,18 @@
       "learning": "Aprendizaje",
       "video": "Vídeo",
       "appearance": "Apariencia"
+    },
+    "deleteAccount": {
+      "title": "Cuenta",
+      "button": "Eliminar la cuenta",
+      "hint": "Elimina para siempre tu cuenta y los datos vinculados: progreso, me gusta y lecciones guardadas.",
+      "dialogTitle": "¿Eliminar tu cuenta?",
+      "body": "Se eliminarán para siempre tu cuenta y los datos vinculados (progreso, me gusta, lecciones guardadas). No se puede deshacer. Los ajustes de este dispositivo se quedan.",
+      "confirm": "Eliminar",
+      "busy": "Eliminando…",
+      "error": "No se pudo eliminar la cuenta. Revisa la conexión e inténtalo de nuevo.",
+      "signInAgain": "Tu sesión ha caducado. Vuelve a iniciar sesión y elimina la cuenta.",
+      "done": "Tu cuenta se ha eliminado."
     }
   },
   "subtitleLangs": {

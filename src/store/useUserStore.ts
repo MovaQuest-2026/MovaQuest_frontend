@@ -65,6 +65,8 @@ interface UserState {
   savedLessons: string[]
 
   setAccount: (account: Account | null) => void
+  /** Акаунт видалено на сервері: виходимо й прибираємо з пристрою все, що йому належало (прогрес, кеш, реакції, мета). */
+  forgetAccount: () => void
   dismissSignInPrompt: () => void
   setOnboardingPending: (pending: boolean) => void
   setInterfaceLanguage: (lang: Lang) => void
@@ -208,6 +210,23 @@ export const useUserStore = create<UserState>()(
             completedLessons: restored?.completedLessons ?? {},
             learnedWords: restored?.learnedWords ?? {},
             activeLessons: nextId ? { ...guestActive, ...(restored?.activeLessons ?? {}) } : {},
+          }
+        }),
+      forgetAccount: () =>
+        set((s) => {
+          const id = s.account?.id
+          const progressByAccount = { ...s.progressByAccount }
+          if (id) delete progressByAccount[id]
+          return {
+            account: null,
+            onboardingPending: false,
+            progressByAccount,
+            completedLessons: {},
+            learnedWords: {},
+            activeLessons: {},
+            likedLessons: [],
+            savedLessons: [],
+            goal: '',
           }
         }),
       dismissSignInPrompt: () => set({ signInPromptDismissed: true }),
