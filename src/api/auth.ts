@@ -179,6 +179,15 @@ export async function signIn(input: { email: string; password: string }): Promis
 }
 
 /** Вихід на сервері. Локальну сесію (account у useUserStore) прибирає той, хто викликає. */
+/**
+ * Назавжди видаляє акаунт, у якого зараз сесія (`DELETE /users/me`): бекенд спершу завершує всі його сесії,
+ * потім видаляє акаунт і пов'язані з ним дані (каскад зовнішніх ключів у БД).
+ * Кидає ApiError (401: сесія закінчилась) або NetworkError; локальні дані прибирає викликач (`forgetAccount`).
+ */
+export async function deleteAccount(): Promise<void> {
+  await apiFetch<null>('/users/me', { method: 'DELETE' })
+}
+
 export async function signOut(): Promise<void> {
   try {
     await apiFetch('/auth/logout', { method: 'POST' })

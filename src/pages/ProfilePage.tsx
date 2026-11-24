@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { trackSpeakModeChosen } from '../api/analytics'
-import { signOut } from '../api/auth'
+import { deleteAccount, signOut } from '../api/auth'
+import { ApiError } from '../api/http'
 import { resetProgressRemote } from '../api/progress'
 import { MultiSelect } from '../components/MultiSelect'
 import { Segmented } from '../components/Segmented'
@@ -29,6 +30,9 @@ export function ProfilePage() {
   const { t } = useTranslation()
   const [confirmReset, setConfirmReset] = useState(false)
   const [resetState, setResetState] = useState<'idle' | 'busy' | 'error'>('idle')
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteState, setDeleteState] = useState<'idle' | 'busy' | 'error' | 'signInAgain'>('idle')
+  const [accountDeleted, setAccountDeleted] = useState(false)
   const mic = useMicTest()
   const navigate = useNavigate()
   const account = useUserStore((s) => s.account)
@@ -74,6 +78,25 @@ export function ProfilePage() {
     setResetState('idle')
     setConfirmReset(false)
   }
+  // Видалення акаунта: спершу сервер (він же завершує сесії), і лише після успіху прибираємо дані з пристрою.
+  const confirmDeleteAccount = async () => {
+    setDeleteState('busy')
+    try {
+      await deleteAccount()
+    } catch (err) {
+      setDeleteState(err instanceof ApiError && err.status === 401 ? 'signInAgain' : 'error')
+      return
+    }
+    useUserStore.getState().forgetAccount()
+    setDeleteState('idle')
+    setConfirmDelete(false)
+    setAccountDeleted(true)
+  }
+  const closeDelete = () => {
+    if (deleteState === 'busy') return
+    setDeleteState('idle')
+    setConfirmDelete(false)
+  }
   const closeReset = () => {
     setResetState('idle')
     setConfirmReset(false)
@@ -83,6 +106,12 @@ export function ProfilePage() {
     <>
       <main className="page page--with-tabbar">
         <h1 className="page__title">{t('profile.title')}</h1>
+
+        {accountDeleted && !account && (
+          <p className="notice notice--ok" role="status">
+            {t('profile.deleteAccount.done')}
+          </p>
+        )}
 
         {account && (
           <section className="card account-card">
@@ -247,8 +276,78 @@ export function ProfilePage() {
             {mic.state === 'error' && <p className="notice notice--error">{t('profile.mic.error')}</p>}
           </div>
         </section>
+        {/* Видалення акаунта (вимога Google Play і GDPR): наприкінці профілю, з підтвердженням. */}
+        {account && (
+          <section className="settings-group">
+            <h2 className="settings-group__title">{t('profile.deleteAccount.title')}</h2>
+            <div className="settings-group__body">
+              <p className="muted">{t('profile.deleteAccount.hint')}</p>
+              <button type="button" className="btn btn--danger btn--block" onClick={() => setConfirmDelete(true)}>
+                {t('profile.deleteAccount.button')}
+              </button>
+            </div>
+          </section>
+        )}
+
+        <Link to="/privacy" className="link-btn profile__legal">
+          {t('legal.link')}
+        </Link>
       </main>
       <TabBar />
+
+      {confirmDelete && (
+        <div className="dialog-backdrop" onClick={closeDelete}>
+          <div
+            className="dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-title"
+            aria-describedby="delete-body"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 id="delete-title" className="section-title">
+              {t('profile.deleteAccount.dialogTitle')}
+            </h2>
+            <p id="delete-body" className="muted">
+              {t('profile.deleteAccount.body')}
+            </p>
+            {(deleteState === 'error' || deleteState === 'signInAgain') && (
+              <p className="notice notice--error" role="alert">
+                {t(`profile.deleteAccount.${deleteState}`)}
+              </p>
+            )}
+            <div className="row">
+              <button type="button" className="btn spacer" disabled={deleteState === 'busy'} onClick={closeDelete}>
+                {t('app.cancel')}
+              </button>
+              {deleteState === 'signInAgain' ? (
+                <button
+                  type="button"
+                  className="btn btn--primary spacer"
+                  onClick={() => {
+                    // Сесії на сервері вже немає: виходимо локально, інакше /auth одразу поверне назад.
+                    const user = useUserStore.getState()
+                    user.setAccount(null)
+                    user.setOnboardingPending(false)
+                    navigate('/auth', { state: { from: '/profile' } })
+                  }}
+                >
+                  {t('auth.signInCta')}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn--danger spacer"
+                  disabled={deleteState === 'busy'}
+                  onClick={() => void confirmDeleteAccount()}
+                >
+                  {deleteState === 'busy' ? t('profile.deleteAccount.busy') : t('profile.deleteAccount.confirm')}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {confirmReset && (
         <div className="dialog-backdrop" onClick={closeReset}>

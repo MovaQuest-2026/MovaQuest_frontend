@@ -1,0 +1,201 @@
+{
+  "title": "Política de privacidad",
+  "updated": "Última actualización: {{date}}",
+  "intro": "Esta política explica qué datos recoge MovaQuest (la aplicación web y la aplicación móvil que usa los mismos servidores), para qué, con quién los compartimos y cómo puedes controlarlos.",
+  "languageLabel": "Idioma de la política",
+  "sections": [
+    {
+      "id": "who",
+      "title": "1. Quiénes somos",
+      "blocks": [
+        { "p": "Responsable del tratamiento: {{controller}}." },
+        { "p": "Contacto para cualquier cuestión sobre tus datos:" },
+        { "email": true }
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "2. En resumen",
+      "blocks": [
+        {
+          "ul": [
+            "Puedes ver los vídeos y responder sin cuenta. Los invitados no nos dan nombre ni email; sus ajustes y lecciones sin terminar se quedan en el navegador.",
+            "Tu voz se graba solo durante una pausa, mientras respondes, y solo para reconocer la palabra. La grabación va a nuestro servidor y al servicio de reconocimiento de voz Deepgram. Nunca la usamos para publicidad.",
+            "Si creas una cuenta, guardamos tu email, nombre, ajustes y progreso para que estén disponibles en todos tus dispositivos.",
+            "No vendemos datos personales ni mostramos anuncios."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "collect",
+      "title": "3. Qué datos recogemos",
+      "blocks": [
+        { "h": "3.1. Cuenta (si te registras)" },
+        {
+          "table": {
+            "head": ["Datos", "Origen", "Finalidad"],
+            "rows": [
+              ["Email, nombre, nombre de usuario (generado a partir del email)", "formulario de registro", "iniciar sesión, identificarte, emails de la cuenta (confirmación de email, restablecer contraseña)"],
+              ["Contraseña", "formulario de registro", "iniciar sesión. Solo se guarda como hash: nunca vemos la contraseña"],
+              ["Nombre, email, foto de perfil, ID de Google", "inicio de sesión con Google", "crear la cuenta e iniciar sesión sin contraseña"],
+              ["Sesiones: dirección IP, tipo de dispositivo y navegador, hora de inicio y de última actividad", "automáticamente", "seguridad de la cuenta, lista de sesiones activas, prevención de abusos"]
+            ]
+          }
+        },
+        { "h": "3.2. Perfil de aprendizaje" },
+        { "p": "Idioma de la interfaz, nivel de español (A1–B2) y objetivo del viaje (texto libre opcional de hasta 200 caracteres). Los indicas al empezar y puedes cambiarlos en tu perfil. No escribas datos sensibles en el campo del objetivo." },
+        { "h": "3.3. Progreso (solo con cuenta)" },
+        { "p": "Lecciones completadas y sus resultados, palabras que has dicho correctamente, precisión de las respuestas y el estado de las lecciones sin terminar, para que sigas donde lo dejaste." },
+        { "h": "3.4. Respuestas por voz" },
+        { "p": "Cuando el vídeo se pausa y respondes por voz, el navegador graba un clip corto (hasta 8 segundos). El clip y la respuesta esperada se envían a nuestro servidor y de ahí a Deepgram, que convierte la voz en texto. Solo recibimos el texto, y tu navegador lo compara con la respuesta correcta." },
+        {
+          "ul": [
+            "La grabación empieza solo después de que permitas el acceso al micrófono y solo durante una pausa. El micrófono no se usa en ningún otro momento.",
+            "Las respuestas por voz también están disponibles para invitados. Siempre puedes escribir la respuesta.",
+            "Las grabaciones solo se usan para reconocer tu respuesta. No las guardamos en tu cuenta ni en tu perfil."
+          ]
+        },
+        { "h": "3.5. Funciones sociales" },
+        {
+          "table": {
+            "head": ["Datos", "Quién los ve"],
+            "rows": [
+              ["Me gusta y lecciones guardadas", "solo tú; los demás solo ven el total"],
+              ["Comentarios (texto, fecha)", "todo el mundo, junto con tu nombre"],
+              ["Denuncias de comentarios (motivo, detalles)", "solo los moderadores"],
+              ["Que compartiste una lección y cómo (menú del sistema o enlace copiado)", "solo el contador total"]
+            ]
+          }
+        },
+        { "p": "Leer comentarios y compartir lecciones funciona sin cuenta; dar me gusta, guardar y comentar requieren una cuenta." },
+        { "h": "3.6. Analítica de uso" },
+        { "p": "Podemos usar Google Analytics 4 para entender cómo se usa la aplicación. Recibe páginas vistas y eventos de aprendizaje: qué lección se empezó o terminó, el resultado de una respuesta (correcta / incorrecta / no se entendió), si fue por voz o texto, número de intentos, pistas mostradas, me gusta, guardados, compartidos, el modo de grabación elegido, el idioma de la interfaz y el nivel. Nunca enviamos a la analítica el texto de tus respuestas, audio, email ni nombre. Google Analytics también recoge datos técnicos (tipo de dispositivo, navegador, ubicación aproximada a partir de la IP) y usa sus propias cookies (_ga, _ga_*)." },
+        { "h": "3.7. Datos técnicos" },
+        { "p": "Con cada solicitud, nuestros proveedores de alojamiento (Vercel, Render) procesan automáticamente la dirección IP, el User-Agent, la hora y la dirección solicitada en los registros del servidor para hacer funcionar y proteger el servicio." }
+      ]
+    },
+    {
+      "id": "device",
+      "title": "4. Qué se guarda en tu dispositivo",
+      "blocks": [
+        {
+          "table": {
+            "head": ["Almacenamiento", "Contenido", "Finalidad"],
+            "rows": [
+              ["Cookie de sesión (httpOnly) y cookie CSRF", "identificador de sesión, token de seguridad", "iniciar sesión y protección frente a solicitudes falsificadas. La cuenta no funciona sin ellas"],
+              ["localStorage (movaquest-user-v1)", "identificador aleatorio del dispositivo, tema, idiomas de subtítulos, velocidad del vídeo, modo de grabación de voz, indicador del permiso de micrófono, copia de tu progreso y lecciones sin terminar, me gusta y guardados, copia de los datos de tu cuenta", "ajustes y uso sin conexión"],
+              ["sessionStorage", "la página a la que volver tras iniciar sesión con Google", "volver tras iniciar sesión; se borra enseguida"],
+              ["Cookies de Google Analytics", "identificador de analítica", "estadísticas (ver 3.6)"]
+            ]
+          }
+        },
+        { "p": "Puedes borrar estos datos en los ajustes del navegador. Los ajustes de invitado y las lecciones sin terminar se perderán; el progreso de la cuenta se queda en el servidor." }
+      ]
+    },
+    {
+      "id": "purposes",
+      "title": "5. Para qué tratamos los datos y con qué base legal",
+      "blocks": [
+        {
+          "table": {
+            "head": ["Finalidad", "Base legal (art. 6 RGPD)"],
+            "rows": [
+              ["Prestar el servicio: cuenta, inicio de sesión, perfil, progreso, reconocimiento de respuestas, comentarios", "ejecución de un contrato (art. 6.1.b)"],
+              ["Seguridad, prevención de abusos, moderación de comentarios", "interés legítimo (art. 6.1.f)"],
+              ["Analítica para mejorar las lecciones", "tu consentimiento cuando la ley lo exige (art. 6.1.a)"],
+              ["Emails del servicio (confirmación de email, restablecer contraseña)", "ejecución de un contrato"]
+            ]
+          }
+        },
+        { "p": "Para los usuarios en Ucrania, el tratamiento se basa también en la Ley de Ucrania «Sobre la protección de datos personales»." }
+      ]
+    },
+    {
+      "id": "sharing",
+      "title": "6. Con quién compartimos los datos",
+      "blocks": [
+        { "p": "Solo con los proveedores sin los que el servicio no puede funcionar, y solo en la medida necesaria:" },
+        {
+          "table": {
+            "head": ["Proveedor", "Función", "Datos"],
+            "rows": [
+              ["Vercel Inc. (EE. UU.)", "alojamiento de la aplicación web, proxy de solicitudes", "datos técnicos; todas las solicitudes a la API pasan por él"],
+              ["Render Services, Inc. (EE. UU.)", "alojamiento del servidor y la base de datos", "datos de cuenta, perfil, progreso y comentarios"],
+              ["Deepgram, Inc. (EE. UU.)", "reconocimiento de voz", "audio de la respuesta y las palabras esperadas"],
+              ["Google LLC / Google Ireland Ltd.", "inicio de sesión con Google, Google Analytics, Google Fonts en la página principal", "datos de tu perfil de Google (si lo eliges), eventos de analítica, dirección IP al cargar las fuentes"],
+              ["TikTok (ByteDance)", "reproductor integrado en algunas lecciones", "al abrir una de estas lecciones, TikTok recibe tu IP y datos del navegador y puede usar sus propias cookies según su política"]
+            ]
+          }
+        },
+        { "p": "Podemos revelar datos cuando la ley lo exija o para proteger los derechos y la seguridad de las personas. No vendemos ni alquilamos datos personales." },
+        { "h": "Transferencias fuera de la UE y de Ucrania" },
+        { "p": "Algunos proveedores están en EE. UU. Las transferencias se basan en las Cláusulas Contractuales Tipo de la Comisión Europea y/o en el Marco de Privacidad de Datos UE–EE. UU. cuando el proveedor está certificado." }
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "7. Cuánto tiempo guardamos los datos",
+      "blocks": [
+        {
+          "ul": [
+            "Cuenta, perfil, progreso: mientras exista la cuenta. Tras eliminar la cuenta, los datos personales se eliminan o anonimizan en un plazo de {{deletionDays}} días.",
+            "Comentarios: hasta que los borres o se elimine la cuenta.",
+            "Grabaciones de voz: no se guardan en tu cuenta ni en tu perfil.",
+            "Sesiones: hasta que cierres sesión o la sesión caduque.",
+            "Analítica: hasta {{analyticsMonths}} meses.",
+            "Registros del servidor: según la configuración de los proveedores de alojamiento, normalmente hasta {{logsDays}} días."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rights",
+      "title": "8. Tus derechos",
+      "blocks": [
+        { "p": "Tienes derecho a:" },
+        {
+          "ul": [
+            "obtener una copia de tus datos;",
+            "rectificarlos (nombre, idioma, nivel y objetivo se cambian en tu perfil);",
+            "suprimirlos: el progreso se puede restablecer en tu perfil («Borrar el progreso»), tus comentarios se pueden borrar en la aplicación y toda la cuenta se puede eliminar en tu perfil («Eliminar la cuenta») o escribiéndonos;",
+            "limitar el tratamiento u oponerte a él;",
+            "recibir tus datos en un formato legible por máquina;",
+            "retirar en cualquier momento el consentimiento a la analítica;",
+            "presentar una reclamación ante una autoridad de control: en Ucrania, el Comisionado para los Derechos Humanos del Parlamento de Ucrania; en la UE, la autoridad de protección de datos de tu país (en España, la AEPD)."
+          ]
+        },
+        { "p": "Respondemos a las solicitudes en un plazo de 30 días y podemos pedirte que confirmes que la cuenta es tuya. Puedes retirar el permiso del micrófono en cualquier momento en los ajustes del navegador o del teléfono; la aplicación seguirá funcionando con respuestas escritas." }
+      ]
+    },
+    {
+      "id": "security",
+      "title": "9. Seguridad",
+      "blocks": [
+        { "p": "Los datos se cifran en tránsito (HTTPS). Las contraseñas solo se guardan como hash. La cookie de sesión no es accesible desde JavaScript y las solicitudes que modifican datos están protegidas con un token CSRF. Solo las personas autorizadas acceden a la base de datos. Ninguna protección es infalible; si una brecha pone en riesgo tus derechos, te lo notificaremos a ti y a la autoridad de control en el plazo que exige la ley." }
+      ]
+    },
+    {
+      "id": "children",
+      "title": "10. Menores",
+      "blocks": [
+        { "p": "El servicio está pensado para personas de {{minAge}} años o más. No recogemos conscientemente datos de menores de {{minAge}} años. Si crees que un menor ha creado una cuenta, escríbenos y la eliminaremos." }
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "11. Cambios en esta política",
+      "blocks": [
+        { "p": "Podemos actualizar esta política. La fecha de la versión vigente aparece arriba. Te avisaremos de los cambios importantes en la aplicación o por email." }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "12. Contacto",
+      "blocks": [
+        { "p": "{{controller}}" },
+        { "email": true }
+      ]
+    }
+  ]
+}

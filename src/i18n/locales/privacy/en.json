@@ -1,0 +1,201 @@
+{
+  "title": "Privacy Policy",
+  "updated": "Last updated: {{date}}",
+  "intro": "This policy explains what data MovaQuest (the web app and the mobile app that uses the same servers) collects, why, who we share it with and how you can control it.",
+  "languageLabel": "Policy language",
+  "sections": [
+    {
+      "id": "who",
+      "title": "1. Who we are",
+      "blocks": [
+        { "p": "Data controller: {{controller}}." },
+        { "p": "Contact for any data question:" },
+        { "email": true }
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "2. In short",
+      "blocks": [
+        {
+          "ul": [
+            "You can watch and answer without an account. Guests don't give us a name or email; their settings and unfinished lessons stay in the browser.",
+            "Your voice is recorded only during a pause, while you answer, and only to recognise the word. The recording goes to our server and to the Deepgram speech service. We never use it for advertising.",
+            "If you create an account, we store your email, name, settings and learning progress so it is available on every device.",
+            "We don't sell personal data and we don't show ads."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "collect",
+      "title": "3. What we collect",
+      "blocks": [
+        { "h": "3.1. Account (if you sign up)" },
+        {
+          "table": {
+            "head": ["Data", "Source", "Purpose"],
+            "rows": [
+              ["Email, name, username (generated from the email)", "sign-up form", "signing in, identifying you, account emails (email confirmation, password reset)"],
+              ["Password", "sign-up form", "signing in. Stored only as a hash: we never see the password itself"],
+              ["Name, email, profile photo, Google ID", "Sign in with Google", "creating the account and signing in without a password"],
+              ["Sessions: IP address, device and browser type, sign-in and last-activity time", "automatically", "account security, the list of active sessions, abuse prevention"]
+            ]
+          }
+        },
+        { "h": "3.2. Learning profile" },
+        { "p": "Interface language, Spanish level (A1–B2) and trip goal (optional free text up to 200 characters). You set them during onboarding and can change them in your profile. Please don't put sensitive information in the goal field." },
+        { "h": "3.3. Learning progress (account only)" },
+        { "p": "Completed lessons and their results, words you have said correctly, answer accuracy and the state of unfinished lessons, so you can continue where you left off." },
+        { "h": "3.4. Voice answers" },
+        { "p": "When the video pauses and you answer by voice, the browser records a short clip (up to 8 seconds). The clip and the expected answer are sent to our server and on to Deepgram, which turns speech into text. We get back only the text, and your browser compares it with the correct answer." },
+        {
+          "ul": [
+            "Recording starts only after you allow microphone access and only during a pause. The microphone is not used at any other time.",
+            "Voice answers are available to guests too. You can always type the answer instead.",
+            "Recordings are used only to recognise your answer. We don't save them to your account or profile."
+          ]
+        },
+        { "h": "3.5. Social features" },
+        {
+          "table": {
+            "head": ["Data", "Who can see it"],
+            "rows": [
+              ["Likes and saved lessons", "only you; others see only the total count"],
+              ["Comments (text, date)", "everyone, together with your name"],
+              ["Comment reports (reason, details)", "moderators only"],
+              ["That you shared a lesson and how (share sheet or copied link)", "only the total share count"]
+            ]
+          }
+        },
+        { "p": "Reading comments and sharing lessons work without an account; liking, saving and commenting need one." },
+        { "h": "3.6. Usage analytics" },
+        { "p": "We may use Google Analytics 4 to understand how the app is used. It receives page views and learning events: which lesson was started or finished, the result of an answer (correct / wrong / unclear), voice or text, number of attempts, hints shown, likes, saves, shares, the chosen recording mode, interface language and level. We never send the text of your answers, audio, email or name to analytics. Google Analytics also collects technical data (device type, browser, approximate location from the IP address) and sets its own cookies (_ga, _ga_*)." },
+        { "h": "3.7. Technical data" },
+        { "p": "With every request our hosting providers (Vercel, Render) automatically process the IP address, User-Agent, time and requested address in server logs to run and protect the service." }
+      ]
+    },
+    {
+      "id": "device",
+      "title": "4. What is stored on your device",
+      "blocks": [
+        {
+          "table": {
+            "head": ["Storage", "Contents", "Purpose"],
+            "rows": [
+              ["Session cookie (httpOnly) and CSRF cookie", "session identifier, security token", "signing in and protection against forged requests. The account doesn't work without them"],
+              ["localStorage (movaquest-user-v1)", "random device identifier, theme, subtitle languages, video speed, voice recording mode, microphone permission flag, a copy of your progress and unfinished lessons, likes and saves, a copy of your account data", "settings and offline use"],
+              ["sessionStorage", "the page to return to after signing in with Google", "returning after sign-in; deleted right away"],
+              ["Google Analytics cookies", "analytics identifier", "statistics (see 3.6)"]
+            ]
+          }
+        },
+        { "p": "You can clear this data in your browser settings. Guest settings and unfinished lessons will then be lost; account progress stays on the server." }
+      ]
+    },
+    {
+      "id": "purposes",
+      "title": "5. Why we process data and on what legal basis",
+      "blocks": [
+        {
+          "table": {
+            "head": ["Purpose", "Legal basis (GDPR Art. 6)"],
+            "rows": [
+              ["Providing the service: account, sign-in, profile, progress, answer recognition, comments", "performance of a contract (Art. 6(1)(b))"],
+              ["Security, abuse prevention, comment moderation", "legitimate interests (Art. 6(1)(f))"],
+              ["Analytics to improve lessons", "your consent where the law requires it (Art. 6(1)(a))"],
+              ["Service emails (email confirmation, password reset)", "performance of a contract"]
+            ]
+          }
+        },
+        { "p": "For users in Ukraine, processing is also based on the Law of Ukraine \"On Personal Data Protection\"." }
+      ]
+    },
+    {
+      "id": "sharing",
+      "title": "6. Who we share data with",
+      "blocks": [
+        { "p": "Only with providers the service can't run without, and only as much as they need:" },
+        {
+          "table": {
+            "head": ["Provider", "Role", "Data"],
+            "rows": [
+              ["Vercel Inc. (USA)", "web app hosting, request proxy", "technical data; all API requests pass through it"],
+              ["Render Services, Inc. (USA)", "server and database hosting", "account, profile, progress data and comments"],
+              ["Deepgram, Inc. (USA)", "speech recognition", "answer audio and the expected words"],
+              ["Google LLC / Google Ireland Ltd.", "Sign in with Google, Google Analytics, Google Fonts on the home page", "your Google profile data (if you choose it), analytics events, IP address when fonts load"],
+              ["TikTok (ByteDance)", "embedded player for some lessons", "when you open such a lesson, TikTok receives your IP and browser data and may set its own cookies under its own policy"]
+            ]
+          }
+        },
+        { "p": "We may disclose data when the law requires it or to protect people's rights and safety. We don't sell or rent personal data." },
+        { "h": "Transfers outside the EU and Ukraine" },
+        { "p": "Some providers are located in the USA. Transfers rely on the European Commission's Standard Contractual Clauses and/or the EU–US Data Privacy Framework where the provider is certified." }
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "7. How long we keep data",
+      "blocks": [
+        {
+          "ul": [
+            "Account, profile, progress: while the account exists. After the account is deleted, personal data is deleted or anonymised within {{deletionDays}} days.",
+            "Comments: until you delete them or the account is deleted.",
+            "Voice recordings: not saved to your account or profile.",
+            "Sessions: until you sign out or the session expires.",
+            "Analytics: up to {{analyticsMonths}} months.",
+            "Server logs: according to the hosting providers' settings, usually up to {{logsDays}} days."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rights",
+      "title": "8. Your rights",
+      "blocks": [
+        { "p": "You have the right to:" },
+        {
+          "ul": [
+            "get a copy of your data;",
+            "correct it (name, language, level and goal can be changed in your profile);",
+            "delete it: progress can be reset in your profile (\"Reset progress\"), your own comments can be deleted in the app, and the whole account can be deleted in your profile (\"Delete account\") or by emailing us;",
+            "restrict or object to processing;",
+            "receive your data in a machine-readable format;",
+            "withdraw consent to analytics at any time;",
+            "lodge a complaint with a supervisory authority: in Ukraine, the Ukrainian Parliament Commissioner for Human Rights; in the EU, the data protection authority of your country (in Spain, the AEPD)."
+          ]
+        },
+        { "p": "We answer requests within 30 days and may ask you to confirm that the account is yours. You can revoke microphone access at any time in your browser or phone settings; the app keeps working with typed answers." }
+      ]
+    },
+    {
+      "id": "security",
+      "title": "9. Security",
+      "blocks": [
+        { "p": "Data is encrypted in transit (HTTPS). Passwords are stored only as hashes. The session cookie is not accessible to JavaScript, and state-changing requests are protected with a CSRF token. Only authorised people can access the database. No protection is 100% guaranteed; if a breach threatens your rights, we will notify you and the supervisory authority within the time the law requires." }
+      ]
+    },
+    {
+      "id": "children",
+      "title": "10. Children",
+      "blocks": [
+        { "p": "The service is meant for people aged {{minAge}} and over. We don't knowingly collect data from children under {{minAge}}. If you believe a child has created an account, contact us and we will delete it." }
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "11. Changes to this policy",
+      "blocks": [
+        { "p": "We may update this policy. The date of the current version is shown at the top. We will tell you about significant changes in the app or by email." }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "12. Contact",
+      "blocks": [
+        { "p": "{{controller}}" },
+        { "email": true }
+      ]
+    }
+  ]
+}

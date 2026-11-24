@@ -220,6 +220,18 @@
       "learning": "Learning",
       "video": "Video",
       "appearance": "Appearance"
+    },
+    "deleteAccount": {
+      "title": "Account",
+      "button": "Delete account",
+      "hint": "Permanently deletes your account and the data linked to it: progress, likes and saved lessons.",
+      "dialogTitle": "Delete your account?",
+      "body": "Your account and the data linked to it (learning progress, likes, saved lessons) will be deleted for good. This cannot be undone. Settings on this device stay.",
+      "confirm": "Delete",
+      "busy": "Deleting…",
+      "error": "Couldn't delete the account. Check your connection and try again.",
+      "signInAgain": "Your session has expired. Sign in again, then delete the account.",
+      "done": "Your account has been deleted."
     }
   },
   "subtitleLangs": {
@@ -307,5 +319,9 @@
       "text": "Sign in to keep your progress and likes."
     },
     "callback": "Signing you in…"
+  },
+  "legal": {
+    "link": "Privacy Policy",
+    "agree": "By continuing, you accept our <link>Privacy Policy</link>."
   }
 }

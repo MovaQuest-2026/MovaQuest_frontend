@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import { AuthError, PASSWORD_MIN_LENGTH, signIn, signUp, type AuthErrorCode, type PasswordRule } from '../api/auth'
 import { startGoogleSignIn } from '../api/googleAuth'
 import { completeSignIn, safeReturnPath, signInReturnPath } from '../features/account/completeSignIn'
@@ -194,6 +194,9 @@ export function AuthPage() {
       </p>
 
       <p className="muted auth__hint auth__switch">{t('auth.skipHint')}</p>
+      <p className="muted auth__hint auth__switch">
+        <Trans i18nKey="legal.agree" components={{ link: <Link to="/privacy" className="auth__legal-link" /> }} />
+      </p>
     </main>
   )
 }

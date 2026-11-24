@@ -170,4 +170,28 @@ describe('useUserStore', () => {
       expect(useUserStore.getState()).toMatchObject({ learnedWords: { l1: ['g1', 'g2'] }, activeLessons: {} })
     })
   })
+
+  it('forgetAccount drops the deleted account and everything it left on the device', () => {
+    const user = useUserStore.getState()
+    user.setAccount(bob)
+    user.recordLessonResult('l2', 'perfect', 2, 2)
+    user.setAccount(ana)
+    user.recordLessonResult('l1', 'perfect', 3, 3)
+    user.recordWordLearned('l1', 'g1')
+    useUserStore.setState({ likedLessons: ['l1'], savedLessons: ['l1'], goal: 'Erasmus', onboardingPending: true })
+
+    useUserStore.getState().forgetAccount()
+
+    const s = useUserStore.getState()
+    expect(s.account).toBeNull()
+    expect(s.progressByAccount.a1).toBeUndefined()
+    expect(s.progressByAccount.b1?.completedLessons.l2).toBeDefined()
+    expect(s.completedLessons).toEqual({})
+    expect(s.learnedWords).toEqual({})
+    expect(s.activeLessons).toEqual({})
+    expect(s.likedLessons).toEqual([])
+    expect(s.savedLessons).toEqual([])
+    expect(s.goal).toBe('')
+    expect(s.onboardingPending).toBe(false)
+  })
 })

@@ -505,6 +505,7 @@ function Footer() {
           <a href="#faq" className="py-2 text-white/80 hover:text-orange">FAQ</a>
           <a href="mailto:hello@movaquest.example" className="py-2 text-white/80 hover:text-orange">Contact</a>
           <Link to="/home" className="py-2 text-white/80 hover:text-orange">Play the prototype</Link>
+          <Link to="/privacy" className="py-2 text-white/80 hover:text-orange">Privacy</Link>
         </nav>
         <p className="text-sm text-white/60">© 2026 MovaQuest team</p>
       </div>
