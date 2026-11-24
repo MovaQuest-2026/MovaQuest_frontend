@@ -20,6 +20,8 @@ import { ProfilePage } from './pages/ProfilePage'
 
 // Клікабельний прототип напрямків продукту: окремий лінивий чанк зі своїми стилями й стором.
 const PrototypeApp = lazy(() => import('./prototype/PrototypeApp'))
+// Політика конфіденційності: довгі тексти трьома мовами, тож окремий лінивий чанк.
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
 
 // Хто зареєструвався, але не завершив онбординг, бачить його знову на будь-якій сторінці застосунку.
 // Гостей це не стосується: вхід необов'язковий.
@@ -48,6 +50,15 @@ function App() {
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       {/* Вхід необов'язковий: відео відкривається одразу. Увійти можна з профілю або з підказки над відео; онбординг іде після реєстрації. */}
       <Route path="/onboarding" element={<OnboardingPage />} />
+      {/* Публічна, без онбордингу: на неї посилаються лендінг, /auth, профіль і Google Play. */}
+      <Route
+        path="/privacy"
+        element={
+          <Suspense fallback={null}>
+            <PrivacyPage />
+          </Suspense>
+        }
+      />
       {/* /app, /lesson і «Головна» відкривають найновіше відео. */}
       <Route path="/app" element={app(<LatestLessonPage />)} />
       <Route path="/home" element={app(<LatestLessonPage />)} />

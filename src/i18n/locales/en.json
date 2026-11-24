@@ -307,5 +307,9 @@
       "text": "Sign in to keep your progress and likes."
     },
     "callback": "Signing you in…"
+  },
+  "legal": {
+    "link": "Privacy Policy",
+    "agree": "By continuing, you accept our <link>Privacy Policy</link>."
   }
 }

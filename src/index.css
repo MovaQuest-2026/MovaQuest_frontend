@@ -2491,3 +2491,140 @@ img {
     padding: 6px 16px 10px;
   }
 }
+
+@layer app {
+  /* ---------- Політика конфіденційності (/privacy) ---------- */
+  .privacy {
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  .privacy__back {
+    margin-left: -8px;
+  }
+
+  .privacy__section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .privacy__subtitle {
+    margin-top: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .privacy__list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 1.2em;
+  }
+
+  .privacy__list li {
+    list-style: disc;
+  }
+
+  /* Таблиці ширші за 360px гортаються самі, сторінка без горизонтального скролу. */
+  .privacy__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .privacy__table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .privacy__table th,
+  .privacy__table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .privacy__table thead th {
+    background: var(--surface-2);
+    font-weight: 600;
+  }
+
+  .privacy__table tbody th {
+    font-weight: 500;
+  }
+
+  .privacy__table tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 599px) {
+    .privacy__table-wrap {
+      overflow: visible;
+    }
+
+    .privacy__table {
+      min-width: 0;
+    }
+
+    .privacy__table thead {
+      display: none;
+    }
+
+    .privacy__table tr,
+    .privacy__table th,
+    .privacy__table td {
+      display: block;
+    }
+
+    .privacy__table tbody tr {
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .privacy__table tbody tr:last-child {
+      border-bottom: 0;
+    }
+
+    .privacy__table tbody th,
+    .privacy__table td {
+      padding: 6px 12px;
+      border-bottom: 0;
+    }
+
+    .privacy__table tbody th {
+      font-weight: 600;
+    }
+
+    .privacy__table td::before {
+      content: attr(data-label);
+      display: block;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+  }
+
+  .privacy__email,
+  .auth__legal-link {
+    color: inherit;
+    text-decoration: underline;
+    overflow-wrap: anywhere;
+  }
+
+  .privacy__email {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+
+  .profile__legal {
+    display: inline-flex;
+    align-items: center;
+  }
+}

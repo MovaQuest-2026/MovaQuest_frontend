@@ -308,5 +308,9 @@
       "text": "Inicia sesión para guardar tu progreso y tus me gusta."
     },
     "callback": "Iniciando sesión…"
+  },
+  "legal": {
+    "link": "Política de privacidad",
+    "agree": "Al continuar, aceptas nuestra <link>Política de privacidad</link>."
   }
 }

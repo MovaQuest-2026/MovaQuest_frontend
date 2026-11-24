@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { trackSpeakModeChosen } from '../api/analytics'
 import { signOut } from '../api/auth'
@@ -247,6 +247,9 @@ export function ProfilePage() {
             {mic.state === 'error' && <p className="notice notice--error">{t('profile.mic.error')}</p>}
           </div>
         </section>
+        <Link to="/privacy" className="link-btn profile__legal">
+          {t('legal.link')}
+        </Link>
       </main>
       <TabBar />
 
