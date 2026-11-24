@@ -1,0 +1,56 @@
+src/i18n/locales/es.json
+  s_f1913be2f5998e::t_0f50e52262a016 230
+  s_f1913be2f5998e::t_b04395f8812c9a 227,229
+  s_f1913be2f5998e::t_ba5ba5df8761ae 223-226,228,231-234
+src/store/useUserStore.test.ts
+  s_f1913be2f5998e::t_4fb96331f6bdb3 173-196
+docs/privacy-policy.md
+  s_f1913be2f5998e::t_99a81e28aa1439 127
+src/i18n/locales/privacy/uk.json
+  s_f1913be2f5998e::t_99a81e28aa1439 161
+src/i18n/locales/privacy/es.json
+  s_f1913be2f5998e::t_99a81e28aa1439 161
+src/store/useUserStore.ts
+  s_f1913be2f5998e::t_6c9d24764f3263 68-69,215-229
+  s_f1913be2f5998e::t_4eaa1104acf49c 230-231
+src/i18n/locales/uk.json
+  s_f1913be2f5998e::t_0f50e52262a016 236
+  s_f1913be2f5998e::t_ba5ba5df8761ae 229-232,234,237-240
+  s_f1913be2f5998e::t_b04395f8812c9a 233,235
+src/pages/ProfilePage.tsx
+  s_f1913be2f5998e::t_adc75443baa28b 5-6,33-35,81-99,110,112-115,279-291,298-326,334-350
+  s_f1913be2f5998e::t_2c0465d93a775e 111,327-333
+  s_f1913be2f5998e::t_ec4adc17c470df 351
+src/i18n/locales/en.json
+  s_f1913be2f5998e::t_b04395f8812c9a 227,229
+  s_f1913be2f5998e::t_0f50e52262a016 230
+  s_f1913be2f5998e::t_ba5ba5df8761ae 223-226,228,231-234
+src/api/auth.ts
+  s_f1913be2f5998e::t_6c9d24764f3263 182-183,185-190
+  s_f1913be2f5998e::t_4fb96331f6bdb3 184
+src/i18n/locales/privacy/en.json
+  s_f1913be2f5998e::t_1abdff5ea7c3ab 161
+CLAUDE.md
+  s_f1913be2f5998e::t_99a81e28aa1439 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0746199ccb81e188cdf8398c1d8ff3a385a04420",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f1913be2f5998e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "350a1acc-e878-4535-8a28-2f2e5acdc44f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
